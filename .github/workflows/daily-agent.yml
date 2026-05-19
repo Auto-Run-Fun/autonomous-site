@@ -1,0 +1,103 @@
+name: Daily Autonomous Agent
+
+on:
+  schedule:
+    # 9 AM Pacific = 16:00 UTC (winter) / 17:00 UTC (summer) — using 16:00 UTC
+    - cron: '0 16 * * *'
+  workflow_dispatch:  # allow manual trigger from the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  agent-run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure git
+        run: |
+          git config user.email "agent@autonomous-site"
+          git config user.name "Autonomous Agent"
+
+      - name: Detect deployment URL
+        id: site
+        run: |
+          # SITE_URL is set as a repo variable (Settings → Variables → Actions)
+          echo "url=${{ vars.SITE_URL }}" >> "$GITHUB_OUTPUT"
+
+      - name: Run Claude Code Agent
+        uses: anthropics/claude-code-action@v1
+        env:
+          STATS_SECRET: ${{ secrets.STATS_SECRET }}
+          SITE_URL: ${{ vars.SITE_URL }}
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_args: |
+            --max-turns 60
+            --allowedTools Edit,Read,Write,Bash,WebFetch,WebSearch,Glob,Grep
+          prompt: |
+            You are an autonomous web growth agent. You run once per day on GitHub Actions.
+
+            The repository is already checked out at the current working directory. Git is configured.
+
+            Environment variables available:
+            - $STATS_SECRET — for authenticating to /api/stats
+            - $SITE_URL — the Vercel deployment URL (no protocol prefix, e.g. "autonomous-site-abc.vercel.app")
+
+            ## Steps (do them in order)
+
+            1. READ CONTEXT:
+               - Read CLAUDE.md (your standing orders)
+               - Read CONCEPT.md if it exists
+               - Read the last 5 entries of PROGRESS.md
+               - Check git log to understand what was done recently
+
+            2. CHECK ANALYTICS:
+               - If CONCEPT.md doesn't exist yet (first run), skip this step
+               - Otherwise: `curl -s "https://$SITE_URL/api/stats?secret=$STATS_SECRET"`
+               - Parse JSON, compute total visits, 7-day trend, best day
+
+            3. DECIDE:
+               - Pick ONE focused improvement based on CLAUDE.md's priority order
+               - Do NOT scatter effort across many small tweaks
+
+            4. IMPLEMENT:
+               - Edit files in `site/` and `api/` as needed
+               - For first run: create CONCEPT.md, build v1 of the site, build `api/track.js` + `api/stats.js`, create vercel.json appropriate to the stack
+               - Use Vercel KV via `@vercel/kv` (KV_REST_API_URL and KV_REST_API_TOKEN are auto-provisioned by Vercel)
+               - If a `package.json` is needed for npm deps, include it
+
+            5. DOCUMENT:
+               - Append a new entry to the bottom of PROGRESS.md:
+                 ```
+                 ## Run YYYY-MM-DD
+                 - Visitors (last 7d): NUMBER (or "N/A — first run")
+                 - Actions taken: WHAT and WHY
+                 - Hypothesis: WHAT YOU EXPECT THIS TO UNLOCK
+                 ```
+
+            6. COMMIT AND PUSH:
+               ```
+               git add -A
+               git commit -m "Day N: <one-line summary>"
+               git push origin main
+               ```
+               If `git diff --cached --quiet` shows nothing to commit, document why in PROGRESS.md and exit cleanly.
+
+            7. VERIFY (only if you pushed changes):
+               - Sleep 90 seconds to let Vercel deploy
+               - `curl -s -o /dev/null -w "%{http_code}" "https://$SITE_URL"`
+               - If non-200, investigate via git log and Vercel deployment logs in the next run. Do NOT rollback.
+
+            ## Rules
+            - Stay within this repository. Do not access anything outside the working directory.
+            - Never hardcode secrets. STATS_SECRET and Vercel KV creds are env vars.
+            - Never delete or overwrite CONCEPT.md once it exists.
+            - Follow CLAUDE.md's priority order for what to work on.
+            - Be decisive. One focused change is better than ten scattered ones.

@@ -119,4 +119,5 @@ Document where you submitted in PROGRESS.md so you don't repeat.
 ## Deployment
 
 Changes pushed to `main` auto-deploy via Vercel. No manual deploy step needed.
-Verify deployment: `curl -s -o /dev/null -w "%{http_code}" https://VERCEL_URL_PLACEHOLDER`
+The deployment URL is provided to each run via the `$SITE_URL` environment variable.
+Verify deployment: `curl -s -o /dev/null -w "%{http_code}" "https://$SITE_URL"`
