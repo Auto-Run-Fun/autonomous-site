@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ship This Weekend — Weekend project ideas for developers</title>
+<meta name="description" content="A weekend project idea generator for developers. Click for a slightly absurd, buildable-in-48-hours side project pitch with stack and time estimate. Free, no signup.">
+<meta name="theme-color" content="#0b0b10">
+<link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Ship This Weekend">
+<meta property="og:description" content="Weekend project ideas for developers. Click for a slightly absurd, buildable-in-48-hours side project pitch.">
+<meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ship This Weekend">
+<meta name="twitter:description" content="Weekend project ideas for developers. Click for an absurd, buildable-in-48-hours pitch.">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Ship This Weekend",
+  "description": "A weekend project idea generator for developers.",
+  "url": "https://auto-run-fun.github.io/autonomous-site/",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (browser)",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+
+<style>
+  :root {
+    --bg: #0b0b10;
+    --panel: #15151d;
+    --panel-2: #1c1c26;
+    --ink: #e9e9f1;
+    --muted: #8a8a9a;
+    --accent: #ffd166;
+    --accent-2: #ef476f;
+    --line: #2a2a36;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  a { color: var(--accent); }
+  a:hover { color: var(--accent-2); }
+
+  .wrap { max-width: 720px; margin: 0 auto; padding: 48px 20px 96px; }
+  header h1 {
+    font-size: clamp(34px, 6vw, 52px);
+    line-height: 1.05;
+    margin: 0 0 12px;
+    letter-spacing: -0.02em;
+  }
+  header h1 .accent { color: var(--accent); }
+  header p.tag {
+    margin: 0 0 32px;
+    color: var(--muted);
+    font-size: 17px;
+    max-width: 56ch;
+  }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    margin-bottom: 20px;
+  }
+
+  .pitch {
+    font-size: clamp(20px, 3.4vw, 26px);
+    line-height: 1.3;
+    margin: 0 0 18px;
+    letter-spacing: -0.01em;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 14px;
+  }
+  .chip {
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 12px;
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .chip b { color: var(--muted); font-weight: 500; margin-right: 4px; }
+
+  .vibe {
+    margin: 12px 0 0;
+    color: var(--muted);
+    font-style: italic;
+    font-size: 14px;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 8px;
+  }
+  button, .btn {
+    appearance: none;
+    border: 1px solid var(--line);
+    background: var(--panel-2);
+    color: var(--ink);
+    padding: 12px 18px;
+    border-radius: 10px;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+  }
+  button:hover, .btn:hover { border-color: var(--accent); color: var(--accent); }
+  button:active { transform: translateY(1px); }
+  button.primary {
+    background: var(--accent);
+    color: #1a1a22;
+    border-color: var(--accent);
+  }
+  button.primary:hover { background: #ffdb85; color: #1a1a22; }
+
+  .copied { color: var(--accent); font-size: 13px; margin-left: 6px; opacity: 0; transition: opacity .2s; }
+  .copied.show { opacity: 1; }
+
+  .about {
+    margin-top: 40px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .about h2 { color: var(--ink); font-size: 18px; margin: 0 0 10px; }
+  .about p { margin: 0 0 10px; }
+
+  footer {
+    margin-top: 32px;
+    color: var(--muted);
+    font-size: 13px;
+    text-align: center;
+  }
+  footer a { color: var(--muted); text-decoration: underline; }
+
+  @media (max-width: 480px) {
+    .wrap { padding: 32px 16px 64px; }
+    .card { padding: 22px 18px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Ship <span class="accent">this</span> weekend.</h1>
+    <p class="tag">A random side project idea you could actually build in 48 hours. Click for a new one.</p>
+  </header>
+
+  <section class="card" id="ideaCard" aria-live="polite">
+    <p class="pitch" id="pitch">…</p>
+    <div class="meta" id="meta"></div>
+    <p class="vibe" id="vibe"></p>
+  </section>
+
+  <div class="actions">
+    <button class="primary" id="newBtn">↻ Another idea</button>
+    <button id="copyBtn">⎘ Copy link <span class="copied" id="copied">copied</span></button>
+    <a class="btn" id="tweetBtn" target="_blank" rel="noopener">↗ Share</a>
+  </div>
+
+  <section class="about">
+    <h2>What is this?</h2>
+    <p>A combinatorial generator that spits out weekend-sized project ideas for developers. Stack suggestions, time estimates, and a one-liner on why each idea might pop. No AI, no signups, no tracking beyond a privacy-friendly visitor counter.</p>
+    <p>Every idea has a permalink — share the URL and your friends land on the same one.</p>
+    <p>This whole site is built and updated daily by an autonomous AI agent (Claude Code) with a 90-day goal: 100 organic visitors. <a href="https://github.com/auto-run-fun/autonomous-site">Watch the experiment on GitHub →</a></p>
+  </section>
+
+  <footer>
+    <p>Made by an agent. <a href="https://github.com/auto-run-fun/autonomous-site">Source</a>.</p>
+  </footer>
+</div>
+
+<script>
+/* ---------- seeded PRNG (mulberry32) ---------- */
+function mulberry32(a) {
+  return function() {
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    var t = a;
+    t = Math.imul(t ^ t >>> 15, t | 1);
+    t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+
+/* ---------- word pools ---------- */
+const TOOL = [
+  "Chrome extension","Tampermonkey script","menu bar app","Discord bot","Telegram bot",
+  "VS Code extension","CLI tool","tiny static site","Slack bot","RSS feed",
+  "browser bookmarklet","iOS shortcut","Raycast extension","email newsletter","single web page",
+  "Mastodon bot","Bluesky bot","GitHub Action","Notion widget","Figma plugin"
+];
+
+const ACTION = [
+  "replaces every","auto-rates your","silently logs your","gamifies your",
+  "translates your","summarizes your","screenshots your","shames you for",
+  "celebrates your","auto-replies to your","blocks your","color-codes your",
+  "ranks your","timestamps your","auto-archives your","explains your"
+];
+
+const OBJECT = [
+  "open tabs","Slack messages","commit messages","PR titles","dependency tree",
+  "browser history","calendar invites","standup notes","Jira tickets","TODO comments",
+  "stack overflow searches","keyboard shortcuts","unused npm packages","test coverage",
+  "container logs","unread emails","ChatGPT prompts","screen time","editor cursor jumps"
+];
+
+const BENEFIT = [
+  "stop pretending to multitask","feel something on a Monday","ship faster than your coworkers",
+  "regain a tiny bit of dignity","quietly judge your past self","look productive on Zoom",
+  "blame the tooling with evidence","get to inbox zero by yelling","sleep like a person again",
+  "remember what you were doing","make standup take 4 minutes","earn the right to log off"
+];
+
+const X_BUT_FOR_X = [
+  ["Wordle","SQL"],["Wordle","regex"],["Twitter","commit messages"],["LinkedIn","junior devs"],
+  ["Strava","reading"],["Spotify Wrapped","your terminal"],["Duolingo","keyboard shortcuts"],
+  ["Tinder","npm packages"],["BeReal","standups"],["Notion","one specific thing"],
+  ["Goodreads","RFCs"],["Letterboxd","CLIs"],["Reddit","one subreddit"],["Yelp","docs sites"]
+];
+
+const NICHE = [
+  "people who never close tabs","devs who hate meetings","ex-Googlers in denial",
+  "vim users who won the war","founders between projects","juniors faking it",
+  "remote workers in caves","staff engineers who refactor for sport","designers who code at 2am",
+  "indie hackers on day 4 of a 48-hour build","TypeScript maximalists","Rust evangelists",
+  "people who treat HN like a slot machine","anyone who has Slack-pinged themselves"
+];
+
+const FEED = ["newsletter","email","Mastodon feed","RSS feed","SMS digest","push notification"];
+const TOPIC = [
+  "yesterday's deprecation warnings","newly orphaned open source repos",
+  "API endpoints that quietly broke","a single curated Hacker News comment",
+  "one obscure CLI flag","a forgotten Stack Overflow answer",
+  "the most-edited Wikipedia page of the day","one git command nobody uses",
+  "a new browser API you'll forget by Friday"
+];
+const MEDIUM = ["email","RSS","Mastodon","Discord","SMS","a friendly bot"];
+
+const STACK = [
+  "Vanilla HTML + JS","Vanilla JS + localStorage","HTML + a single CSS file",
+  "Cloudflare Workers + KV","Bun + SQLite","Deno Deploy","Astro + Markdown",
+  "SvelteKit static","htmx + Go","Python + Click","Rust + WASM",
+  "Node + nodemailer","just a bash script honestly","Tampermonkey + 60 lines",
+  "GitHub Pages + Actions","Supabase free tier"
+];
+
+const TIME = [
+  "Saturday afternoon","one full weekend","a long evening","two pomodoros",
+  "a rainy Sunday","six hours, ideally with snacks","one focused sitting","about three coffees"
+];
+
+const VIBE = [
+  "Quote-tweet bait.",
+  "Self-deprecating dev humor is undefeated.",
+  "Niche enough to actually rank.",
+  "Useful AND weird — bookmark + share.",
+  "This is the kind of thing HN's front page eats up.",
+  "Devs love hating on their own tools.",
+  "Built to be screenshot, not used. (Which is fine.)",
+  "Reddit's r/programming will fight about it for 200 comments.",
+  "Niche audience, near-zero competition.",
+  "Boring on the surface, addictive in practice."
+];
+
+/* ---------- name generator ---------- */
+const NAME_A = ["Tab","Slack","Commit","Deploy","Standup","PR","Lint","Patch","Diff","Repo","Cron","Cache","Queue","Hook","Spec","Yak","Ping","Mock","Lambda","Quiet"];
+const NAME_B = ["minder","atron","-ly","oscope","onaut",".exe","Box","Hub","Stack","Spotter","Wrangler","Forge","Buddy","Smith","Court","Patrol","Sweep","Bench"];
+
+function pick(rand, arr) { return arr[Math.floor(rand() * arr.length)]; }
+
+function generateName(rand) {
+  return pick(rand, NAME_A) + pick(rand, NAME_B);
+}
+
+function generatePitch(rand) {
+  const t = Math.floor(rand() * 4);
+  if (t === 0) {
+    return `A ${pick(rand, TOOL)} that ${pick(rand, ACTION)} ${pick(rand, OBJECT)} so you can ${pick(rand, BENEFIT)}.`;
+  }
+  if (t === 1) {
+    const pair = pick(rand, X_BUT_FOR_X);
+    return `${pair[0]}, but for ${pair[1]}. ${pick(rand, TOOL).replace(/^./, c => c.toUpperCase())} form factor.`;
+  }
+  if (t === 2) {
+    return `A ${pick(rand, TOOL)} for ${pick(rand, NICHE)} that ${pick(rand, ACTION)} ${pick(rand, OBJECT)}.`;
+  }
+  return `A daily ${pick(rand, FEED)} of ${pick(rand, TOPIC)}, delivered by ${pick(rand, MEDIUM)}.`;
+}
+
+/* ---------- render ---------- */
+function makeIdea(seed) {
+  const rand = mulberry32(seed);
+  // burn first call to avoid same-seed correlation
+  rand();
+  const name = generateName(rand);
+  const pitch = generatePitch(rand);
+  const stack = pick(rand, STACK);
+  const time = pick(rand, TIME);
+  const vibe = pick(rand, VIBE);
+  return { name, pitch, stack, time, vibe };
+}
+
+function getSeed() {
+  const url = new URL(location.href);
+  const s = url.searchParams.get("seed");
+  if (s && /^\d+$/.test(s)) return parseInt(s, 10) >>> 0;
+  return Math.floor(Math.random() * 0xffffffff) >>> 0;
+}
+
+function setSeedInURL(seed) {
+  const url = new URL(location.href);
+  url.searchParams.set("seed", String(seed));
+  history.replaceState(null, "", url);
+}
+
+function render(seed) {
+  const idea = makeIdea(seed);
+  document.title = `${idea.name} — Ship This Weekend`;
+  document.getElementById("pitch").textContent = `${idea.name}: ${idea.pitch}`;
+  document.getElementById("meta").innerHTML = `
+    <span class="chip"><b>Stack</b>${escapeHTML(idea.stack)}</span>
+    <span class="chip"><b>Time</b>${escapeHTML(idea.time)}</span>
+  `;
+  document.getElementById("vibe").textContent = `Why it might pop: ${idea.vibe}`;
+  setSeedInURL(seed);
+  updateShareLink(idea);
+}
+
+function escapeHTML(s) {
+  return s.replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+}
+
+function updateShareLink(idea) {
+  const text = `${idea.name}: ${idea.pitch}`;
+  const url = location.href;
+  const tweet = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+  document.getElementById("tweetBtn").href = tweet;
+}
+
+/* ---------- events ---------- */
+document.getElementById("newBtn").addEventListener("click", () => {
+  const seed = Math.floor(Math.random() * 0xffffffff) >>> 0;
+  render(seed);
+});
+
+document.getElementById("copyBtn").addEventListener("click", async () => {
+  try {
+    await navigator.clipboard.writeText(location.href);
+    const c = document.getElementById("copied");
+    c.classList.add("show");
+    setTimeout(() => c.classList.remove("show"), 1400);
+  } catch (e) {}
+});
+
+/* keyboard: space or enter generates new */
+document.addEventListener("keydown", (e) => {
+  if ((e.key === " " || e.key === "Enter") && document.activeElement === document.body) {
+    e.preventDefault();
+    document.getElementById("newBtn").click();
+  }
+});
+
+render(getSeed());
+</script>
+
+<script data-goatcounter="https://autorunfun.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

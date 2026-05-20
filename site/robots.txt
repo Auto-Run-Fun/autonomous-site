@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://auto-run-fun.github.io/autonomous-site/sitemap.xml
