@@ -36,6 +36,79 @@
 }
 </script>
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What should I build this weekend?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "That's exactly what this generator answers. Click for a new idea until one makes you smile or twitch — that's usually the right one. Weekend projects are most valuable when they're small enough to actually finish, weird enough to teach you something, and shareable enough that finishing them matters."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I come up with side project ideas?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Three reliable starting points: something that annoys you every day at work, a tiny version of a tool you already use, or 'X but for Y' — take a popular product and apply it to a smaller, weirder niche. This generator mostly samples from those patterns."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are weekend projects worth it?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, if your goal is learning, building a portfolio, or shipping more often. Most side projects don't become businesses, and that's fine. The point is reps, taste, and the occasional surprise hit."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What's a good side project for a junior developer?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Build something small enough that you can finish it in one weekend and deploy it publicly. Don't pick 'a Twitter clone' — pick 'a tiny tool that does one specific thing for one specific person.' A Chrome extension, a CLI, a single static page. The deploy and the share matter more than the code."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How long should a weekend project take?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Six to fifteen hours total. If you're past 20 hours and not done, the scope is wrong — cut features until you can ship the demo. Every generated idea here is sized for one weekend."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What stack should I use for a weekend project?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The one you already know. A weekend project should not also be 'and now I learn Rust.' Each idea here suggests a stack, but treat it as a hint — vanilla HTML/JS, a single Python script, or whatever you can iterate fastest in beats whatever's trendy this week."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Where should I share my weekend project once it's done?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Hacker News (Show HN), Reddit (r/SideProject, r/webdev, r/IMadeThis, or wherever your niche lives), Indie Hackers, Twitter/X with a screenshot, and Product Hunt for tools. Posting at all matters more than where — the worst outcome is a finished project nobody sees."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is this generator AI-powered?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. It's a combinatorial generator written in plain JavaScript — about 200 lines and zero API calls. That's why it's instant, free, and doesn't track you beyond a privacy-friendly visitor counter."
+      }
+    }
+  ]
+}
+</script>
+
 <style>
   :root {
     --bg: #0b0b10;
@@ -150,6 +223,16 @@
   .about h2 { color: var(--ink); font-size: 18px; margin: 0 0 10px; }
   .about p { margin: 0 0 10px; }
 
+  .faq {
+    margin-top: 40px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+  }
+  .faq h2 { color: var(--ink); font-size: 22px; margin: 0 0 18px; letter-spacing: -0.01em; }
+  .faq h3 { color: var(--ink); font-size: 16px; margin: 22px 0 6px; }
+  .faq p { color: var(--muted); font-size: 14px; margin: 0 0 10px; line-height: 1.6; }
+  .faq h3:first-of-type { margin-top: 0; }
+
   footer {
     margin-top: 32px;
     color: var(--muted);
@@ -188,6 +271,34 @@
     <p>A combinatorial generator that spits out weekend-sized project ideas for developers. Stack suggestions, time estimates, and a one-liner on why each idea might pop. No AI, no signups, no tracking beyond a privacy-friendly visitor counter.</p>
     <p>Every idea has a permalink — share the URL and your friends land on the same one.</p>
     <p>This whole site is built and updated daily by an autonomous AI agent (Claude Code) with a 90-day goal: 100 organic visitors. <a href="https://github.com/auto-run-fun/autonomous-site">Watch the experiment on GitHub →</a></p>
+  </section>
+
+  <section class="faq" aria-labelledby="faq-heading">
+    <h2 id="faq-heading">Side project FAQ</h2>
+
+    <h3>What should I build this weekend?</h3>
+    <p>That's exactly what this generator answers. Click for a new idea until one makes you smile or twitch — that's usually the right one. Weekend projects are most valuable when they're small enough to actually finish, weird enough to teach you something, and shareable enough that finishing them matters.</p>
+
+    <h3>How do I come up with side project ideas?</h3>
+    <p>Three reliable starting points: something that annoys you every day at work, a tiny version of a tool you already use, or "X but for Y" — take a popular product and apply it to a smaller, weirder niche. This generator mostly samples from those patterns.</p>
+
+    <h3>Are weekend projects worth it?</h3>
+    <p>Yes, if your goal is learning, building a portfolio, or shipping more often. Most side projects don't become businesses, and that's fine. The point is reps, taste, and the occasional surprise hit.</p>
+
+    <h3>What's a good side project for a junior developer?</h3>
+    <p>Build something small enough that you can finish it in one weekend and deploy it publicly. Don't pick "a Twitter clone" — pick a tiny tool that does one specific thing for one specific person. A Chrome extension, a CLI, a single static page. The deploy and the share matter more than the code.</p>
+
+    <h3>How long should a weekend project take?</h3>
+    <p>Six to fifteen hours total. If you're past 20 hours and not done, the scope is wrong — cut features until you can ship the demo. Every generated idea here is sized for one weekend.</p>
+
+    <h3>What stack should I use for a weekend project?</h3>
+    <p>The one you already know. A weekend project should not also be "and now I learn Rust." Each idea here suggests a stack, but treat it as a hint — vanilla HTML/JS, a single Python script, or whatever you can iterate fastest in beats whatever's trendy this week.</p>
+
+    <h3>Where should I share my weekend project once it's done?</h3>
+    <p>Hacker News (Show HN), Reddit (r/SideProject, r/webdev, r/IMadeThis, or wherever your niche lives), Indie Hackers, Twitter/X with a screenshot, and Product Hunt for tools. Posting at all matters more than where — the worst outcome is a finished project nobody sees.</p>
+
+    <h3>Is this generator AI-powered?</h3>
+    <p>No. It's a combinatorial generator written in plain JavaScript — about 200 lines and zero API calls. That's why it's instant, free, and doesn't track you beyond a privacy-friendly visitor counter.</p>
   </section>
 
   <footer>
@@ -340,7 +451,6 @@ function setSeedInURL(seed) {
 
 function render(seed) {
   const idea = makeIdea(seed);
-  document.title = `${idea.name} — Ship This Weekend`;
   document.getElementById("pitch").textContent = `${idea.name}: ${idea.pitch}`;
   document.getElementById("meta").innerHTML = `
     <span class="chip"><b>Stack</b>${escapeHTML(idea.stack)}</span>
