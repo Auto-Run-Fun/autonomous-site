@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Portfolio Project Ideas for Developers — Ship This Weekend</title>
+<meta name="description" content="20 portfolio project ideas for developers that actually stand out. Small, specific, shippable in a weekend. Better than another todo app.">
+<meta name="theme-color" content="#0b0b10">
+<link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/portfolio-projects.html">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Portfolio Project Ideas for Developers That Stand Out">
+<meta property="og:description" content="20 portfolio project ideas that are small, specific, and shippable in a weekend. Better than another todo app.">
+<meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/portfolio-projects.html">
+<meta property="og:image" content="https://auto-run-fun.github.io/autonomous-site/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Ship This Weekend — portfolio project ideas for developers.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Portfolio Project Ideas for Developers That Stand Out">
+<meta name="twitter:description" content="20 portfolio project ideas: small, specific, shippable in a weekend. Better than another todo app.">
+<meta name="twitter:image" content="https://auto-run-fun.github.io/autonomous-site/og.png">
+
+<script type="application/ld+json" id="itemlist-ld"></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What makes a good portfolio project for developers?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A good developer portfolio project is small enough to actually finish, specific enough to be memorable, and deployed publicly so people can see it. The worst portfolio projects are half-finished Twitter clones. The best are tiny, unusual tools that solve one specific problem — a Chrome extension that does one thing, a CLI that saved you an hour, a bot that makes you laugh. Reviewers scan dozens of portfolios; the one project that does something weird and ships is the one that gets mentioned."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How many projects should I have in my developer portfolio?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Two to four finished, deployed projects beat ten half-finished ones every time. Quality and completion matter more than quantity. Each project should be live at a URL — not 'almost done' or 'in progress.' Employers want to see that you can ship, not just start."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What portfolio projects should I build as a beginner developer?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Start with a small, specific tool instead of a big app. A Chrome extension, a CLI script, or a single static page is easier to finish and more impressive than an unfinished 'full-stack app.' Focus on: one feature, deployed publicly, with a shareable URL. Finish something small and real before adding complexity. The ability to ship is what most junior developer portfolios lack."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are side projects necessary for a developer portfolio?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Not strictly necessary, but they're one of the highest-signal things you can have. A shipped side project proves you can take an idea from zero to live without a team, a manager, or a deadline. That's a different skill from writing code at a job — and it shows initiative. If you have strong work experience, one or two projects is plenty. If you're breaking into the field, two to three strong projects can substitute for job history."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What kind of side projects impress employers?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Projects that solve a real, specific problem — even a weird or tiny one. A tool you built because you were annoyed by something at work. A scraper for data you wanted but couldn't find. A game with a mechanic you always wanted to try. Employers don't need the project to be useful to anyone else — they need to see that you had an idea, built it, deployed it, and can explain why. Unusual projects get remembered. Generic ones don't."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How long should a portfolio project take to build?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "One weekend is the sweet spot. Long enough to build something real, short enough to actually finish it. If a project is taking longer than two weekends, either cut scope drastically or accept that it may never ship. The ideas on this page are all sized for one weekend — not because two weeks is too long, but because scope creep kills projects and the habit of finishing in a focused sprint is worth practicing."
+      }
+    }
+  ]
+}
+</script>
+
+<style>
+  :root {
+    --bg: #0b0b10;
+    --panel: #15151d;
+    --panel-2: #1c1c26;
+    --ink: #e9e9f1;
+    --muted: #8a8a9a;
+    --accent: #ffd166;
+    --accent-2: #ef476f;
+    --line: #2a2a36;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  a { color: var(--accent); }
+  a:hover { color: var(--accent-2); }
+
+  .wrap { max-width: 720px; margin: 0 auto; padding: 48px 20px 96px; }
+
+  .back { color: var(--muted); font-size: 14px; text-decoration: none; }
+  .back:hover { color: var(--ink); }
+
+  header { margin: 16px 0 28px; }
+  header h1 {
+    font-size: clamp(28px, 5vw, 42px);
+    line-height: 1.05;
+    margin: 12px 0 10px;
+    letter-spacing: -0.02em;
+  }
+  header h1 .accent { color: var(--accent); }
+  header p.tag {
+    margin: 0 0 20px;
+    color: var(--muted);
+    font-size: 16px;
+  }
+
+  .chip {
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 12px;
+    color: var(--ink);
+  }
+  .chip b { color: var(--muted); font-weight: 500; margin-right: 3px; }
+
+  .btn {
+    appearance: none;
+    border: 1px solid var(--line);
+    background: var(--panel-2);
+    color: var(--ink);
+    padding: 10px 16px;
+    border-radius: 10px;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 40px;
+    font-size: 14px;
+  }
+  .btn.primary {
+    background: var(--accent);
+    color: #1a1a22;
+    border-color: var(--accent);
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn.primary:hover { background: #ffdb85; color: #1a1a22; }
+
+  .intro {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.65;
+  }
+  .intro strong { color: var(--ink); }
+  .intro p { margin: 0 0 10px; }
+  .intro p:last-child { margin: 0; }
+
+  .ideas-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  @media (max-width: 540px) {
+    .ideas-grid { grid-template-columns: 1fr; }
+  }
+
+  .idea-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 18px 16px;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: border-color 0.15s;
+  }
+  .idea-card:hover { border-color: var(--accent); color: inherit; }
+  .idea-card .name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 0 0 7px;
+  }
+  .idea-card .pitch {
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 0 0 10px;
+    color: var(--ink);
+  }
+  .idea-card .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .cta-box {
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .cta-box p { color: var(--muted); font-size: 14px; margin: 0 0 14px; }
+
+  .nav-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+    justify-content: center;
+  }
+
+  .advice {
+    margin-top: 36px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+  }
+  .advice h2 { color: var(--ink); font-size: 20px; margin: 0 0 12px; letter-spacing: -0.01em; }
+  .advice p { color: var(--muted); font-size: 14px; margin: 0 0 12px; line-height: 1.7; }
+  .advice strong { color: var(--ink); }
+
+  .faq {
+    margin-top: 36px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+  }
+  .faq h2 { color: var(--ink); font-size: 20px; margin: 0 0 18px; letter-spacing: -0.01em; }
+  .faq h3 { color: var(--ink); font-size: 15px; margin: 22px 0 6px; }
+  .faq p { color: var(--muted); font-size: 14px; margin: 0 0 10px; line-height: 1.65; }
+  .faq h3:first-of-type { margin-top: 0; }
+
+  footer {
+    margin-top: 32px;
+    color: var(--muted);
+    font-size: 13px;
+    text-align: center;
+  }
+  footer a { color: var(--muted); text-decoration: underline; }
+
+  @media (max-width: 480px) {
+    .wrap { padding: 28px 16px 64px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a href="./" class="back">← Ship This Weekend</a>
+
+  <header>
+    <h1><span class="accent">Portfolio</span> Project Ideas for Developers</h1>
+    <p class="tag">Small, specific, and shippable in a weekend. Better than another todo app.</p>
+  </header>
+
+  <div class="intro">
+    <p>Most developer portfolios look the same: a weather app, a todo list, maybe a movie search with a free API. <strong>These ideas don't.</strong></p>
+    <p>The best portfolio projects are <strong>small enough to actually finish, specific enough to be memorable, and weird enough to get remembered.</strong> A Chrome extension that does one thing, a CLI that automates something annoying, a bot for a niche audience — these tell a better story than a half-finished full-stack clone of an app that already exists.</p>
+    <p>Each idea below can be built solo over a weekend and deployed publicly. That combination — finished, live, and linkable — is what most portfolio projects lack. Click any card to open it in the generator with full stack and time details. Or hit the random generator for millions more combinations.</p>
+  </div>
+
+  <div class="ideas-grid" id="grid"></div>
+
+  <div class="cta-box">
+    <p>None of these feeling right? The random generator has millions of combinations.</p>
+    <div class="nav-links">
+      <a href="./" class="btn primary">↻ Random generator</a>
+      <a href="./ideas.html" class="btn">☰ Browse 30 more ideas</a>
+    </div>
+  </div>
+
+  <section class="advice">
+    <h2>What makes a portfolio project actually stand out</h2>
+    <p>Hiring managers and senior engineers who review portfolios see the same projects constantly. <strong>Another weather app, another todo list, another e-commerce clone.</strong> They don't need to see that you can follow a tutorial. They need to see that you can take an idea, scope it correctly, build it, and ship it.</p>
+    <p>The projects that stand out in a portfolio share three traits: they solve a <strong>real, specific problem</strong> (even a tiny or absurd one), they are <strong>deployed and publicly accessible</strong> (not "coming soon" or a local screenshot), and they are <strong>small enough that they're actually done</strong>. Unfinished projects are worse than no projects.</p>
+    <p>Tools and utilities tend to age better than clones. A Chrome extension you built because something at work annoyed you tells a better story than a Twitter clone you built from a YouTube tutorial. The story matters as much as the code: why did you build it, what did you learn, what would you do differently?</p>
+    <p>The ideas on this page are sized for one weekend. <strong>One weekend, one deployed URL, one thing to talk about in an interview.</strong> That's the formula. The generator has millions of combinations — keep clicking until something makes you want to open your editor right now.</p>
+  </section>
+
+  <section class="faq" aria-labelledby="faq-heading">
+    <h2 id="faq-heading">Portfolio project FAQ</h2>
+
+    <h3>What makes a good portfolio project for developers?</h3>
+    <p>Small, specific, deployed. A tool that solves one weird problem — a Chrome extension, a CLI, a bot for a niche — beats an unfinished app clone every time. The project doesn't need to be useful to anyone else. It needs to show you can take an idea to a live URL.</p>
+
+    <h3>How many projects should be in a developer portfolio?</h3>
+    <p>Two to four finished, deployed projects beats ten half-finished ones. Quality and completion beat quantity. Each project should live at a real URL — not "in progress" or "almost done." Employers want evidence you can ship, not evidence you can start.</p>
+
+    <h3>What portfolio projects should a beginner developer build?</h3>
+    <p>Start with something small and specific: a Chrome extension, a CLI script, or a single static page. Avoid big multi-page apps — they're hard to finish in a weekend and the scope creep kills motivation. Build one feature, deploy it publicly, get it to a real URL. That's worth more than a partially-built "full-stack" project with twenty screenshots.</p>
+
+    <h3>Are side projects necessary for a developer portfolio?</h3>
+    <p>Not strictly — strong work experience can substitute. But a shipped side project proves something work history can't: that you can take an idea from zero to live without a team or a deadline. If you're breaking into the field, two strong projects can substitute for job history. If you have experience, they differentiate you.</p>
+
+    <h3>What kind of projects impress employers?</h3>
+    <p>Projects that solve a real, specific problem — even a small or weird one. A scraper for data you wanted. A tool you built because something annoyed you at work. A game with a mechanic you always wanted to try. Unusual projects get remembered. Generic ones don't. The ability to explain why you built it, what tradeoffs you made, and what you'd change matters as much as the code itself.</p>
+
+    <h3>How long should a portfolio project take?</h3>
+    <p>One weekend is the sweet spot. Long enough to build something real, short enough to finish it. If a project is taking more than two weekends, cut scope until it ships. Every idea on this page is scoped for one weekend — the habit of scoping small and shipping often is worth building early.</p>
+  </section>
+
+  <footer>
+    <p>Made by an agent. <a href="https://github.com/auto-run-fun/autonomous-site">Source</a>. <a href="./">Generator →</a></p>
+  </footer>
+</div>
+
+<script>
+function mulberry32(a) {
+  return function() {
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    var t = a;
+    t = Math.imul(t ^ t >>> 15, t | 1);
+    t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+
+const TOOL = [
+  "Chrome extension","Tampermonkey script","menu bar app","Discord bot","Telegram bot",
+  "VS Code extension","CLI tool","tiny static site","Slack bot","RSS feed",
+  "browser bookmarklet","iOS shortcut","Raycast extension","email newsletter","single web page",
+  "Mastodon bot","Bluesky bot","GitHub Action","Notion widget","Figma plugin"
+];
+const ACTION = [
+  "replaces every","auto-rates your","silently logs your","gamifies your",
+  "translates your","summarizes your","screenshots your","shames you for",
+  "celebrates your","auto-replies to your","blocks your","color-codes your",
+  "ranks your","timestamps your","auto-archives your","explains your"
+];
+const OBJECT = [
+  "open tabs","Slack messages","commit messages","PR titles","dependency tree",
+  "browser history","calendar invites","standup notes","Jira tickets","TODO comments",
+  "stack overflow searches","keyboard shortcuts","unused npm packages","test coverage",
+  "container logs","unread emails","ChatGPT prompts","screen time","editor cursor jumps"
+];
+const BENEFIT = [
+  "stop pretending to multitask","feel something on a Monday","ship faster than your coworkers",
+  "regain a tiny bit of dignity","quietly judge your past self","look productive on Zoom",
+  "blame the tooling with evidence","get to inbox zero by yelling","sleep like a person again",
+  "remember what you were doing","make standup take 4 minutes","earn the right to log off"
+];
+const X_BUT_FOR_X = [
+  ["Wordle","SQL"],["Wordle","regex"],["Twitter","commit messages"],["LinkedIn","junior devs"],
+  ["Strava","reading"],["Spotify Wrapped","your terminal"],["Duolingo","keyboard shortcuts"],
+  ["Tinder","npm packages"],["BeReal","standups"],["Notion","one specific thing"],
+  ["Goodreads","RFCs"],["Letterboxd","CLIs"],["Reddit","one subreddit"],["Yelp","docs sites"]
+];
+const NICHE = [
+  "people who never close tabs","devs who hate meetings","ex-Googlers in denial",
+  "vim users who won the war","founders between projects","juniors faking it",
+  "remote workers in caves","staff engineers who refactor for sport","designers who code at 2am",
+  "indie hackers on day 4 of a 48-hour build","TypeScript maximalists","Rust evangelists",
+  "people who treat HN like a slot machine","anyone who has Slack-pinged themselves"
+];
+const FEED = ["newsletter","email","Mastodon feed","RSS feed","SMS digest","push notification"];
+const TOPIC = [
+  "yesterday's deprecation warnings","newly orphaned open source repos",
+  "API endpoints that quietly broke","a single curated Hacker News comment",
+  "one obscure CLI flag","a forgotten Stack Overflow answer",
+  "the most-edited Wikipedia page of the day","one git command nobody uses",
+  "a new browser API you'll forget by Friday"
+];
+const MEDIUM = ["email","RSS","Mastodon","Discord","SMS","a friendly bot"];
+const STACK = [
+  "Vanilla HTML + JS","Vanilla JS + localStorage","HTML + a single CSS file",
+  "Cloudflare Workers + KV","Bun + SQLite","Deno Deploy","Astro + Markdown",
+  "SvelteKit static","htmx + Go","Python + Click","Rust + WASM",
+  "Node + nodemailer","just a bash script honestly","Tampermonkey + 60 lines",
+  "GitHub Pages + Actions","Supabase free tier"
+];
+const TIME = [
+  "Saturday afternoon","one full weekend","a long evening","two pomodoros",
+  "a rainy Sunday","six hours, ideally with snacks","one focused sitting","about three coffees"
+];
+const NAME_A = ["Tab","Slack","Commit","Deploy","Standup","PR","Lint","Patch","Diff","Repo","Cron","Cache","Queue","Hook","Spec","Yak","Ping","Mock","Lambda","Quiet"];
+const NAME_B = ["minder","atron","-ly","oscope","onaut",".exe","Box","Hub","Stack","Spotter","Wrangler","Forge","Buddy","Smith","Court","Patrol","Sweep","Bench"];
+
+function pick(rand, arr) { return arr[Math.floor(rand() * arr.length)]; }
+function generateName(rand) { return pick(rand, NAME_A) + pick(rand, NAME_B); }
+function generatePitch(rand) {
+  const t = Math.floor(rand() * 4);
+  if (t === 0) return `A ${pick(rand, TOOL)} that ${pick(rand, ACTION)} ${pick(rand, OBJECT)} so you can ${pick(rand, BENEFIT)}.`;
+  if (t === 1) { const pair = pick(rand, X_BUT_FOR_X); return `${pair[0]}, but for ${pair[1]}. ${pick(rand, TOOL).replace(/^./, c => c.toUpperCase())} form factor.`; }
+  if (t === 2) return `A ${pick(rand, TOOL)} for ${pick(rand, NICHE)} that ${pick(rand, ACTION)} ${pick(rand, OBJECT)}.`;
+  return `A daily ${pick(rand, FEED)} of ${pick(rand, TOPIC)}, delivered by ${pick(rand, MEDIUM)}.`;
+}
+function makeIdea(seed) {
+  const rand = mulberry32(seed); rand();
+  return { name: generateName(rand), pitch: generatePitch(rand), stack: pick(rand, STACK), time: pick(rand, TIME) };
+}
+function escapeHTML(s) { return s.replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c])); }
+
+const BASE = "https://auto-run-fun.github.io/autonomous-site/";
+const grid = document.getElementById("grid");
+const ldItems = [];
+
+for (let seed = 31; seed <= 50; seed++) {
+  const idea = makeIdea(seed);
+  const url = `${BASE}?seed=${seed}`;
+  const a = document.createElement("a");
+  a.href = `./index.html?seed=${seed}`;
+  a.className = "idea-card";
+  a.setAttribute("aria-label", `${idea.name}: ${idea.pitch}`);
+  a.innerHTML = `
+    <div class="name">${escapeHTML(idea.name)}</div>
+    <div class="pitch">${escapeHTML(idea.pitch)}</div>
+    <div class="chips">
+      <span class="chip"><b>Stack</b>${escapeHTML(idea.stack)}</span>
+      <span class="chip"><b>Time</b>${escapeHTML(idea.time)}</span>
+    </div>
+  `;
+  grid.appendChild(a);
+  ldItems.push({ "@type": "ListItem", "position": seed - 30, "name": `${idea.name}: ${idea.pitch}`, "url": url });
+}
+
+document.getElementById("itemlist-ld").textContent = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Portfolio Project Ideas for Developers",
+  "description": "20 portfolio project ideas for developers: small, specific, and shippable in a weekend.",
+  "numberOfItems": 20,
+  "itemListElement": ldItems
+});
+</script>
+
+<script data-goatcounter="https://autorunfun.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
