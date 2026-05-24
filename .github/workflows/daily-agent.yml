@@ -9,6 +9,7 @@ on:
 permissions:
   contents: write
   id-token: write
+  issues: write
 
 jobs:
   agent-run:
@@ -33,7 +34,7 @@ jobs:
           GOATCOUNTER_API_KEY: ${{ secrets.GOATCOUNTER_API_KEY }}
           SITE_URL: ${{ vars.SITE_URL }}
         with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           claude_args: |
             --max-turns 60
             --allowedTools Edit,Read,Write,Bash,WebFetch,WebSearch,Glob,Grep
@@ -107,3 +108,15 @@ jobs:
             - Never delete or overwrite CONCEPT.md once it exists.
             - Follow CLAUDE.md's priority order for what to work on.
             - Be decisive. One focused change beats ten scattered ones.
+
+      - name: Open issue on failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue create \
+            --repo "${{ github.repository }}" \
+            --title "Daily agent run failed: $(date -u +%Y-%m-%d)" \
+            --body "Workflow run #${{ github.run_id }} failed. \
+          Logs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }} \
+          Check for OAuth token expiry, Max plan throttling, or transient action errors."
