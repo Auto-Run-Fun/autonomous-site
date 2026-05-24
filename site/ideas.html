@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>30 Weekend Side Project Ideas for Developers — Ship This Weekend</title>
+<meta name="description" content="Browse 30 weekend side project ideas for developers. Each idea ships in 48 hours, with a stack suggestion and time estimate. Click any to open in the generator.">
+<meta name="theme-color" content="#0b0b10">
+<link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/ideas.html">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="30 Weekend Side Project Ideas for Developers">
+<meta property="og:description" content="Browse weekend project ideas sized for 48 hours. Stack suggestions, time estimates, no AI, no signup.">
+<meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/ideas.html">
+<meta property="og:image" content="https://auto-run-fun.github.io/autonomous-site/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Ship This Weekend — a weekend-sized side project idea generator for developers.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="30 Weekend Side Project Ideas for Developers">
+<meta name="twitter:description" content="Browse weekend project ideas sized for 48 hours. Stack suggestions, time estimates, no AI, no signup.">
+<meta name="twitter:image" content="https://auto-run-fun.github.io/autonomous-site/og.png">
+
+<script type="application/ld+json" id="itemlist-ld"></script>
+
+<style>
+  :root {
+    --bg: #0b0b10;
+    --panel: #15151d;
+    --panel-2: #1c1c26;
+    --ink: #e9e9f1;
+    --muted: #8a8a9a;
+    --accent: #ffd166;
+    --accent-2: #ef476f;
+    --line: #2a2a36;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  a { color: var(--accent); }
+  a:hover { color: var(--accent-2); }
+
+  .wrap { max-width: 720px; margin: 0 auto; padding: 48px 20px 96px; }
+
+  .back { color: var(--muted); font-size: 14px; text-decoration: none; }
+  .back:hover { color: var(--ink); }
+
+  header { margin: 16px 0 28px; }
+  header h1 {
+    font-size: clamp(28px, 5vw, 42px);
+    line-height: 1.05;
+    margin: 12px 0 10px;
+    letter-spacing: -0.02em;
+  }
+  header h1 .accent { color: var(--accent); }
+  header p.tag {
+    margin: 0 0 20px;
+    color: var(--muted);
+    font-size: 16px;
+  }
+
+  .chip {
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 12px;
+    color: var(--ink);
+  }
+  .chip b { color: var(--muted); font-weight: 500; margin-right: 3px; }
+
+  .btn {
+    appearance: none;
+    border: 1px solid var(--line);
+    background: var(--panel-2);
+    color: var(--ink);
+    padding: 10px 16px;
+    border-radius: 10px;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 40px;
+    font-size: 14px;
+  }
+  .btn.primary {
+    background: var(--accent);
+    color: #1a1a22;
+    border-color: var(--accent);
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn.primary:hover { background: #ffdb85; color: #1a1a22; }
+
+  .intro {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.65;
+  }
+  .intro strong { color: var(--ink); }
+  .intro p { margin: 0 0 10px; }
+  .intro p:last-child { margin: 0; }
+
+  .ideas-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  @media (max-width: 540px) {
+    .ideas-grid { grid-template-columns: 1fr; }
+  }
+
+  .idea-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 18px 16px;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: border-color 0.15s;
+  }
+  .idea-card:hover { border-color: var(--accent); color: inherit; }
+  .idea-card .name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 0 0 7px;
+  }
+  .idea-card .pitch {
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 0 0 10px;
+    color: var(--ink);
+  }
+  .idea-card .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .cta-box {
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .cta-box p { color: var(--muted); font-size: 14px; margin: 0 0 14px; }
+
+  .about {
+    margin-top: 36px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .about h2 { color: var(--ink); font-size: 17px; margin: 0 0 10px; }
+  .about p { margin: 0 0 10px; }
+
+  footer {
+    margin-top: 32px;
+    color: var(--muted);
+    font-size: 13px;
+    text-align: center;
+  }
+  footer a { color: var(--muted); text-decoration: underline; }
+
+  @media (max-width: 480px) {
+    .wrap { padding: 28px 16px 64px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a href="./" class="back">← Ship This Weekend</a>
+
+  <header>
+    <h1>30 Weekend <span class="accent">Side Project</span> Ideas</h1>
+    <p class="tag">Each idea is scoped for 48 hours. Click any card to open it in the generator with stack and time details.</p>
+  </header>
+
+  <div class="intro">
+    <p>These 30 ideas come from the <strong>Ship This Weekend</strong> combinatorial engine. They cover browser extensions, CLI tools, bots, tiny static sites, and daily newsletters — all buildable solo over a weekend. Each comes with a <strong>stack hint</strong> and a realistic <strong>time estimate</strong>.</p>
+    <p>Scope is the hardest part of a weekend project. These ideas are deliberately small: one feature, one screen, one thing well. Finish the demo, deploy it, share it. That's the whole game.</p>
+    <p>None of these clicking? The <a href="./">random generator</a> has millions of combinations.</p>
+  </div>
+
+  <div class="ideas-grid" id="grid"></div>
+
+  <div class="cta-box">
+    <p>Want something different? The generator has millions of combinations — keep clicking until one sticks.</p>
+    <a href="./" class="btn primary">↻ Open the random generator</a>
+  </div>
+
+  <section class="about">
+    <h2>About these ideas</h2>
+    <p>Weekend projects are valuable not because they become businesses, but because they build shipping habits. The developers who ship the most interesting things are rarely the best coders — they're the ones who can scope a weekend project correctly and resist the urge to add "just one more feature" before it's live.</p>
+    <p>Every idea listed here is intentionally scoped so you can have something deployed by Sunday evening. The stack suggestions are defaults, not mandates — use whatever you can move fastest in. And when it's done, share it somewhere: <a href="https://news.ycombinator.com/submit" target="_blank" rel="noopener">Hacker News</a>, <a href="https://reddit.com/r/sideproject" target="_blank" rel="noopener">r/SideProject</a>, <a href="https://reddit.com/r/webdev" target="_blank" rel="noopener">r/webdev</a>, or wherever your niche lives.</p>
+    <p>This list is generated by a <a href="./">free, no-signup tool</a>. No AI, no tracking beyond a privacy-friendly visitor counter.</p>
+  </section>
+
+  <footer>
+    <p>Made by an agent. <a href="https://github.com/auto-run-fun/autonomous-site">Source</a>. <a href="./">Generator →</a></p>
+  </footer>
+</div>
+
+<script>
+function mulberry32(a) {
+  return function() {
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    var t = a;
+    t = Math.imul(t ^ t >>> 15, t | 1);
+    t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+
+const TOOL = [
+  "Chrome extension","Tampermonkey script","menu bar app","Discord bot","Telegram bot",
+  "VS Code extension","CLI tool","tiny static site","Slack bot","RSS feed",
+  "browser bookmarklet","iOS shortcut","Raycast extension","email newsletter","single web page",
+  "Mastodon bot","Bluesky bot","GitHub Action","Notion widget","Figma plugin"
+];
+const ACTION = [
+  "replaces every","auto-rates your","silently logs your","gamifies your",
+  "translates your","summarizes your","screenshots your","shames you for",
+  "celebrates your","auto-replies to your","blocks your","color-codes your",
+  "ranks your","timestamps your","auto-archives your","explains your"
+];
+const OBJECT = [
+  "open tabs","Slack messages","commit messages","PR titles","dependency tree",
+  "browser history","calendar invites","standup notes","Jira tickets","TODO comments",
+  "stack overflow searches","keyboard shortcuts","unused npm packages","test coverage",
+  "container logs","unread emails","ChatGPT prompts","screen time","editor cursor jumps"
+];
+const BENEFIT = [
+  "stop pretending to multitask","feel something on a Monday","ship faster than your coworkers",
+  "regain a tiny bit of dignity","quietly judge your past self","look productive on Zoom",
+  "blame the tooling with evidence","get to inbox zero by yelling","sleep like a person again",
+  "remember what you were doing","make standup take 4 minutes","earn the right to log off"
+];
+const X_BUT_FOR_X = [
+  ["Wordle","SQL"],["Wordle","regex"],["Twitter","commit messages"],["LinkedIn","junior devs"],
+  ["Strava","reading"],["Spotify Wrapped","your terminal"],["Duolingo","keyboard shortcuts"],
+  ["Tinder","npm packages"],["BeReal","standups"],["Notion","one specific thing"],
+  ["Goodreads","RFCs"],["Letterboxd","CLIs"],["Reddit","one subreddit"],["Yelp","docs sites"]
+];
+const NICHE = [
+  "people who never close tabs","devs who hate meetings","ex-Googlers in denial",
+  "vim users who won the war","founders between projects","juniors faking it",
+  "remote workers in caves","staff engineers who refactor for sport","designers who code at 2am",
+  "indie hackers on day 4 of a 48-hour build","TypeScript maximalists","Rust evangelists",
+  "people who treat HN like a slot machine","anyone who has Slack-pinged themselves"
+];
+const FEED = ["newsletter","email","Mastodon feed","RSS feed","SMS digest","push notification"];
+const TOPIC = [
+  "yesterday's deprecation warnings","newly orphaned open source repos",
+  "API endpoints that quietly broke","a single curated Hacker News comment",
+  "one obscure CLI flag","a forgotten Stack Overflow answer",
+  "the most-edited Wikipedia page of the day","one git command nobody uses",
+  "a new browser API you'll forget by Friday"
+];
+const MEDIUM = ["email","RSS","Mastodon","Discord","SMS","a friendly bot"];
+const STACK = [
+  "Vanilla HTML + JS","Vanilla JS + localStorage","HTML + a single CSS file",
+  "Cloudflare Workers + KV","Bun + SQLite","Deno Deploy","Astro + Markdown",
+  "SvelteKit static","htmx + Go","Python + Click","Rust + WASM",
+  "Node + nodemailer","just a bash script honestly","Tampermonkey + 60 lines",
+  "GitHub Pages + Actions","Supabase free tier"
+];
+const TIME = [
+  "Saturday afternoon","one full weekend","a long evening","two pomodoros",
+  "a rainy Sunday","six hours, ideally with snacks","one focused sitting","about three coffees"
+];
+const VIBE = [
+  "Quote-tweet bait.","Self-deprecating dev humor is undefeated.",
+  "Niche enough to actually rank.","Useful AND weird — bookmark + share.",
+  "This is the kind of thing HN's front page eats up.",
+  "Devs love hating on their own tools.",
+  "Built to be screenshot, not used. (Which is fine.)",
+  "Reddit's r/programming will fight about it for 200 comments.",
+  "Niche audience, near-zero competition.",
+  "Boring on the surface, addictive in practice."
+];
+const NAME_A = ["Tab","Slack","Commit","Deploy","Standup","PR","Lint","Patch","Diff","Repo","Cron","Cache","Queue","Hook","Spec","Yak","Ping","Mock","Lambda","Quiet"];
+const NAME_B = ["minder","atron","-ly","oscope","onaut",".exe","Box","Hub","Stack","Spotter","Wrangler","Forge","Buddy","Smith","Court","Patrol","Sweep","Bench"];
+
+function pick(rand, arr) { return arr[Math.floor(rand() * arr.length)]; }
+function generateName(rand) { return pick(rand, NAME_A) + pick(rand, NAME_B); }
+function generatePitch(rand) {
+  const t = Math.floor(rand() * 4);
+  if (t === 0) return `A ${pick(rand, TOOL)} that ${pick(rand, ACTION)} ${pick(rand, OBJECT)} so you can ${pick(rand, BENEFIT)}.`;
+  if (t === 1) { const pair = pick(rand, X_BUT_FOR_X); return `${pair[0]}, but for ${pair[1]}. ${pick(rand, TOOL).replace(/^./, c => c.toUpperCase())} form factor.`; }
+  if (t === 2) return `A ${pick(rand, TOOL)} for ${pick(rand, NICHE)} that ${pick(rand, ACTION)} ${pick(rand, OBJECT)}.`;
+  return `A daily ${pick(rand, FEED)} of ${pick(rand, TOPIC)}, delivered by ${pick(rand, MEDIUM)}.`;
+}
+function makeIdea(seed) {
+  const rand = mulberry32(seed); rand();
+  return { name: generateName(rand), pitch: generatePitch(rand), stack: pick(rand, STACK), time: pick(rand, TIME) };
+}
+function escapeHTML(s) { return s.replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c])); }
+
+const BASE = "https://auto-run-fun.github.io/autonomous-site/";
+const grid = document.getElementById("grid");
+const ldItems = [];
+
+for (let seed = 1; seed <= 30; seed++) {
+  const idea = makeIdea(seed);
+  const url = `${BASE}?seed=${seed}`;
+  const a = document.createElement("a");
+  a.href = `./index.html?seed=${seed}`;
+  a.className = "idea-card";
+  a.setAttribute("aria-label", `${idea.name}: ${idea.pitch}`);
+  a.innerHTML = `
+    <div class="name">${escapeHTML(idea.name)}</div>
+    <div class="pitch">${escapeHTML(idea.pitch)}</div>
+    <div class="chips">
+      <span class="chip"><b>Stack</b>${escapeHTML(idea.stack)}</span>
+      <span class="chip"><b>Time</b>${escapeHTML(idea.time)}</span>
+    </div>
+  `;
+  grid.appendChild(a);
+  ldItems.push({ "@type": "ListItem", "position": seed, "name": `${idea.name}: ${idea.pitch}`, "url": url });
+}
+
+document.getElementById("itemlist-ld").textContent = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Weekend Side Project Ideas for Developers",
+  "description": "30 weekend side project ideas, each scoped to ship in 48 hours, with stack suggestions and time estimates.",
+  "numberOfItems": 30,
+  "itemListElement": ldItems
+});
+</script>
+
+<script data-goatcounter="https://autorunfun.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
