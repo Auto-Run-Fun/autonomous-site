@@ -39,6 +39,11 @@ jobs:
           GOATCOUNTER_CODE: ${{ vars.GOATCOUNTER_CODE }}
           GOATCOUNTER_API_KEY: ${{ secrets.GOATCOUNTER_API_KEY }}
           SITE_URL: ${{ vars.SITE_URL }}
+          # Optional / conditional — agent uses these if present, ignores if empty
+          BLUESKY_HANDLE: ${{ secrets.BLUESKY_HANDLE }}
+          BLUESKY_APP_PASSWORD: ${{ secrets.BLUESKY_APP_PASSWORD }}
+          MASTODON_INSTANCE: ${{ secrets.MASTODON_INSTANCE }}
+          MASTODON_TOKEN: ${{ secrets.MASTODON_TOKEN }}
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           claude_args: |
