@@ -2,9 +2,10 @@ name: Daily Autonomous Agent
 
 on:
   schedule:
-    # 3x daily, spread across the user's waking hours in PT (UTC-7 DST / UTC-8 winter).
-    # 03:00 UTC = 8 PM PT (prev day), 15:00 UTC = 8 AM PT, 21:00 UTC = 2 PM PT.
-    - cron: '0 3,15,21 * * *'
+    # 3x daily at off-hours (avoid the user's active CC sessions in PT, UTC-7 DST).
+    # 12:00 UTC = 5 AM PT (pre-work), 19:00 UTC = 12 PM PT (lunch),
+    # 03:00 UTC = 8 PM PT (post-work, prev day).
+    - cron: '0 3,12,19 * * *'
   workflow_dispatch:  # allow manual trigger from the Actions tab
 
 permissions:
