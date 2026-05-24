@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Beginner Programming Project Ideas — Ship This Weekend</title>
+<meta name="description" content="20 beginner programming project ideas you can actually finish in a weekend. No tutorials, no clones — real projects sized for your first build.">
+<meta name="theme-color" content="#0b0b10">
+<link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/beginner-projects.html">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Beginner Programming Project Ideas — Ship This Weekend">
+<meta property="og:description" content="20 beginner-friendly project ideas sized for a weekend. Real projects you can actually finish, not tutorial clones.">
+<meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/beginner-projects.html">
+<meta property="og:image" content="https://auto-run-fun.github.io/autonomous-site/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Ship This Weekend — beginner programming project ideas.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Beginner Programming Project Ideas — Ship This Weekend">
+<meta name="twitter:description" content="20 beginner-friendly project ideas sized for a weekend. Real projects you can finish, not tutorial clones.">
+<meta name="twitter:image" content="https://auto-run-fun.github.io/autonomous-site/og.png">
+
+<script type="application/ld+json" id="itemlist-ld"></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is a good first programming project for beginners?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The best first programming project is one you can finish in a weekend. That usually means: one feature, no backend, no database, no user accounts. A static HTML page that does one interesting thing — a quiz, a small generator, a calculator — is perfect. The goal isn't to impress anyone yet. The goal is to build the habit of finishing things. Pick something you'd actually want to use, and make it work. That matters more than the tech stack."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What programming projects should beginners build for practice?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "For practice, beginners should build things that require them to solve problems, not follow steps. A to-do app from a tutorial teaches you to type. A random generator with your own word lists teaches you to think. Try: a random quote page (arrays, DOM), a quiz app with scoring (conditionals, state), a click counter with local storage (persistence), or a color palette generator (math, display). Anything where the output changes based on input — that's where the learning happens."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I come up with programming project ideas as a beginner?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Start with your own annoyances: what's something small and repetitive you do manually that a script could do for you? Then scope it down until it fits in one sitting. Most beginners overestimate how complex their first project needs to be. A tool that converts one thing to another, a page that displays some information in a useful format, or a small game with one mechanic — these are all real projects. The bar for 'good enough to ship' is lower than you think."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What should a beginner developer put on their portfolio?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Two or three finished, deployed projects beats a dozen unfinished ones. As a beginner, 'finished and deployed' is the signal that matters — it shows you can take something to completion. The projects don't need to be complex or original. A calculator that works, a quiz app that tracks scores, a small tool that does one useful thing — all of these are worth more than an unfinished Twitter clone. Deploy to GitHub Pages (free) so there's a real URL to link to."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is it too early to build projects as a programming beginner?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No — in fact, building projects before you feel ready is one of the fastest ways to learn. You don't need to know everything first. You need to know enough to start, then Google the rest as you go. Every experienced developer does this. The projects on this page are designed to be doable with a few weeks of HTML, CSS, and JavaScript knowledge. If something doesn't work, that's not failure — that's the process."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How long should a beginner's first programming project take?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "One weekend is the target. If it's taking more than two weekends, scope it down — don't abandon it. 'Make it smaller until it ships' is the most important programming skill beginners don't teach themselves. Finishing a tiny thing is better than not finishing a big thing. You can always add features after the first version is live. The habit of shipping matters more than the feature set."
+      }
+    }
+  ]
+}
+</script>
+
+<style>
+  :root {
+    --bg: #0b0b10;
+    --panel: #15151d;
+    --panel-2: #1c1c26;
+    --ink: #e9e9f1;
+    --muted: #8a8a9a;
+    --accent: #ffd166;
+    --accent-2: #ef476f;
+    --line: #2a2a36;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  a { color: var(--accent); }
+  a:hover { color: var(--accent-2); }
+
+  .wrap { max-width: 720px; margin: 0 auto; padding: 48px 20px 96px; }
+
+  .back { color: var(--muted); font-size: 14px; text-decoration: none; }
+  .back:hover { color: var(--ink); }
+
+  header { margin: 16px 0 28px; }
+  header h1 {
+    font-size: clamp(28px, 5vw, 42px);
+    line-height: 1.05;
+    margin: 12px 0 10px;
+    letter-spacing: -0.02em;
+  }
+  header h1 .accent { color: var(--accent); }
+  header p.tag {
+    margin: 0 0 20px;
+    color: var(--muted);
+    font-size: 16px;
+  }
+
+  .chip {
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 12px;
+    color: var(--ink);
+  }
+  .chip b { color: var(--muted); font-weight: 500; margin-right: 3px; }
+
+  .btn {
+    appearance: none;
+    border: 1px solid var(--line);
+    background: var(--panel-2);
+    color: var(--ink);
+    padding: 10px 16px;
+    border-radius: 10px;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 40px;
+    font-size: 14px;
+  }
+  .btn.primary {
+    background: var(--accent);
+    color: #1a1a22;
+    border-color: var(--accent);
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn.primary:hover { background: #ffdb85; color: #1a1a22; }
+
+  .intro {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.65;
+  }
+  .intro strong { color: var(--ink); }
+  .intro p { margin: 0 0 10px; }
+  .intro p:last-child { margin: 0; }
+
+  .ideas-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  @media (max-width: 540px) {
+    .ideas-grid { grid-template-columns: 1fr; }
+  }
+
+  .idea-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 18px 16px;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    transition: border-color 0.15s;
+  }
+  .idea-card:hover { border-color: var(--accent); color: inherit; }
+  .idea-card .name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 0 0 7px;
+  }
+  .idea-card .pitch {
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 0 0 10px;
+    color: var(--ink);
+  }
+  .idea-card .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .cta-box {
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .cta-box p { color: var(--muted); font-size: 14px; margin: 0 0 14px; }
+
+  .nav-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+    justify-content: center;
+  }
+
+  .advice {
+    margin-top: 36px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+  }
+  .advice h2 { color: var(--ink); font-size: 20px; margin: 0 0 12px; letter-spacing: -0.01em; }
+  .advice p { color: var(--muted); font-size: 14px; margin: 0 0 12px; line-height: 1.7; }
+  .advice strong { color: var(--ink); }
+
+  .tips {
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+  }
+  .tips h2 { color: var(--ink); font-size: 20px; margin: 0 0 14px; letter-spacing: -0.01em; }
+  .tip-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 10px;
+  }
+  .tip-list li {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 12px 14px;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .tip-list li strong { color: var(--ink); display: block; margin-bottom: 2px; }
+
+  .faq {
+    margin-top: 36px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+  }
+  .faq h2 { color: var(--ink); font-size: 20px; margin: 0 0 18px; letter-spacing: -0.01em; }
+  .faq h3 { color: var(--ink); font-size: 15px; margin: 22px 0 6px; }
+  .faq p { color: var(--muted); font-size: 14px; margin: 0 0 10px; line-height: 1.65; }
+
+  footer {
+    margin-top: 32px;
+    color: var(--muted);
+    font-size: 13px;
+    text-align: center;
+  }
+  footer a { color: var(--muted); text-decoration: underline; }
+
+  @media (max-width: 480px) {
+    .wrap { padding: 28px 16px 64px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a href="./" class="back">← Ship This Weekend</a>
+
+  <header>
+    <h1><span class="accent">Beginner</span> Programming Project Ideas</h1>
+    <p class="tag">20 projects a beginner can actually finish in a weekend. No backend. No accounts. No excuses.</p>
+  </header>
+
+  <div class="intro">
+    <p>Most beginner project lists tell you to build a calculator, a todo app, or a weather app. <strong>Those are fine for practice — but they don't teach you to think.</strong></p>
+    <p>The projects below are sized for one weekend and designed to be slightly weird and specific. Weird means you make decisions. Decisions mean you learn. Each idea is small enough to finish before you give up, concrete enough that you know when you're done, and unusual enough that you'll actually remember what you built.</p>
+    <p><strong>You don't need to know everything to start.</strong> You need enough JavaScript to manipulate a page, and the willingness to Google the rest. That's the actual skill. Click any card to get the full idea with a suggested stack and time estimate.</p>
+  </div>
+
+  <div class="ideas-grid" id="grid"></div>
+
+  <div class="cta-box">
+    <p>Want millions more combinations? The random generator is right here.</p>
+    <div class="nav-links">
+      <a href="./" class="btn primary">↻ Random generator</a>
+      <a href="./ideas.html" class="btn">☰ Browse 30 ideas</a>
+      <a href="./portfolio-projects.html" class="btn">★ Portfolio picks</a>
+    </div>
+  </div>
+
+  <section class="advice">
+    <h2>How to actually finish your first programming project</h2>
+    <p>The number one reason beginners don't finish projects isn't skill — it's scope. You pick something too big, it takes longer than expected, motivation drops, and the project sits unfinished in a folder forever. <strong>Sound familiar?</strong> The fix isn't to try harder. It's to pick smaller.</p>
+    <p>A project is done when it has a URL and does the one thing it's supposed to do. Not when it has user accounts, a database, a mobile app, and ten features. One feature, deployed, is worth more than ten features not deployed. Every project you see from experienced developers started as something much smaller than the final version.</p>
+    <p>The ideas on this page are all scoped to one weekend on purpose. If an idea feels too small, <strong>that's usually a sign it's sized correctly.</strong> Build the smallest version, deploy it to GitHub Pages (free), get a URL, then decide if you want to add features. Most beginner projects die before they reach a URL. Don't let that happen.</p>
+    <p>One more thing: the technology doesn't matter as much as you think. Vanilla HTML, CSS, and JavaScript can build everything on this page without a build step, a package manager, or a framework. Learn the language before the framework. You'll build faster, understand more, and debug less.</p>
+  </section>
+
+  <section class="tips">
+    <h2>Six rules for beginner projects that actually ship</h2>
+    <ul class="tip-list">
+      <li>
+        <strong>No backend for your first five projects</strong>
+        Everything runs in the browser. No Node.js, no Python server, no database. localStorage is your friend. GitHub Pages is free and deploys in seconds.
+      </li>
+      <li>
+        <strong>One feature means one feature</strong>
+        Not "one feature, plus user accounts, plus a history page." One thing the page does. You can always add features after it ships.
+      </li>
+      <li>
+        <strong>Done means there's a URL</strong>
+        Not "mostly done" or "just needs a few more things." A real URL you can text someone. That's the finish line.
+      </li>
+      <li>
+        <strong>Google is not cheating</strong>
+        Every professional developer Googles things constantly. Looking up "how to shuffle an array in JavaScript" while building is exactly how you're supposed to learn.
+      </li>
+      <li>
+        <strong>Weird beats generic every time</strong>
+        A random excuse generator beats a generic todo app for learning and for your portfolio. The more specific and unusual, the more interesting the decisions you have to make.
+      </li>
+      <li>
+        <strong>Make it smaller until it ships</strong>
+        If you're stuck for two days on one feature, cut it. Scope down until something works end-to-end, then expand. A working small thing beats a broken big thing.
+      </li>
+    </ul>
+  </section>
+
+  <section class="faq" aria-labelledby="faq-heading">
+    <h2 id="faq-heading">Beginner project FAQ</h2>
+
+    <h3>What is a good first programming project for beginners?</h3>
+    <p>One you can finish in a weekend. Usually that means: one feature, no backend, no database. A static page that does one interesting thing — a quiz, a generator, a small game — is perfect. The goal is to build the habit of finishing. Pick something you'd want to use, make it work, ship it. That matters more than the technology.</p>
+
+    <h3>What programming projects should beginners build for practice?</h3>
+    <p>Build things that require you to solve problems, not follow steps. A random generator with your own word lists, a quiz app with scoring, a click counter with localStorage, a color tool — anything where output changes based on input. That's where real learning happens. Tutorial clones teach you to type. Original projects teach you to think.</p>
+
+    <h3>How do I come up with programming project ideas as a beginner?</h3>
+    <p>Start with your own annoyances. What's something small and repetitive you do manually that a script could handle? Then scope it down until it fits in one sitting. Most beginners overestimate how complex a project needs to be. A tool that converts one thing to another, a page that displays information usefully, or a tiny game — all of these are real projects. The bar for "good enough to ship" is lower than you think.</p>
+
+    <h3>What should a beginner developer put on their portfolio?</h3>
+    <p>Two or three finished, deployed projects beats a dozen unfinished ones. As a beginner, "finished and deployed" is the main signal. The projects don't need to be complex. A calculator that works, a quiz that tracks scores, a small tool that does one useful thing — all worth more than an unfinished clone. Deploy to GitHub Pages (free) so there's a real URL to link to.</p>
+
+    <h3>Is it too early to build projects as a programming beginner?</h3>
+    <p>No — building projects before you feel ready is one of the fastest ways to learn. You don't need to know everything first. You need to know enough to start, then Google the rest. Every professional developer does this. The projects here are designed for a few weeks of HTML, CSS, and JavaScript knowledge. If something doesn't work, that's not failure — that's the process.</p>
+
+    <h3>How long should a beginner's first programming project take?</h3>
+    <p>One weekend is the target. If it's taking more than two weekends, scope it down — don't abandon it. "Make it smaller until it ships" is the most important skill beginners don't teach themselves. Finishing a tiny thing beats not finishing a big thing. You can always add features after v1 is live.</p>
+  </section>
+
+  <footer>
+    <p>Made by an agent. <a href="https://github.com/auto-run-fun/autonomous-site">Source</a>. <a href="./">Generator →</a></p>
+  </footer>
+</div>
+
+<script>
+function mulberry32(a) {
+  return function() {
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    var t = a;
+    t = Math.imul(t ^ t >>> 15, t | 1);
+    t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+
+const TOOL = [
+  "Chrome extension","Tampermonkey script","menu bar app","Discord bot","Telegram bot",
+  "VS Code extension","CLI tool","tiny static site","Slack bot","RSS feed",
+  "browser bookmarklet","iOS shortcut","Raycast extension","email newsletter","single web page",
+  "Mastodon bot","Bluesky bot","GitHub Action","Notion widget","Figma plugin"
+];
+const ACTION = [
+  "replaces every","auto-rates your","silently logs your","gamifies your",
+  "translates your","summarizes your","screenshots your","shames you for",
+  "celebrates your","auto-replies to your","blocks your","color-codes your",
+  "ranks your","timestamps your","auto-archives your","explains your"
+];
+const OBJECT = [
+  "open tabs","Slack messages","commit messages","PR titles","dependency tree",
+  "browser history","calendar invites","standup notes","Jira tickets","TODO comments",
+  "stack overflow searches","keyboard shortcuts","unused npm packages","test coverage",
+  "container logs","unread emails","ChatGPT prompts","screen time","editor cursor jumps"
+];
+const BENEFIT = [
+  "stop pretending to multitask","feel something on a Monday","ship faster than your coworkers",
+  "regain a tiny bit of dignity","quietly judge your past self","look productive on Zoom",
+  "blame the tooling with evidence","get to inbox zero by yelling","sleep like a person again",
+  "remember what you were doing","make standup take 4 minutes","earn the right to log off"
+];
+const X_BUT_FOR_X = [
+  ["Wordle","SQL"],["Wordle","regex"],["Twitter","commit messages"],["LinkedIn","junior devs"],
+  ["Strava","reading"],["Spotify Wrapped","your terminal"],["Duolingo","keyboard shortcuts"],
+  ["Tinder","npm packages"],["BeReal","standups"],["Notion","one specific thing"],
+  ["Goodreads","RFCs"],["Letterboxd","CLIs"],["Reddit","one subreddit"],["Yelp","docs sites"]
+];
+const NICHE = [
+  "people who never close tabs","devs who hate meetings","ex-Googlers in denial",
+  "vim users who won the war","founders between projects","juniors faking it",
+  "remote workers in caves","staff engineers who refactor for sport","designers who code at 2am",
+  "indie hackers on day 4 of a 48-hour build","TypeScript maximalists","Rust evangelists",
+  "people who treat HN like a slot machine","anyone who has Slack-pinged themselves"
+];
+const FEED = ["newsletter","email","Mastodon feed","RSS feed","SMS digest","push notification"];
+const TOPIC = [
+  "yesterday's deprecation warnings","newly orphaned open source repos",
+  "API endpoints that quietly broke","a single curated Hacker News comment",
+  "one obscure CLI flag","a forgotten Stack Overflow answer",
+  "the most-edited Wikipedia page of the day","one git command nobody uses",
+  "a new browser API you'll forget by Friday"
+];
+const MEDIUM = ["email","RSS","Mastodon","Discord","SMS","a friendly bot"];
+const STACK = [
+  "Vanilla HTML + JS","Vanilla JS + localStorage","HTML + a single CSS file",
+  "Cloudflare Workers + KV","Bun + SQLite","Deno Deploy","Astro + Markdown",
+  "SvelteKit static","htmx + Go","Python + Click","Rust + WASM",
+  "Node + nodemailer","just a bash script honestly","Tampermonkey + 60 lines",
+  "GitHub Pages + Actions","Supabase free tier"
+];
+const TIME = [
+  "Saturday afternoon","one full weekend","a long evening","two pomodoros",
+  "a rainy Sunday","six hours, ideally with snacks","one focused sitting","about three coffees"
+];
+const NAME_A = ["Tab","Slack","Commit","Deploy","Standup","PR","Lint","Patch","Diff","Repo","Cron","Cache","Queue","Hook","Spec","Yak","Ping","Mock","Lambda","Quiet"];
+const NAME_B = ["minder","atron","-ly","oscope","onaut",".exe","Box","Hub","Stack","Spotter","Wrangler","Forge","Buddy","Smith","Court","Patrol","Sweep","Bench"];
+
+function pick(rand, arr) { return arr[Math.floor(rand() * arr.length)]; }
+function generateName(rand) { return pick(rand, NAME_A) + pick(rand, NAME_B); }
+function generatePitch(rand) {
+  const t = Math.floor(rand() * 4);
+  if (t === 0) return `A ${pick(rand, TOOL)} that ${pick(rand, ACTION)} ${pick(rand, OBJECT)} so you can ${pick(rand, BENEFIT)}.`;
+  if (t === 1) { const pair = pick(rand, X_BUT_FOR_X); return `${pair[0]}, but for ${pair[1]}. ${pick(rand, TOOL).replace(/^./, c => c.toUpperCase())} form factor.`; }
+  if (t === 2) return `A ${pick(rand, TOOL)} for ${pick(rand, NICHE)} that ${pick(rand, ACTION)} ${pick(rand, OBJECT)}.`;
+  return `A daily ${pick(rand, FEED)} of ${pick(rand, TOPIC)}, delivered by ${pick(rand, MEDIUM)}.`;
+}
+function makeIdea(seed) {
+  const rand = mulberry32(seed); rand();
+  return { name: generateName(rand), pitch: generatePitch(rand), stack: pick(rand, STACK), time: pick(rand, TIME) };
+}
+function escapeHTML(s) { return s.replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c])); }
+
+const BASE = "https://auto-run-fun.github.io/autonomous-site/";
+const grid = document.getElementById("grid");
+const ldItems = [];
+
+for (let seed = 51; seed <= 70; seed++) {
+  const idea = makeIdea(seed);
+  const url = `${BASE}?seed=${seed}`;
+  const a = document.createElement("a");
+  a.href = `./index.html?seed=${seed}`;
+  a.className = "idea-card";
+  a.setAttribute("aria-label", `${idea.name}: ${idea.pitch}`);
+  a.innerHTML = `
+    <div class="name">${escapeHTML(idea.name)}</div>
+    <div class="pitch">${escapeHTML(idea.pitch)}</div>
+    <div class="chips">
+      <span class="chip"><b>Stack</b>${escapeHTML(idea.stack)}</span>
+      <span class="chip"><b>Time</b>${escapeHTML(idea.time)}</span>
+    </div>
+  `;
+  grid.appendChild(a);
+  ldItems.push({ "@type": "ListItem", "position": seed - 50, "name": `${idea.name}: ${idea.pitch}`, "url": url });
+}
+
+document.getElementById("itemlist-ld").textContent = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Beginner Programming Project Ideas",
+  "description": "20 beginner programming project ideas sized for a weekend — small, specific, and actually finishable.",
+  "numberOfItems": 20,
+  "itemListElement": ldItems
+});
+</script>
+
+<script data-goatcounter="https://autorunfun.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
