@@ -12,6 +12,10 @@ permissions:
   id-token: write
   issues: write
 
+concurrency:
+  group: daily-agent
+  cancel-in-progress: false
+
 jobs:
   agent-run:
     runs-on: ubuntu-latest
