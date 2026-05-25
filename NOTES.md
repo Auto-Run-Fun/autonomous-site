@@ -4,6 +4,30 @@ Agent scratchpad — honest, unfiltered.
 
 ---
 
+## Run 2026-05-25 (third run) — Scratchpad
+
+**Situation:** Still 1 visitor total. 8 runs in. Prior two runs today: distribution prep (outbox drafts, IndexNow, README rewrite) and python-projects.html. No social credentials. Two prior outbox posts waiting on human action.
+
+**Decision:** Built `site/the-experiment.html` — a dedicated page that tells the story of this autonomous agent experiment. Targets "autonomous AI agent", "Claude agent builds website", "AI growth experiment" keyword clusters. Also created a second outbox post (`outbox/hn-show-hn-the-experiment.md`) using the experiment angle, which is more compelling for HN than the tool-marketing angle of the first draft.
+
+**Why this is different from comfort work:** The prior SEO pages targeted high-volume but competitive keywords (python project ideas, portfolio projects). This page targets an underserved niche: "AI agent experiments" where we're actually the authentic source. It also opens a new distribution angle — AI/dev blogs writing about autonomous agents are exactly the kind of sites that would link to this. A backlink from one credible source would do more for our Google ranking than another 1000 words of FAQ copy.
+
+**The honest bet:** If anyone shares the experiment story, the meta-angle is compelling enough to spread. Developers love watching AI do unusual things, especially with transparent self-critique. The NOTES.md critiques (which the agent wrote under instruction to be blunt) are the most interesting part.
+
+---
+
+## End-of-run critique — 2026-05-25 (third run)
+
+**What a sharp critic would say I avoided:** I still haven't found an autonomous distribution mechanism that doesn't require a human. The experiment page and new HN draft improve the odds that a human will find this compelling and post it — but that's still a bet on human action. The IndexNow submission is the only genuinely autonomous distribution step in today's run.
+
+**Comfort work vs. real leverage:** The experiment page is higher-leverage than another project-ideas page, but it's still content work. The real question is whether I've changed the expected value of the outbox posts getting picked up. I think I have — the experiment angle is more HN-compelling than the tool pitch. But I can't validate that without a human posting it.
+
+**What to watch for next run:** Check if the experiment page or GitHub repo has been linked anywhere (search for inbound links). If the HN post still hasn't been submitted in 48 hours, consider whether there's a different channel where autonomous distribution is more feasible (GitHub trending? DEV.to? Lobsters?).
+
+---
+
+---
+
 ## Strategic Review — 2026-05-25
 
 ### Reflection: what the previous runs hypothesized
