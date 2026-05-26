@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Side Project Scope Estimator — Can You Build It This Weekend?</title>
+<meta name="description" content="Find out if your side project is scoped for a weekend or a year. Pick your features, get a realistic time estimate, and learn what to cut to ship faster.">
+<link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/project-estimator.html">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Side Project Scope Estimator — Can You Build It This Weekend?">
+<meta property="og:description" content="Interactive tool: select the features your project needs, get a realistic time estimate, and find out if it's a weekend project or a 6-month commitment.">
+<meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/project-estimator.html">
+<meta property="og:image" content="https://auto-run-fun.github.io/autonomous-site/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Side Project Scope Estimator — Can You Build It This Weekend?">
+<meta name="twitter:description" content="Select your features, get a time estimate, find out if your side project is actually a weekend build.">
+<meta name="twitter:image" content="https://auto-run-fun.github.io/autonomous-site/og.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Side Project Scope Estimator",
+  "description": "An interactive tool for developers to estimate how long a side project will take to build, based on required features, tech stack, and experience level.",
+  "url": "https://auto-run-fun.github.io/autonomous-site/project-estimator.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any",
+  "offers": {"@type":"Offer","price":"0","priceCurrency":"USD"}
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How long does it take to build a side project?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "It depends heavily on features. A static page or simple tool can take 2–4 hours. A CRUD app with authentication takes 16–30 hours. A full SaaS product with payments, multi-user support, and an admin dashboard typically takes 80–200+ hours. The biggest predictor is how many 'infrastructure' features you need — auth, payments, and real-time are each 10–20 hour investments on their own."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What makes a good weekend project?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A good weekend project has: one clear user action, no auth (or third-party auth via Clerk/Auth0), data in localStorage or a simple free database, and a deployed URL by Sunday evening. Scope it to 8–16 hours of work. If you need more than 3 features, you're building a week-long project, not a weekend one."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Should I add authentication to my side project?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Only if users need to own their data across devices or share it with others. Auth adds 8–16 hours even with a service like Clerk or Auth0. Many successful tools work without login — users share via URL or bookmark a local version. Ask: would this be useful without accounts? If yes, skip auth for v1 and add it when real users ask for it."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I estimate how long a software project will take?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "List every feature including the boring ones — auth, deployment, error handling, responsive design. These 'infrastructure' tasks take as long as the interesting parts. Add up realistic estimates per feature, multiply by your experience level (beginners: 2–3x more time), then add 20% for debugging. Most developers underestimate by 2–4x because they forget the invisible work."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What should I cut to scope down my side project?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The highest-ROI cuts: (1) Skip auth — use localStorage or URL-based access. (2) Skip payments — launch free first. (3) Skip the admin dashboard — use your database's built-in UI. (4) Make it polling instead of real-time. (5) Skip tests for v1. Each saves 4–20 hours."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How long does it take to build an MVP?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A true MVP — the smallest thing that proves the core value — typically takes 20–60 hours for a solo developer. Most 'MVPs' are overbuilt: they include auth, dashboards, and settings nobody asked for. The test: can you describe what users DO in one sentence? If not, you're building a product, not an MVP."
+      }
+    }
+  ]
+}
+</script>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f1117;
+  --surface:#161b22;
+  --border:#30363d;
+  --accent:#f0db4f;
+  --accent2:#61dafb;
+  --text:#e6edf3;
+  --muted:#8b949e;
+  --green:#3fb950;
+  --orange:#f97316;
+  --red:#f85149;
+  --yellow:#d29922;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,sans-serif;line-height:1.6;min-height:100vh}
+a{color:var(--accent2);text-decoration:none}
+a:hover{text-decoration:underline}
+
+nav{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 20px;font-size:13px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+nav strong{color:var(--text);margin-right:4px}
+nav a{color:var(--muted)}
+nav a:hover{color:var(--text)}
+
+header{padding:56px 20px 40px;max-width:900px;margin:0 auto;text-align:center}
+.badge{display:inline-block;background:rgba(97,218,251,.15);color:var(--accent2);font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:4px;margin-bottom:16px;font-family:var(--mono);border:1px solid rgba(97,218,251,.3)}
+h1{font-size:clamp(26px,4.5vw,44px);font-weight:700;line-height:1.2;margin-bottom:16px}
+.subhead{font-size:17px;color:var(--muted);max-width:600px;margin:0 auto}
+
+main{max-width:900px;margin:0 auto;padding:0 20px 80px}
+
+.tool-section{margin-bottom:28px}
+.tool-section h2{font-size:17px;font-weight:700;margin-bottom:6px;padding-bottom:10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.step-num{background:var(--accent);color:#000;font-size:12px;font-weight:700;font-family:var(--mono);padding:2px 8px;border-radius:4px;flex-shrink:0}
+.tool-hint{font-size:13px;color:var(--muted);margin:8px 0 14px;line-height:1.5}
+
+/* Feature checkboxes */
+.feature-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:8px}
+.feature-item{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 14px;cursor:pointer;transition:border-color .15s,background .15s;display:flex;align-items:flex-start;gap:10px;user-select:none}
+.feature-item:hover{border-color:var(--muted)}
+.feature-item.selected{border-color:var(--accent);background:rgba(240,219,79,.06)}
+.feature-item input[type=checkbox]{width:15px;height:15px;margin-top:3px;flex-shrink:0;cursor:pointer;accent-color:var(--accent)}
+.feature-label{flex:1;min-width:0}
+.feature-name{font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px}
+.feature-cost{font-size:12px;color:var(--muted);font-family:var(--mono)}
+
+/* Stack + experience options */
+.radio-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+.radio-item{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 14px;cursor:pointer;transition:border-color .15s,background .15s;display:flex;align-items:flex-start;gap:10px;user-select:none}
+.radio-item:hover{border-color:var(--muted)}
+.radio-item.selected{border-color:var(--accent2);background:rgba(97,218,251,.06)}
+.radio-item input[type=radio]{width:15px;height:15px;margin-top:3px;flex-shrink:0;cursor:pointer;accent-color:var(--accent2)}
+.radio-label{flex:1;min-width:0}
+.radio-name{font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px}
+.radio-desc{font-size:12px;color:var(--muted)}
+
+/* Result box */
+#result-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:28px;margin:32px 0;transition:border-color .2s}
+#result-box.verdict-weekend-box{border-color:rgba(63,185,80,.4)}
+#result-box.verdict-long-box{border-color:rgba(210,153,34,.4)}
+#result-box.verdict-project-box{border-color:rgba(249,115,22,.4)}
+#result-box.verdict-serious-box{border-color:rgba(248,81,73,.4)}
+
+.result-top{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:20px;flex-wrap:wrap}
+.result-time{}
+.time-number{font-size:38px;font-weight:700;font-family:var(--mono);line-height:1;margin-bottom:4px}
+.time-sublabel{font-size:13px;color:var(--muted)}
+
+.verdict-badge{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:700;padding:8px 16px;border-radius:8px;font-family:var(--mono);white-space:nowrap}
+.verdict-weekend{background:rgba(63,185,80,.15);color:#3fb950;border:1px solid rgba(63,185,80,.3)}
+.verdict-long{background:rgba(210,153,34,.15);color:var(--yellow);border:1px solid rgba(210,153,34,.3)}
+.verdict-project{background:rgba(249,115,22,.15);color:var(--orange);border:1px solid rgba(249,115,22,.3)}
+.verdict-serious{background:rgba(248,81,73,.15);color:var(--red);border:1px solid rgba(248,81,73,.3)}
+
+.result-breakdown{margin-bottom:18px}
+.breakdown-label{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-family:var(--mono);margin-bottom:8px;font-weight:700}
+.feature-pills{display:flex;flex-wrap:wrap;gap:6px}
+.feature-pill{font-size:12px;padding:3px 9px;border-radius:4px;font-family:var(--mono);background:var(--bg);border:1px solid var(--border);color:var(--muted)}
+.feature-pill.base{color:var(--green);border-color:rgba(63,185,80,.3)}
+
+.cuts-section{background:rgba(248,81,73,.07);border:1px solid rgba(248,81,73,.2);border-radius:8px;padding:16px;margin:16px 0}
+.cuts-title{font-size:13px;font-weight:700;color:var(--red);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.cut-item{font-size:13px;color:var(--muted);padding:7px 0;border-bottom:1px solid rgba(248,81,73,.12);line-height:1.55}
+.cut-item:last-child{border-bottom:none}
+.cut-item strong{color:var(--text)}
+
+.explore-links{padding-top:16px;border-top:1px solid var(--border);margin-top:16px}
+.explore-title{font-size:13px;font-weight:700;margin-bottom:10px;color:var(--text)}
+.link-chips{display:flex;flex-wrap:wrap;gap:7px}
+.link-chip{background:var(--bg);border:1px solid var(--border);color:var(--text);font-size:12px;padding:5px 12px;border-radius:5px;text-decoration:none;transition:border-color .15s}
+.link-chip:hover{border-color:var(--accent);text-decoration:none}
+
+.share-row{display:flex;align-items:center;gap:10px;margin-top:18px;flex-wrap:wrap}
+.share-btn{background:var(--accent);color:#000;font-size:13px;font-weight:700;padding:8px 16px;border-radius:6px;border:none;cursor:pointer;font-family:var(--mono);transition:opacity .15s}
+.share-btn:hover{opacity:.85}
+.share-feedback{font-size:12px;color:var(--green);font-family:var(--mono);display:none}
+
+.empty-state{text-align:center;padding:48px 20px;color:var(--muted)}
+.empty-state p{font-size:15px;margin-bottom:6px}
+.empty-state small{font-size:13px;font-family:var(--mono)}
+
+/* Intro + FAQ */
+.intro-section{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:28px;margin:40px 0}
+.intro-section h2{font-size:20px;margin-bottom:14px}
+.intro-section p{font-size:15px;color:var(--muted);margin-bottom:12px;line-height:1.7}
+.intro-section p:last-child{margin-bottom:0}
+
+.faq-section{margin:40px 0}
+.faq-section h2{font-size:22px;margin-bottom:20px}
+.faq-item{border-left:2px solid var(--border);padding-left:20px;margin-bottom:24px}
+.faq-item h3{font-size:16px;font-weight:600;margin-bottom:8px;color:var(--text)}
+.faq-item p{font-size:14px;color:var(--muted);line-height:1.7}
+
+@media(max-width:640px){
+  .feature-grid{grid-template-columns:1fr}
+  .radio-grid{grid-template-columns:1fr 1fr}
+  .time-number{font-size:28px}
+  .result-top{flex-direction:column}
+}
+@media(max-width:400px){
+  .radio-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <strong>Ship This Weekend</strong>
+  <a href="/autonomous-site/">Generator</a>
+  <a href="/autonomous-site/ideas.html">Browse 30</a>
+  <a href="/autonomous-site/python-projects.html">Python</a>
+  <a href="/autonomous-site/javascript-projects.html">JavaScript</a>
+  <a href="/autonomous-site/portfolio-projects.html">Portfolio</a>
+  <a href="/autonomous-site/beginner-projects.html">Beginner</a>
+  <a href="/autonomous-site/project-estimator.html" style="color:var(--accent)">Scope Estimator</a>
+</nav>
+
+<header>
+  <div class="badge">Interactive Tool</div>
+  <h1>Can You Build It<br>This Weekend?</h1>
+  <p class="subhead">Pick the features your project needs, choose your stack, and get an honest time estimate — plus what to cut if it's too big.</p>
+</header>
+
+<main>
+
+<div class="tool-section">
+  <h2><span class="step-num">1</span> What features does your project need?</h2>
+  <p class="tool-hint">Check only what v1 genuinely requires — not nice-to-haves. Each adds real hours.</p>
+  <div class="feature-grid" id="feature-grid"></div>
+</div>
+
+<div class="tool-section">
+  <h2><span class="step-num">2</span> What's your tech stack?</h2>
+  <p class="tool-hint">Pick the closest match to what you're planning to build with.</p>
+  <div class="radio-grid" id="stack-grid"></div>
+</div>
+
+<div class="tool-section">
+  <h2><span class="step-num">3</span> How well do you know this stack?</h2>
+  <p class="tool-hint">Honest answer. This is the single biggest variable in any time estimate.</p>
+  <div class="radio-grid" id="exp-grid"></div>
+</div>
+
+<div id="result-box">
+  <div id="result-content">
+    <div class="empty-state">
+      <p>Select features above to see your estimate</p>
+      <small>← or load a saved scope from a shared link</small>
+    </div>
+  </div>
+</div>
+
+<div class="intro-section">
+  <h2>Why most project estimates are wrong</h2>
+  <p>Developers routinely underestimate side projects by 2–4x. The culprit isn't the fun parts — it's the invisible infrastructure. Authentication, deployment, error handling, responsive design, and "just one more feature" syndrome add up fast.</p>
+  <p>The three features that hurt most: <strong>user auth</strong> (even with Clerk or Auth0, it's 8–16 hours to get right), <strong>payment processing</strong> (Stripe seems simple but webhooks, edge cases, and compliance add 12–24 hours), and <strong>real-time features</strong> (WebSockets introduce state complexity that ripples through your whole app). These are where most "2-week projects" become 3-month projects.</p>
+  <p>The best scope for a weekend project: one clear user action, no auth (or third-party auth), data in localStorage or a simple free database, deployed URL by Sunday. Everything else is scope creep. The version you're embarrassed to ship is usually better than the version you never ship.</p>
+</div>
+
+<section class="faq-section">
+  <h2>Scope and estimation questions</h2>
+
+  <div class="faq-item">
+    <h3>How long does it take to build a side project?</h3>
+    <p>It depends on features. A static page or simple tool takes 2–4 hours. A CRUD app with auth takes 16–30 hours. A full SaaS with payments, multi-user support, and an admin dashboard takes 80–200+ hours. The biggest factor is how many "infrastructure" features you need — auth, payments, and real-time are each 10–20 hour investments on their own.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3>What makes a good weekend project?</h3>
+    <p>One clear user action, no login required (or handled by a third-party service in 1 hour), data in localStorage or a simple free database, deployed URL by Sunday evening. Scope it to 8–16 hours. If you need more than 3 features to describe your core value prop, you're building a week-long project.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3>Should I add authentication to my side project?</h3>
+    <p>Only if users need to own their data across devices or share it with others. Auth adds 8–16 hours even with a service like Clerk or Auth0. Many successful tools work without login — data lives in localStorage or is shared via URL. Ask yourself: would this be useful without accounts? If yes, skip auth for v1 and add it when real users ask for it.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3>How do I estimate software project time correctly?</h3>
+    <p>List every feature including the boring ones. The "infrastructure" work (auth, deployment, error handling, responsive design) takes as long as the interesting parts. Add up estimates per feature, multiply by your experience level (beginners: 2–3x), then add 20% for debugging. Most developers underestimate because they only count the interesting work and forget the invisible bits.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3>What should I cut to ship my side project faster?</h3>
+    <p>Highest-ROI cuts: (1) Skip auth — use localStorage or URL-based access. (2) Skip payments — launch free first, add monetization when someone asks to pay. (3) Skip the admin dashboard — use your database's built-in UI (Supabase, PlanetScale). (4) Make it polling instead of real-time — refreshing every 30 seconds is fine for v1. (5) Skip tests — write them after the core works. Each saves 4–20 hours.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3>How long does it take to build an MVP?</h3>
+    <p>A real MVP — the smallest thing that proves the core value — typically takes 20–60 hours for a solo developer. Most so-called MVPs are overbuilt: they include auth, dashboards, and settings nobody asked for. The test: can you describe what users DO in one sentence? If you can't, you're building a product, not an MVP.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3>Does experience really change the estimate that much?</h3>
+    <p>Yes — a developer learning a new stack should expect 2–3x more hours than an experienced developer for the same features. The bottleneck shifts from "what to build" to "why is this auth callback not firing." That's not a flaw — it's how learning works. Which means beginners should aim for even smaller scopes: finish one 4-hour project, then build the next one. Finishing compounds; ambition that never ships doesn't.</p>
+  </div>
+</section>
+
+</main>
+
+<script data-goatcounter="https://autorunfun.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+
+<script>
+const FEATURES = [
+  { key:'auth',      name:'User authentication',            desc:'Login / signup flow',                hrs:10 },
+  { key:'database',  name:'Database / persistent storage',  desc:'Data survives page refresh',         hrs:6  },
+  { key:'payments',  name:'Payment processing',             desc:'Stripe, subscriptions, invoices',    hrs:18 },
+  { key:'uploads',   name:'File uploads',                   desc:'Images, docs, attachments',          hrs:6  },
+  { key:'email',     name:'Email notifications',            desc:'Transactional email via SendGrid/Resend', hrs:4 },
+  { key:'realtime',  name:'Real-time features',             desc:'Chat, live updates, websockets',     hrs:14 },
+  { key:'search',    name:'Search & filtering',             desc:'Beyond a simple array .filter()',    hrs:6  },
+  { key:'admin',     name:'Admin dashboard',                desc:'Internal UI to manage data/users',   hrs:10 },
+  { key:'api',       name:'External API integration',       desc:'Third-party data or services',       hrs:4  },
+  { key:'roles',     name:'Multiple user roles',            desc:'Admin vs member vs viewer perms',    hrs:8  },
+  { key:'tests',     name:'Automated test suite',           desc:'Unit, integration, or E2E tests',    hrs:6  },
+  { key:'cicd',      name:'CI/CD pipeline',                 desc:'Auto-deploy on push to main',        hrs:4  },
+  { key:'oauth',     name:'OAuth / social login',           desc:'Sign in with Google/GitHub',         hrs:6  },
+  { key:'i18n',      name:'Multiple languages (i18n)',      desc:'Translated UI for different locales',hrs:8  },
+  { key:'responsive',name:'Mobile-responsive design',      desc:'Works well on phones and tablets',   hrs:3  },
+  { key:'analytics', name:'Custom analytics & tracking',   desc:'Beyond basic pageviews',             hrs:3  },
+];
+
+const STACKS = [
+  { key:'static',    name:'Static site',          desc:'HTML, CSS, JS — no backend',             mult:0.5  },
+  { key:'frontend',  name:'Frontend app',         desc:'React/Vue/Svelte, no custom backend',    mult:0.75 },
+  { key:'basic',     name:'Frontend + backend',   desc:'Node/Python/Rails + database',           mult:1.0  },
+  { key:'fullstack', name:'Full-stack framework', desc:'Next.js / Nuxt / Remix / SvelteKit',    mult:1.25 },
+  { key:'mobile',    name:'Mobile app',           desc:'React Native or Flutter',               mult:1.9  },
+];
+
+const EXPERIENCE = [
+  { key:'learning',    name:'Still learning it',  desc:'New to this stack',           mult:2.5  },
+  { key:'comfortable', name:'Comfortable',         desc:'Shipped with it before',      mult:1.0  },
+  { key:'expert',      name:'Know it well',        desc:'Production experience',       mult:0.55 },
+];
+
+const CUTS = {
+  payments:  { tip:'Launch free — add Stripe Checkout only when real users ask to pay.' },
+  realtime:  { tip:'Use polling (reload every 30s) instead of WebSockets for v1.' },
+  admin:     { tip:'Use your database\'s built-in UI (Supabase, PlanetScale) — skip building your own.' },
+  auth:      { tip:'Use localStorage or URL-based access. Add login when users ask for it.' },
+  roles:     { tip:'Start with a single user type. Add roles after the core flow works.' },
+  i18n:      { tip:'English-only for v1. Add i18n after you have users in other locales.' },
+  oauth:     { tip:'Start with email/password only. Add social login in v2.' },
+  database:  { tip:'Use localStorage for v1 — add a real DB when you need multi-device sync.' },
+  uploads:   { tip:'Accept URLs instead of file uploads for v1.' },
+  tests:     { tip:'Skip tests for v1. Write them once the core flow is stable.' },
+  search:    { tip:'Use a simple client-side .filter() instead of a search service for v1.' },
+  email:     { tip:'Skip email for v1 — use in-app messaging only.' },
+  cicd:      { tip:'Manual deploy is fine for v1. Set up CI/CD once you\'re shipping regularly.' },
+};
+
+function getChecked(gridId, type) {
+  return [...document.querySelectorAll(`#${gridId} input[type=${type}]:checked`)].map(el => el.value);
+}
+
+function estimate() {
+  const selectedKeys = getChecked('feature-grid', 'checkbox');
+  const stackKey = getChecked('stack-grid', 'radio')[0] || 'basic';
+  const expKey   = getChecked('exp-grid',   'radio')[0] || 'comfortable';
+
+  const stack = STACKS.find(s => s.key === stackKey);
+  const exp   = EXPERIENCE.find(e => e.key === expKey);
+
+  const BASE_HOURS = 4; // any project needs setup + basic UI
+  const featureHours = selectedKeys.reduce((s, k) => s + (FEATURES.find(f => f.key === k)?.hrs || 0), 0);
+  const raw = (BASE_HOURS + featureHours) * stack.mult * exp.mult;
+  const hours = Math.round(raw);
+
+  renderResult(selectedKeys, stackKey, expKey, hours, stack, exp);
+  syncURL(selectedKeys, stackKey, expKey);
+}
+
+function renderResult(selectedKeys, stackKey, expKey, hours, stack, exp) {
+  const box = document.getElementById('result-box');
+  const content = document.getElementById('result-content');
+
+  let verdictClass, boxClass, verdictText, timeText, timeSub;
+
+  if (hours <= 16) {
+    verdictClass = 'verdict-weekend'; boxClass = 'verdict-weekend-box';
+    verdictText = '✅ Weekend project';
+    timeText = hours <= 8 ? `~${hours}h` : `~${hours}h`;
+    timeSub = 'fits a weekend';
+  } else if (hours <= 40) {
+    verdictClass = 'verdict-long'; boxClass = 'verdict-long-box';
+    verdictText = '🟡 Long weekend or a week of evenings';
+    timeText = `~${hours}h`;
+    timeSub = 'longer than a weekend';
+  } else if (hours <= 120) {
+    verdictClass = 'verdict-project'; boxClass = 'verdict-project-box';
+    verdictText = '⚠️ Multi-week side project';
+    const weeks = Math.round(hours / 12);
+    timeText = `~${weeks} wks`;
+    timeSub = `at ~12 hrs/week part-time`;
+  } else {
+    verdictClass = 'verdict-serious'; boxClass = 'verdict-serious-box';
+    verdictText = '🚨 Serious commitment — scope it down';
+    const months = Math.max(1, Math.round(hours / 50));
+    timeText = `~${months}mo`;
+    timeSub = `at ~50 hrs/month`;
+  }
+
+  box.className = boxClass;
+
+  // Feature breakdown pills
+  const selectedFeatures = selectedKeys.map(k => FEATURES.find(f => f.key === k)).filter(Boolean);
+  const sMultiplier = stack.mult * exp.mult;
+  const pillsHtml = selectedFeatures.length > 0
+    ? selectedFeatures.map(f =>
+        `<span class="feature-pill">${f.name} (~${Math.round(f.hrs * sMultiplier)}h)</span>`
+      ).join('')
+    : `<span class="feature-pill base">Base project (setup + core UI only)</span>`;
+
+  // Cuts — only show if over 16h and there are cuttable features
+  let cutsHtml = '';
+  if (hours > 16) {
+    const candidates = selectedKeys
+      .filter(k => CUTS[k])
+      .sort((a, b) => (FEATURES.find(f=>f.key===b)?.hrs||0) - (FEATURES.find(f=>f.key===a)?.hrs||0))
+      .slice(0, 3);
+    if (candidates.length > 0) {
+      cutsHtml = `<div class="cuts-section">
+        <div class="cuts-title">✂️ Scope it down — cut these first</div>
+        ${candidates.map(k =>
+          `<div class="cut-item"><strong>Drop: ${FEATURES.find(f=>f.key===k)?.name}</strong> — ${CUTS[k].tip}</div>`
+        ).join('')}
+      </div>`;
+    }
+  }
+
+  // Links
+  const links = [
+    {href:'/autonomous-site/', label:'💡 Random idea'},
+    {href:'/autonomous-site/ideas.html', label:'Browse 30 ideas'},
+    {href:'/autonomous-site/python-projects.html', label:'Python projects'},
+    {href:'/autonomous-site/javascript-projects.html', label:'JS projects'},
+    {href:'/autonomous-site/portfolio-projects.html', label:'Portfolio picks'},
+    {href:'/autonomous-site/beginner-projects.html', label:'Beginner projects'},
+  ];
+
+  content.innerHTML = `
+    <div class="result-top">
+      <div class="result-time">
+        <div class="time-number">${timeText}</div>
+        <div class="time-sublabel">${timeSub}</div>
+      </div>
+      <span class="verdict-badge ${verdictClass}">${verdictText}</span>
+    </div>
+
+    <div class="result-breakdown">
+      <div class="breakdown-label">Feature breakdown</div>
+      <div class="feature-pills">${pillsHtml}</div>
+    </div>
+
+    ${cutsHtml}
+
+    <div class="explore-links">
+      <div class="explore-title">Need project ideas to build?</div>
+      <div class="link-chips">${links.map(l=>`<a href="${l.href}" class="link-chip">${l.label}</a>`).join('')}</div>
+    </div>
+
+    <div class="share-row">
+      <button class="share-btn" onclick="copyShareLink(this)">Copy shareable link</button>
+      <span class="share-feedback" id="copy-feedback">Copied!</span>
+    </div>
+  `;
+}
+
+function syncURL(selectedKeys, stackKey, expKey) {
+  const p = new URLSearchParams();
+  if (selectedKeys.length > 0) p.set('f', selectedKeys.join(','));
+  p.set('s', stackKey);
+  p.set('e', expKey);
+  history.replaceState({}, '', location.pathname + '?' + p.toString());
+}
+
+function copyShareLink(btn) {
+  navigator.clipboard.writeText(location.href).then(() => {
+    const fb = document.getElementById('copy-feedback');
+    fb.style.display = 'inline';
+    setTimeout(() => { fb.style.display = 'none'; }, 2000);
+  });
+}
+
+function loadFromURL() {
+  const p = new URLSearchParams(location.search);
+  const features = p.has('f') ? p.get('f').split(',').filter(Boolean) : [];
+  const stackKey = p.get('s') || 'basic';
+  const expKey   = p.get('e') || 'comfortable';
+
+  features.forEach(k => {
+    const cb = document.querySelector(`#feature-grid input[value="${k}"]`);
+    if (cb) { cb.checked = true; cb.closest('.feature-item').classList.add('selected'); }
+  });
+
+  const sr = document.querySelector(`#stack-grid input[value="${stackKey}"]`);
+  if (sr) { sr.checked = true; sr.closest('.radio-item').classList.add('selected'); }
+
+  const er = document.querySelector(`#exp-grid input[value="${expKey}"]`);
+  if (er) { er.checked = true; er.closest('.radio-item').classList.add('selected'); }
+
+  if (features.length > 0 || p.has('s') || p.has('e')) estimate();
+}
+
+// Build feature grid
+const fg = document.getElementById('feature-grid');
+FEATURES.forEach(f => {
+  const el = document.createElement('label');
+  el.className = 'feature-item';
+  el.innerHTML = `<input type="checkbox" value="${f.key}">
+    <div class="feature-label">
+      <div class="feature-name">${f.name}</div>
+      <div class="feature-cost">${f.desc} · ~${f.hrs}h base</div>
+    </div>`;
+  el.querySelector('input').addEventListener('change', ev => {
+    el.classList.toggle('selected', ev.target.checked);
+    estimate();
+  });
+  fg.appendChild(el);
+});
+
+// Build stack grid
+const sg = document.getElementById('stack-grid');
+STACKS.forEach((s, i) => {
+  const el = document.createElement('label');
+  const isDefault = i === 2;
+  el.className = 'radio-item' + (isDefault ? ' selected' : '');
+  el.innerHTML = `<input type="radio" name="stack" value="${s.key}" ${isDefault?'checked':''}>
+    <div class="radio-label">
+      <div class="radio-name">${s.name}</div>
+      <div class="radio-desc">${s.desc}</div>
+    </div>`;
+  el.querySelector('input').addEventListener('change', () => {
+    document.querySelectorAll('#stack-grid .radio-item').forEach(r => r.classList.remove('selected'));
+    el.classList.add('selected');
+    estimate();
+  });
+  sg.appendChild(el);
+});
+
+// Build experience grid
+const eg = document.getElementById('exp-grid');
+EXPERIENCE.forEach((e, i) => {
+  const el = document.createElement('label');
+  const isDefault = i === 1;
+  el.className = 'radio-item' + (isDefault ? ' selected' : '');
+  el.innerHTML = `<input type="radio" name="experience" value="${e.key}" ${isDefault?'checked':''}>
+    <div class="radio-label">
+      <div class="radio-name">${e.name}</div>
+      <div class="radio-desc">${e.desc} · ${e.mult === 1 ? 'baseline' : e.mult + '× time'}</div>
+    </div>`;
+  el.querySelector('input').addEventListener('change', () => {
+    document.querySelectorAll('#exp-grid .radio-item').forEach(r => r.classList.remove('selected'));
+    el.classList.add('selected');
+    estimate();
+  });
+  eg.appendChild(el);
+});
+
+loadFromURL();
+</script>
+</body>
+</html>
