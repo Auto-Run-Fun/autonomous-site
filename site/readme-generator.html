@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GitHub README Generator — Create a Professional README.md</title>
+<meta name="description" content="Generate a polished GitHub README in seconds. Fill in your project details and get a formatted README.md you can copy directly to your repository. Free, no signup.">
+<link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/readme-generator.html">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="GitHub README Generator — Create a Professional README.md">
+<meta property="og:description" content="Fill in your project details, pick your tech stack, and get a formatted README.md ready to copy. Shareable links let you save your configuration.">
+<meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/readme-generator.html">
+<meta property="og:image" content="https://auto-run-fun.github.io/autonomous-site/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="GitHub README Generator — Create a Professional README.md">
+<meta name="twitter:description" content="Generate a professional README.md for your GitHub project. Free, instant, no account needed.">
+<meta name="twitter:image" content="https://auto-run-fun.github.io/autonomous-site/og.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "GitHub README Generator",
+  "description": "An interactive tool for developers to generate a polished, professional README.md for their GitHub projects. Supports tech stack badges, installation instructions, feature lists, and shareable configuration URLs.",
+  "url": "https://auto-run-fun.github.io/autonomous-site/readme-generator.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any",
+  "offers": {"@type":"Offer","price":"0","priceCurrency":"USD"}
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What should a GitHub README include?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A good GitHub README includes: project name and a one-line description at the top, tech stack badges, a longer description explaining what the project does and why, a features list, quick start instructions (install + run commands), a demo link if available, contributing guidelines, and a license. The most important thing is the quick start — if someone can't get it running in under 5 minutes, they'll leave."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I add badges to my GitHub README?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "GitHub README badges use shields.io. The format is: ![Badge Label](https://img.shields.io/badge/label-value-color). For license badges: ![License](https://img.shields.io/badge/license-MIT-blue.svg). For tech stack: use the static badge endpoint with the technology name and its brand color. This generator creates all the badge markdown for you automatically."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is a good README format for GitHub?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The standard GitHub README format: (1) h1 title with one-line tagline, (2) badges for license/language/status, (3) screenshot or demo GIF if visual, (4) description paragraph explaining the problem it solves, (5) feature list with bullets, (6) installation + usage code blocks, (7) configuration options if any, (8) contributing section, (9) license. Keep it concise — long READMEs get skimmed, not read."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How long should a GitHub README be?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Most good READMEs are 200–600 words. Long enough to explain what it does, how to install it, and how to use it. Short enough that someone can read it in 2–3 minutes. The quick start section is the most important — put it high. Everything else (contributing guide, detailed config, changelog) can go in separate docs linked from the README."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need a README for a side project?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, even for personal side projects. A README forces you to articulate what your project does (useful for explaining it to future-you), makes it easy for others to run your code if you share it, and is the first thing recruiters or collaborators see when they visit your GitHub. A minimal README with a description and quick start takes 10 minutes to write and lasts the lifetime of the project."
+      }
+    }
+  ]
+}
+</script>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f1117;
+  --surface:#161b22;
+  --border:#30363d;
+  --accent:#f0db4f;
+  --accent2:#61dafb;
+  --text:#e6edf3;
+  --muted:#8b949e;
+  --green:#3fb950;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,sans-serif;line-height:1.6;min-height:100vh}
+a{color:var(--accent2);text-decoration:none}
+a:hover{text-decoration:underline}
+
+nav{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 20px;font-size:13px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+nav strong{color:var(--text);margin-right:4px}
+nav a{color:var(--muted)}
+nav a:hover{color:var(--text)}
+
+header{padding:48px 20px 32px;max-width:960px;margin:0 auto;text-align:center}
+.badge-pill{display:inline-block;background:rgba(97,218,251,.15);color:var(--accent2);font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:4px;margin-bottom:16px;font-family:var(--mono);border:1px solid rgba(97,218,251,.3)}
+h1{font-size:clamp(24px,4vw,40px);font-weight:700;line-height:1.2;margin-bottom:12px}
+.subhead{font-size:16px;color:var(--muted);max-width:560px;margin:0 auto}
+
+/* Generator layout */
+.generator{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:1200px;margin:0 auto;padding:0 20px 80px}
+
+/* Form panel */
+.form-panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;height:fit-content}
+.form-panel h2{font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-family:var(--mono);margin-bottom:18px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+
+.field{margin-bottom:18px}
+.field label{display:block;font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px}
+.field .hint{font-size:12px;color:var(--muted);margin-bottom:6px}
+.field input,.field textarea,.field select{width:100%;background:#0d1117;border:1px solid var(--border);border-radius:6px;padding:9px 12px;color:var(--text);font-size:14px;font-family:inherit;transition:border-color .15s;resize:vertical}
+.field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--accent2)}
+.field textarea{min-height:80px;line-height:1.5}
+.field input::placeholder,.field textarea::placeholder{color:var(--muted)}
+.field select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%238b949e' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+
+.section-divider{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-family:var(--mono);margin:24px 0 14px;padding-top:16px;border-top:1px solid var(--border)}
+
+/* Tech stack chips */
+.stack-grid{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
+.stack-chip{background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:5px 11px;font-size:13px;cursor:pointer;transition:all .15s;user-select:none;color:var(--muted);font-family:var(--mono)}
+.stack-chip:hover{border-color:var(--muted);color:var(--text)}
+.stack-chip.active{border-color:var(--accent);color:var(--accent);background:rgba(240,219,79,.08)}
+.stack-label{font-size:12px;color:var(--muted);margin-bottom:8px}
+
+/* Toggle row */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0}
+.toggle-row+.toggle-row{border-top:1px solid var(--border)}
+.toggle-label{font-size:14px;color:var(--text)}
+.toggle{position:relative;width:38px;height:20px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.slider{position:absolute;cursor:pointer;inset:0;background:var(--border);border-radius:20px;transition:.2s}
+.slider:before{content:'';position:absolute;width:14px;height:14px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}
+.toggle input:checked+.slider{background:var(--green)}
+.toggle input:checked+.slider:before{transform:translateX(18px)}
+
+/* Preview panel */
+.preview-panel{position:sticky;top:20px;height:fit-content}
+.preview-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.preview-header h2{font-size:15px;font-weight:700;color:var(--text);flex:1}
+.view-tabs{display:flex;gap:4px}
+.view-tab{background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;color:var(--muted);font-family:var(--mono);transition:all .15s}
+.view-tab.active{background:var(--surface);border-color:var(--accent2);color:var(--accent2)}
+.view-tab:hover{color:var(--text)}
+
+.preview-box{background:#0d1117;border:1px solid var(--border);border-radius:10px;padding:24px;min-height:400px;max-height:70vh;overflow-y:auto;font-size:14px;line-height:1.6}
+.preview-box.markdown-view{font-family:var(--mono);font-size:13px;white-space:pre-wrap;word-break:break-word;color:var(--muted)}
+.preview-box.rendered-view{color:var(--text)}
+
+/* Rendered markdown styles */
+.rendered-view h1{font-size:24px;font-weight:700;margin-bottom:8px;border-bottom:1px solid var(--border);padding-bottom:8px}
+.rendered-view h2{font-size:18px;font-weight:600;margin:20px 0 8px}
+.rendered-view h3{font-size:15px;font-weight:600;margin:16px 0 6px}
+.rendered-view p{margin-bottom:12px;color:#c9d1d9}
+.rendered-view ul,.rendered-view ol{margin:8px 0 12px 20px}
+.rendered-view li{margin-bottom:4px;color:#c9d1d9}
+.rendered-view code{background:#161b22;border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:var(--mono);font-size:12px;color:var(--accent)}
+.rendered-view pre{background:#161b22;border:1px solid var(--border);border-radius:6px;padding:14px;overflow-x:auto;margin:12px 0}
+.rendered-view pre code{background:none;border:none;padding:0;font-size:12px;color:#c9d1d9}
+.rendered-view blockquote{border-left:3px solid var(--border);padding-left:14px;color:var(--muted);margin:12px 0}
+.rendered-view hr{border:none;border-top:1px solid var(--border);margin:16px 0}
+.rendered-view a{color:var(--accent2)}
+.rendered-view img{max-width:100%;height:auto}
+.rendered-view strong{color:var(--text);font-weight:700}
+.rendered-view em{font-style:italic}
+
+/* Action buttons */
+.action-row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.btn{font-size:13px;font-weight:700;padding:8px 16px;border-radius:6px;border:none;cursor:pointer;font-family:var(--mono);transition:all .15s;display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:var(--accent);color:#000}
+.btn-primary:hover{opacity:.88}
+.btn-secondary{background:var(--surface);color:var(--text);border:1px solid var(--border)}
+.btn-secondary:hover{border-color:var(--muted)}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.btn-ghost:hover{color:var(--text);border-color:var(--muted)}
+.btn-feedback{font-size:12px;color:var(--green);font-family:var(--mono);display:none;padding:8px 0}
+
+/* FAQ section */
+.faq-wrapper{max-width:760px;margin:0 auto;padding:0 20px 80px}
+.faq-section{margin-top:60px}
+.faq-section h2{font-size:22px;margin-bottom:20px}
+.faq-item{border-left:2px solid var(--border);padding-left:20px;margin-bottom:24px}
+.faq-item h3{font-size:16px;font-weight:600;margin-bottom:8px}
+.faq-item p{font-size:14px;color:var(--muted);line-height:1.7}
+
+.guide-section{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:24px;margin-bottom:24px}
+.guide-section h2{font-size:19px;margin-bottom:12px}
+.guide-section p{font-size:14px;color:var(--muted);margin-bottom:10px;line-height:1.7}
+.guide-section p:last-child{margin-bottom:0}
+
+footer{text-align:center;padding:24px;font-size:12px;color:var(--muted);border-top:1px solid var(--border)}
+footer a{color:var(--muted)}
+footer a:hover{color:var(--text)}
+
+@media(max-width:860px){
+  .generator{grid-template-columns:1fr}
+  .preview-panel{position:static}
+  .preview-box{max-height:400px}
+}
+@media(max-width:480px){
+  .action-row{flex-direction:column}
+  .action-row .btn{width:100%;justify-content:center}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <strong>Ship This Weekend</strong>
+  <a href="/autonomous-site/">Generator</a>
+  <a href="/autonomous-site/ideas.html">Browse 30</a>
+  <a href="/autonomous-site/python-projects.html">Python</a>
+  <a href="/autonomous-site/javascript-projects.html">JavaScript</a>
+  <a href="/autonomous-site/portfolio-projects.html">Portfolio</a>
+  <a href="/autonomous-site/project-estimator.html">Scope Estimator</a>
+  <a href="/autonomous-site/readme-generator.html" style="color:var(--accent)">README Generator</a>
+</nav>
+
+<header>
+  <div class="badge-pill">Free Tool</div>
+  <h1>GitHub README Generator</h1>
+  <p class="subhead">Fill in your project details and get a professional README.md — ready to copy or download. No account needed.</p>
+</header>
+
+<div class="generator">
+
+  <!-- FORM PANEL -->
+  <div class="form-panel">
+    <h2>Project Details</h2>
+
+    <div class="field">
+      <label for="proj-name">Project Name <span style="color:var(--accent)">*</span></label>
+      <input type="text" id="proj-name" placeholder="my-awesome-project" maxlength="80">
+    </div>
+
+    <div class="field">
+      <label for="proj-tagline">One-Line Tagline <span style="color:var(--accent)">*</span></label>
+      <input type="text" id="proj-tagline" placeholder="A fast, minimal widget for doing X" maxlength="120">
+    </div>
+
+    <div class="field">
+      <label for="proj-desc">Description</label>
+      <div class="hint">Explain the problem it solves and who it's for.</div>
+      <textarea id="proj-desc" rows="3" placeholder="A longer explanation of what the project does, the problem it solves, and why you built it."></textarea>
+    </div>
+
+    <div class="field">
+      <label for="proj-demo">Demo / Live URL</label>
+      <input type="text" id="proj-demo" placeholder="https://yourproject.vercel.app">
+    </div>
+
+    <div class="section-divider">Tech Stack</div>
+
+    <div class="field">
+      <div class="stack-label">Click to select technologies used in this project</div>
+
+      <div class="stack-label" style="margin-top:6px">Frontend</div>
+      <div class="stack-grid" id="stack-frontend"></div>
+
+      <div class="stack-label" style="margin-top:10px">Backend</div>
+      <div class="stack-grid" id="stack-backend"></div>
+
+      <div class="stack-label" style="margin-top:10px">Database &amp; Storage</div>
+      <div class="stack-grid" id="stack-db"></div>
+
+      <div class="stack-label" style="margin-top:10px">Tools &amp; Deployment</div>
+      <div class="stack-grid" id="stack-tools"></div>
+    </div>
+
+    <div class="section-divider">Quick Start</div>
+
+    <div class="field">
+      <label for="install-cmd">Install Command</label>
+      <input type="text" id="install-cmd" placeholder="npm install" value="npm install">
+    </div>
+
+    <div class="field">
+      <label for="run-cmd">Run / Dev Command</label>
+      <input type="text" id="run-cmd" placeholder="npm run dev" value="npm run dev">
+    </div>
+
+    <div class="field">
+      <label for="prereqs">Prerequisites</label>
+      <input type="text" id="prereqs" placeholder="Node.js v18+, PostgreSQL">
+    </div>
+
+    <div class="section-divider">Features &amp; License</div>
+
+    <div class="field">
+      <label for="features">Key Features</label>
+      <div class="hint">One feature per line. These become bullet points.</div>
+      <textarea id="features" rows="4" placeholder="Fast, lightweight, zero dependencies&#10;Shareable links via URL encoding&#10;Dark mode support&#10;Mobile responsive"></textarea>
+    </div>
+
+    <div class="field">
+      <label for="license">License</label>
+      <select id="license">
+        <option value="MIT">MIT</option>
+        <option value="Apache-2.0">Apache 2.0</option>
+        <option value="GPL-3.0">GPL v3.0</option>
+        <option value="BSD-2-Clause">BSD 2-Clause</option>
+        <option value="ISC">ISC</option>
+        <option value="Unlicense">Unlicense</option>
+      </select>
+    </div>
+
+    <div class="section-divider">Optional Sections</div>
+
+    <div class="toggle-row">
+      <span class="toggle-label">Contributing guide</span>
+      <label class="toggle"><input type="checkbox" id="incl-contributing" checked><span class="slider"></span></label>
+    </div>
+    <div class="toggle-row">
+      <span class="toggle-label">Screenshots section</span>
+      <label class="toggle"><input type="checkbox" id="incl-screenshots"><span class="slider"></span></label>
+    </div>
+    <div class="toggle-row">
+      <span class="toggle-label">Environment variables section</span>
+      <label class="toggle"><input type="checkbox" id="incl-env"><span class="slider"></span></label>
+    </div>
+    <div class="toggle-row">
+      <span class="toggle-label">Acknowledgments section</span>
+      <label class="toggle"><input type="checkbox" id="incl-ack"><span class="slider"></span></label>
+    </div>
+
+  </div><!-- /form-panel -->
+
+  <!-- PREVIEW PANEL -->
+  <div class="preview-panel">
+    <div class="preview-header">
+      <h2>Preview</h2>
+      <div class="view-tabs">
+        <button class="view-tab active" id="tab-rendered" onclick="switchTab('rendered')">Rendered</button>
+        <button class="view-tab" id="tab-markdown" onclick="switchTab('markdown')">Markdown</button>
+      </div>
+    </div>
+
+    <div class="preview-box rendered-view" id="preview-content">
+      <div style="text-align:center;padding:60px 20px;color:var(--muted)">
+        <p style="font-size:16px;margin-bottom:8px">Start filling in the form</p>
+        <p style="font-size:13px;font-family:var(--mono)">Your README will appear here</p>
+      </div>
+    </div>
+
+    <div class="action-row">
+      <button class="btn btn-primary" onclick="copyMarkdown()">⬇ Copy Markdown</button>
+      <button class="btn btn-secondary" onclick="downloadReadme()">↓ Download README.md</button>
+      <button class="btn btn-ghost" onclick="copyShareLink()">🔗 Share Link</button>
+    </div>
+    <div class="btn-feedback" id="copy-feedback">Copied to clipboard!</div>
+
+  </div><!-- /preview-panel -->
+
+</div><!-- /generator -->
+
+<div class="faq-wrapper">
+
+  <div class="guide-section">
+    <h2>What makes a great GitHub README?</h2>
+    <p>The best READMEs answer three questions within the first 10 seconds: what does this do, why should I care, and how do I run it? Everything else is secondary. A compelling one-line tagline and a working quick-start section are more valuable than 2,000 words of detailed documentation.</p>
+    <p>Badges serve two purposes: quick visual summary (language, license, build status) and social proof (stars, downloads). Don't over-badge — 3–5 badges is ideal. Put them right after the title so they render immediately on the GitHub project page.</p>
+    <p>The contributing section matters even for solo projects. It signals that you're open to collaboration, sets expectations for pull requests, and often gets auto-filled by GitHub's standard bots. Keep it brief: fork, branch, commit, PR.</p>
+  </div>
+
+  <section class="faq-section" id="faq">
+    <h2>README questions answered</h2>
+
+    <div class="faq-item">
+      <h3>What should a GitHub README include?</h3>
+      <p>A good GitHub README includes: project name and a one-line description at the top, tech stack badges, a longer description explaining what the project does and why, a features list, quick start instructions (install + run commands), a demo link if available, contributing guidelines, and a license. The most important thing is the quick start — if someone can't get it running in under 5 minutes, they'll leave.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>How do I add badges to my GitHub README?</h3>
+      <p>GitHub README badges use shields.io. The format is: <code>![Badge Label](https://img.shields.io/badge/label-value-color)</code>. For license badges: <code>![License](https://img.shields.io/badge/license-MIT-blue.svg)</code>. For tech stack: use the static badge endpoint with the technology name and its brand color. This generator creates all the badge markdown automatically — just click your tech stack.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>How long should a GitHub README be?</h3>
+      <p>Most good READMEs are 200–600 words. Long enough to explain what it does, how to install it, and how to use it. Short enough that someone can read it in 2–3 minutes. The quick start section is the most important — put it high. Everything else (detailed config, changelog, architecture docs) can go in separate files linked from the README.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>Should I use a README template?</h3>
+      <p>Templates are a good starting point but need personalization. The description, features, and quick start are where most developers underinvest — they write "This is a great project that does X" when they should write "I built this because Y was broken in existing tools, and it specifically solves Z." The problem statement and why-you-built-it are the highest-signal parts of any README.</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>Do I need a README for a side project?</h3>
+      <p>Yes, even for personal side projects. A README forces you to articulate what your project does (useful for explaining it to future-you), makes it easy for others to run your code when you share it, and is the first thing recruiters or collaborators see when they visit your GitHub. A minimal README with a description and quick start takes 10 minutes to write and lasts the lifetime of the project.</p>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <p>Part of <a href="/autonomous-site/">Ship This Weekend</a> — tools for developers building side projects.
+  Also: <a href="/autonomous-site/project-estimator.html">Scope Estimator</a> · <a href="/autonomous-site/python-projects.html">Python Projects</a> · <a href="/autonomous-site/javascript-projects.html">JS Projects</a></p>
+</footer>
+
+<script>
+// Tech stack data
+const STACK = {
+  frontend: [
+    {id:'react',label:'React',color:'61dafb'},
+    {id:'nextjs',label:'Next.js',color:'ffffff'},
+    {id:'vue',label:'Vue',color:'42b883'},
+    {id:'svelte',label:'Svelte',color:'ff3e00'},
+    {id:'angular',label:'Angular',color:'dd0031'},
+    {id:'typescript',label:'TypeScript',color:'3178c6'},
+    {id:'javascript',label:'JavaScript',color:'f7df1e'},
+    {id:'tailwind',label:'Tailwind',color:'06b6d4'},
+    {id:'vite',label:'Vite',color:'646cff'},
+  ],
+  backend: [
+    {id:'nodejs',label:'Node.js',color:'5fa04e'},
+    {id:'express',label:'Express',color:'000000'},
+    {id:'fastapi',label:'FastAPI',color:'009688'},
+    {id:'django',label:'Django',color:'092e20'},
+    {id:'flask',label:'Flask',color:'000000'},
+    {id:'python',label:'Python',color:'3776ab'},
+    {id:'go',label:'Go',color:'00add8'},
+    {id:'rust',label:'Rust',color:'ce422b'},
+  ],
+  db: [
+    {id:'postgresql',label:'PostgreSQL',color:'4169e1'},
+    {id:'mongodb',label:'MongoDB',color:'47a248'},
+    {id:'sqlite',label:'SQLite',color:'003b57'},
+    {id:'redis',label:'Redis',color:'dc382d'},
+    {id:'mysql',label:'MySQL',color:'4479a1'},
+    {id:'prisma',label:'Prisma',color:'2d3748'},
+    {id:'supabase',label:'Supabase',color:'3ecf8e'},
+  ],
+  tools: [
+    {id:'docker',label:'Docker',color:'2496ed'},
+    {id:'github-actions',label:'GitHub Actions',color:'2088ff'},
+    {id:'vercel',label:'Vercel',color:'000000'},
+    {id:'netlify',label:'Netlify',color:'00c7b7'},
+    {id:'aws',label:'AWS',color:'ff9900'},
+    {id:'graphql',label:'GraphQL',color:'e10098'},
+  ]
+};
+
+// Selected stack
+const selectedStack = new Set();
+let currentTab = 'rendered';
+
+// Render stack chips
+function renderStackGroup(groupId, items) {
+  const container = document.getElementById(`stack-${groupId}`);
+  items.forEach(item => {
+    const chip = document.createElement('span');
+    chip.className = 'stack-chip';
+    chip.textContent = item.label;
+    chip.dataset.id = item.id;
+    chip.addEventListener('click', () => {
+      if (selectedStack.has(item.id)) {
+        selectedStack.delete(item.id);
+        chip.classList.remove('active');
+      } else {
+        selectedStack.add(item.id);
+        chip.classList.add('active');
+      }
+      updatePreview();
+      updateURL();
+    });
+    container.appendChild(chip);
+  });
+}
+
+// Initialize stack chips
+renderStackGroup('frontend', STACK.frontend);
+renderStackGroup('backend', STACK.backend);
+renderStackGroup('db', STACK.db);
+renderStackGroup('tools', STACK.tools);
+
+// Get all stack items flat for lookup
+const ALL_STACK_ITEMS = [...STACK.frontend, ...STACK.backend, ...STACK.db, ...STACK.tools];
+
+// Generate shields.io badge markdown for a tech
+function badgeFor(item) {
+  const label = encodeURIComponent(item.label).replace(/-/g, '--');
+  const color = item.color;
+  return `![${item.label}](https://img.shields.io/badge/${label}-${color}?style=flat-square)`;
+}
+
+// License badge
+function licenseBadge(license) {
+  const colorMap = {
+    'MIT': 'blue', 'Apache-2.0': 'orange', 'GPL-3.0': 'green',
+    'BSD-2-Clause': 'blue', 'ISC': 'blue', 'Unlicense': 'lightgrey'
+  };
+  const color = colorMap[license] || 'blue';
+  return `![License](https://img.shields.io/badge/license-${encodeURIComponent(license)}-${color}.svg)`;
+}
+
+// Generate README markdown
+function generateMarkdown() {
+  const name = get('proj-name') || 'my-project';
+  const tagline = get('proj-tagline') || 'A description of your project';
+  const desc = get('proj-desc');
+  const demo = get('proj-demo');
+  const installCmd = get('install-cmd') || 'npm install';
+  const runCmd = get('run-cmd') || 'npm run dev';
+  const prereqs = get('prereqs');
+  const featuresRaw = get('features');
+  const license = document.getElementById('license').value;
+  const inclContrib = document.getElementById('incl-contributing').checked;
+  const inclScreenshots = document.getElementById('incl-screenshots').checked;
+  const inclEnv = document.getElementById('incl-env').checked;
+  const inclAck = document.getElementById('incl-ack').checked;
+
+  const features = featuresRaw ? featuresRaw.split('\n').filter(l => l.trim()) : [];
+  const stackItems = ALL_STACK_ITEMS.filter(s => selectedStack.has(s.id));
+
+  let md = '';
+
+  // Title
+  md += `# ${name}\n\n`;
+  md += `> ${tagline}\n\n`;
+
+  // Badges
+  const badges = [licenseBadge(license)];
+  stackItems.slice(0, 5).forEach(s => badges.push(badgeFor(s)));
+  md += badges.join(' ') + '\n\n';
+
+  // Description
+  if (desc) {
+    md += `## About\n\n${desc}\n\n`;
+  }
+
+  // Demo
+  if (demo) {
+    md += `**[Live Demo →](${demo})**\n\n`;
+  }
+
+  // Screenshots
+  if (inclScreenshots) {
+    md += `## Screenshots\n\n`;
+    md += `![Screenshot](./screenshots/screenshot.png)\n\n`;
+  }
+
+  // Features
+  if (features.length > 0) {
+    md += `## Features\n\n`;
+    features.forEach(f => {
+      md += `- ${f.trim()}\n`;
+    });
+    md += '\n';
+  }
+
+  // Tech Stack
+  if (stackItems.length > 0) {
+    md += `## Tech Stack\n\n`;
+    stackItems.forEach(s => {
+      md += `- **${s.label}**\n`;
+    });
+    md += '\n';
+  }
+
+  // Getting Started
+  md += `## Getting Started\n\n`;
+
+  if (prereqs) {
+    md += `### Prerequisites\n\n- ${prereqs}\n\n`;
+  }
+
+  md += `### Installation\n\n`;
+  md += `\`\`\`bash\n`;
+  md += `# Clone the repository\n`;
+  md += `git clone https://github.com/yourusername/${name}.git\ncd ${name}\n\n`;
+  md += `# Install dependencies\n${installCmd}\n`;
+  md += `\`\`\`\n\n`;
+
+  md += `### Running Locally\n\n`;
+  md += `\`\`\`bash\n${runCmd}\n\`\`\`\n\n`;
+
+  // Environment variables
+  if (inclEnv) {
+    md += `## Environment Variables\n\n`;
+    md += `Create a \`.env\` file in the root directory:\n\n`;
+    md += `\`\`\`env\nAPI_KEY=your_api_key_here\nDATABASE_URL=your_database_url\n\`\`\`\n\n`;
+  }
+
+  // Contributing
+  if (inclContrib) {
+    md += `## Contributing\n\n`;
+    md += `Contributions are welcome! Please feel free to submit a pull request.\n\n`;
+    md += `1. Fork the project\n`;
+    md += `2. Create your feature branch (\`git checkout -b feature/amazing-feature\`)\n`;
+    md += `3. Commit your changes (\`git commit -m 'Add amazing feature'\`)\n`;
+    md += `4. Push to the branch (\`git push origin feature/amazing-feature\`)\n`;
+    md += `5. Open a Pull Request\n\n`;
+  }
+
+  // Acknowledgments
+  if (inclAck) {
+    md += `## Acknowledgments\n\n`;
+    md += `- [shields.io](https://shields.io/) for badge generation\n`;
+    md += `- [README best practices](https://www.makeareadme.com/)\n\n`;
+  }
+
+  // License
+  md += `## License\n\n`;
+  md += `Distributed under the ${license} License. See \`LICENSE\` for more information.\n`;
+
+  return md;
+}
+
+// Minimal markdown → HTML renderer
+function renderMarkdown(md) {
+  let html = md;
+
+  // Escape HTML first (before processing)
+  html = html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+  // Code blocks (must be before inline code)
+  html = html.replace(/```(\w*)\n([\s\S]*?)```/g, (_, lang, code) => {
+    return `<pre><code>${code.trim()}</code></pre>`;
+  });
+
+  // Inline code
+  html = html.replace(/`([^`\n]+)`/g, '<code>$1</code>');
+
+  // Images (before links)
+  html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1">');
+
+  // Links
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+
+  // Bold
+  html = html.replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>');
+
+  // Italic
+  html = html.replace(/\*([^*\n]+)\*/g, '<em>$1</em>');
+
+  // HR
+  html = html.replace(/^---$/gm, '<hr>');
+
+  // Blockquote
+  html = html.replace(/^&gt; (.+)$/gm, '<blockquote>$1</blockquote>');
+
+  // Headings
+  html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+  html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+  html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+
+  // Numbered list items
+  html = html.replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
+
+  // Unordered list items
+  html = html.replace(/^- (.+)$/gm, '<li>$1</li>');
+
+  // Wrap consecutive li items in ul
+  html = html.replace(/(<li>.*<\/li>\n?)+/g, m => `<ul>${m}</ul>`);
+
+  // Paragraphs — blank lines separate paragraphs
+  html = html.split(/\n{2,}/).map(block => {
+    if (block.match(/^<(h[1-3]|pre|ul|ol|hr|blockquote)/)) return block;
+    if (!block.trim()) return '';
+    return `<p>${block.replace(/\n/g, ' ')}</p>`;
+  }).join('\n');
+
+  return html;
+}
+
+function get(id) {
+  return document.getElementById(id).value.trim();
+}
+
+function updatePreview() {
+  const md = generateMarkdown();
+  const box = document.getElementById('preview-content');
+  if (currentTab === 'rendered') {
+    box.className = 'preview-box rendered-view';
+    box.innerHTML = renderMarkdown(md);
+  } else {
+    box.className = 'preview-box markdown-view';
+    box.textContent = md;
+  }
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.getElementById('tab-rendered').classList.toggle('active', tab === 'rendered');
+  document.getElementById('tab-markdown').classList.toggle('active', tab === 'markdown');
+  updatePreview();
+}
+
+function copyMarkdown() {
+  const md = generateMarkdown();
+  navigator.clipboard.writeText(md).then(() => {
+    const fb = document.getElementById('copy-feedback');
+    fb.style.display = 'block';
+    fb.textContent = 'Copied to clipboard!';
+    setTimeout(() => { fb.style.display = 'none'; }, 2500);
+  });
+}
+
+function downloadReadme() {
+  const md = generateMarkdown();
+  const blob = new Blob([md], {type: 'text/markdown'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'README.md';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function copyShareLink() {
+  updateURL();
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    const fb = document.getElementById('copy-feedback');
+    fb.style.display = 'block';
+    fb.textContent = 'Share link copied!';
+    setTimeout(() => { fb.style.display = 'none'; }, 2500);
+  });
+}
+
+// URL state encoding/decoding
+function updateURL() {
+  const params = new URLSearchParams();
+  const name = get('proj-name'); if (name) params.set('n', name);
+  const tag = get('proj-tagline'); if (tag) params.set('t', tag);
+  const desc = get('proj-desc'); if (desc) params.set('d', desc);
+  const demo = get('proj-demo'); if (demo) params.set('u', demo);
+  const ic = get('install-cmd'); if (ic && ic !== 'npm install') params.set('ic', ic);
+  const rc = get('run-cmd'); if (rc && rc !== 'npm run dev') params.set('rc', rc);
+  const pre = get('prereqs'); if (pre) params.set('pre', pre);
+  const feat = get('features'); if (feat) params.set('f', feat);
+  const lic = document.getElementById('license').value; if (lic !== 'MIT') params.set('l', lic);
+  const stack = [...selectedStack].join(','); if (stack) params.set('s', stack);
+  const toggles = [
+    document.getElementById('incl-contributing').checked ? '1' : '0',
+    document.getElementById('incl-screenshots').checked ? '1' : '0',
+    document.getElementById('incl-env').checked ? '1' : '0',
+    document.getElementById('incl-ack').checked ? '1' : '0',
+  ].join('');
+  if (toggles !== '1000') params.set('opts', toggles);
+
+  const newURL = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+  history.replaceState(null, '', newURL);
+}
+
+function loadFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('n')) document.getElementById('proj-name').value = params.get('n');
+  if (params.get('t')) document.getElementById('proj-tagline').value = params.get('t');
+  if (params.get('d')) document.getElementById('proj-desc').value = params.get('d');
+  if (params.get('u')) document.getElementById('proj-demo').value = params.get('u');
+  if (params.get('ic')) document.getElementById('install-cmd').value = params.get('ic');
+  if (params.get('rc')) document.getElementById('run-cmd').value = params.get('rc');
+  if (params.get('pre')) document.getElementById('prereqs').value = params.get('pre');
+  if (params.get('f')) document.getElementById('features').value = params.get('f');
+  if (params.get('l')) document.getElementById('license').value = params.get('l');
+  if (params.get('s')) {
+    params.get('s').split(',').forEach(id => {
+      selectedStack.add(id);
+      const chip = document.querySelector(`.stack-chip[data-id="${id}"]`);
+      if (chip) chip.classList.add('active');
+    });
+  }
+  if (params.get('opts')) {
+    const opts = params.get('opts');
+    document.getElementById('incl-contributing').checked = opts[0] === '1';
+    document.getElementById('incl-screenshots').checked = opts[1] === '1';
+    document.getElementById('incl-env').checked = opts[2] === '1';
+    document.getElementById('incl-ack').checked = opts[3] === '1';
+  }
+}
+
+// Wire up all form inputs
+function wireInputs() {
+  ['proj-name','proj-tagline','proj-desc','proj-demo','install-cmd','run-cmd','prereqs','features'].forEach(id => {
+    document.getElementById(id).addEventListener('input', () => { updatePreview(); updateURL(); });
+  });
+  document.getElementById('license').addEventListener('change', () => { updatePreview(); updateURL(); });
+  ['incl-contributing','incl-screenshots','incl-env','incl-ack'].forEach(id => {
+    document.getElementById(id).addEventListener('change', () => { updatePreview(); updateURL(); });
+  });
+}
+
+// Init
+loadFromURL();
+wireInputs();
+updatePreview();
+</script>
+
+<script data-goatcounter="https://autorunfun.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
