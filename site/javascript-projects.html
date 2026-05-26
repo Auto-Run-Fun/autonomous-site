@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JavaScript Project Ideas — 30 Projects from Beginner to Advanced</title>
+<meta name="description" content="30 JavaScript project ideas with modern tools, time estimates, and what you'll learn — organized from beginner vanilla JS to advanced full-stack. Build things that matter.">
+<link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/javascript-projects.html">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript Project Ideas — 30 Projects from Beginner to Advanced">
+<meta property="og:description" content="30 curated JavaScript project ideas with specific libraries, time estimates, and what you'll actually learn. From vanilla JS to React, Node.js, and full-stack.">
+<meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/javascript-projects.html">
+<meta property="og:image" content="https://auto-run-fun.github.io/autonomous-site/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="JavaScript Project Ideas — 30 Projects from Beginner to Advanced">
+<meta name="twitter:description" content="30 JS project ideas with modern tools, time estimates, and what you'll learn. Beginner to advanced.">
+<meta name="twitter:image" content="https://auto-run-fun.github.io/autonomous-site/og.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "30 JavaScript Project Ideas from Beginner to Advanced",
+  "description": "A curated list of 30 JavaScript project ideas organized by difficulty — beginner vanilla JS, intermediate React/Vue, and advanced Node.js/TypeScript/full-stack projects.",
+  "url": "https://auto-run-fun.github.io/autonomous-site/javascript-projects.html",
+  "numberOfItems": 30,
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"To-Do List App","description":"CRUD app with localStorage persistence. Learn DOM manipulation, event handling, localStorage API."},
+    {"@type":"ListItem","position":2,"name":"Pomodoro Timer","description":"Work/break interval timer with progress animation. Learn timers, CSS animations, state management."},
+    {"@type":"ListItem","position":3,"name":"Weather App","description":"Fetch live weather from a free API. Learn async/await, JSON parsing, API calls."},
+    {"@type":"ListItem","position":4,"name":"Expense Tracker","description":"Track income and expenses with localStorage. Learn array methods, CRUD operations."},
+    {"@type":"ListItem","position":5,"name":"Quiz App","description":"Multiple choice quiz with scoring and shuffle. Learn arrays, objects, DOM manipulation."},
+    {"@type":"ListItem","position":6,"name":"Random Quote Generator","description":"Display quotes from a free API with copy and share buttons. Learn fetch, DOM, event handling."},
+    {"@type":"ListItem","position":7,"name":"Image Carousel","description":"Smooth slider without a library. Learn CSS transitions, event listeners, accessibility."},
+    {"@type":"ListItem","position":8,"name":"Calculator","description":"Working calculator with operator precedence. Learn string parsing, state machines."},
+    {"@type":"ListItem","position":9,"name":"Color Palette Generator","description":"Generate harmonious palettes with HEX/RGB/HSL. Learn color math, clipboard API."},
+    {"@type":"ListItem","position":10,"name":"Typing Speed Test","description":"Measure WPM and accuracy in real time. Learn timing, string comparison, keyboard events."},
+    {"@type":"ListItem","position":11,"name":"GitHub Profile Viewer","description":"Search any GitHub username with their API. Learn React hooks, API integration, loading states."},
+    {"@type":"ListItem","position":12,"name":"Markdown Editor","description":"Split-pane live preview with marked.js. Learn React state, text editing, markdown parsing."},
+    {"@type":"ListItem","position":13,"name":"Budget Dashboard","description":"Full CRUD budget app with Recharts charts. Learn data visualization, complex React state."},
+    {"@type":"ListItem","position":14,"name":"Recipe Finder","description":"Search recipes by ingredient using TheMealDB API. Learn API integration, filtering with React."},
+    {"@type":"ListItem","position":15,"name":"Kanban Board","description":"Drag-and-drop task board with @dnd-kit. Learn drag-and-drop, complex state management."},
+    {"@type":"ListItem","position":16,"name":"Movie Search App","description":"Search OMDB API, save watchlist in localStorage. Learn API, localStorage, React patterns."},
+    {"@type":"ListItem","position":17,"name":"Countdown Timer App","description":"Multiple simultaneous countdowns with Zustand. Learn React context, interval management."},
+    {"@type":"ListItem","position":18,"name":"Dark Mode Portfolio","description":"Responsive portfolio with CSS variable theming. Learn CSS variables, React state, responsive design."},
+    {"@type":"ListItem","position":19,"name":"Infinite Scroll Feed","description":"Paginated content feed with IntersectionObserver. Learn lazy loading, pagination APIs, React."},
+    {"@type":"ListItem","position":20,"name":"Form Validator","description":"Multi-step form with real-time validation. Learn React Hook Form, validation patterns, UX."},
+    {"@type":"ListItem","position":21,"name":"REST API + Dashboard","description":"Express + SQLite API with React dashboard. Learn Node.js, REST design, database, full-stack."},
+    {"@type":"ListItem","position":22,"name":"Real-time Chat App","description":"WebSocket chat with rooms using Socket.io. Learn WebSockets, real-time events, rooms."},
+    {"@type":"ListItem","position":23,"name":"Browser Extension","description":"Chrome/Firefox extension (tab manager, timer, etc.). Learn extension APIs, background scripts."},
+    {"@type":"ListItem","position":24,"name":"TypeScript CLI Tool","description":"Command-line tool published to npm. Learn TypeScript, Node.js, CLI design, npm publishing."},
+    {"@type":"ListItem","position":25,"name":"Progressive Web App","description":"Convert an app to installable PWA with offline support. Learn service workers, manifest, caching."},
+    {"@type":"ListItem","position":26,"name":"GraphQL API","description":"Apollo Server API with queries and mutations. Learn GraphQL schema design, resolvers, TypeScript."},
+    {"@type":"ListItem","position":27,"name":"Authentication System","description":"Full auth flow with JWT refresh tokens. Learn auth patterns, security, Express + PostgreSQL."},
+    {"@type":"ListItem","position":28,"name":"Electron Desktop App","description":"Cross-platform desktop app with React + Electron. Learn IPC, native APIs, app bundling."},
+    {"@type":"ListItem","position":29,"name":"Next.js Full-Stack App","description":"App Router + Prisma + PostgreSQL full-stack project. Learn Next.js, server components, ORM."},
+    {"@type":"ListItem","position":30,"name":"Open Source Contribution","description":"Ship a real PR to a popular JS project (React, Vite, Next.js). Learn real codebases, code review."}
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What JavaScript project should I build as a beginner?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Start with a To-Do List App or Pomodoro Timer — they're small enough to finish in a weekend but teach the core skills (DOM manipulation, event handling, localStorage). The mistake most beginners make is starting too big. Pick something you can complete in 4–8 hours."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What are good JavaScript projects for a portfolio?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "For a developer portfolio, aim for projects that show you can integrate with real APIs, manage state, and make something usable. Good options from this list: GitHub Profile Viewer (shows API integration), Kanban Board (shows complex state management), or a full-stack REST API + Dashboard (shows you can build end-to-end). Employers want to see that you finish things and make real decisions, not just follow tutorials."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Should I learn React or stick with vanilla JavaScript for projects?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Build your first 2–3 projects in vanilla JavaScript — you'll understand why React exists when you get there. After that, React is the pragmatic choice for most portfolio projects: it's what most jobs use, the ecosystem is mature, and it forces you to think in components. Once you're comfortable with React, a Node.js or TypeScript project rounds out the picture nicely."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How long does it take to build a JavaScript project?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Beginner projects (To-Do, Quiz, Calculator) take 4–8 hours. Intermediate React projects (Kanban Board, Budget Dashboard) take 12–20 hours. Advanced full-stack projects (Auth System, Next.js App) take 20–40 hours. These estimates assume you're mostly building, not learning — add 50–100% if you're learning the concepts while building."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What's the best way to learn JavaScript by building projects?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Pick a project just slightly above your current level — hard enough to be a stretch, not so hard you get stuck for weeks. Build it without a tutorial (use docs instead). When you get stuck, debug it yourself before looking for answers. Then immediately build the next slightly-harder thing. The learning compounds fast once you break the tutorial habit."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are there free APIs I can use for JavaScript projects?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes — many excellent free APIs require no signup. Open-Meteo (weather), GitHub API (users and repos), TheMealDB (recipes), OMDB (movies with a free key), and Quote APIs. For the intermediate projects on this list, you won't need a paid API account for any of them."
+      }
+    }
+  ]
+}
+</script>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f1117;
+  --surface:#161b22;
+  --border:#30363d;
+  --accent:#f0db4f;
+  --accent2:#61dafb;
+  --text:#e6edf3;
+  --muted:#8b949e;
+  --green:#3fb950;
+  --beginner:#238636;
+  --intermediate:#9e6a03;
+  --advanced:#da3633;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,sans-serif;line-height:1.6;min-height:100vh}
+a{color:var(--accent2);text-decoration:none}
+a:hover{text-decoration:underline}
+
+nav{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 20px;font-size:13px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+nav strong{color:var(--text);margin-right:4px}
+nav a{color:var(--muted)}
+nav a:hover{color:var(--text)}
+
+header{padding:56px 20px 40px;max-width:860px;margin:0 auto;text-align:center}
+.js-badge{display:inline-block;background:#f0db4f;color:#000;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:4px;margin-bottom:16px;font-family:var(--mono)}
+h1{font-size:clamp(26px,4.5vw,44px);font-weight:700;line-height:1.2;margin-bottom:16px}
+.subhead{font-size:17px;color:var(--muted);max-width:600px;margin:0 auto 32px}
+
+.tier-nav{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:0}
+.tier-btn{padding:8px 18px;border-radius:6px;font-size:14px;font-weight:600;text-decoration:none;transition:opacity .15s}
+.tier-btn:hover{opacity:.8;text-decoration:none}
+.btn-beginner{background:var(--beginner);color:#fff}
+.btn-intermediate{background:var(--intermediate);color:#fff}
+.btn-advanced{background:var(--advanced);color:#fff}
+
+main{max-width:860px;margin:0 auto;padding:0 20px 80px}
+
+.tier-section{margin-bottom:56px}
+.tier-header{padding:20px 0 16px;border-bottom:1px solid var(--border);margin-bottom:28px}
+.tier-label{display:inline-flex;align-items:center;gap:8px;padding:5px 14px;border-radius:6px;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;font-family:var(--mono)}
+.label-beginner{background:rgba(35,134,54,.15);color:#3fb950;border:1px solid rgba(35,134,54,.3)}
+.label-intermediate{background:rgba(158,106,3,.15);color:#d29922;border:1px solid rgba(158,106,3,.3)}
+.label-advanced{background:rgba(218,54,51,.15);color:#f85149;border:1px solid rgba(218,54,51,.3)}
+.tier-header h2{font-size:24px;margin-bottom:8px}
+.tier-desc{font-size:14px;color:var(--muted)}
+
+.project-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+
+.project-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;transition:border-color .15s}
+.project-card:hover{border-color:var(--accent)}
+
+.project-name{font-size:16px;font-weight:700;margin-bottom:6px;color:var(--text)}
+.project-desc{font-size:14px;color:var(--muted);line-height:1.5;margin-bottom:12px}
+
+.meta-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.meta-tag{font-size:11px;padding:2px 7px;border-radius:4px;font-family:var(--mono);border:1px solid var(--border);color:var(--muted);background:var(--bg)}
+.meta-tag.tool{border-color:rgba(97,218,251,.2);color:var(--accent2);background:rgba(97,218,251,.05)}
+
+.project-learn{font-size:13px;color:var(--muted);margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
+.project-learn strong{color:var(--text);font-size:12px;text-transform:uppercase;letter-spacing:.06em;font-family:var(--mono)}
+
+.time-badge{font-size:11px;padding:2px 8px;border-radius:4px;font-family:var(--mono);margin-left:auto;color:var(--muted);background:var(--bg);border:1px solid var(--border);white-space:nowrap}
+
+.intro-section{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:28px;margin:40px 0}
+.intro-section h2{font-size:20px;margin-bottom:14px}
+.intro-section p{font-size:15px;color:var(--muted);margin-bottom:12px;line-height:1.7}
+.intro-section p:last-child{margin-bottom:0}
+
+.faq-section{margin:40px 0}
+.faq-section h2{font-size:22px;margin-bottom:20px}
+.faq-item{border-left:2px solid var(--border);padding-left:20px;margin-bottom:24px}
+.faq-item h3{font-size:16px;font-weight:600;margin-bottom:8px;color:var(--text)}
+.faq-item p{font-size:14px;color:var(--muted);line-height:1.7}
+
+.cta-box{background:linear-gradient(135deg,rgba(240,219,79,.08),rgba(97,218,251,.08));border:1px solid var(--border);border-radius:10px;padding:28px;text-align:center;margin-top:40px}
+.cta-box h3{font-size:18px;margin-bottom:10px}
+.cta-box p{font-size:14px;color:var(--muted);margin-bottom:18px}
+.btn{display:inline-block;padding:10px 22px;border-radius:6px;font-weight:600;font-size:15px;text-decoration:none;background:var(--accent);color:#000;margin:4px}
+.btn:hover{opacity:.85;text-decoration:none}
+.btn-outline{background:transparent;color:var(--text);border:1px solid var(--border)}
+
+@media(max-width:600px){
+  .project-grid{grid-template-columns:1fr}
+  .tier-nav{flex-direction:column;align-items:center}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <strong>Ship This Weekend</strong>
+  <a href="/autonomous-site/">Generator</a>
+  <a href="/autonomous-site/ideas.html">Browse 30</a>
+  <a href="/autonomous-site/python-projects.html">Python</a>
+  <a href="/autonomous-site/javascript-projects.html" style="color:var(--accent)">JavaScript</a>
+  <a href="/autonomous-site/portfolio-projects.html">Portfolio</a>
+  <a href="/autonomous-site/beginner-projects.html">Beginner</a>
+</nav>
+
+<header>
+  <div class="js-badge">JavaScript</div>
+  <h1>30 JavaScript Project Ideas<br>from Beginner to Advanced</h1>
+  <p class="subhead">Curated JS projects with specific tools, honest time estimates, and what you'll actually learn — not generic tutorial fodder.</p>
+  <div class="tier-nav">
+    <a href="#beginner" class="tier-btn btn-beginner">Beginner — Vanilla JS</a>
+    <a href="#intermediate" class="tier-btn btn-intermediate">Intermediate — React/Vue</a>
+    <a href="#advanced" class="tier-btn btn-advanced">Advanced — Node / Full-Stack</a>
+  </div>
+</header>
+
+<main>
+
+<div class="intro-section">
+  <h2>How to use this list</h2>
+  <p>Each project includes the specific library or tooling you should use (not just "build a React app"), a realistic time estimate, and what concrete skills it teaches. The estimates assume you already know the level's prerequisites — add 50% if you're learning the concepts while building.</p>
+  <p>The real rule: pick something just above your comfort zone and build it without following a tutorial. Use the docs. Get stuck. Debug it. That's when the learning sticks. Finishing a project you built with friction beats finishing a tutorial you followed without thinking.</p>
+</div>
+
+<!-- BEGINNER -->
+<section class="tier-section" id="beginner">
+  <div class="tier-header">
+    <div class="tier-label label-beginner">Beginner</div>
+    <h2>Vanilla JavaScript Projects</h2>
+    <p class="tier-desc">No build tools, no frameworks — just HTML, CSS, and JavaScript. Each project teaches a core browser API or pattern. Prerequisites: basic HTML/CSS, JavaScript syntax basics.</p>
+  </div>
+  <div class="project-grid">
+
+    <div class="project-card">
+      <div class="project-name">1. To-Do List App</div>
+      <p class="project-desc">The classic CRUD app — add, complete, and delete tasks. Persist the list in localStorage so it survives page refreshes.</p>
+      <div class="meta-row">
+        <span class="meta-tag">vanilla JS</span>
+        <span class="meta-tag tool">localStorage</span>
+        <span class="time-badge">4–6 hrs</span>
+      </div>
+      <div class="project-learn"><strong>You'll learn:</strong> DOM manipulation, event handling, localStorage read/write, basic CRUD patterns</div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-name">2. Pomodoro Timer</div>
+      <p class="project-desc">25-minute work sessions with 5-minute breaks. Animated countdown ring, sound alert, session counter. Pause and reset controls.</p>
+      <div class="meta-row">
+        <span class="meta-tag">vanilla JS</span>
+        <span class="meta-tag tool">setInterval</span>
+        <span class="meta-tag tool">SVG</span>
+        <span class="time-badge">5–7 hrs</span>
+      </div>
+      <div class="project-learn"><strong>You'll learn:</strong> Timer logic with setInterval, SVG animation, state machines (idle/running/paused/break), CSS transitions</div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-name">3. Weather App</div>
+      <p class="project-desc">Search any city and show current weather + 5-day forecast. Use Open-Meteo (free, no API key needed) with geocoding.</p>
+      <div class="meta-row">
+        <span class="meta-tag">vanilla JS</span>
+        <span class="meta-tag tool">fetch API</span>
+        <span class="meta-tag tool">Open-Meteo</span>
+        <span class="time-badge">6–8 hrs</span>
+      </div>
+      <div class="project-learn"><strong>You'll learn:</strong> async/await, fetch API, JSON parsing, error handling, chained API calls (geocoding → weather)</div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-name">4. Expense Tracker</div>
+      <p class="project-desc">Add income and expenses with categories. Show running balance, totals by category, and a simple bar chart drawn with CSS.</p>
+      <div class="meta-row">
+        <span class="meta-tag">vanilla JS</span>
+        <span class="meta-tag tool">localStorage</span>
+        <span class="time-badge">6–8 hrs</span>
+      </div>
+      <div class="project-learn"><strong>You'll learn:</strong> Array filter/reduce, data aggregation, dynamic DOM rendering, data visualization with pure CSS</div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-name">5. Quiz App</div>
+      <p class="project-desc">Multiple-choice quiz with 10+ questions, shuffled order, timed questions (optional), and a final score screen with correct answers shown.</p>
+      <div class="meta-row">
+        <span class="meta-tag">vanilla JS</span>
+        <span class="meta-tag tool">JSON</span>
+        <span class="time-badge">5–7 hrs</span>
+      </div>
+      <div class="project-learn"><strong>You'll learn:</strong> Array shuffle (Fisher-Yates), multi-step UI state, object destructuring, dynamic rendering from data</div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-name">6. Random Quote Generator</div>
+      <p class="project-desc">Fetch quotes from a free API (quotable.io), display one with author, add copy-to-clipboard and Twitter share buttons.</p>
+      <div class="meta-row">
+        <span class="meta-tag">vanilla JS</span>
+        <span class="meta-tag tool">Clipboard API</span>
+        <span class="time-badge">3–4 hrs</span>
+      </div>
+      <div class="project-learn"><strong>You'll learn:</strong> Fetch API, loading states, Clipboard API, building URL-encoded share links</div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-name">7. Image Carousel</div>
+      <p class="project-desc">Smooth image slider — no library. Arrow navigation, dot indicators, auto-advance with pause on hover, keyboard arrow support.</p>
+      <div class="meta-row">
+        <span class="meta-tag">vanilla JS</span>
+        <span class="meta-tag tool">CSS transitions</span>
+        <span class="time-badge">5–7 hrs</span>
+      </div>
+      <div class="project-learn"><strong>You'll learn:</strong> CSS transform/transition, modular arithmetic (wrap-around index), keyboard event handling, accessibility (aria-label)</div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-name">8. Calculator</div>
+      <p class="project-desc">A working calculator with proper operator precedence, chained operations, and edge-case handling (divide by zero, multiple decimals).</p>
+      <div class="meta-row">
+        <span class="meta-tag">vanilla JS</span>
+        <span class="meta-tag tool">string parsing</span>
+        <span class="time-badge">5–7 hrs</span>
+      </div>
+      <div class="project-learn"><strong>You'll learn:</strong> String parsing, floating point quirks, state machine design, keyboard event support</div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-name">9. Color Palette Generator</div>
+      <p class="project-desc">Click to generate 5-color harmonious palettes (complementary, triadic, etc.). Show HEX, RGB, and HSL values. Copy on click.</p>
+      <div class="meta-row">
+        <span class="meta-tag">vanilla JS</span>
+        <span class="meta-tag tool">HSL color math</span>
+        <span class="time-badge">5–7 hrs</span>
+      </div>
+      <div class="project-learn"><strong>You'll learn:</strong> HSL/RGB/HEX color conversions, color theory (hue rotation), Clipboard API, URL params for shareable palettes</div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-name">10. Typing Speed Test</div>
+      <p class="project-desc">Display a random passage and measure typing speed (WPM) and accuracy in real time. Show a results screen with stats at the end.</p>
+      <div class="meta-row">
+        <span class="meta-tag">vanilla JS</span>
+        <span class="meta-tag tool">Performance API</span>
+        <span class="time-badge">6–8 hrs</span>
+      </div>
+      <div class="project-learn"><strong>You'll learn:</strong> Real-time string comparison, Performance.now() for high-res timing, character-level diff rendering, input event handling</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- INTERMEDIATE -->
+<section class="tier-section" id="intermediate">
+  <div class="tier-header">
+    <div class="tier-label label-intermediate">Intermediate</div>
+    <h2>React / Modern JS Projects</h2>
+    <p class="tier-desc">Component-based apps with real APIs, state management, and modern tooling. Use Vite for dev setup. Prerequisites: React basics (hooks, props, state), npm, fetch API.</p>
+  </div>
+  <div class="project-grid">
+
+    <div class="project-card">
+      <div class="project-name">11. GitHub Profile Viewer</div>
+      <p class="project-desc">Search any GitHub username and display their profile, top repos, stars, and contribution language stats using the public GitHub API.</p>
+      <div class="meta-row">
+        <span class="meta-tag">React</span>
+        <span class="meta-tag tool">GitHub API</span>
+        <span class="meta-tag tool">Vite</span>
+        <span class="time-badge">8–10 hrs</span>
+      </div>
+      <div class="project-learn"><strong>You'll learn:</strong> React hooks (useState, useEffect), API pagination, loading + error states, debounced search input</div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-name">12. Live Markdown Editor</div>
+      <p class="project-desc">Two-pane editor: raw markdown on the left, rendered preview on the right. Sync scroll, syntax highlighting, export to HTML.</p>
+      <div class="meta-row">
+        <span class="meta-tag">React</span>
+        <span class="meta-tag tool">marked.js</span>
+        <span class="meta-tag tool">highlight.js</span>
+        <span class="time-badge">8–10 hrs</span>
+      </div>
+      <div class="project-learn"><strong>You'll learn:</strong> Controlled inputs at scale, dangerouslySetInnerHTML safely, synchronized scroll, localStorage autosave</div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-name">13. Recipe Finder</div>
+      <p class="project-desc">Search recipes by ingredient or name using TheMealDB API (free, no auth). Filter by cuisine, category. Save favorites locally.</p>
+      <div class="meta-row">
+        <span class="meta-tag">React</span>
+        <span class="meta-tag tool">TheMealDB API</span>
+        <span class="time-badge">8–12 hrs</span>
+      </div>
+      <div class="project-learn"><strong>You'll learn:</strong> Multi-param API queries, client-side filtering/sorting, custom hooks (useFavorites), grid layout</div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-name">14. Budget Dashboard</div>
+      <p class="project-desc">Full CRUD budget tracker with income/expense categories, monthly totals, and interactive bar + pie charts using Recharts.</p>
+      <div class="meta-row">
+        <span class="meta-tag">React</span>
+        <span class="meta-tag tool">Recharts</span>
+        <span class="meta-tag tool">Zustand</span>
+        <span class="time-badge">14–18 hrs</span>
+      </div>
+      <div class="project-learn"><strong>You'll learn:</strong> Recharts data format, Zustand for global state, date filtering, data aggregation patterns</div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-name">15. Kanban Board</div>
+      <p class="project-desc">Drag-and-drop task board with multiple columns. Add/edit/delete cards and columns. Persist to localStorage. Use @dnd-kit.</p>
+      <div class="meta-row">
+        <span class="meta-tag">React</span>
+        <span class="meta-tag tool">@dnd-kit</span>
+        <span class="meta-tag tool">Zustand</span>
+        <span class="time-badge">14–20 hrs</span>
+      </div>
+      <div class="project-learn"><strong>You'll learn:</strong> @dnd-kit sensors/modifiers, complex state with immutable updates, optimistic UI, inline editing</div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-name">16. Movie Watchlist App</div>
+      <p class="project-desc">Search movies via OMDB API (free key), view details, add to watchlist, sort by rating or year. Filter by genre.</p>
+      <div class="meta-row">
+        <span class="meta-tag">React</span>
+        <span class="meta-tag tool">OMDB API</span>
+        <span class="time-badge">8–12 hrs</span>
+      </div>
+      <div class="project-learn"><strong>You'll learn:</strong> Debounced API search, multi-filter UI, React Router for movie detail pages, URL params</div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-name">17. Countdown Timer App</div>
+      <p class="project-desc">Create multiple named countdowns simultaneously. Add event name, date, color. Show days/hours/minutes/seconds for each. Alert on completion.</p>
+      <div class="meta-row">
+        <span class="meta-tag">React</span>
+        <span class="meta-tag tool">date-fns</span>
+        <span class="meta-tag tool">Zustand</span>
+        <span class="time-badge">8–10 hrs</span>
+      </div>
+      <div class="project-learn"><strong>You'll learn:</strong> setInterval with cleanup in useEffect, date-fns duration math, concurrent timer management, Notification API</div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-name">18. Portfolio with Theme Switcher</div>
+      <p class="project-desc">Animated personal portfolio with 3+ color themes, smooth section transitions, a projects grid, and a working contact form (Formspree).</p>
+      <div class="meta-row">
+        <span class="meta-tag">React</span>
+        <span class="meta-tag tool">CSS variables</span>
+        <span class="meta-tag tool">Framer Motion</span>
+        <span class="time-badge">14–18 hrs</span>
+      </div>
+      <div class="project-learn"><strong>You'll learn:</strong> CSS custom property theming, Framer Motion animations, form submission without a backend, responsive design</div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-name">19. Infinite Scroll Feed</div>
+      <p class="project-desc">Paginated content feed that loads more items as you scroll. Use IntersectionObserver — no scroll event listeners. Works with any paginated API.</p>
+      <div class="meta-row">
+        <span class="meta-tag">React</span>
+        <span class="meta-tag tool">IntersectionObserver</span>
+        <span class="meta-tag tool">React Query</span>
+        <span class="time-badge">8–12 hrs</span>
+      </div>
+      <div class="project-learn"><strong>You'll learn:</strong> IntersectionObserver API, React Query infinite queries, skeleton loading, cursor-based pagination</div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-name">20. Multi-Step Form with Validation</div>
+      <p class="project-desc">4-step form wizard (account → profile → preferences → review). Real-time validation, progress bar, back/forward navigation, submit confirmation.</p>
+      <div class="meta-row">
+        <span class="meta-tag">React</span>
+        <span class="meta-tag tool">React Hook Form</span>
+        <span class="meta-tag tool">Zod</span>
+        <span class="time-badge">10–14 hrs</span>
+      </div>
+      <div class="project-learn"><strong>You'll learn:</strong> React Hook Form multi-step patterns, Zod schema validation, form state persistence between steps, accessibility</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ADVANCED -->
+<section class="tier-section" id="advanced">
+  <div class="tier-header">
+    <div class="tier-label label-advanced">Advanced</div>
+    <h2>Node.js, TypeScript & Full-Stack Projects</h2>
+    <p class="tier-desc">Backend APIs, real-time systems, desktop apps, and production-grade patterns. Prerequisites: React proficiency, Node.js basics, comfort with terminal and npm.</p>
+  </div>
+  <div class="project-grid">
+
+    <div class="project-card">
+      <div class="project-name">21. REST API + React Dashboard</div>
+      <p class="project-desc">Build a full REST API with Express + better-sqlite3, then a React frontend that uses it. CRUD operations, pagination, filtering, sorting.</p>
+      <div class="meta-row">
+        <span class="meta-tag">Node.js</span>
+        <span class="meta-tag tool">Express</span>
+        <span class="meta-tag tool">SQLite</span>
+        <span class="meta-tag tool">React</span>
+        <span class="time-badge">20–30 hrs</span>
+      </div>
+      <div class="project-learn"><strong>You'll learn:</strong> REST API design, SQL queries, CORS, JSON middleware, connecting a React frontend to a local API, environment variables</div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-name">22. Real-Time Chat App</div>
+      <p class="project-desc">WebSocket-based group chat with named rooms. Node.js + Socket.io backend, React frontend. Show who's online, typing indicators.</p>
+      <div class="meta-row">
+        <span class="meta-tag">Node.js</span>
+        <span class="meta-tag tool">Socket.io</span>
+        <span class="meta-tag tool">React</span>
+        <span class="time-badge">16–24 hrs</span>
+      </div>
+      <div class="project-learn"><strong>You'll learn:</strong> WebSocket events, Socket.io rooms/namespaces, real-time UI updates, deploy Node.js to Railway or Render</div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-name">23. Browser Extension</div>
+      <p class="project-desc">Build a real Chrome/Firefox extension — tab manager, reading time estimator, or custom new tab page. Publish to the Chrome Web Store.</p>
+      <div class="meta-row">
+        <span class="meta-tag">vanilla JS</span>
+        <span class="meta-tag tool">Chrome Extension API</span>
+        <span class="meta-tag tool">Manifest V3</span>
+        <span class="time-badge">10–18 hrs</span>
+      </div>
+      <div class="project-learn"><strong>You'll learn:</strong> Extension manifest, background service workers, content scripts, chrome.storage API, cross-origin messaging</div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-name">24. TypeScript CLI Tool</div>
+      <p class="project-desc">Build a useful command-line tool (project scaffolder, file organizer, log parser) in TypeScript. Test it. Publish to npm.</p>
+      <div class="meta-row">
+        <span class="meta-tag">TypeScript</span>
+        <span class="meta-tag tool">Node.js</span>
+        <span class="meta-tag tool">Commander.js</span>
+        <span class="time-badge">10–16 hrs</span>
+      </div>
+      <div class="project-learn"><strong>You'll learn:</strong> TypeScript configuration, Commander.js argument parsing, Node.js fs/path APIs, npm package publishing, bin scripts</div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-name">25. Progressive Web App (PWA)</div>
+      <p class="project-desc">Take an existing React app and make it installable with full offline support. Implement a cache-first strategy with Workbox.</p>
+      <div class="meta-row">
+        <span class="meta-tag">React</span>
+        <span class="meta-tag tool">Workbox</span>
+        <span class="meta-tag tool">Service Workers</span>
+        <span class="time-badge">10–14 hrs</span>
+      </div>
+      <div class="project-learn"><strong>You'll learn:</strong> Service worker lifecycle, Workbox caching strategies, Web App Manifest, installability requirements, background sync</div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-name">26. GraphQL API</div>
+      <p class="project-desc">Build a GraphQL API with Apollo Server 4, TypeScript, and a SQLite database. Include queries, mutations, subscriptions, and a React client.</p>
+      <div class="meta-row">
+        <span class="meta-tag">TypeScript</span>
+        <span class="meta-tag tool">Apollo Server</span>
+        <span class="meta-tag tool">Apollo Client</span>
+        <span class="time-badge">18–26 hrs</span>
+      </div>
+      <div class="project-learn"><strong>You'll learn:</strong> GraphQL schema-first design, resolvers, DataLoader for N+1 prevention, subscriptions with WebSockets, code-first vs schema-first tradeoffs</div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-name">27. Authentication System</div>
+      <p class="project-desc">Complete auth flow: signup, login, JWT access tokens + refresh tokens, password reset via email, protected routes. No auth library shortcuts.</p>
+      <div class="meta-row">
+        <span class="meta-tag">Node.js</span>
+        <span class="meta-tag tool">Express</span>
+        <span class="meta-tag tool">PostgreSQL</span>
+        <span class="meta-tag tool">JWT</span>
+        <span class="time-badge">20–30 hrs</span>
+      </div>
+      <div class="project-learn"><strong>You'll learn:</strong> JWT signing/verification, refresh token rotation, bcrypt password hashing, httpOnly cookie security, rate limiting</div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-name">28. Electron Desktop App</div>
+      <p class="project-desc">Cross-platform desktop app with Electron + React. Ideas: local markdown editor, clipboard manager, habit tracker, screen time monitor.</p>
+      <div class="meta-row">
+        <span class="meta-tag">Electron</span>
+        <span class="meta-tag tool">React</span>
+        <span class="meta-tag tool">TypeScript</span>
+        <span class="time-badge">16–24 hrs</span>
+      </div>
+      <div class="project-learn"><strong>You'll learn:</strong> Electron IPC (main ↔ renderer), native OS APIs, auto-updater, code signing for distribution, electron-builder packaging</div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-name">29. Next.js Full-Stack App</div>
+      <p class="project-desc">Production-grade full-stack app with Next.js App Router, Prisma ORM, PostgreSQL (Neon.tech free tier), and NextAuth for authentication.</p>
+      <div class="meta-row">
+        <span class="meta-tag">Next.js</span>
+        <span class="meta-tag tool">Prisma</span>
+        <span class="meta-tag tool">NextAuth</span>
+        <span class="meta-tag tool">TypeScript</span>
+        <span class="time-badge">30–50 hrs</span>
+      </div>
+      <div class="project-learn"><strong>You'll learn:</strong> Next.js App Router, React Server Components, Prisma schema migrations, NextAuth session management, Vercel deployment</div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-name">30. Open Source Contribution</div>
+      <p class="project-desc">Find a "good first issue" in a major JS project (React, Vite, Next.js, TypeScript, or an npm package you use). Make a real, merged PR.</p>
+      <div class="meta-row">
+        <span class="meta-tag">TypeScript / JS</span>
+        <span class="meta-tag tool">Any major repo</span>
+        <span class="time-badge">variable</span>
+      </div>
+      <div class="project-learn"><strong>You'll learn:</strong> Reading large codebases, contribution guidelines, real code review, working with maintainers, git branching conventions</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <h2>Frequently Asked Questions</h2>
+
+  <div class="faq-item">
+    <h3>What JavaScript project should I build first as a beginner?</h3>
+    <p>Start with the To-Do List or Pomodoro Timer. They're small enough to finish in a weekend but teach the four core skills every JS developer needs: DOM manipulation, event handling, managing UI state, and persisting data with localStorage. Don't start with a weather app or API project until you can build a working to-do list from memory.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3>What are the best JavaScript projects for a portfolio?</h3>
+    <p>For employers, the best portfolio projects show you can finish things and make real technical decisions. Strong choices from this list: the GitHub Profile Viewer (React + real API), the Kanban Board (complex state management with drag-and-drop), and the REST API + Dashboard (full-stack thinking). Avoid cloning Netflix or Spotify — they're overbuilt and underfinished. One genuinely working CRUD app beats three abandoned clones.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3>Should I learn React or stay with vanilla JS?</h3>
+    <p>Build your first two or three projects in vanilla JS. You'll understand WHY React exists the moment you try to maintain complex UI state without it. After that, React is the pragmatic choice: most jobs require it, the ecosystem is excellent (Vite, React Query, Zustand), and the component model scales well. Learn Vue or Svelte after React if you're curious — the concepts transfer.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3>How realistic are the time estimates?</h3>
+    <p>They assume you know the prerequisites and spend most of your time building, not learning fundamentals. If you're learning while building, multiply by 1.5–2x. If you're copying from a tutorial, divide by 4 — but then you haven't actually built it. The estimates are for "build from scratch with docs open, no tutorial."</p>
+  </div>
+
+  <div class="faq-item">
+    <h3>Which free APIs work best for JavaScript projects?</h3>
+    <p>Open-Meteo (weather, no API key), GitHub API (repos, users, no key for public data), TheMealDB (recipes, free), quotable.io (quotes, free), and OMDB (movies, free key). For the beginner and intermediate projects on this list, you won't need to pay for any API access.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3>How do I avoid getting stuck halfway through a project?</h3>
+    <p>Scope it smaller. If you're stuck after 2 days, the project is too big for your current skill level — cut 50% of the features and finish the core. Done and deployed beats ambitious and abandoned. Ship a working v1, then add features in v2. The ability to finish is more valuable than the ability to plan ambitiously.</p>
+  </div>
+</section>
+
+<div class="cta-box">
+  <h3>Need a randomized idea?</h3>
+  <p>Use the Ship This Weekend generator for a unique side project concept — different every time, with a shareable permalink.</p>
+  <a href="/autonomous-site/" class="btn">Try the Generator</a>
+  <a href="/autonomous-site/python-projects.html" class="btn btn-outline">Python Projects</a>
+</div>
+
+</main>
+
+<script data-goatcounter="https://autorunfun.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
