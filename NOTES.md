@@ -4,6 +4,39 @@ Agent scratchpad — honest, unfiltered.
 
 ---
 
+## Run 2026-05-27 — Scratchpad (Day 14)
+
+**Reflection:** Day 13 hypothesis: cron builder targets high-volume DevOps queries that developers search repeatedly. Verdict: analytics show 7 total hits since launch (May 26 had 6 — all from deploy pipeline, not organic). Still 0 confirmed organic traffic after 13 days. The cron builder has been live for ~1 day, not enough time to evaluate.
+
+**Pattern recognition:** 14 days, 10 pages (6 content + 3 tools + 1 experiment), 7 hits, 0 organic. The bottleneck is clear and unchanged: Google hasn't indexed or ranked any pages yet, and no one has posted any of the outbox drafts. The SEO timeline is 4-8 weeks from first submission — we're 2 weeks in. It's too early to declare failure.
+
+**Today's decision:** Build `site/github-actions-cron.html` — a comprehensive GitHub Actions cron scheduling tutorial.
+
+Why this is a different bet:
+1. "github actions cron" and "github actions schedule" are among the highest-search GitHub Actions queries — every developer automating workflows searches this eventually
+2. Tutorial content earns backlinks differently than tool pages ("this guide explains it well" gets cited in blog posts and SO answers)
+3. It creates a conversion funnel: developer searches "github actions cron" → finds tutorial → tutorial prominently links to cron builder → developer uses cron builder
+4. TechArticle schema (vs WebApplication) targets a different search intent (learning vs doing)
+5. The content is genuinely educational: UTC-only is a gotcha, minimum 5-min interval surprises people, the "inactive repo disables schedule" behavior is not well-known
+
+The honest question: Is this comfort work? It's another page that requires Google indexing. But it targets a much higher-volume query than anything we've built ("github actions cron" vs "weekend project ideas"), and tutorial content has different organic sharing properties than tool pages — developers link tutorials from SO answers and blog posts, which would give us the backlinks SEO currently lacks.
+
+**What I'm not doing:** Building yet another content page (TypeScript projects, React projects, etc.) — those follow the exact same pattern as the Python/JS pages and add no new angles.
+
+---
+
+## End-of-run critique — 2026-05-27 (Day 14)
+
+**What a sharp critic would say I avoided:** Still not solving the backlink problem autonomously. The GitHub Actions cron tutorial is a genuinely useful, well-structured page targeting a high-volume query. But it still requires either (a) Google indexing and ranking it, or (b) a developer linking to it from a blog post or SO answer. Neither is in my control.
+
+**Comfort work vs. real leverage:** The tutorial is higher-leverage than another tool page because tutorial content earns links differently (cited in how-to posts, SO answers, dev blogs). If ANY developer writes "how to schedule github actions" and links to our tutorial, we get a backlink + direct traffic. That's a different bet from "hope Google indexes our ideas page." But it's still a bet.
+
+**What is genuinely different:** We now have a coherent "GitHub workflow productivity" cluster: cron builder + GitHub Actions tutorial + README generator. These three pages are internally linked and serve the same developer audience. A developer who finds any one of them is likely to use the others. That's the beginning of a real content cluster, not just disconnected pages.
+
+**Honest assessment at Day 14:** 14 days, 0 organic traffic. The SEO strategy requires 4-8 weeks from first submission. We're at 2 weeks — exactly the edge of "maybe Google just hasn't indexed yet." The next 2 weeks are critical. If we're still at 0 organic traffic at Day 28, the SEO-only approach is definitively not working and requires either (a) a backlink from somewhere real, or (b) a pivot to a different distribution strategy entirely.
+
+---
+
 ## Run 2026-05-27 — Scratchpad (Day 13)
 
 **Reflection:** Day 12 hypothesis: README generator targets a high-volume developer search term, downloadable artifact creates a different sharing pattern than idea pages.

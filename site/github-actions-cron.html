@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitHub Actions Cron: Schedule Workflows Step by Step (2024)</title>
+  <meta name="description" content="Complete guide to GitHub Actions cron scheduling. Learn the syntax, see real examples, avoid common gotchas like UTC-only times and minimum 5-minute intervals.">
+  <link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/github-actions-cron.html">
+  <meta property="og:title" content="GitHub Actions Cron: Schedule Workflows Step by Step">
+  <meta property="og:description" content="Learn to schedule GitHub Actions with cron. Syntax, real examples, UTC gotchas, common patterns — plus a visual cron expression builder.">
+  <meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/github-actions-cron.html">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="GitHub Actions Cron: Schedule Workflows Step by Step">
+  <meta name="twitter:description" content="Learn to schedule GitHub Actions with cron. Syntax, real examples, UTC gotchas, common patterns — plus a visual cron expression builder.">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "GitHub Actions Cron: How to Schedule Workflows",
+    "description": "Complete guide to GitHub Actions cron scheduling. Learn the syntax, see real examples, avoid common gotchas like UTC-only times and minimum 5-minute intervals.",
+    "url": "https://auto-run-fun.github.io/autonomous-site/github-actions-cron.html",
+    "datePublished": "2026-05-27",
+    "dateModified": "2026-05-27",
+    "author": {
+      "@type": "Organization",
+      "name": "Ship This Weekend"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Ship This Weekend",
+      "url": "https://auto-run-fun.github.io/autonomous-site/"
+    },
+    "about": {
+      "@type": "SoftwareApplication",
+      "name": "GitHub Actions",
+      "applicationCategory": "DeveloperApplication"
+    },
+    "keywords": "github actions cron, github actions schedule, github actions cron syntax, schedule workflow github actions"
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What timezone does GitHub Actions cron use?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "GitHub Actions cron schedules always run in UTC. There is no way to set a different timezone in the workflow file itself. If you need a schedule relative to a different timezone, you need to convert the local time to UTC manually. For example, 9:00 AM Eastern Time (UTC-5) is 14:00 UTC, so you'd use '0 14 * * *'."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the minimum interval for GitHub Actions scheduled workflows?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The minimum interval for a GitHub Actions scheduled workflow is 5 minutes. You cannot schedule a workflow to run more frequently than every 5 minutes. If you try, GitHub will either reject the workflow or silently enforce the minimum."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Will my GitHub Actions scheduled workflow always run exactly on time?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. GitHub explicitly states in their documentation that scheduled workflows can be delayed during periods of high load on GitHub Actions infrastructure. Delays of 5–30 minutes are common during peak hours. Do not use scheduled workflows for tasks requiring exact timing — use them for approximate timing only."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Why is my GitHub Actions scheduled workflow not running?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Several common reasons: (1) The workflow is on a branch other than the default branch — scheduled workflows only run on the default branch. (2) The repository has been inactive for 60 days — GitHub disables scheduled workflows on inactive repositories. (3) There's a syntax error in the cron expression. (4) The workflow file is in .github/workflows/ but has a YAML syntax error. (5) GitHub's infrastructure is experiencing delays."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I use a cron schedule with other GitHub Actions triggers?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. You can combine 'schedule' with other triggers like 'push', 'pull_request', and 'workflow_dispatch' in the same 'on:' block. The workflow will run when any of the specified triggers fire. Using 'workflow_dispatch' alongside a schedule is a common pattern — it lets you run the workflow manually when needed while also having it run automatically on schedule."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I run a GitHub Actions workflow every weekday?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Use the cron expression '0 9 * * 1-5' to run at 9:00 AM UTC Monday through Friday. The last field (1-5) specifies day of week where 1=Monday and 5=Friday. To run at a different time, adjust the first two fields: '30 14 * * 1-5' runs at 2:30 PM UTC on weekdays."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I schedule a GitHub Actions workflow to run monthly?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. Use '0 9 1 * *' to run at 9 AM UTC on the 1st of every month. Use '0 9 15 * *' for the 15th. To run on the last day of the month is trickier since months have different lengths — a common workaround is to run on the 28th (all months have at least 28 days) with '0 9 28 * *'."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I read the current time inside a scheduled GitHub Actions workflow?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "In a step, use 'run: echo \"Current UTC time: $(date -u)\"' to print the current time. To use the date in subsequent steps or as an artifact name, set it as an output: 'run: echo \"date=$(date -u +%Y-%m-%d)\" >> $GITHUB_OUTPUT'. You can then reference it with '${{ steps.step-id.outputs.date }}'."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      line-height: 1.7;
+    }
+    a { color: #58a6ff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    nav {
+      background: #161b22;
+      border-bottom: 1px solid #30363d;
+      padding: 12px 24px;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      font-size: 14px;
+    }
+    nav a { color: #8b949e; }
+    nav a:hover { color: #e6edf3; }
+
+    .hero {
+      background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+      border-bottom: 1px solid #30363d;
+      padding: 60px 24px 40px;
+      text-align: center;
+    }
+    .hero .badge {
+      display: inline-block;
+      background: #1f6feb33;
+      border: 1px solid #1f6feb;
+      color: #58a6ff;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 100px;
+      margin-bottom: 16px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .hero h1 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      color: #f0f6fc;
+    }
+    .hero h1 span { color: #58a6ff; }
+    .hero p {
+      font-size: 1.1rem;
+      color: #8b949e;
+      max-width: 640px;
+      margin: 0 auto 24px;
+    }
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #238636;
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 15px;
+    }
+    .hero-cta:hover { background: #2ea043; text-decoration: none; }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 48px 24px;
+    }
+
+    .toc {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 48px;
+    }
+    .toc h2 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #8b949e;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+    .toc ol {
+      padding-left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .toc li { font-size: 15px; }
+
+    h2 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #f0f6fc;
+      margin: 48px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #21262d;
+    }
+    h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #e6edf3;
+      margin: 32px 0 12px;
+    }
+    p { margin-bottom: 16px; color: #c9d1d9; }
+    ul, ol { padding-left: 24px; margin-bottom: 16px; color: #c9d1d9; }
+    li { margin-bottom: 6px; }
+
+    pre {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 16px 0 24px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    code {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 0.9em;
+      background: #1c2128;
+      border: 1px solid #30363d;
+      border-radius: 4px;
+      padding: 2px 6px;
+      color: #f2cc60;
+    }
+    pre code {
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 1em;
+      color: #e6edf3;
+    }
+    pre .comment { color: #8b949e; }
+    pre .key { color: #7ee787; }
+    pre .val { color: #a5d6ff; }
+    pre .cron { color: #f2cc60; }
+    pre .str { color: #a5d6ff; }
+
+    .callout {
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin: 24px 0;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .callout-warn {
+      background: #3d2b00;
+      border: 1px solid #d29922;
+    }
+    .callout-info {
+      background: #0d2545;
+      border: 1px solid #1f6feb;
+    }
+    .callout-tip {
+      background: #0d2b0d;
+      border: 1px solid #238636;
+    }
+    .callout-icon { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+    .callout-body { font-size: 14px; line-height: 1.6; color: #c9d1d9; }
+    .callout-body strong { color: #e6edf3; }
+
+    .cron-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 24px;
+      font-size: 14px;
+    }
+    .cron-table th {
+      background: #161b22;
+      border: 1px solid #30363d;
+      padding: 10px 14px;
+      text-align: left;
+      color: #8b949e;
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .cron-table td {
+      border: 1px solid #21262d;
+      padding: 10px 14px;
+      color: #c9d1d9;
+    }
+    .cron-table tr:hover td { background: #161b22; }
+    .cron-table .field { color: #f2cc60; font-family: monospace; font-size: 13px; }
+
+    .example-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin: 16px 0 24px;
+    }
+    .example-card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .example-header {
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .example-title { font-weight: 600; font-size: 15px; color: #f0f6fc; }
+    .example-expr {
+      font-family: monospace;
+      font-size: 14px;
+      color: #f2cc60;
+      background: #0d1117;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid #30363d;
+    }
+    .example-desc {
+      padding: 0 16px 12px;
+      font-size: 14px;
+      color: #8b949e;
+    }
+    .example-yaml {
+      border-top: 1px solid #30363d;
+    }
+    .example-yaml pre {
+      margin: 0;
+      border-radius: 0;
+      border: none;
+      border-left: 3px solid #1f6feb;
+      font-size: 13px;
+    }
+
+    .cta-box {
+      background: linear-gradient(135deg, #0d2545 0%, #0d1b3d 100%);
+      border: 1px solid #1f6feb;
+      border-radius: 12px;
+      padding: 32px;
+      text-align: center;
+      margin: 48px 0;
+    }
+    .cta-box h3 {
+      font-size: 1.4rem;
+      color: #f0f6fc;
+      margin-bottom: 10px;
+    }
+    .cta-box p { color: #8b949e; margin-bottom: 20px; }
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #1f6feb;
+      color: #fff;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 15px;
+    }
+    .cta-btn:hover { background: #388bfd; text-decoration: none; }
+
+    .faq { margin: 32px 0; }
+    .faq-item {
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+    .faq-q {
+      padding: 16px 20px;
+      font-weight: 600;
+      color: #e6edf3;
+      background: #161b22;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+    }
+    .faq-q:hover { background: #1c2128; }
+    .faq-q::after { content: "+"; color: #58a6ff; font-size: 18px; }
+    .faq-a {
+      display: none;
+      padding: 16px 20px;
+      font-size: 14px;
+      color: #c9d1d9;
+      border-top: 1px solid #30363d;
+      line-height: 1.7;
+    }
+    .faq-item.open .faq-q::after { content: "−"; }
+    .faq-item.open .faq-a { display: block; }
+
+    footer {
+      border-top: 1px solid #21262d;
+      padding: 32px 24px;
+      text-align: center;
+      color: #8b949e;
+      font-size: 14px;
+    }
+    footer a { color: #58a6ff; }
+
+    @media (max-width: 640px) {
+      .hero { padding: 40px 16px 32px; }
+      .container { padding: 32px 16px; }
+      h2 { font-size: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/autonomous-site/">💡 Ship This Weekend</a>
+  <a href="/autonomous-site/cron-builder.html">⏰ Cron Builder</a>
+  <a href="/autonomous-site/project-estimator.html">📐 Scope Estimator</a>
+  <a href="/autonomous-site/readme-generator.html">📄 README Generator</a>
+  <a href="/autonomous-site/python-projects.html">🐍 Python Projects</a>
+  <a href="/autonomous-site/javascript-projects.html">⚡ JS Projects</a>
+</nav>
+
+<div class="hero">
+  <div class="badge">GitHub Actions Guide</div>
+  <h1>GitHub Actions <span>Cron</span>: Schedule<br>Workflows Step by Step</h1>
+  <p>Learn to schedule any GitHub Actions workflow on a cron schedule. Covers syntax, real-world examples, UTC timezone gotchas, and common mistakes developers make.</p>
+  <a href="/autonomous-site/cron-builder.html" class="hero-cta">
+    ⏰ Try the Visual Cron Builder →
+  </a>
+</div>
+
+<div class="container">
+
+  <div class="toc">
+    <h2>Table of contents</h2>
+    <ol>
+      <li><a href="#syntax">Basic syntax: on: schedule</a></li>
+      <li><a href="#cron-format">Understanding the 5-field cron format</a></li>
+      <li><a href="#examples">12 real-world cron examples</a></li>
+      <li><a href="#gotchas">Critical gotchas you must know</a></li>
+      <li><a href="#combining-triggers">Combining schedule with other triggers</a></li>
+      <li><a href="#debugging">Debugging scheduled workflows</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ol>
+  </div>
+
+  <p>Scheduled workflows are one of the most powerful features of GitHub Actions. They let you run any automation on a time-based trigger — nightly builds, weekly dependency updates, monthly cleanup jobs, daily health checks, and more — without any external cron service or infrastructure.</p>
+
+  <p>This guide covers everything you need to know: the syntax, how to read cron expressions, 12 copy-paste examples for common schedules, and the gotchas that trip up almost every developer the first time.</p>
+
+  <!-- ===== SECTION 1 ===== -->
+  <h2 id="syntax">1. Basic syntax: on: schedule</h2>
+
+  <p>A scheduled GitHub Actions workflow uses the <code>on: schedule:</code> trigger in your workflow YAML file. Here's the minimal complete example:</p>
+
+  <pre><code><span class="comment"># .github/workflows/daily-job.yml</span>
+<span class="key">name</span><span class="val">: Daily job</span>
+
+<span class="key">on</span><span class="val">:</span>
+  <span class="key">schedule</span><span class="val">:</span>
+    <span class="val">- cron: </span><span class="cron">'0 9 * * *'</span>  <span class="comment"># Every day at 9:00 AM UTC</span>
+
+<span class="key">jobs</span><span class="val">:</span>
+  <span class="key">run-daily</span><span class="val">:</span>
+    <span class="key">runs-on</span><span class="val">: ubuntu-latest</span>
+    <span class="key">steps</span><span class="val">:</span>
+      <span class="val">- name: Run my task</span>
+        <span class="key">run</span><span class="val">: echo "Running daily at 9 AM UTC"</span></code></pre>
+
+  <p>The <code>cron:</code> value is a standard 5-field cron expression in quotes. That's all you need to get a scheduled workflow running.</p>
+
+  <div class="callout callout-info">
+    <span class="callout-icon">ℹ️</span>
+    <div class="callout-body">
+      <strong>Where does this file go?</strong> Workflow files must be in <code>.github/workflows/</code> at the root of your repository. The filename can be anything ending in <code>.yml</code> or <code>.yaml</code>.
+    </div>
+  </div>
+
+  <h3>Multiple schedules</h3>
+  <p>You can specify multiple cron expressions for the same workflow by adding multiple entries under <code>schedule:</code>:</p>
+
+  <pre><code><span class="key">on</span><span class="val">:</span>
+  <span class="key">schedule</span><span class="val">:</span>
+    <span class="val">- cron: </span><span class="cron">'0 9 * * 1-5'</span>   <span class="comment"># Weekdays at 9 AM UTC</span>
+    <span class="val">- cron: </span><span class="cron">'0 12 * * 0,6'</span>  <span class="comment"># Weekends at noon UTC</span></code></pre>
+
+  <!-- ===== SECTION 2 ===== -->
+  <h2 id="cron-format">2. Understanding the 5-field cron format</h2>
+
+  <p>A GitHub Actions cron expression has exactly 5 space-separated fields. Here's the structure:</p>
+
+  <pre><code>  ┌──────────── minute (0–59)
+  │  ┌─────────── hour (0–23)
+  │  │  ┌────────── day of month (1–31)
+  │  │  │  ┌──────── month (1–12)
+  │  │  │  │  ┌───── day of week (0–6, Sunday=0)
+  │  │  │  │  │
+  *  *  *  *  *</code></pre>
+
+  <table class="cron-table">
+    <thead>
+      <tr>
+        <th>Field</th>
+        <th>Allowed values</th>
+        <th>Special chars</th>
+        <th>Examples</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="field">minute</span></td>
+        <td>0–59</td>
+        <td><code>*</code> <code>,</code> <code>-</code> <code>/</code></td>
+        <td><code>0</code> = top of hour, <code>30</code> = half past, <code>*/15</code> = every 15 min</td>
+      </tr>
+      <tr>
+        <td><span class="field">hour</span></td>
+        <td>0–23</td>
+        <td><code>*</code> <code>,</code> <code>-</code> <code>/</code></td>
+        <td><code>9</code> = 9 AM, <code>14</code> = 2 PM, <code>*/6</code> = every 6 hours</td>
+      </tr>
+      <tr>
+        <td><span class="field">day-of-month</span></td>
+        <td>1–31</td>
+        <td><code>*</code> <code>,</code> <code>-</code> <code>/</code></td>
+        <td><code>1</code> = 1st, <code>15</code> = 15th, <code>1,15</code> = 1st and 15th</td>
+      </tr>
+      <tr>
+        <td><span class="field">month</span></td>
+        <td>1–12</td>
+        <td><code>*</code> <code>,</code> <code>-</code> <code>/</code></td>
+        <td><code>1</code> = January, <code>6,12</code> = June and December</td>
+      </tr>
+      <tr>
+        <td><span class="field">day-of-week</span></td>
+        <td>0–6 (Sun=0)</td>
+        <td><code>*</code> <code>,</code> <code>-</code> <code>/</code></td>
+        <td><code>1</code> = Monday, <code>1-5</code> = weekdays, <code>0,6</code> = weekends</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Special characters</h3>
+  <ul>
+    <li><code>*</code> — matches any value ("every minute", "every hour", "every day")</li>
+    <li><code>,</code> — separates multiple values: <code>1,3,5</code> means 1st, 3rd, and 5th</li>
+    <li><code>-</code> — defines a range: <code>1-5</code> means 1 through 5</li>
+    <li><code>/</code> — step values: <code>*/15</code> in the minute field means every 15 minutes; <code>*/2</code> in the hour field means every 2 hours</li>
+  </ul>
+
+  <div class="callout callout-tip">
+    <span class="callout-icon">💡</span>
+    <div class="callout-body">
+      <strong>Quick cheat:</strong> To turn any cron expression into plain English, use the <a href="/autonomous-site/cron-builder.html">visual cron expression builder</a> — it shows the human-readable description and the next 5 scheduled run times in your local timezone.
+    </div>
+  </div>
+
+  <!-- ===== SECTION 3 ===== -->
+  <h2 id="examples">3. 12 real-world GitHub Actions cron examples</h2>
+
+  <div class="example-grid">
+
+    <div class="example-card">
+      <div class="example-header">
+        <span class="example-title">Every day at midnight UTC</span>
+        <span class="example-expr">0 0 * * *</span>
+      </div>
+      <div class="example-desc">Classic nightly build trigger. Runs once per day at exactly midnight UTC. Good for nightly test suites, database backups, or report generation.</div>
+      <div class="example-yaml">
+        <pre><code><span class="key">on</span><span class="val">:</span>
+  <span class="key">schedule</span><span class="val">:</span>
+    <span class="val">- cron: </span><span class="cron">'0 0 * * *'</span></code></pre>
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-header">
+        <span class="example-title">Every weekday at 9 AM UTC</span>
+        <span class="example-expr">0 9 * * 1-5</span>
+      </div>
+      <div class="example-desc">Business hours trigger. Runs Monday through Friday at 9:00 AM UTC. Common for morning standup summaries, business-hours health checks, or Slack notifications.</div>
+      <div class="example-yaml">
+        <pre><code><span class="key">on</span><span class="val">:</span>
+  <span class="key">schedule</span><span class="val">:</span>
+    <span class="val">- cron: </span><span class="cron">'0 9 * * 1-5'</span></code></pre>
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-header">
+        <span class="example-title">Every Monday morning</span>
+        <span class="example-expr">0 8 * * 1</span>
+      </div>
+      <div class="example-desc">Weekly trigger, runs once on Monday at 8 AM UTC. Great for weekly dependency update checks (Dependabot does this automatically, but a custom workflow gives more control), weekly reports, or team digests.</div>
+      <div class="example-yaml">
+        <pre><code><span class="key">on</span><span class="val">:</span>
+  <span class="key">schedule</span><span class="val">:</span>
+    <span class="val">- cron: </span><span class="cron">'0 8 * * 1'</span></code></pre>
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-header">
+        <span class="example-title">First day of every month</span>
+        <span class="example-expr">0 6 1 * *</span>
+      </div>
+      <div class="example-desc">Monthly trigger at 6 AM UTC on the 1st of every month. Used for monthly analytics summaries, rotating API keys, archiving old data, or generating monthly invoices.</div>
+      <div class="example-yaml">
+        <pre><code><span class="key">on</span><span class="val">:</span>
+  <span class="key">schedule</span><span class="val">:</span>
+    <span class="val">- cron: </span><span class="cron">'0 6 1 * *'</span></code></pre>
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-header">
+        <span class="example-title">Every 6 hours</span>
+        <span class="example-expr">0 */6 * * *</span>
+      </div>
+      <div class="example-desc">Runs at midnight, 6 AM, noon, and 6 PM UTC every day. Good for polling external APIs, syncing data from third-party services, or health checks that need more frequent runs than daily but don't justify every hour.</div>
+      <div class="example-yaml">
+        <pre><code><span class="key">on</span><span class="val">:</span>
+  <span class="key">schedule</span><span class="val">:</span>
+    <span class="val">- cron: </span><span class="cron">'0 */6 * * *'</span></code></pre>
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-header">
+        <span class="example-title">Every 30 minutes</span>
+        <span class="example-expr">*/30 * * * *</span>
+      </div>
+      <div class="example-desc">Runs every 30 minutes, 48 times per day. Note the minimum interval on GitHub Actions is 5 minutes — attempting to run more frequently will be throttled or ignored.</div>
+      <div class="example-yaml">
+        <pre><code><span class="key">on</span><span class="val">:</span>
+  <span class="key">schedule</span><span class="val">:</span>
+    <span class="val">- cron: </span><span class="cron">'*/30 * * * *'</span></code></pre>
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-header">
+        <span class="example-title">Weekdays at 3 PM UTC (US East 11 AM)</span>
+        <span class="example-expr">0 15 * * 1-5</span>
+      </div>
+      <div class="example-desc">A reminder that GitHub Actions cron is always UTC. 3 PM UTC = 11 AM Eastern / 8 AM Pacific. If your team is US-based and you want a "midday" trigger, use hour 17 (noon Eastern) or 20 (noon Pacific).</div>
+      <div class="example-yaml">
+        <pre><code><span class="key">on</span><span class="val">:</span>
+  <span class="key">schedule</span><span class="val">:</span>
+    <span class="val">- cron: </span><span class="cron">'0 15 * * 1-5'</span>  <span class="comment"># 11 AM Eastern, 8 AM Pacific</span></code></pre>
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-header">
+        <span class="example-title">Twice a day (9 AM and 5 PM UTC)</span>
+        <span class="example-expr">0 9,17 * * *</span>
+      </div>
+      <div class="example-desc">Use comma-separated values in the hour field to trigger at multiple specific times. This runs at 9 AM and 5 PM UTC daily — good for morning/evening report generation or end-of-business-day summaries across different regions.</div>
+      <div class="example-yaml">
+        <pre><code><span class="key">on</span><span class="val">:</span>
+  <span class="key">schedule</span><span class="val">:</span>
+    <span class="val">- cron: </span><span class="cron">'0 9,17 * * *'</span>  <span class="comment"># 9 AM and 5 PM UTC</span></code></pre>
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-header">
+        <span class="example-title">Every Sunday at 2 AM UTC (weekly maintenance)</span>
+        <span class="example-expr">0 2 * * 0</span>
+      </div>
+      <div class="example-desc">Sunday early morning is the classic low-traffic maintenance window. Good for database vacuum/optimization, SSL certificate renewal checks, or rebuilding caches. Day-of-week 0 = Sunday.</div>
+      <div class="example-yaml">
+        <pre><code><span class="key">on</span><span class="val">:</span>
+  <span class="key">schedule</span><span class="val">:</span>
+    <span class="val">- cron: </span><span class="cron">'0 2 * * 0'</span>  <span class="comment"># Sunday at 2 AM UTC</span></code></pre>
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-header">
+        <span class="example-title">15th and last day of month (approximately)</span>
+        <span class="example-expr">0 12 15,28 * *</span>
+      </div>
+      <div class="example-desc">Runs on the 15th and 28th of every month at noon UTC. Note: there's no cron syntax for "last day of month" since months have different lengths. The 28th is the closest reliable approximation (all months have at least 28 days). For true last-day logic, add a step that checks if tomorrow is the 1st.</div>
+      <div class="example-yaml">
+        <pre><code><span class="key">on</span><span class="val">:</span>
+  <span class="key">schedule</span><span class="val">:</span>
+    <span class="val">- cron: </span><span class="cron">'0 12 15,28 * *'</span></code></pre>
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-header">
+        <span class="example-title">Every quarter (Jan, Apr, Jul, Oct)</span>
+        <span class="example-expr">0 9 1 1,4,7,10 *</span>
+      </div>
+      <div class="example-desc">Runs on the 1st of January, April, July, and October at 9 AM UTC — a quarterly trigger. Use for quarterly reports, major version bumps, annual dependency audits split into quarters, or QBR automation.</div>
+      <div class="example-yaml">
+        <pre><code><span class="key">on</span><span class="val">:</span>
+  <span class="key">schedule</span><span class="val">:</span>
+    <span class="val">- cron: </span><span class="cron">'0 9 1 1,4,7,10 *'</span>  <span class="comment"># Quarterly</span></code></pre>
+      </div>
+    </div>
+
+    <div class="example-card">
+      <div class="example-header">
+        <span class="example-title">Every hour on the half hour</span>
+        <span class="example-expr">30 * * * *</span>
+      </div>
+      <div class="example-desc">Runs at :30 past every hour — midnight:30, 1:30 AM, 2:30 AM, etc. The minute field is 30, the hour field is * (every hour). This is distinct from "every 30 minutes" — it runs at fixed half-hour marks, not relative to when the workflow was last run.</div>
+      <div class="example-yaml">
+        <pre><code><span class="key">on</span><span class="val">:</span>
+  <span class="key">schedule</span><span class="val">:</span>
+    <span class="val">- cron: </span><span class="cron">'30 * * * *'</span>  <span class="comment"># Every hour at :30</span></code></pre>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="cta-box">
+    <h3>Not sure about your cron expression?</h3>
+    <p>Paste any expression into the visual builder to get a plain-English description and the next 5 scheduled times in your local timezone.</p>
+    <a href="/autonomous-site/cron-builder.html" class="cta-btn">⏰ Open Visual Cron Builder</a>
+  </div>
+
+  <!-- ===== SECTION 4 ===== -->
+  <h2 id="gotchas">4. Critical gotchas you must know</h2>
+
+  <div class="callout callout-warn">
+    <span class="callout-icon">⚠️</span>
+    <div class="callout-body">
+      <strong>All times are UTC.</strong> GitHub Actions has no timezone setting. Every cron schedule runs in UTC, period. If you need 9 AM New York time (ET/EST), that's 14:00 UTC in winter (UTC−5) and 13:00 UTC in summer (UTC−4 during EDT). There's no automatic daylight saving time handling — you'd need two schedule entries if that matters.
+    </div>
+  </div>
+
+  <div class="callout callout-warn">
+    <span class="callout-icon">⚠️</span>
+    <div class="callout-body">
+      <strong>Minimum interval is 5 minutes.</strong> GitHub won't run a workflow more often than every 5 minutes. Any expression with <code>*/1</code>, <code>*/2</code>, <code>*/3</code>, or <code>*/4</code> in the minute field will either be rejected or silently limited. For sub-5-minute needs, use a different mechanism (a self-triggering workflow, an external scheduler, etc.).
+    </div>
+  </div>
+
+  <div class="callout callout-warn">
+    <span class="callout-icon">⚠️</span>
+    <div class="callout-body">
+      <strong>Scheduled runs can be delayed or skipped.</strong> GitHub explicitly says schedules are "best effort" — they can be delayed by 5–30 minutes during peak load, and in rare cases skipped entirely. Never build systems that depend on scheduled workflows running at an exact time. Use them for approximate triggers only.
+    </div>
+  </div>
+
+  <div class="callout callout-warn">
+    <span class="callout-icon">⚠️</span>
+    <div class="callout-body">
+      <strong>Scheduled workflows only run on the default branch.</strong> If your workflow file is in a feature branch and the <code>schedule:</code> trigger is defined there, it will NOT run. GitHub only picks up scheduled workflows from the repository's default branch (usually <code>main</code> or <code>master</code>). Merging to default is required for the schedule to activate.
+    </div>
+  </div>
+
+  <div class="callout callout-warn">
+    <span class="callout-icon">⚠️</span>
+    <div class="callout-body">
+      <strong>Inactive repos get their schedules disabled.</strong> If a repository has no activity for 60 days, GitHub automatically disables scheduled workflows. You'll get an email warning before it happens. To re-enable, go to Actions → the disabled workflow → click "Enable workflow".
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5 ===== -->
+  <h2 id="combining-triggers">5. Combining schedule with other triggers</h2>
+
+  <p>You can — and often should — combine <code>schedule:</code> with other triggers in the same workflow. The most common patterns:</p>
+
+  <h3>Schedule + workflow_dispatch (manual override)</h3>
+  <p>Adding <code>workflow_dispatch:</code> lets you run the workflow manually from the GitHub Actions UI when you need to trigger it outside the schedule. This is almost always a good idea for scheduled workflows.</p>
+
+  <pre><code><span class="key">on</span><span class="val">:</span>
+  <span class="key">schedule</span><span class="val">:</span>
+    <span class="val">- cron: </span><span class="cron">'0 2 * * 0'</span>  <span class="comment"># Auto: every Sunday at 2 AM UTC</span>
+  <span class="key">workflow_dispatch</span><span class="val">:</span>    <span class="comment"># Manual: run anytime from the Actions tab</span></code></pre>
+
+  <h3>Schedule + push (also runs on deploy)</h3>
+  <p>Run the workflow on both a schedule and on every push to <code>main</code>:</p>
+
+  <pre><code><span class="key">on</span><span class="val">:</span>
+  <span class="key">push</span><span class="val">:</span>
+    <span class="key">branches</span><span class="val">: [main]</span>
+  <span class="key">schedule</span><span class="val">:</span>
+    <span class="val">- cron: </span><span class="cron">'0 0 * * *'</span>  <span class="comment"># Nightly, and also on every push to main</span></code></pre>
+
+  <h3>Checking how the workflow was triggered</h3>
+  <p>Inside your workflow, use <code>github.event_name</code> to check whether the run was triggered by a schedule or another event:</p>
+
+  <pre><code><span class="val">- name: Check trigger</span>
+  <span class="key">run</span><span class="val">: |
+    if [ "${{ github.event_name }}" = "schedule" ]; then
+      echo "Running on schedule"
+    else
+      echo "Triggered manually or by push"
+    fi</span></code></pre>
+
+  <!-- ===== SECTION 6 ===== -->
+  <h2 id="debugging">6. Debugging scheduled workflows</h2>
+
+  <h3>My workflow isn't running — checklist</h3>
+  <ol>
+    <li><strong>Is the workflow file on the default branch?</strong> Check that <code>.github/workflows/your-workflow.yml</code> is merged to <code>main</code>/<code>master</code>. Scheduled workflows on other branches don't run.</li>
+    <li><strong>Is the cron expression valid?</strong> A malformed expression (wrong number of fields, invalid values) will cause the workflow to fail silently. <a href="/autonomous-site/cron-builder.html">Validate it here</a>.</li>
+    <li><strong>Is the repository inactive?</strong> Go to Actions → check if the workflow shows as "disabled". Inactive repos have schedules automatically disabled after 60 days.</li>
+    <li><strong>Is it just delayed?</strong> GitHub schedules can run 5–30 minutes late. Check if the run appeared eventually.</li>
+    <li><strong>Are there YAML syntax errors?</strong> A YAML error anywhere in the file will prevent the workflow from being registered. Check Actions → the workflow name for parse errors.</li>
+  </ol>
+
+  <h3>Viewing scheduled run history</h3>
+  <p>Go to your repository → <strong>Actions</strong> tab → click on the specific workflow name in the left sidebar. You'll see all runs including scheduled ones, with their trigger source, duration, and status. The "Trigger" column shows "schedule" for cron-triggered runs.</p>
+
+  <h3>Testing a scheduled workflow without waiting</h3>
+  <p>Add <code>workflow_dispatch:</code> to your triggers (as shown above), then go to Actions → your workflow → <strong>Run workflow</strong>. This triggers the exact same job steps as the scheduled run, letting you test the logic immediately.</p>
+
+  <pre><code><span class="key">on</span><span class="val">:</span>
+  <span class="key">schedule</span><span class="val">:</span>
+    <span class="val">- cron: </span><span class="cron">'0 0 * * *'</span>
+  <span class="key">workflow_dispatch</span><span class="val">:</span>  <span class="comment"># Add this to test immediately</span></code></pre>
+
+  <!-- ===== FAQ ===== -->
+  <h2 id="faq">7. Frequently asked questions</h2>
+
+  <div class="faq">
+
+    <div class="faq-item">
+      <div class="faq-q">What timezone does GitHub Actions cron use?</div>
+      <div class="faq-a">GitHub Actions cron schedules always run in UTC. There is no way to set a different timezone in the workflow file itself. If you need a schedule relative to a different timezone, convert the local time to UTC manually. For example, 9:00 AM Eastern Time (UTC−5) is 14:00 UTC, so you'd use <code>0 14 * * *</code>.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">What is the minimum interval for GitHub Actions scheduled workflows?</div>
+      <div class="faq-a">The minimum interval is 5 minutes. You cannot schedule a workflow to run more frequently than every 5 minutes. Expressions like <code>*/1 * * * *</code> (every minute) or <code>*/2 * * * *</code> (every 2 minutes) will be silently limited or rejected.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Will my scheduled workflow always run exactly on time?</div>
+      <div class="faq-a">No. GitHub explicitly documents that scheduled workflows can be delayed during periods of high infrastructure load. Delays of 5–30 minutes are common during peak hours (Monday morning UTC is especially prone to delays). Do not use scheduled workflows for tasks requiring exact timing.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Why is my GitHub Actions scheduled workflow not running?</div>
+      <div class="faq-a">Common reasons: (1) The workflow file is not on the default branch. (2) The repository has been inactive for 60+ days — GitHub disables scheduled workflows on inactive repos. (3) There's a syntax error in the cron expression or YAML file. (4) GitHub's infrastructure is experiencing delays. (5) The workflow is disabled in the Actions tab.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Can I use a cron schedule with other GitHub Actions triggers?</div>
+      <div class="faq-a">Yes. You can combine <code>schedule:</code> with <code>push:</code>, <code>pull_request:</code>, <code>workflow_dispatch:</code>, and any other trigger in the same <code>on:</code> block. The workflow will run when any of the specified triggers fires. Adding <code>workflow_dispatch:</code> is especially useful for testing scheduled workflows on-demand.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">How do I run a GitHub Actions workflow every weekday?</div>
+      <div class="faq-a">Use <code>0 9 * * 1-5</code> to run at 9:00 AM UTC Monday through Friday. The last field (1–5) specifies day of week where 1=Monday and 5=Friday. To run at a different time, adjust the first two fields: <code>30 14 * * 1-5</code> runs at 2:30 PM UTC on weekdays.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">How do I schedule a workflow to run monthly?</div>
+      <div class="faq-a">Use <code>0 9 1 * *</code> to run at 9 AM UTC on the 1st of every month. For the 15th, use <code>0 9 15 * *</code>. For "last day of month" — which varies — a common approximation is the 28th (<code>0 9 28 * *</code>), since every month has at least 28 days. For true last-day logic, add a step that checks if tomorrow is the 1st.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">How do I read or use the current date inside a scheduled workflow?</div>
+      <div class="faq-a">Use <code>run: echo "date=$(date -u +%Y-%m-%d)" >> $GITHUB_OUTPUT</code> in a step to capture the current UTC date, then reference it as <code>${{ steps.step-id.outputs.date }}</code> in subsequent steps. For a timestamp, use <code>date -u +%Y-%m-%dT%H:%M:%SZ</code>.</div>
+    </div>
+
+  </div>
+
+  <div class="cta-box">
+    <h3>Build your cron expression visually</h3>
+    <p>Stop second-guessing your cron syntax. The visual builder lets you set each field with sliders and chips, then shows the human-readable description and next 5 run times — all before you commit anything.</p>
+    <a href="/autonomous-site/cron-builder.html" class="cta-btn">⏰ Try the Cron Expression Builder →</a>
+  </div>
+
+</div>
+
+<footer>
+  <p>Part of <a href="/autonomous-site/">Ship This Weekend</a> — developer tools for people who actually build things.</p>
+  <p style="margin-top:8px">Also useful: <a href="/autonomous-site/readme-generator.html">README Generator</a> · <a href="/autonomous-site/project-estimator.html">Project Scope Estimator</a> · <a href="/autonomous-site/python-projects.html">Python Project Ideas</a> · <a href="/autonomous-site/javascript-projects.html">JavaScript Project Ideas</a></p>
+</footer>
+
+<script>
+  document.querySelectorAll('.faq-q').forEach(q => {
+    q.addEventListener('click', () => {
+      q.parentElement.classList.toggle('open');
+    });
+  });
+</script>
+
+<script data-goatcounter="https://autorunfun.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
