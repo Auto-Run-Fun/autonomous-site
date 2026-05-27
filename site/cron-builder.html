@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cron Expression Builder — Visual Cron Job Generator & Explainer</title>
+<meta name="description" content="Build cron expressions visually. Get human-readable descriptions, calculate next run times, and generate GitHub Actions cron syntax — free, instant, no login.">
+<link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/cron-builder.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Cron Expression Builder — Visual Cron Job Generator">
+<meta property="og:description" content="Build cron expressions visually. Human-readable descriptions, next run times, GitHub Actions YAML — all in one tool.">
+<meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/cron-builder.html">
+<meta property="og:image" content="https://auto-run-fun.github.io/autonomous-site/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Cron Expression Builder">
+<meta name="twitter:description" content="Build cron expressions visually. Human-readable output + next run times + GitHub Actions support.">
+<meta name="twitter:image" content="https://auto-run-fun.github.io/autonomous-site/og.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Cron Expression Builder",
+  "description": "Visual cron job generator and explainer. Build cron expressions with a visual UI, get human-readable descriptions, calculate next run times, and generate GitHub Actions YAML.",
+  "url": "https://auto-run-fun.github.io/autonomous-site/cron-builder.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any",
+  "offers": {"@type":"Offer","price":"0","priceCurrency":"USD"}
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is a cron expression?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A cron expression is a string of 5 space-separated fields that define a recurring schedule: minute (0-59), hour (0-23), day of month (1-31), month (1-12), and day of week (0-6, where 0 is Sunday). Special characters include * (any value), */N (every N), N-M (range), and N,M (list). For example, '0 9 * * 1-5' means 'at 9:00 AM on weekdays'."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does * * * * * mean in cron?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Five asterisks (* * * * *) means run every minute of every hour, every day, every month — the maximum frequency possible. It fires 1,440 times per day. For most real use cases, */5 * * * * (every 5 minutes) or 0 * * * * (every hour) is far more appropriate."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I write a cron expression for GitHub Actions?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "GitHub Actions uses standard 5-field cron syntax in UTC timezone. Add it under 'on: schedule: - cron:' in your workflow YAML. The minimum supported interval is 5 minutes (*/5 * * * *). GitHub may delay scheduled workflows by 15-30 minutes during peak load, so don't rely on precise timing. Example: on:\n  schedule:\n    - cron: \"0 9 * * 1-5\" runs at 9 AM UTC on weekdays."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I run a cron job at a specific time every day?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Set the minute and hour fields to your target time, leave the rest as *. For example, '0 14 * * *' runs at 2:00 PM every day. '30 6 * * *' runs at 6:30 AM every day. Cron uses 24-hour format: 0 is midnight, 12 is noon, 14 is 2 PM, 23 is 11 PM."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I run a cron job only on weekdays?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Use '1-5' in the day-of-week field (field 5). For example, '0 9 * * 1-5' runs at 9 AM on weekdays only. Day numbering: 0=Sunday, 1=Monday, 2=Tuesday, 3=Wednesday, 4=Thursday, 5=Friday, 6=Saturday. For weekends only, use '0,6' in the day-of-week field."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between cron day-of-month and day-of-week?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Day-of-month (field 3, values 1-31) controls which calendar date to run on. Day-of-week (field 5, values 0-6) controls which day of the week. When both fields are set to non-* values, most cron implementations use OR logic — the job runs if either condition matches. To run on 'the first Monday of the month', you need a conditional check inside your script since cron cannot natively express this."
+      }
+    }
+  ]
+}
+</script>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f1117;
+  --surface:#161b22;
+  --border:#30363d;
+  --accent:#f0db4f;
+  --accent2:#61dafb;
+  --text:#e6edf3;
+  --muted:#8b949e;
+  --green:#3fb950;
+  --orange:#f97316;
+  --red:#f85149;
+  --yellow:#d29922;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,sans-serif;line-height:1.6;min-height:100vh}
+a{color:var(--accent2);text-decoration:none}
+a:hover{text-decoration:underline}
+code{font-family:var(--mono);font-size:0.9em;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px}
+
+nav{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 20px;font-size:13px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+nav strong{color:var(--text);margin-right:4px}
+nav a{color:var(--muted)}
+nav a:hover{color:var(--text)}
+nav a.active{color:var(--text)}
+
+header{padding:48px 20px 32px;max-width:900px;margin:0 auto;text-align:center}
+.badge{display:inline-block;background:rgba(97,218,251,.15);color:var(--accent2);font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:4px;margin-bottom:16px;font-family:var(--mono);border:1px solid rgba(97,218,251,.3)}
+h1{font-size:clamp(24px,4vw,42px);font-weight:700;line-height:1.2;margin-bottom:14px}
+.subhead{font-size:17px;color:var(--muted);max-width:640px;margin:0 auto}
+
+main{max-width:900px;margin:0 auto;padding:0 20px 80px}
+
+/* ===== Expression display ===== */
+.expr-display{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px 20px;margin-bottom:20px;text-align:center}
+.expr-code{font-family:var(--mono);font-size:clamp(22px,5vw,50px);font-weight:700;color:var(--accent);letter-spacing:.15em;word-break:break-all;line-height:1.3;margin-bottom:12px}
+.expr-human{font-size:15px;color:var(--muted);margin-bottom:18px;min-height:22px;font-style:italic}
+.expr-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;align-items:center}
+.copy-btn{background:var(--accent);color:#000;border:none;font-size:13px;font-weight:700;padding:8px 18px;border-radius:6px;cursor:pointer;font-family:var(--mono);transition:opacity .15s}
+.copy-btn:hover{opacity:.85}
+.copy-feedback{font-size:12px;color:var(--green);font-family:var(--mono);display:none}
+
+/* ===== Field builders ===== */
+.fields-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:20px}
+.field-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:13px 11px}
+.field-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px}
+.field-name{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-family:var(--mono)}
+.field-range{font-size:10px;color:#444d56;font-family:var(--mono)}
+.field-chips{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}
+.field-chip{background:var(--bg);border:1px solid var(--border);color:var(--muted);font-size:11px;font-family:var(--mono);padding:3px 7px;border-radius:4px;cursor:pointer;transition:border-color .1s,color .1s,background .1s;line-height:1.4;white-space:nowrap;user-select:none}
+.field-chip:hover{border-color:var(--muted);color:var(--text)}
+.field-chip.active{border-color:var(--accent);color:var(--accent);background:rgba(240,219,79,.08)}
+.field-input{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:13px;padding:6px 9px;border-radius:5px;outline:none;transition:border-color .15s}
+.field-input:focus{border-color:var(--accent2)}
+
+/* ===== Presets ===== */
+.presets-section{margin-bottom:20px}
+.section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-family:var(--mono);margin-bottom:10px}
+.presets-grid{display:flex;flex-wrap:wrap;gap:7px}
+.preset-btn{background:var(--surface);border:1px solid var(--border);color:var(--text);font-size:12px;padding:8px 13px;border-radius:7px;cursor:pointer;transition:border-color .15s,background .15s;text-align:left;line-height:1}
+.preset-btn:hover{border-color:var(--muted);background:rgba(255,255,255,.04)}
+.preset-expr{font-family:var(--mono);font-size:11px;color:var(--accent);display:block;margin-bottom:3px}
+.preset-desc{font-size:11px;color:var(--muted)}
+
+/* ===== Next run times ===== */
+.next-runs{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px 20px;margin-bottom:20px}
+.next-runs-title{font-size:14px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.tz-label{font-family:var(--mono);font-size:11px;font-weight:400;color:var(--muted)}
+.run-list{list-style:none}
+.run-item{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px}
+.run-item:last-child{border-bottom:none}
+.run-num{font-family:var(--mono);font-size:11px;color:#444d56;width:16px;text-align:right;flex-shrink:0}
+.run-time{font-family:var(--mono);font-size:13px;color:var(--accent2)}
+.run-from{font-size:12px;color:var(--muted);margin-left:auto;white-space:nowrap}
+
+/* ===== GitHub Actions section ===== */
+.gha-box{background:rgba(97,218,251,.05);border:1px solid rgba(97,218,251,.2);border-radius:10px;padding:18px 20px;margin-bottom:24px}
+.gha-box h2{font-size:16px;font-weight:700;margin-bottom:10px;color:var(--accent2)}
+.gha-code{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:12px 14px;font-family:var(--mono);font-size:13px;color:var(--text);white-space:pre;overflow-x:auto;margin:10px 0;line-height:1.6}
+.gha-notes{list-style:none;font-size:13px;color:var(--muted);line-height:1.9;padding-left:0}
+.gha-notes li::before{content:"→ ";color:var(--accent2)}
+.gha-notes strong{color:var(--text)}
+
+/* ===== Explainer ===== */
+.section-h2{font-size:20px;font-weight:700;margin-bottom:16px;margin-top:36px}
+.field-grid-explain{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:24px}
+.field-explain-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:13px}
+.fec-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-family:var(--mono);margin-bottom:5px}
+.fec-val{font-size:22px;font-weight:700;font-family:var(--mono);color:var(--accent);margin-bottom:4px}
+.fec-desc{font-size:12px;color:var(--muted);line-height:1.55}
+
+.chars-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px;margin-bottom:24px}
+.char-card{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:11px 13px;display:flex;gap:10px}
+.char-sym{font-family:var(--mono);font-size:17px;color:var(--accent);font-weight:700;flex-shrink:0;min-width:32px;line-height:1.4}
+.char-body{font-size:13px;color:var(--muted);line-height:1.5}
+.char-body strong{color:var(--text);display:block;margin-bottom:2px}
+
+.ex-table{width:100%;border-collapse:collapse;margin-bottom:24px}
+.ex-table th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-family:var(--mono);text-align:left;padding:7px 10px;border-bottom:1px solid var(--border)}
+.ex-table td{padding:9px 10px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:top}
+.ex-table tr:last-child td{border-bottom:none}
+.ex-table td:first-child{font-family:var(--mono);color:var(--accent);white-space:nowrap;width:170px}
+.ex-table tr{cursor:pointer;transition:background .1s}
+.ex-table tr:hover td{background:rgba(240,219,79,.05)}
+
+/* ===== FAQ ===== */
+.faq-list{margin-top:4px}
+.faq-item{border-left:2px solid var(--border);padding-left:20px;margin-bottom:22px}
+.faq-item h3{font-size:15px;font-weight:600;margin-bottom:7px}
+.faq-item p{font-size:14px;color:var(--muted);line-height:1.7}
+
+.footer-links{font-size:13px;color:var(--muted);text-align:center;margin-top:40px;line-height:2}
+
+@media(max-width:680px){
+  .fields-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:480px){
+  .fields-grid{grid-template-columns:repeat(2,1fr)}
+  .expr-code{letter-spacing:.06em}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <strong>Dev Tools</strong>
+  <a href="/autonomous-site/">Ideas</a>
+  <a href="/autonomous-site/project-estimator.html">Scope Estimator</a>
+  <a href="/autonomous-site/readme-generator.html">README</a>
+  <a href="/autonomous-site/cron-builder.html" class="active">Cron Builder</a>
+  <a href="/autonomous-site/python-projects.html">Python</a>
+  <a href="/autonomous-site/javascript-projects.html">JavaScript</a>
+  <a href="/autonomous-site/the-experiment.html">The Experiment</a>
+</nav>
+
+<header>
+  <div class="badge">Developer Tool</div>
+  <h1>Cron Expression Builder</h1>
+  <p class="subhead">Build, explain, and validate cron expressions. Visual field editor with human-readable output, next run times, and GitHub Actions YAML — no login, no ads.</p>
+</header>
+
+<main>
+
+<!-- Expression display -->
+<div class="expr-display">
+  <div class="expr-code" id="expr-display">* * * * *</div>
+  <div class="expr-human" id="expr-human">Every minute</div>
+  <div class="expr-actions">
+    <button class="copy-btn" onclick="copyExpr()">Copy Expression</button>
+    <span class="copy-feedback" id="copy-feedback">Copied!</span>
+  </div>
+</div>
+
+<!-- Field builders -->
+<div class="fields-grid">
+
+  <div class="field-card" id="fc-min">
+    <div class="field-header">
+      <span class="field-name">Minute</span>
+      <span class="field-range">0–59</span>
+    </div>
+    <div class="field-chips" id="chips-min">
+      <button class="field-chip active" onclick="setChip('min','*')">* every</button>
+      <button class="field-chip" onclick="setChip('min','0')">0</button>
+      <button class="field-chip" onclick="setChip('min','*/5')">*/5</button>
+      <button class="field-chip" onclick="setChip('min','*/15')">*/15</button>
+      <button class="field-chip" onclick="setChip('min','*/30')">*/30</button>
+    </div>
+    <input type="text" class="field-input" id="fi-min" value="*"
+           oninput="onFieldInput('min',this.value)" placeholder="e.g. */5">
+  </div>
+
+  <div class="field-card" id="fc-hr">
+    <div class="field-header">
+      <span class="field-name">Hour</span>
+      <span class="field-range">0–23</span>
+    </div>
+    <div class="field-chips" id="chips-hr">
+      <button class="field-chip active" onclick="setChip('hr','*')">* every</button>
+      <button class="field-chip" onclick="setChip('hr','0')">0 midnight</button>
+      <button class="field-chip" onclick="setChip('hr','9')">9 AM</button>
+      <button class="field-chip" onclick="setChip('hr','12')">12 PM</button>
+      <button class="field-chip" onclick="setChip('hr','*/6')">*/6</button>
+    </div>
+    <input type="text" class="field-input" id="fi-hr" value="*"
+           oninput="onFieldInput('hr',this.value)" placeholder="e.g. 9-17">
+  </div>
+
+  <div class="field-card" id="fc-dom">
+    <div class="field-header">
+      <span class="field-name">Day (Month)</span>
+      <span class="field-range">1–31</span>
+    </div>
+    <div class="field-chips" id="chips-dom">
+      <button class="field-chip active" onclick="setChip('dom','*')">* every</button>
+      <button class="field-chip" onclick="setChip('dom','1')">1st</button>
+      <button class="field-chip" onclick="setChip('dom','15')">15th</button>
+      <button class="field-chip" onclick="setChip('dom','1,15')">1,15</button>
+    </div>
+    <input type="text" class="field-input" id="fi-dom" value="*"
+           oninput="onFieldInput('dom',this.value)" placeholder="e.g. 1,15">
+  </div>
+
+  <div class="field-card" id="fc-mon">
+    <div class="field-header">
+      <span class="field-name">Month</span>
+      <span class="field-range">1–12</span>
+    </div>
+    <div class="field-chips" id="chips-mon">
+      <button class="field-chip active" onclick="setChip('mon','*')">* every</button>
+      <button class="field-chip" onclick="setChip('mon','1')">Jan</button>
+      <button class="field-chip" onclick="setChip('mon','1-3')">Q1</button>
+      <button class="field-chip" onclick="setChip('mon','*/3')">*/3</button>
+    </div>
+    <input type="text" class="field-input" id="fi-mon" value="*"
+           oninput="onFieldInput('mon',this.value)" placeholder="e.g. 1-6">
+  </div>
+
+  <div class="field-card" id="fc-dow">
+    <div class="field-header">
+      <span class="field-name">Day (Week)</span>
+      <span class="field-range">0–6</span>
+    </div>
+    <div class="field-chips" id="chips-dow">
+      <button class="field-chip active" onclick="setChip('dow','*')">* every</button>
+      <button class="field-chip" onclick="setChip('dow','1-5')">weekdays</button>
+      <button class="field-chip" onclick="setChip('dow','0,6')">weekends</button>
+      <button class="field-chip" onclick="setChip('dow','1')">Mon</button>
+      <button class="field-chip" onclick="setChip('dow','5')">Fri</button>
+    </div>
+    <input type="text" class="field-input" id="fi-dow" value="*"
+           oninput="onFieldInput('dow',this.value)" placeholder="e.g. 1-5">
+  </div>
+
+</div>
+
+<!-- Presets -->
+<div class="presets-section">
+  <div class="section-label">Common Schedules — click to load</div>
+  <div class="presets-grid">
+    <button class="preset-btn" onclick="setPreset('* * * * *')">
+      <span class="preset-expr">* * * * *</span>
+      <span class="preset-desc">Every minute</span>
+    </button>
+    <button class="preset-btn" onclick="setPreset('*/5 * * * *')">
+      <span class="preset-expr">*/5 * * * *</span>
+      <span class="preset-desc">Every 5 min</span>
+    </button>
+    <button class="preset-btn" onclick="setPreset('*/15 * * * *')">
+      <span class="preset-expr">*/15 * * * *</span>
+      <span class="preset-desc">Every 15 min</span>
+    </button>
+    <button class="preset-btn" onclick="setPreset('0 * * * *')">
+      <span class="preset-expr">0 * * * *</span>
+      <span class="preset-desc">Every hour</span>
+    </button>
+    <button class="preset-btn" onclick="setPreset('0 0 * * *')">
+      <span class="preset-expr">0 0 * * *</span>
+      <span class="preset-desc">Daily midnight</span>
+    </button>
+    <button class="preset-btn" onclick="setPreset('0 12 * * *')">
+      <span class="preset-expr">0 12 * * *</span>
+      <span class="preset-desc">Daily noon</span>
+    </button>
+    <button class="preset-btn" onclick="setPreset('0 9 * * 1-5')">
+      <span class="preset-expr">0 9 * * 1-5</span>
+      <span class="preset-desc">Weekdays 9 AM</span>
+    </button>
+    <button class="preset-btn" onclick="setPreset('30 17 * * 1-5')">
+      <span class="preset-expr">30 17 * * 1-5</span>
+      <span class="preset-desc">Weekdays 5:30 PM</span>
+    </button>
+    <button class="preset-btn" onclick="setPreset('0 0 * * 0')">
+      <span class="preset-expr">0 0 * * 0</span>
+      <span class="preset-desc">Every Sunday midnight</span>
+    </button>
+    <button class="preset-btn" onclick="setPreset('0 0 1 * *')">
+      <span class="preset-expr">0 0 1 * *</span>
+      <span class="preset-desc">Monthly (1st)</span>
+    </button>
+    <button class="preset-btn" onclick="setPreset('0 0 1 1 *')">
+      <span class="preset-expr">0 0 1 1 *</span>
+      <span class="preset-desc">Yearly (Jan 1)</span>
+    </button>
+    <button class="preset-btn" onclick="setPreset('0 9,17 * * *')">
+      <span class="preset-expr">0 9,17 * * *</span>
+      <span class="preset-desc">9 AM and 5 PM daily</span>
+    </button>
+  </div>
+</div>
+
+<!-- Next run times -->
+<div class="next-runs">
+  <div class="next-runs-title">
+    Next 5 Run Times
+    <span class="tz-label" id="tz-label">(local timezone)</span>
+  </div>
+  <ul class="run-list">
+    <li class="run-item"><span class="run-num">1</span><span class="run-time" id="r1">—</span><span class="run-from" id="rf1"></span></li>
+    <li class="run-item"><span class="run-num">2</span><span class="run-time" id="r2">—</span><span class="run-from" id="rf2"></span></li>
+    <li class="run-item"><span class="run-num">3</span><span class="run-time" id="r3">—</span><span class="run-from" id="rf3"></span></li>
+    <li class="run-item"><span class="run-num">4</span><span class="run-time" id="r4">—</span><span class="run-from" id="rf4"></span></li>
+    <li class="run-item"><span class="run-num">5</span><span class="run-time" id="r5">—</span><span class="run-from" id="rf5"></span></li>
+  </ul>
+</div>
+
+<!-- GitHub Actions -->
+<div class="gha-box">
+  <h2>⚙ GitHub Actions Cron YAML</h2>
+  <div class="gha-code" id="gha-yaml">on:
+  schedule:
+    - cron: "* * * * *"</div>
+  <ul class="gha-notes">
+    <li><strong>UTC timezone:</strong> GitHub Actions always runs cron in UTC. Adjust your hour offset accordingly.</li>
+    <li><strong>Minimum interval:</strong> GitHub supports a minimum of <strong>5 minutes</strong> (<code>*/5 * * * *</code>). Shorter intervals are not guaranteed.</li>
+    <li><strong>Delay at peak:</strong> Scheduled workflows may be delayed 15–30 minutes during GitHub's peak load. Don't use cron for time-sensitive tasks.</li>
+    <li><strong>Inactive repos:</strong> GitHub disables scheduled workflows in repos with no activity for 60 days.</li>
+  </ul>
+</div>
+
+<!-- Explainer -->
+<h2 class="section-h2">Understanding Cron Syntax</h2>
+
+<p style="font-size:14px;color:var(--muted);margin-bottom:18px;line-height:1.7">A cron expression has exactly 5 space-separated fields. Each controls one dimension of timing:</p>
+
+<div class="field-grid-explain">
+  <div class="field-explain-card">
+    <div class="fec-label">Field 1</div>
+    <div class="fec-val">Minute</div>
+    <div class="fec-desc">0–59. When within the hour to run. 0 = top of the hour.</div>
+  </div>
+  <div class="field-explain-card">
+    <div class="fec-label">Field 2</div>
+    <div class="fec-val">Hour</div>
+    <div class="fec-desc">0–23 (24h). 0 = midnight, 12 = noon, 17 = 5 PM.</div>
+  </div>
+  <div class="field-explain-card">
+    <div class="fec-label">Field 3</div>
+    <div class="fec-val">Dom</div>
+    <div class="fec-desc">1–31. Day of the month. February has 28/29 days — avoid 29-31 for monthly jobs.</div>
+  </div>
+  <div class="field-explain-card">
+    <div class="fec-label">Field 4</div>
+    <div class="fec-val">Month</div>
+    <div class="fec-desc">1–12. 1 = January, 12 = December. Restrict to specific months.</div>
+  </div>
+  <div class="field-explain-card">
+    <div class="fec-label">Field 5</div>
+    <div class="fec-val">Dow</div>
+    <div class="fec-desc">0–6. 0 = Sunday, 1 = Monday, …, 6 = Saturday. (7 = Sunday in some systems.)</div>
+  </div>
+</div>
+
+<h3 style="font-size:16px;margin-bottom:12px">Special Characters</h3>
+<div class="chars-grid">
+  <div class="char-card">
+    <span class="char-sym">*</span>
+    <div class="char-body"><strong>Any / Every</strong>Matches every valid value in this field.</div>
+  </div>
+  <div class="char-card">
+    <span class="char-sym">*/N</span>
+    <div class="char-body"><strong>Step / Every N</strong><code>*/5</code> in minutes = 0, 5, 10, 15 … every 5 minutes.</div>
+  </div>
+  <div class="char-card">
+    <span class="char-sym">N-M</span>
+    <div class="char-body"><strong>Range</strong><code>1-5</code> in day-of-week = Mon through Fri.</div>
+  </div>
+  <div class="char-card">
+    <span class="char-sym">N,M</span>
+    <div class="char-body"><strong>List</strong><code>0,6</code> in day-of-week = Sunday and Saturday.</div>
+  </div>
+</div>
+
+<h3 style="font-size:16px;margin-bottom:12px">Expression Reference — click any row to load it</h3>
+<table class="ex-table">
+  <thead>
+    <tr><th>Expression</th><th>Meaning</th></tr>
+  </thead>
+  <tbody>
+    <tr onclick="setPreset('* * * * *')"><td>* * * * *</td><td>Every minute (1,440× per day)</td></tr>
+    <tr onclick="setPreset('*/5 * * * *')"><td>*/5 * * * *</td><td>Every 5 minutes — minimum for GitHub Actions</td></tr>
+    <tr onclick="setPreset('0 * * * *')"><td>0 * * * *</td><td>At the start of every hour (1:00, 2:00, …)</td></tr>
+    <tr onclick="setPreset('0 0 * * *')"><td>0 0 * * *</td><td>Every day at midnight (00:00)</td></tr>
+    <tr onclick="setPreset('0 12 * * *')"><td>0 12 * * *</td><td>Every day at noon (12:00 PM)</td></tr>
+    <tr onclick="setPreset('0 9 * * 1-5')"><td>0 9 * * 1-5</td><td>At 9:00 AM on weekdays (Mon–Fri)</td></tr>
+    <tr onclick="setPreset('30 17 * * 1-5')"><td>30 17 * * 1-5</td><td>At 5:30 PM on weekdays</td></tr>
+    <tr onclick="setPreset('0 9,17 * * *')"><td>0 9,17 * * *</td><td>At 9 AM and 5 PM every day</td></tr>
+    <tr onclick="setPreset('0 0 * * 0')"><td>0 0 * * 0</td><td>Every Sunday at midnight</td></tr>
+    <tr onclick="setPreset('0 0 1 * *')"><td>0 0 1 * *</td><td>Midnight on the 1st of every month</td></tr>
+    <tr onclick="setPreset('0 0 1 1 *')"><td>0 0 1 1 *</td><td>Midnight on January 1st (once per year)</td></tr>
+    <tr onclick="setPreset('*/10 9-17 * * 1-5')"><td>*/10 9-17 * * 1-5</td><td>Every 10 min during business hours, weekdays</td></tr>
+  </tbody>
+</table>
+
+<!-- FAQ -->
+<h2 class="section-h2">Cron FAQ</h2>
+<div class="faq-list">
+
+  <div class="faq-item">
+    <h3>What is a cron expression?</h3>
+    <p>A cron expression is a 5-field string that defines a repeating schedule for automated tasks. The fields are <code>minute hour day-of-month month day-of-week</code>, each separated by a space. Special characters (<code>*</code>, <code>/</code>, <code>-</code>, <code>,</code>) let you express "every," "every N," ranges, and lists. For example, <code>0 9 * * 1-5</code> means "at 9:00 AM on weekdays."</p>
+  </div>
+
+  <div class="faq-item">
+    <h3>What does * * * * * mean?</h3>
+    <p>Five asterisks mean "every minute of every hour, every day" — the maximum cron frequency. It fires 1,440 times per day. This is almost always too frequent for real workloads. GitHub Actions enforces a minimum of 5 minutes (<code>*/5 * * * *</code>); Linux cron has no minimum but running every minute is expensive.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3>How do I write a cron expression for GitHub Actions?</h3>
+    <p>GitHub Actions uses standard 5-field cron syntax in UTC. Add it under <code>on: schedule: - cron:</code> in your <code>.github/workflows/*.yml</code> file. The minimum supported interval is 5 minutes. GitHub may delay scheduled runs by 15–30 minutes during peak load. Repos with no activity for 60 days have their scheduled workflows automatically disabled.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3>How do I run a cron job at a specific time every day?</h3>
+    <p>Set minute and hour to your target time, leave the remaining three fields as <code>*</code>. Example: <code>0 14 * * *</code> runs at 2:00 PM every day. <code>30 6 * * *</code> runs at 6:30 AM. Cron uses 24-hour format: 0 is midnight, 12 is noon, 23 is 11 PM. Remember to account for timezone — Linux cron uses the system timezone, GitHub Actions always runs in UTC.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3>How do I restrict a cron job to weekdays only?</h3>
+    <p>Use <code>1-5</code> in the 5th field (day-of-week). Example: <code>0 9 * * 1-5</code> runs at 9 AM, Monday through Friday. Days are numbered 0 (Sunday) through 6 (Saturday). For weekends only, use <code>0,6</code>. For a single day, use the number alone — <code>0 9 * * 1</code> runs only on Mondays.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3>What is the difference between day-of-month and day-of-week?</h3>
+    <p>Day-of-month (field 3) restricts to specific calendar dates (1st, 15th, etc.). Day-of-week (field 5) restricts to specific days of the week (Mon, Tue, etc.). When both are non-<code>*</code>, most cron systems apply OR logic — the job runs if either condition matches. To run on "the first Monday of every month," you'd need to check the date inside your script, since cron can't natively express complex calendar logic.</p>
+  </div>
+
+</div>
+
+<p class="footer-links">
+  More developer tools:
+  <a href="/autonomous-site/project-estimator.html">Scope Estimator</a> ·
+  <a href="/autonomous-site/readme-generator.html">README Generator</a> ·
+  <a href="/autonomous-site/">Idea Generator</a> ·
+  <a href="/autonomous-site/python-projects.html">Python Projects</a> ·
+  <a href="/autonomous-site/javascript-projects.html">JS Projects</a>
+</p>
+
+</main>
+
+<script data-goatcounter="https://autorunfun.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+
+<script>
+// ===== STATE =====
+const S = { min: '*', hr: '*', dom: '*', mon: '*', dow: '*' };
+
+// ===== CRON PARSER =====
+function parseCronField(expr, lo, hi) {
+  if (expr === '*') {
+    const r = [];
+    for (let i = lo; i <= hi; i++) r.push(i);
+    return r;
+  }
+  const vals = new Set();
+  expr.split(',').forEach(p => {
+    if (p.includes('/')) {
+      const [range, stepStr] = p.split('/');
+      const step = parseInt(stepStr);
+      if (isNaN(step) || step < 1) return;
+      let s = lo, e = hi;
+      if (range !== '*') {
+        if (range.includes('-')) { const ab = range.split('-'); s = +ab[0]; e = +ab[1]; }
+        else s = +range;
+      }
+      for (let i = s; i <= e; i += step) vals.add(i);
+    } else if (p.includes('-')) {
+      const ab = p.split('-'); const s = +ab[0], e = +ab[1];
+      for (let i = s; i <= e; i++) vals.add(i);
+    } else {
+      const n = parseInt(p);
+      if (!isNaN(n)) vals.add(n);
+    }
+  });
+  return [...vals].sort((a, b) => a - b);
+}
+
+// ===== NEXT RUN TIMES =====
+function getNextRuns(expr, count) {
+  count = count || 5;
+  try {
+    const parts = expr.trim().split(/\s+/);
+    if (parts.length !== 5) return [];
+    const aMin = new Set(parseCronField(parts[0], 0, 59));
+    const aHr  = new Set(parseCronField(parts[1], 0, 23));
+    const aDom = new Set(parseCronField(parts[2], 1, 31));
+    const aMon = new Set(parseCronField(parts[3], 1, 12));
+    const aDow = new Set(parseCronField(parts[4], 0, 6));
+    const c = new Date();
+    c.setSeconds(0, 0);
+    c.setMinutes(c.getMinutes() + 1);
+    const results = [];
+    const limit = new Date(c.getTime() + 366 * 86400000);
+    while (results.length < count && c < limit) {
+      if (aMon.has(c.getMonth() + 1) && aDom.has(c.getDate()) &&
+          aDow.has(c.getDay()) && aHr.has(c.getHours()) && aMin.has(c.getMinutes())) {
+        results.push(new Date(c));
+      }
+      c.setMinutes(c.getMinutes() + 1);
+    }
+    return results;
+  } catch (e) { return []; }
+}
+
+// ===== HUMAN READABLE =====
+const DOW = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const MON = ['','January','February','March','April','May','June','July','August','September','October','November','December'];
+
+function fmt12(h, m) {
+  const suf = h >= 12 ? 'PM' : 'AM';
+  const h12 = h === 0 ? 12 : h > 12 ? h - 12 : h;
+  const ms = m === 0 ? '' : ':' + String(m).padStart(2, '0');
+  return h12 + ms + ' ' + suf;
+}
+
+function humanReadable(expr) {
+  try {
+    const p = expr.trim().split(/\s+/);
+    if (p.length !== 5) return 'Invalid expression';
+    const [min, hr, dom, mon, dow] = p;
+
+    // Named shortcuts
+    const shortcuts = {
+      '* * * * *':     'Every minute',
+      '0 * * * *':     'At the start of every hour',
+      '0 0 * * *':     'Every day at midnight',
+      '0 12 * * *':    'Every day at noon',
+      '0 9 * * 1-5':   'At 9:00 AM on weekdays (Mon–Fri)',
+      '30 17 * * 1-5': 'At 5:30 PM on weekdays (Mon–Fri)',
+      '0 0 * * 0':     'Every Sunday at midnight',
+      '0 0 1 * *':     'Midnight on the 1st of every month',
+      '0 0 1 1 *':     'Midnight on January 1st (yearly)',
+    };
+    if (shortcuts[expr.trim()]) return shortcuts[expr.trim()];
+
+    // Build time description
+    let timePart = '';
+    if (min === '*' && hr === '*') {
+      timePart = 'every minute';
+    } else if (min.startsWith('*/') && hr === '*') {
+      timePart = 'every ' + min.slice(2) + ' minutes';
+    } else if (hr === '*' && min !== '*') {
+      timePart = min.startsWith('*/') ? 'every ' + min.slice(2) + ' minutes' : 'at minute ' + min + ' of every hour';
+    } else if (hr.startsWith('*/')) {
+      const step = hr.slice(2);
+      const mDesc = min === '0' ? 'on the hour' : 'at minute ' + min;
+      timePart = 'every ' + step + ' hours, ' + mDesc;
+    } else {
+      const hv = parseCronField(hr, 0, 23);
+      const mv = parseCronField(min, 0, 59);
+      if (hv.length <= 4 && mv.length === 1) {
+        timePart = 'at ' + hv.map(h => fmt12(h, mv[0])).join(' and ');
+      } else {
+        timePart = 'at hours ' + hr + ', minute ' + min;
+      }
+    }
+
+    // Day/month part
+    let dayPart = '';
+    if (dow !== '*') {
+      if (dow === '1-5') dayPart = ' on weekdays (Mon–Fri)';
+      else if (dow === '0,6' || dow === '6,0') dayPart = ' on weekends';
+      else {
+        const dv = parseCronField(dow, 0, 6).filter(v => v >= 0 && v <= 6);
+        dayPart = dv.length === 1 ? ' every ' + DOW[dv[0]] : ' on ' + dv.map(d => DOW[d]).join(', ');
+      }
+    } else if (dom !== '*') {
+      const dv = parseCronField(dom, 1, 31);
+      dayPart = dv.length === 1 ? ' on day ' + dv[0] + ' of the month' : ' on days ' + dom + ' of the month';
+    }
+
+    let monPart = '';
+    if (mon !== '*') {
+      const mv = parseCronField(mon, 1, 12);
+      if (mv.length < 12) monPart = ' in ' + mv.map(m => MON[m]).join(', ');
+    }
+
+    const full = timePart + dayPart + monPart;
+    return full.charAt(0).toUpperCase() + full.slice(1);
+  } catch (e) { return 'Invalid expression'; }
+}
+
+// ===== TIME FORMATTING =====
+function fmtDate(d) {
+  return d.toLocaleString(undefined, {
+    weekday: 'short', month: 'short', day: 'numeric',
+    hour: 'numeric', minute: '2-digit'
+  });
+}
+
+function fmtFrom(d) {
+  const ms = d - Date.now();
+  if (ms < 0) return '';
+  const mins = Math.round(ms / 60000);
+  if (mins < 60) return 'in ' + mins + 'm';
+  const hrs = Math.floor(mins / 60), rm = mins % 60;
+  if (hrs < 24) return rm > 0 ? 'in ' + hrs + 'h ' + rm + 'm' : 'in ' + hrs + 'h';
+  return 'in ' + Math.floor(hrs / 24) + 'd';
+}
+
+// ===== CORE UPDATE =====
+function getExpr() {
+  return S.min + ' ' + S.hr + ' ' + S.dom + ' ' + S.mon + ' ' + S.dow;
+}
+
+function updateUI() {
+  const expr = getExpr();
+  document.getElementById('expr-display').textContent = expr;
+  document.getElementById('expr-human').textContent = humanReadable(expr);
+  document.getElementById('gha-yaml').textContent =
+    'on:\n  schedule:\n    - cron: "' + expr + '"';
+
+  const runs = getNextRuns(expr, 5);
+  for (let i = 1; i <= 5; i++) {
+    const re = document.getElementById('r' + i);
+    const rf = document.getElementById('rf' + i);
+    if (runs[i - 1]) {
+      re.textContent = fmtDate(runs[i - 1]);
+      rf.textContent = fmtFrom(runs[i - 1]);
+    } else {
+      re.textContent = '—';
+      rf.textContent = '';
+    }
+  }
+
+  // Shareable URL
+  try {
+    const url = new URL(location.href);
+    url.searchParams.set('expr', expr);
+    history.replaceState(null, '', url);
+  } catch (e) {}
+}
+
+// ===== INTERACTION =====
+function syncFieldUI(field, value) {
+  document.getElementById('fi-' + field).value = value;
+  document.querySelectorAll('#chips-' + field + ' .field-chip').forEach(btn => {
+    const bval = btn.getAttribute('onclick').match(/'([^']+)'\)$/);
+    btn.classList.toggle('active', bval && bval[1] === value);
+  });
+}
+
+function setChip(field, value) {
+  S[field] = value;
+  syncFieldUI(field, value);
+  updateUI();
+}
+
+function onFieldInput(field, value) {
+  S[field] = value || '*';
+  document.querySelectorAll('#chips-' + field + ' .field-chip').forEach(b => b.classList.remove('active'));
+  updateUI();
+}
+
+function setPreset(expr) {
+  const parts = expr.trim().split(/\s+/);
+  if (parts.length !== 5) return;
+  const keys = ['min', 'hr', 'dom', 'mon', 'dow'];
+  keys.forEach((k, i) => { S[k] = parts[i]; syncFieldUI(k, parts[i]); });
+  updateUI();
+}
+
+function copyExpr() {
+  navigator.clipboard.writeText(getExpr()).then(() => {
+    const fb = document.getElementById('copy-feedback');
+    fb.style.display = 'inline';
+    setTimeout(() => { fb.style.display = 'none'; }, 2000);
+  }).catch(() => {});
+}
+
+// ===== INIT =====
+(function () {
+  try {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    if (tz) document.getElementById('tz-label').textContent = '(' + tz + ')';
+  } catch (e) {}
+
+  const params = new URLSearchParams(location.search);
+  const urlExpr = params.get('expr');
+  if (urlExpr && /^[\d\*\/\-,\s]+$/.test(urlExpr) && urlExpr.trim().split(/\s+/).length === 5) {
+    setPreset(urlExpr);
+  } else {
+    updateUI();
+  }
+})();
+</script>
+</body>
+</html>
