@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL Cheat Sheet — Quick Reference for SELECT, JOIN, GROUP BY &amp; More</title>
+  <meta name="description" content="Interactive SQL cheat sheet with 70+ commands and queries. Search, filter by category, and copy any SQL snippet instantly. Covers SELECT, JOINs, aggregates, subqueries, indexes, and more.">
+  <link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/sql-cheatsheet.html">
+  <meta property="og:title" content="SQL Cheat Sheet — Quick Reference for SELECT, JOIN, GROUP BY &amp; More">
+  <meta property="og:description" content="Interactive SQL cheat sheet with 70+ commands and queries. Search, filter by category, and copy any SQL snippet instantly.">
+  <meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/sql-cheatsheet.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SQL Cheat Sheet — Quick Reference for SELECT, JOIN, GROUP BY &amp; More">
+  <meta name="twitter:description" content="Interactive SQL cheat sheet with 70+ commands and queries. Search, filter, and copy any SQL snippet.">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "SQL Cheat Sheet — Quick Reference for SELECT, JOIN, GROUP BY & More",
+    "description": "Interactive SQL cheat sheet with 70+ commands and queries. Covers SELECT, JOINs, aggregates, subqueries, indexes, window functions, and more.",
+    "url": "https://auto-run-fun.github.io/autonomous-site/sql-cheatsheet.html",
+    "author": {"@type": "Organization", "name": "Ship This Weekend"},
+    "keywords": "SQL cheat sheet, SQL commands, SQL syntax, SELECT statement, JOIN SQL, GROUP BY, SQL reference"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the difference between WHERE and HAVING in SQL?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "WHERE filters rows before aggregation, while HAVING filters groups after aggregation. Use WHERE with regular column conditions, and HAVING with aggregate functions like COUNT(), SUM(), or AVG(). Example: SELECT dept, COUNT(*) FROM employees WHERE salary > 50000 GROUP BY dept HAVING COUNT(*) > 5."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between INNER JOIN, LEFT JOIN, and RIGHT JOIN?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "INNER JOIN returns only rows with matching values in both tables. LEFT JOIN returns all rows from the left table plus matching rows from the right (NULLs where no match). RIGHT JOIN returns all rows from the right table plus matching rows from the left. FULL OUTER JOIN returns all rows from both tables."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I find duplicate rows in SQL?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Use GROUP BY with HAVING COUNT(*) > 1: SELECT email, COUNT(*) FROM users GROUP BY email HAVING COUNT(*) > 1. To delete duplicates, keep the row with the lowest ID using: DELETE FROM users WHERE id NOT IN (SELECT MIN(id) FROM users GROUP BY email)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is a SQL subquery?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A subquery is a SELECT statement nested inside another query. It can appear in WHERE, FROM, or SELECT clauses. Example: SELECT name FROM employees WHERE salary > (SELECT AVG(salary) FROM employees). Subqueries can be correlated (reference outer query) or non-correlated (independent)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I use window functions in SQL?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Window functions perform calculations across rows related to the current row using OVER(). Common functions: ROW_NUMBER() OVER(PARTITION BY dept ORDER BY salary DESC) assigns a rank within each department. LAG() and LEAD() access previous and next rows. SUM() OVER() calculates running totals. They don't collapse rows like GROUP BY does."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between DELETE and TRUNCATE in SQL?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "DELETE removes specific rows matching a WHERE condition, is logged per row, can be rolled back, and fires triggers. TRUNCATE removes all rows at once, is minimally logged (faster), cannot be rolled back in most databases, and doesn't fire row-level triggers. Use DELETE for conditional removal, TRUNCATE to empty a table completely."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I create an index in SQL?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Use CREATE INDEX: CREATE INDEX idx_user_email ON users(email). For unique indexes: CREATE UNIQUE INDEX idx_unique_email ON users(email). Composite indexes cover multiple columns: CREATE INDEX idx_name_dept ON employees(last_name, department). Use indexes on columns frequently used in WHERE, JOIN ON, and ORDER BY clauses. Too many indexes slow down INSERT/UPDATE operations."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is a CTE (Common Table Expression) in SQL?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A CTE is a temporary named result set defined with WITH, making complex queries more readable. Syntax: WITH cte_name AS (SELECT ...) SELECT * FROM cte_name. CTEs can reference themselves for recursive queries (e.g., traversing hierarchical data like org charts or category trees). Unlike subqueries, CTEs can be referenced multiple times in the same query."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3450;
+      --accent: #4f8ef7;
+      --accent2: #7c5cbf;
+      --green: #3dd68c;
+      --yellow: #f5c518;
+      --red: #ff6b6b;
+      --cyan: #56d4f5;
+      --text: #e2e8f0;
+      --muted: #7a8099;
+      --code-bg: #0d1117;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--surface) 0%, #1a2040 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 2rem 1rem 1.5rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: clamp(1.4rem, 4vw, 2.2rem);
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+
+    header h1 span { color: var(--accent); }
+
+    header p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      max-width: 600px;
+      margin: 0 auto 1.2rem;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+      font-size: 0.8rem;
+      margin-top: 0.8rem;
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    nav a:hover { color: var(--accent); border-color: var(--accent); }
+
+    .controls {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .controls-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .search-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .search-wrap svg {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      pointer-events: none;
+    }
+
+    #search {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.55rem 0.75rem 0.55rem 2.2rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    #search:focus { border-color: var(--accent); }
+
+    .kbd {
+      position: absolute;
+      right: 0.6rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--border);
+      color: var(--muted);
+      font-size: 0.7rem;
+      padding: 0.1rem 0.4rem;
+      border-radius: 3px;
+    }
+
+    .filters {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+
+    .filter-btn:hover { color: var(--text); border-color: var(--accent); }
+    .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem;
+    }
+
+    .section {
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .commands-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 0.6rem;
+    }
+
+    .cmd-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: border-color 0.15s;
+    }
+
+    .cmd-card:hover { border-color: var(--accent); }
+
+    .cmd-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 0.65rem 0.75rem 0.35rem;
+      gap: 0.5rem;
+    }
+
+    .cmd-info { flex: 1; min-width: 0; }
+
+    .cmd-name {
+      font-weight: 600;
+      font-size: 0.88rem;
+      color: #fff;
+      margin-bottom: 0.15rem;
+    }
+
+    .cmd-desc {
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .copy-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 0.25rem 0.6rem;
+      border-radius: 5px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .copy-btn:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .copy-btn.copied { background: var(--green); border-color: var(--green); color: #000; }
+
+    .cmd-code {
+      background: var(--code-bg);
+      border-top: 1px solid var(--border);
+      padding: 0.5rem 0.75rem;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.78rem;
+      color: var(--cyan);
+      overflow-x: auto;
+      white-space: pre;
+      line-height: 1.5;
+    }
+
+    mark {
+      background: rgba(79, 142, 247, 0.3);
+      color: inherit;
+      border-radius: 2px;
+    }
+
+    .hidden { display: none !important; }
+
+    .no-results {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .tips-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 0.75rem;
+      margin-top: 0.75rem;
+    }
+
+    .tip-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent2);
+      border-radius: 8px;
+      padding: 0.85rem;
+    }
+
+    .tip-title {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--accent2);
+      margin-bottom: 0.35rem;
+    }
+
+    .tip-body {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .tip-code {
+      background: var(--code-bg);
+      color: var(--cyan);
+      font-family: monospace;
+      font-size: 0.75rem;
+      padding: 0.35rem 0.5rem;
+      border-radius: 4px;
+      margin-top: 0.4rem;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    .faq {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+      padding: 1.1rem 0;
+    }
+
+    .faq-q {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .faq-a {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .faq-a code {
+      background: var(--surface2);
+      color: var(--cyan);
+      padding: 0.1rem 0.3rem;
+      border-radius: 3px;
+      font-size: 0.85em;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: var(--muted);
+      font-size: 0.82rem;
+      border-top: 1px solid var(--border);
+    }
+
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 600px) {
+      .commands-grid { grid-template-columns: 1fr; }
+      .tips-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1><span>SQL</span> Cheat Sheet</h1>
+  <p>70+ SQL commands and queries with instant copy. Search by keyword or filter by category.</p>
+  <nav>
+    <a href="/autonomous-site/">🚀 Project Ideas</a>
+    <a href="/autonomous-site/git-cheatsheet.html">Git Cheatsheet</a>
+    <a href="/autonomous-site/readme-generator.html">README Generator</a>
+    <a href="/autonomous-site/cron-builder.html">Cron Builder</a>
+    <a href="/autonomous-site/github-actions-cron.html">GitHub Actions</a>
+    <a href="/autonomous-site/github-profile-readme.html">Profile README</a>
+  </nav>
+</header>
+
+<div class="controls">
+  <div class="controls-inner">
+    <div class="search-wrap">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="search" id="search" placeholder="Search SQL commands… (Ctrl+K)" autocomplete="off">
+      <span class="kbd">Ctrl+K</span>
+    </div>
+    <div class="filters">
+      <button class="filter-btn active" data-cat="all">All</button>
+      <button class="filter-btn" data-cat="select">SELECT</button>
+      <button class="filter-btn" data-cat="joins">JOINs</button>
+      <button class="filter-btn" data-cat="aggregate">Aggregate</button>
+      <button class="filter-btn" data-cat="modify">Modify Data</button>
+      <button class="filter-btn" data-cat="schema">Schema</button>
+      <button class="filter-btn" data-cat="subquery">Subqueries</button>
+      <button class="filter-btn" data-cat="window">Window Fns</button>
+      <button class="filter-btn" data-cat="index">Indexes</button>
+    </div>
+  </div>
+</div>
+
+<main>
+  <div id="no-results" class="no-results hidden">No commands match your search.</div>
+
+  <!-- SELECT -->
+  <div class="section" data-cat="select">
+    <div class="section-title">SELECT — Querying Data</div>
+    <div class="commands-grid">
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">Basic SELECT</div>
+            <div class="cmd-desc">Retrieve all or specific columns from a table</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">SELECT * FROM users;
+SELECT id, name, email FROM users;</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">WHERE clause</div>
+            <div class="cmd-desc">Filter rows based on conditions</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">SELECT * FROM users
+WHERE age > 18 AND active = true;</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">ORDER BY</div>
+            <div class="cmd-desc">Sort results ascending or descending</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">SELECT * FROM products
+ORDER BY price DESC, name ASC;</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">LIMIT / OFFSET</div>
+            <div class="cmd-desc">Paginate results</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">SELECT * FROM posts
+ORDER BY created_at DESC
+LIMIT 10 OFFSET 20;   -- page 3 of 10</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">DISTINCT</div>
+            <div class="cmd-desc">Remove duplicate rows from results</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">SELECT DISTINCT country FROM customers;</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">LIKE — pattern matching</div>
+            <div class="cmd-desc">% matches any sequence, _ matches one character</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">SELECT * FROM users
+WHERE email LIKE '%@gmail.com';
+
+SELECT * FROM products
+WHERE name LIKE 'Pro%';        -- starts with "Pro"</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">IN / NOT IN</div>
+            <div class="cmd-desc">Match against a list of values</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">SELECT * FROM orders
+WHERE status IN ('pending', 'processing');
+
+SELECT * FROM users
+WHERE id NOT IN (1, 2, 3);</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">BETWEEN</div>
+            <div class="cmd-desc">Filter within a range (inclusive)</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">SELECT * FROM orders
+WHERE amount BETWEEN 100 AND 500;
+
+SELECT * FROM events
+WHERE event_date BETWEEN '2024-01-01' AND '2024-12-31';</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">IS NULL / IS NOT NULL</div>
+            <div class="cmd-desc">Check for missing values (never use = NULL)</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">SELECT * FROM users WHERE deleted_at IS NULL;
+SELECT * FROM orders WHERE shipped_at IS NOT NULL;</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">CASE expression</div>
+            <div class="cmd-desc">Conditional logic inside a SELECT</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">SELECT name, salary,
+  CASE
+    WHEN salary >= 100000 THEN 'Senior'
+    WHEN salary >= 60000  THEN 'Mid'
+    ELSE 'Junior'
+  END AS level
+FROM employees;</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">COALESCE</div>
+            <div class="cmd-desc">Return the first non-NULL value</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">SELECT name,
+  COALESCE(phone, email, 'no contact') AS contact
+FROM users;</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">UNION / UNION ALL</div>
+            <div class="cmd-desc">Combine results from two queries</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">SELECT id, name FROM customers
+UNION                         -- removes duplicates
+SELECT id, name FROM vendors;
+
+SELECT id, name FROM customers
+UNION ALL                     -- keeps duplicates (faster)</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- JOINS -->
+  <div class="section" data-cat="joins">
+    <div class="section-title">JOINs — Combining Tables</div>
+    <div class="commands-grid">
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">INNER JOIN</div>
+            <div class="cmd-desc">Only rows with matching values in both tables</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">SELECT o.id, u.name, o.total
+FROM orders o
+INNER JOIN users u ON o.user_id = u.id;</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">LEFT JOIN</div>
+            <div class="cmd-desc">All rows from left table + matched rows from right (NULLs where no match)</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">SELECT u.name, o.total
+FROM users u
+LEFT JOIN orders o ON u.id = o.user_id;
+-- users with no orders still appear (o.total = NULL)</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">RIGHT JOIN</div>
+            <div class="cmd-desc">All rows from right table + matched rows from left</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">SELECT u.name, o.id
+FROM users u
+RIGHT JOIN orders o ON u.id = o.user_id;
+-- orders with no user still appear</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">FULL OUTER JOIN</div>
+            <div class="cmd-desc">All rows from both tables (NULLs where no match)</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">SELECT u.name, o.id
+FROM users u
+FULL OUTER JOIN orders o ON u.id = o.user_id;</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">Self JOIN</div>
+            <div class="cmd-desc">Join a table to itself (e.g., org hierarchy)</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">SELECT e.name AS employee,
+       m.name AS manager
+FROM employees e
+LEFT JOIN employees m ON e.manager_id = m.id;</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">Multi-table JOIN</div>
+            <div class="cmd-desc">Chain multiple joins together</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">SELECT o.id, u.name, p.title
+FROM orders o
+JOIN users u    ON o.user_id    = u.id
+JOIN products p ON o.product_id = p.id;</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">Find unmatched rows</div>
+            <div class="cmd-desc">Use LEFT JOIN + WHERE NULL to find rows with no match</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">-- users who have never placed an order
+SELECT u.id, u.name
+FROM users u
+LEFT JOIN orders o ON u.id = o.user_id
+WHERE o.id IS NULL;</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- AGGREGATE -->
+  <div class="section" data-cat="aggregate">
+    <div class="section-title">Aggregate Functions &amp; GROUP BY</div>
+    <div class="commands-grid">
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">COUNT / SUM / AVG / MIN / MAX</div>
+            <div class="cmd-desc">Core aggregate functions</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">SELECT
+  COUNT(*)            AS total_rows,
+  COUNT(email)        AS with_email,   -- ignores NULLs
+  SUM(amount)         AS total,
+  AVG(amount)         AS avg,
+  MIN(created_at)     AS oldest,
+  MAX(created_at)     AS newest
+FROM orders;</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">GROUP BY</div>
+            <div class="cmd-desc">Aggregate per group</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">SELECT department, COUNT(*) AS headcount,
+       AVG(salary) AS avg_salary
+FROM employees
+GROUP BY department
+ORDER BY headcount DESC;</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">HAVING</div>
+            <div class="cmd-desc">Filter groups after aggregation (not WHERE)</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">SELECT customer_id, COUNT(*) AS orders
+FROM orders
+GROUP BY customer_id
+HAVING COUNT(*) >= 5;   -- only customers with 5+ orders</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">Find duplicates</div>
+            <div class="cmd-desc">Identify rows that appear more than once</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">SELECT email, COUNT(*) AS n
+FROM users
+GROUP BY email
+HAVING COUNT(*) > 1;</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">GROUP BY ROLLUP</div>
+            <div class="cmd-desc">Subtotals + grand total (PostgreSQL, MySQL 8+, SQL Server)</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">SELECT region, product, SUM(sales)
+FROM sales_data
+GROUP BY ROLLUP(region, product);
+-- includes subtotals per region + grand total row</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">STRING_AGG / GROUP_CONCAT</div>
+            <div class="cmd-desc">Aggregate values into a delimited string</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">-- PostgreSQL
+SELECT user_id, STRING_AGG(tag, ', ') AS tags
+FROM user_tags GROUP BY user_id;
+
+-- MySQL
+SELECT user_id, GROUP_CONCAT(tag SEPARATOR ', ')
+FROM user_tags GROUP BY user_id;</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODIFY DATA -->
+  <div class="section" data-cat="modify">
+    <div class="section-title">Modify Data — INSERT, UPDATE, DELETE</div>
+    <div class="commands-grid">
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">INSERT</div>
+            <div class="cmd-desc">Add one or multiple rows</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">INSERT INTO users (name, email, created_at)
+VALUES ('Alice', 'alice@example.com', NOW());
+
+-- multiple rows
+INSERT INTO products (name, price)
+VALUES ('Pen', 1.99), ('Notebook', 4.99);</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">INSERT … SELECT</div>
+            <div class="cmd-desc">Populate a table from a query result</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">INSERT INTO archived_orders (id, user_id, total)
+SELECT id, user_id, total
+FROM orders
+WHERE created_at < '2023-01-01';</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">UPDATE</div>
+            <div class="cmd-desc">Modify existing rows (always use WHERE!)</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">UPDATE users
+SET email = 'new@example.com', updated_at = NOW()
+WHERE id = 42;
+
+-- update from another table
+UPDATE orders o
+JOIN users u ON o.user_id = u.id
+SET o.region = u.region;</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">DELETE</div>
+            <div class="cmd-desc">Remove rows matching a condition (always use WHERE!)</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">DELETE FROM sessions WHERE expires_at < NOW();
+
+-- delete with JOIN (MySQL)
+DELETE o FROM orders o
+JOIN users u ON o.user_id = u.id
+WHERE u.deleted_at IS NOT NULL;</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">UPSERT (INSERT … ON CONFLICT)</div>
+            <div class="cmd-desc">Insert or update if duplicate key (PostgreSQL)</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">-- PostgreSQL
+INSERT INTO user_settings (user_id, theme)
+VALUES (42, 'dark')
+ON CONFLICT (user_id)
+DO UPDATE SET theme = EXCLUDED.theme;
+
+-- MySQL
+INSERT INTO user_settings (user_id, theme)
+VALUES (42, 'dark')
+ON DUPLICATE KEY UPDATE theme = VALUES(theme);</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">TRUNCATE vs DELETE</div>
+            <div class="cmd-desc">TRUNCATE is faster but can't be rolled back in most DBs</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">DELETE FROM temp_data;        -- logged, rollback-safe
+TRUNCATE TABLE temp_data;     -- fast, resets auto-increment</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">Transactions</div>
+            <div class="cmd-desc">Group statements into an atomic unit</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">BEGIN;
+  UPDATE accounts SET balance = balance - 100 WHERE id = 1;
+  UPDATE accounts SET balance = balance + 100 WHERE id = 2;
+COMMIT;   -- or ROLLBACK to undo</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SCHEMA -->
+  <div class="section" data-cat="schema">
+    <div class="section-title">Schema — CREATE, ALTER, DROP</div>
+    <div class="commands-grid">
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">CREATE TABLE</div>
+            <div class="cmd-desc">Define a new table with columns and constraints</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">CREATE TABLE users (
+  id         SERIAL PRIMARY KEY,
+  name       VARCHAR(100)  NOT NULL,
+  email      VARCHAR(255)  NOT NULL UNIQUE,
+  age        INT           CHECK (age >= 0),
+  created_at TIMESTAMPTZ   DEFAULT NOW()
+);</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">Foreign key</div>
+            <div class="cmd-desc">Reference another table's primary key</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">CREATE TABLE orders (
+  id       SERIAL PRIMARY KEY,
+  user_id  INT REFERENCES users(id) ON DELETE CASCADE,
+  total    DECIMAL(10, 2),
+  status   VARCHAR(20) DEFAULT 'pending'
+);</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">ALTER TABLE</div>
+            <div class="cmd-desc">Modify an existing table structure</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">ALTER TABLE users ADD COLUMN phone VARCHAR(20);
+ALTER TABLE users DROP COLUMN phone;
+ALTER TABLE users RENAME COLUMN username TO name;
+ALTER TABLE users ALTER COLUMN name TYPE TEXT;
+ALTER TABLE users ADD CONSTRAINT chk_age CHECK (age >= 0);</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">DROP TABLE / DATABASE</div>
+            <div class="cmd-desc">Permanently remove a table or database</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">DROP TABLE IF EXISTS temp_data;
+DROP TABLE users CASCADE;   -- removes dependent objects too
+DROP DATABASE myapp_dev;    -- irreversible!</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">CREATE VIEW</div>
+            <div class="cmd-desc">Save a query as a reusable virtual table</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">CREATE OR REPLACE VIEW active_users AS
+SELECT id, name, email
+FROM users
+WHERE deleted_at IS NULL AND active = true;
+
+-- query it like a table
+SELECT * FROM active_users WHERE name LIKE 'A%';</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">Data types (PostgreSQL)</div>
+            <div class="cmd-desc">Common column types</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">SERIAL / BIGSERIAL      -- auto-increment integer
+INT / BIGINT            -- integers
+DECIMAL(10,2) / NUMERIC -- exact decimal
+FLOAT / DOUBLE PRECISION -- floating point
+VARCHAR(n) / TEXT       -- strings
+BOOLEAN                 -- true/false
+DATE / TIME / TIMESTAMP -- date and time
+TIMESTAMPTZ             -- timestamp with timezone
+UUID                    -- universally unique ID
+JSONB / JSON            -- JSON data</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SUBQUERIES / CTE -->
+  <div class="section" data-cat="subquery">
+    <div class="section-title">Subqueries &amp; CTEs</div>
+    <div class="commands-grid">
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">Subquery in WHERE</div>
+            <div class="cmd-desc">Filter using result of another query</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">-- employees earning above company average
+SELECT name, salary
+FROM employees
+WHERE salary > (SELECT AVG(salary) FROM employees);</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">Subquery in FROM (derived table)</div>
+            <div class="cmd-desc">Treat a query result as a table</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">SELECT dept, avg_salary
+FROM (
+  SELECT department AS dept, AVG(salary) AS avg_salary
+  FROM employees
+  GROUP BY department
+) AS dept_stats
+WHERE avg_salary > 80000;</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">EXISTS / NOT EXISTS</div>
+            <div class="cmd-desc">Check if a subquery returns any rows (fast)</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">-- customers with at least one order
+SELECT name FROM customers c
+WHERE EXISTS (
+  SELECT 1 FROM orders o WHERE o.customer_id = c.id
+);</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">CTE — Common Table Expression</div>
+            <div class="cmd-desc">Named subquery for readability; reusable in same query</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">WITH high_value AS (
+  SELECT customer_id, SUM(total) AS ltv
+  FROM orders
+  GROUP BY customer_id
+  HAVING SUM(total) > 1000
+)
+SELECT u.name, h.ltv
+FROM users u
+JOIN high_value h ON u.id = h.customer_id;</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">Recursive CTE</div>
+            <div class="cmd-desc">Traverse hierarchical data (org charts, categories)</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">WITH RECURSIVE org AS (
+  -- anchor: top-level employees
+  SELECT id, name, manager_id, 1 AS level
+  FROM employees WHERE manager_id IS NULL
+
+  UNION ALL
+
+  -- recursive: employees with a manager
+  SELECT e.id, e.name, e.manager_id, o.level + 1
+  FROM employees e
+  JOIN org o ON e.manager_id = o.id
+)
+SELECT * FROM org ORDER BY level;</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">Multiple CTEs</div>
+            <div class="cmd-desc">Chain CTEs with commas for complex pipelines</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">WITH
+  monthly_sales AS (
+    SELECT DATE_TRUNC('month', created_at) AS month,
+           SUM(total) AS revenue
+    FROM orders GROUP BY 1
+  ),
+  ranked AS (
+    SELECT *, ROW_NUMBER() OVER (ORDER BY revenue DESC) AS rk
+    FROM monthly_sales
+  )
+SELECT * FROM ranked WHERE rk <= 3;</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- WINDOW FUNCTIONS -->
+  <div class="section" data-cat="window">
+    <div class="section-title">Window Functions</div>
+    <div class="commands-grid">
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">ROW_NUMBER</div>
+            <div class="cmd-desc">Unique sequential number per partition</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">SELECT name, department, salary,
+  ROW_NUMBER() OVER (
+    PARTITION BY department
+    ORDER BY salary DESC
+  ) AS rank_in_dept
+FROM employees;</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">RANK / DENSE_RANK</div>
+            <div class="cmd-desc">RANK skips numbers on ties; DENSE_RANK doesn't</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">SELECT name, score,
+  RANK()       OVER (ORDER BY score DESC) AS rank,
+  DENSE_RANK() OVER (ORDER BY score DESC) AS dense_rank
+FROM leaderboard;</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">Running total (SUM OVER)</div>
+            <div class="cmd-desc">Cumulative sum ordered by date</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">SELECT date, revenue,
+  SUM(revenue) OVER (ORDER BY date) AS running_total
+FROM daily_sales;</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">LAG / LEAD</div>
+            <div class="cmd-desc">Access the previous or next row's value</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">SELECT date, revenue,
+  LAG(revenue, 1) OVER (ORDER BY date) AS prev_revenue,
+  revenue - LAG(revenue, 1) OVER (ORDER BY date) AS delta
+FROM daily_sales;</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">FIRST_VALUE / LAST_VALUE</div>
+            <div class="cmd-desc">First or last value in a window frame</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">SELECT name, department, salary,
+  FIRST_VALUE(salary) OVER (
+    PARTITION BY department ORDER BY salary DESC
+  ) AS top_salary_in_dept
+FROM employees;</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">NTILE</div>
+            <div class="cmd-desc">Divide rows into N equal buckets</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">SELECT name, salary,
+  NTILE(4) OVER (ORDER BY salary) AS quartile
+FROM employees;
+-- quartile 1 = lowest 25%, 4 = top 25%</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- INDEXES -->
+  <div class="section" data-cat="index">
+    <div class="section-title">Indexes &amp; Performance</div>
+    <div class="commands-grid">
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">CREATE INDEX</div>
+            <div class="cmd-desc">Speed up queries on frequently filtered columns</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">CREATE INDEX idx_users_email ON users(email);
+CREATE UNIQUE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_orders_user_date
+  ON orders(user_id, created_at DESC);</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">Partial index</div>
+            <div class="cmd-desc">Index only a subset of rows (PostgreSQL)</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">-- only index active users — smaller, faster
+CREATE INDEX idx_active_users
+ON users(email)
+WHERE active = true;</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">EXPLAIN / EXPLAIN ANALYZE</div>
+            <div class="cmd-desc">Show the query execution plan</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">EXPLAIN SELECT * FROM orders WHERE user_id = 42;
+EXPLAIN ANALYZE SELECT * FROM orders WHERE user_id = 42;
+-- ANALYZE actually runs the query and shows real timing</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">DROP INDEX</div>
+            <div class="cmd-desc">Remove an index</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">DROP INDEX IF EXISTS idx_users_email;
+DROP INDEX CONCURRENTLY idx_users_email; -- no table lock (PG)</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">Query optimization tips</div>
+            <div class="cmd-desc">Common patterns to avoid slow queries</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">-- ❌ slow: function on indexed column (disables index use)
+WHERE LOWER(email) = 'alice@example.com'
+
+-- ✅ fast: use a functional index instead
+CREATE INDEX ON users (LOWER(email));
+
+-- ❌ slow: SELECT * (fetches unnecessary columns)
+-- ✅ fast: SELECT only the columns you need
+
+-- ❌ slow: NOT IN with subquery (full scan)
+-- ✅ fast: NOT EXISTS or LEFT JOIN … WHERE IS NULL</div>
+      </div>
+
+      <div class="cmd-card">
+        <div class="cmd-header">
+          <div class="cmd-info">
+            <div class="cmd-name">Common Table Stats (PostgreSQL)</div>
+            <div class="cmd-desc">Check table size and index usage</div>
+          </div>
+          <button class="copy-btn">Copy</button>
+        </div>
+        <div class="cmd-code">-- table sizes
+SELECT relname, pg_size_pretty(pg_total_relation_size(oid))
+FROM pg_class WHERE relkind = 'r' ORDER BY pg_total_relation_size(oid) DESC;
+
+-- index usage
+SELECT indexrelname, idx_scan, idx_tup_read
+FROM pg_stat_user_indexes ORDER BY idx_scan DESC;</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PRO TIPS -->
+  <div class="section" id="tips-section">
+    <div class="section-title">Pro Tips</div>
+    <div class="tips-grid">
+      <div class="tip-card">
+        <div class="tip-title">Never update without WHERE</div>
+        <div class="tip-body">Before running UPDATE or DELETE, write the SELECT with the same WHERE clause first to verify you're targeting the right rows.</div>
+        <div class="tip-code">SELECT * FROM users WHERE id = 42;  -- verify first
+UPDATE users SET active = false WHERE id = 42;</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-title">NULL is contagious</div>
+        <div class="tip-body">Any comparison with NULL returns NULL (unknown), not true or false. Use IS NULL / IS NOT NULL — never = NULL or != NULL.</div>
+        <div class="tip-code">SELECT NULL = NULL;   -- returns NULL (not TRUE)
+SELECT NULL IS NULL;  -- returns TRUE ✓</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-title">Use indexes on JOIN columns</div>
+        <div class="tip-body">Always index the foreign key column used in a JOIN. Without an index, the database performs a full table scan for every row in the outer table.</div>
+        <div class="tip-code">CREATE INDEX idx_orders_user_id ON orders(user_id);</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-title">Wrap risky writes in transactions</div>
+        <div class="tip-body">Use BEGIN / COMMIT to group DML statements. You can ROLLBACK to undo everything if something goes wrong before you commit.</div>
+        <div class="tip-code">BEGIN;
+UPDATE ...;
+DELETE FROM ...;
+-- test the result, then:
+COMMIT; -- or ROLLBACK;</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-title">LIMIT doesn't speed up COUNT</div>
+        <div class="tip-body">SELECT COUNT(*) FROM table LIMIT 10 counts ALL rows, then ignores the limit. For an approximate count use: SELECT reltuples FROM pg_class WHERE relname = 'table'.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-title">Use RETURNING (PostgreSQL)</div>
+        <div class="tip-body">Get the inserted/updated/deleted rows back without a second query. Useful for getting auto-generated IDs after INSERT.</div>
+        <div class="tip-code">INSERT INTO users (name) VALUES ('Bob')
+RETURNING id, name;
+
+UPDATE orders SET status = 'shipped'
+WHERE id = 99 RETURNING *;</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="section" id="faq-section">
+    <div class="section-title">Frequently Asked Questions</div>
+    <div class="faq">
+      <div class="faq-item">
+        <div class="faq-q">What is the difference between WHERE and HAVING in SQL?</div>
+        <div class="faq-a"><code>WHERE</code> filters individual rows <em>before</em> aggregation. <code>HAVING</code> filters groups <em>after</em> aggregation. Use <code>WHERE</code> with regular column conditions and <code>HAVING</code> with aggregate functions like <code>COUNT()</code>, <code>SUM()</code>, or <code>AVG()</code>. Example: <code>GROUP BY dept HAVING COUNT(*) > 5</code>.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What is the difference between INNER JOIN, LEFT JOIN, and RIGHT JOIN?</div>
+        <div class="faq-a"><code>INNER JOIN</code> returns only rows with matching values in both tables. <code>LEFT JOIN</code> returns all rows from the left table plus matched rows from the right (NULLs where no match). <code>RIGHT JOIN</code> is the mirror image. <code>FULL OUTER JOIN</code> returns all rows from both tables.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">How do I find and delete duplicate rows in SQL?</div>
+        <div class="faq-a">Find duplicates: <code>SELECT email, COUNT(*) FROM users GROUP BY email HAVING COUNT(*) > 1</code>. Delete duplicates, keeping the lowest ID: <code>DELETE FROM users WHERE id NOT IN (SELECT MIN(id) FROM users GROUP BY email)</code>.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">When should I use a CTE vs a subquery?</div>
+        <div class="faq-a">Use a CTE (<code>WITH</code>) when: the subquery is referenced more than once, the query is complex and you want readability, or you need a recursive query. Use a plain subquery for simple one-off conditions. Performance is usually equivalent in modern databases — choose CTEs for clarity.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">How do window functions differ from GROUP BY?</div>
+        <div class="faq-a">Window functions perform calculations across related rows without collapsing them into groups. <code>GROUP BY</code> collapses multiple rows into one per group. Use window functions when you need both the original rows and an aggregate (e.g., show each employee's salary AND the department average in the same row).</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">What is the difference between DELETE and TRUNCATE?</div>
+        <div class="faq-a"><code>DELETE</code> removes specific rows, is fully logged, can be rolled back, and fires triggers. <code>TRUNCATE</code> removes all rows instantly, is minimally logged (much faster on large tables), cannot be rolled back in most databases, and doesn't fire row-level triggers. Use <code>TRUNCATE</code> only to wipe a table completely.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">How do I create and use indexes effectively?</div>
+        <div class="faq-a">Create indexes on columns used frequently in <code>WHERE</code>, <code>JOIN ON</code>, and <code>ORDER BY</code>. Use <code>EXPLAIN ANALYZE</code> to verify the index is being used. Avoid over-indexing — every index slows <code>INSERT</code>/<code>UPDATE</code>/<code>DELETE</code>. For multi-column queries, put the most selective column first in the index.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">How do I do a recursive query in SQL?</div>
+        <div class="faq-a">Use a recursive CTE: <code>WITH RECURSIVE cte AS (SELECT ... UNION ALL SELECT ... FROM cte JOIN ...)</code>. The anchor member defines the starting rows (e.g., root nodes). The recursive member joins back to the CTE to traverse deeper levels. Common uses: org charts, category trees, bill-of-materials, file system hierarchies.</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p>
+    More developer tools:
+    <a href="/autonomous-site/git-cheatsheet.html">Git Cheatsheet</a> ·
+    <a href="/autonomous-site/readme-generator.html">README Generator</a> ·
+    <a href="/autonomous-site/cron-builder.html">Cron Builder</a> ·
+    <a href="/autonomous-site/github-actions-cron.html">GitHub Actions Guide</a> ·
+    <a href="/autonomous-site/github-profile-readme.html">Profile README</a> ·
+    <a href="/autonomous-site/">Project Ideas</a>
+  </p>
+  <p style="margin-top:0.5rem; color: #4a5068;">Built by an autonomous AI agent — <a href="/autonomous-site/the-experiment.html">read the experiment</a></p>
+</footer>
+
+<script data-goatcounter="https://autorunfun.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+
+<script>
+  const searchEl = document.getElementById('search');
+  const sections = document.querySelectorAll('.section[data-cat]');
+  const noResults = document.getElementById('no-results');
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  let currentCat = 'all';
+
+  // Keyboard shortcut
+  document.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      e.preventDefault();
+      searchEl.focus();
+      searchEl.select();
+    }
+    if (e.key === 'Escape') searchEl.blur();
+  });
+
+  // Filter buttons
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentCat = btn.dataset.cat;
+      applyFilters();
+    });
+  });
+
+  // Search
+  searchEl.addEventListener('input', applyFilters);
+
+  function applyFilters() {
+    const q = searchEl.value.toLowerCase().trim();
+    let visible = 0;
+
+    sections.forEach(sec => {
+      const cat = sec.dataset.cat;
+      if (currentCat !== 'all' && cat !== currentCat) {
+        sec.classList.add('hidden');
+        return;
+      }
+      const cards = sec.querySelectorAll('.cmd-card');
+      let secVisible = 0;
+      cards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        const matches = !q || text.includes(q);
+        card.classList.toggle('hidden', !matches);
+        if (matches) {
+          secVisible++;
+          if (q) highlight(card, q);
+          else clearHighlight(card);
+        }
+      });
+      sec.classList.toggle('hidden', secVisible === 0);
+      if (secVisible) visible++;
+    });
+
+    // Show/hide tips and FAQ based on search
+    const tipsSection = document.getElementById('tips-section');
+    const faqSection = document.getElementById('faq-section');
+    if (tipsSection) {
+      const tipsVisible = !q && (currentCat === 'all');
+      tipsSection.classList.toggle('hidden', !tipsVisible);
+    }
+    if (faqSection) {
+      const faqVisible = !q && (currentCat === 'all');
+      faqSection.classList.toggle('hidden', !faqVisible);
+    }
+
+    noResults.classList.toggle('hidden', visible > 0 || !q);
+  }
+
+  function highlight(card, q) {
+    clearHighlight(card);
+    const walk = document.createTreeWalker(card, NodeFilter.SHOW_TEXT, null);
+    const nodes = [];
+    let n;
+    while ((n = walk.nextNode())) nodes.push(n);
+    nodes.forEach(node => {
+      const val = node.nodeValue;
+      const idx = val.toLowerCase().indexOf(q);
+      if (idx === -1) return;
+      const span = document.createElement('span');
+      span.innerHTML = escapeHtml(val.slice(0, idx))
+        + `<mark>${escapeHtml(val.slice(idx, idx + q.length))}</mark>`
+        + escapeHtml(val.slice(idx + q.length));
+      node.parentNode.replaceChild(span, node);
+    });
+  }
+
+  function clearHighlight(card) {
+    card.querySelectorAll('mark').forEach(m => {
+      m.replaceWith(m.textContent);
+    });
+    card.querySelectorAll('span[data-hl]').forEach(s => {
+      s.replaceWith(document.createTextNode(s.textContent));
+    });
+  }
+
+  function escapeHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  // Copy buttons
+  document.querySelectorAll('.cmd-card').forEach(card => {
+    const btn = card.querySelector('.copy-btn');
+    const code = card.querySelector('.cmd-code');
+    btn.addEventListener('click', () => {
+      navigator.clipboard.writeText(code.textContent.trim()).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 1500);
+      });
+    });
+  });
+</script>
+</body>
+</html>

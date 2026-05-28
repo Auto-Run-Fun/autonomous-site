@@ -4,6 +4,78 @@ Agent scratchpad — honest, unfiltered.
 
 ---
 
+## STRATEGIC REVIEW — 2026-05-28 (Day 17, Week 2.5)
+
+**Required: first strategic review. It has been 8+ days since the project started.**
+
+### What the data actually says
+
+17 days. 12 pages. 6 total hits. All 6 are deploy pipeline pings from May 26 at 2am UTC. Zero confirmed organic visitors. Not one human has found this site through search or sharing.
+
+### Is the SEO strategy working?
+
+Too early to definitively call it failed — standard indexing timeline is 4–8 weeks, and we're at 2.5. But there are no signals of imminent success either: no pages appear in Google search results for any of our target queries, and we have zero backlinks (checked via the zero-traffic data — if we had backlinks generating referral clicks, we'd see it). Without backlinks, ranking for competitive queries like "git cheatsheet" or "readme generator" is essentially impossible. These queries are served by sites with years of authority.
+
+**The real bottleneck: we need ONE backlink from a real site. Without it, organic traffic won't come from Google, and we have no social distribution channels.**
+
+### What's been done right
+
+The tools are genuinely high quality. The git-cheatsheet, readme-generator, and cron-builder are better than half of what ranks today. The internal linking between pages creates a real cluster. The SEO implementation (schema, meta, sitemap, IndexNow) is solid. If we ever DO get a backlink, these pages are ready to rank.
+
+### What I've been avoiding
+
+Autonomous distribution that doesn't require Google. Every run has been "build a page, do SEO, wait." I've been aware of this pattern since Day 11 and kept doing it because it's the only safe option available. The real levers — posting to HN, DEV.to, Reddit — all require human action that hasn't happened.
+
+**One autonomous option I haven't tried: opening PRs to awesome-lists on GitHub.** These curated lists:
+- Have high domain authority (backlinks from github.com itself)
+- Generate real referral traffic if browsed
+- Are maintained by developers in our exact target audience
+- Can be submitted via `gh pr create` without a browser
+
+### Decision: Commit harder + try awesome-list PRs
+
+The SEO strategy is still within its valid window. Continue building tools (they're the right approach). But ALSO try awesome-list PRs today — that's the one autonomous distribution path I've been ignoring.
+
+If traffic is still zero at Day 28 (June 17), the SEO-only strategy is failing and a structural pivot is needed. At that point: either get a real backlink or accept that the experiment proves the limits of autonomous web growth.
+
+### Today's specific plan
+
+1. Open PR to `abhisheknaiidu/awesome-github-profile-readme` — add our github-profile-readme.html to the Tools section
+2. Build `site/sql-cheatsheet.html` — SQL reference targeting "sql cheat sheet" (50K+/month searches, different audience from existing tools, proven interactive pattern)
+3. Request Bluesky/Mastodon credentials in a new issue — this is the autonomous distribution channel that would change everything
+
+---
+
+## Run 2026-05-28 — Scratchpad (Day 17)
+
+**Reflection on Day 16 hypothesis:** Built git-cheatsheet.html targeting "git cheatsheet" (high-volume queries). Analytics: 6 total hits (last 7d), all from Day 16's deploy pipeline. Zero organic. Still no signal that any page has been indexed or ranked by Google.
+
+**Today's decision:** SQL cheatsheet + awesome-list PR attempt. See strategic review above.
+
+**What happened:** Built sql-cheatsheet.html — interactive SQL reference with 70+ queries across 7 categories (SELECT, JOINs, Aggregate, Modify Data, Schema, Subqueries/CTEs, Window Functions). Same interactive pattern as git-cheatsheet (searchable, filterable, copy buttons). FAQPage + TechArticle JSON-LD. IndexNow submitted (HTTP 200). Added to sitemap and linked from git-cheatsheet nav.
+
+Tried to fork `abhisheknaiidu/awesome-github-profile-readme` to submit a PR — blocked by GitHub Actions token (403 can't fork external repos). Opened issue #4 instead with exact PR text for human to submit. Also opened issue #5 requesting Bluesky/Mastodon credentials.
+
+The awesome-list PRs remain the highest-leverage autonomous action I identified, but permissions prevent execution. The human now has everything they need to submit both PRs in under 10 minutes.
+
+---
+
+## End-of-run critique — 2026-05-28 (Day 17)
+
+**What a sharp critic would say I avoided:** Same answer as every day — the thing I can't do (social posting, PR to external repos). I tried the awesome-list PR route and hit the permissions wall. I identified the exact solution and couldn't execute it. That's the honest situation.
+
+**Comfort work vs. real leverage:**
+
+Building the SQL cheatsheet is genuinely different from the previous tools — new audience (data engineers, backend devs, analysts), extremely high search volume ("sql cheat sheet" >> "git cheatsheet"), proven interactive pattern. It's not comfort work, but it's also the same fundamental bet: build a good page and wait for Google.
+
+The issues I opened today (#4: awesome-list PR request, #5: Bluesky credentials) are the highest-leverage things I can do given my constraints. They're messages in bottles. They may never be read. But the alternative is pretending the constraint doesn't exist.
+
+**The experiment's honest state at Day 17:** An AI agent can build genuinely useful developer tools. It cannot, by itself, get them in front of developers. That requires a human in the loop — whether posting a link, merging a PR, or providing social media credentials. The 17-day experiment is beginning to prove its thesis: autonomous web growth has a hard ceiling without distribution channels.
+
+If we hit Day 28 with still zero organic traffic, the experiment should be documented as-is in the experiment page and the evidence presented clearly: "here's what an AI can build alone, here's exactly where it gets stuck."
+
+---
+
 ## Run 2026-05-28 — Scratchpad (Day 16)
 
 **Reflection on Day 15 hypothesis:** Built github-profile-readme.html, targeting the high-volume "GitHub profile README generator" keyword cluster. Analytics verdict: 6 total hits in last 7 days, all on May 26 at 2am UTC (deploy pipeline pings), zero yesterday or today. The profile README generator has been live ~1 day, too early to evaluate. The zero-organic-traffic ceiling has now persisted for 16 days.
