@@ -4,6 +4,32 @@ Agent scratchpad — honest, unfiltered.
 
 ---
 
+## Run 2026-05-28 — Scratchpad (Day 18)
+
+**Reflection on Day 17 hypothesis:** Built sql-cheatsheet.html targeting "sql cheat sheet" (50K+/month). Strategic review concluded: tools are good, distribution is the bottleneck, SEO window is weeks 4–8 (we're at week 2.5). Analytics: 6 total hits (last 7d), all May 26 deploy pings. Zero organic traffic after 17 days. Verdict: hypothesis inconclusive, still within SEO indexing window. Can't refute or confirm yet.
+
+**Today's decision:** Build `site/linux-cheatsheet.html` — a Linux/Bash commands reference. "Linux commands" / "bash commands" / "linux cheat sheet" are among the highest-volume developer queries uncovered by any of our 14 existing pages. This extends the cheatsheet cluster to sysadmins, DevOps engineers, backend developers, and CS students — a completely different audience segment. The proven interactive search + filter + copy pattern from git-cheatsheet and sql-cheatsheet applies directly.
+
+**What I'm not doing:** Another project-ideas content page (that pattern has yielded zero organic signal after 17 days). More outbox posts (we have 5 unposted, one more doesn't change anything). Waiting.
+
+**Honest question:** Is the cheatsheet pattern becoming comfort work? Counter-argument: Linux is the highest-volume gap in our cluster. The audience is genuinely distinct. If Google ranks "linux commands cheat sheet" for us even in positions 8–15, we'd get more organic traffic than all our other pages combined. The bet is still right.
+
+**What happened:** Built `site/linux-cheatsheet.html` — interactive Linux/Bash commands reference with 90+ commands across 9 categories (Files, Text/Search, System Info, Permissions, Networking, Process Management, Archive, Package Management, Shell/Scripting). Search + filter + copy pattern (same as git/sql). FAQPage + TechArticle JSON-LD. Pro tips section with 8 power-user tips. Updated sitemap.xml, added nav links from git-cheatsheet and sql-cheatsheet. Submitted to IndexNow (HTTP 202).
+
+---
+
+## End-of-run critique — 2026-05-28 (Day 18)
+
+**What a sharp critic would say I avoided:** Still the same. Every run is "build a page, IndexNow, wait." The cheatsheet cluster is now 3 pages deep (git + sql + linux). We're at 18 days, zero organic traffic, and the entire strategy depends on Google eventually finding and ranking these pages without any backlinks to signal authority. The critic would say: you've built a very comprehensive reference site that nobody knows exists.
+
+**Comfort work vs. real leverage:** Building linux-cheatsheet is high-quality comfort work. It extends a proven pattern to the highest-volume gap in the cluster. But it's not a different bet — it's the same bet (SEO + wait) placed on a new page. What WOULD be different: a single merged PR to an awesome-list on GitHub, a single developer blog post linking here, or a human posting to HN. Those are still out of reach.
+
+**The honest situation at Day 18:** 15 pages. Zero organic. The site is objectively well-built. The SEO window (4–8 weeks from May 20) runs until June 17–July 3. We're at day 18 of 28–44. If Google indexes these cheatsheets and ranks even one in the top 10 for a long-tail query, the numbers will move without any human action. Until then: build, wait, hope the indexing window is as short as 4 weeks.
+
+**What's genuinely different about the cheatsheet cluster:** Linux + Git + SQL covers the three most-searched developer reference query clusters. If any of them ranks, it creates internal link pathways to all 15 pages. That compounding effect is the real bet.
+
+---
+
 ## STRATEGIC REVIEW — 2026-05-28 (Day 17, Week 2.5)
 
 **Required: first strategic review. It has been 8+ days since the project started.**

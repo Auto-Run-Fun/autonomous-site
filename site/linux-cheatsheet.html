@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linux Commands Cheat Sheet — Essential Bash Reference for Developers</title>
+  <meta name="description" content="Interactive Linux and Bash commands cheat sheet with 90+ commands. Search, filter by category, and copy commands instantly. Covers files, text processing, networking, permissions, processes, and more.">
+  <link rel="canonical" href="https://axgura.github.io/autonomous-site/linux-cheatsheet.html">
+  <meta property="og:title" content="Linux Commands Cheat Sheet — Essential Bash Reference">
+  <meta property="og:description" content="Interactive Linux and Bash commands cheat sheet with 90+ commands. Search, filter, and copy. Covers files, text, networking, permissions, and system administration.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://axgura.github.io/autonomous-site/linux-cheatsheet.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Linux Commands Cheat Sheet — Essential Bash Reference">
+  <meta name="twitter:description" content="Interactive Linux and Bash commands cheat sheet with 90+ commands. Search, filter, and copy. Covers files, text, networking, permissions, and system administration.">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "Linux Commands Cheat Sheet — Essential Bash Reference for Developers",
+    "description": "Interactive Linux and Bash commands cheat sheet with 90+ essential commands organized by category with search, filter, and one-click copy.",
+    "url": "https://axgura.github.io/autonomous-site/linux-cheatsheet.html",
+    "author": {"@type": "Organization", "name": "DevTools Hub"},
+    "keywords": "linux commands, bash commands, linux cheat sheet, bash cheat sheet, terminal commands, linux reference, shell commands"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What are the most important Linux commands to know?",
+        "acceptedAnswer": {"@type": "Answer", "text": "The most important Linux commands are: ls (list files), cd (change directory), pwd (print working directory), cp (copy), mv (move/rename), rm (remove), mkdir (make directory), grep (search text), chmod (change permissions), ps (list processes), kill (stop process), and ssh (remote login). These 12 commands cover 80% of everyday terminal usage."}
+      },
+      {
+        "@type": "Question",
+        "name": "How do I find a file in Linux?",
+        "acceptedAnswer": {"@type": "Answer", "text": "Use 'find / -name filename' to search the entire filesystem, or 'find . -name filename' to search from the current directory. For faster searches, use 'locate filename' (requires the locate database to be updated with 'updatedb'). To find files by content, use 'grep -r \"search term\" /path/to/search'."}
+      },
+      {
+        "@type": "Question",
+        "name": "How do I check disk space in Linux?",
+        "acceptedAnswer": {"@type": "Answer", "text": "Use 'df -h' to see disk space usage for all mounted filesystems in human-readable format. Use 'du -sh /path' to see the total size of a specific directory. Use 'du -sh *' inside a directory to see the sizes of all items in that directory."}
+      },
+      {
+        "@type": "Question",
+        "name": "How do I kill a process in Linux?",
+        "acceptedAnswer": {"@type": "Answer", "text": "First find the process ID with 'ps aux | grep processname' or 'pgrep processname'. Then use 'kill PID' to send SIGTERM (graceful stop) or 'kill -9 PID' to force kill. You can also use 'pkill processname' to kill by name, or 'killall processname' to kill all processes with that name."}
+      },
+      {
+        "@type": "Question",
+        "name": "How do I change file permissions in Linux?",
+        "acceptedAnswer": {"@type": "Answer", "text": "Use chmod to change permissions. Common patterns: 'chmod 755 file' (owner: rwx, group: rx, others: rx), 'chmod 644 file' (owner: rw, group: r, others: r), 'chmod +x file' (add execute for all), 'chmod -R 755 dir' (recursive). Permissions are read(4), write(2), execute(1) added together for owner/group/others."}
+      },
+      {
+        "@type": "Question",
+        "name": "How do I search for text inside files in Linux?",
+        "acceptedAnswer": {"@type": "Answer", "text": "Use grep: 'grep \"pattern\" file.txt' to search in one file, 'grep -r \"pattern\" /directory' to search recursively, 'grep -i \"pattern\" file' for case-insensitive search, 'grep -n \"pattern\" file' to show line numbers, 'grep -v \"pattern\" file' to show lines NOT matching. Combine with pipes: 'cat file | grep \"pattern\"'."}
+      },
+      {
+        "@type": "Question",
+        "name": "How do I use pipes and redirects in Linux?",
+        "acceptedAnswer": {"@type": "Answer", "text": "Pipes (|) send output of one command to input of another: 'ls -la | grep .txt | wc -l' counts .txt files. Redirects: '>' overwrites a file (echo 'hello' > file.txt), '>>' appends to a file, '<' reads from a file. '2>' redirects stderr, '2>&1' combines stderr with stdout. Example: 'command > output.txt 2>&1' saves all output including errors."}
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between apt, yum, and dnf?",
+        "acceptedAnswer": {"@type": "Answer", "text": "These are package managers for different Linux distributions. apt (and apt-get) is used on Debian/Ubuntu systems. yum is used on older RHEL/CentOS systems. dnf is the modern replacement for yum, used on Fedora, RHEL 8+, and CentOS 8+. For macOS, use brew (Homebrew). The commands are similar: install, update, remove — just the package manager name differs."}
+      }
+    ]
+  }
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0f1117;
+      color: #e2e8f0;
+      min-height: 100vh;
+    }
+    header {
+      background: linear-gradient(135deg, #1a1f2e 0%, #0f1117 100%);
+      border-bottom: 1px solid #2d3748;
+      padding: 1.5rem 1rem;
+      text-align: center;
+    }
+    header h1 {
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 700;
+      color: #e2e8f0;
+      margin-bottom: 0.5rem;
+    }
+    header h1 span { color: #48bb78; }
+    header p {
+      color: #a0aec0;
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+    }
+    nav {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 0.5rem;
+    }
+    nav a {
+      color: #63b3ed;
+      text-decoration: none;
+      font-size: 0.8rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      border: 1px solid #2d4a6e;
+      transition: background 0.2s;
+    }
+    nav a:hover { background: #1a3a5c; }
+    .controls {
+      background: #1a1f2e;
+      border-bottom: 1px solid #2d3748;
+      padding: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .controls-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    #search {
+      flex: 1;
+      min-width: 200px;
+      padding: 0.6rem 0.75rem 0.6rem 2.2rem;
+      background: #0f1117;
+      border: 1px solid #2d3748;
+      border-radius: 6px;
+      color: #e2e8f0;
+      font-size: 0.9rem;
+      outline: none;
+    }
+    #search:focus { border-color: #48bb78; }
+    .search-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 200px;
+    }
+    .search-wrap::before {
+      content: '⌕';
+      position: absolute;
+      left: 0.6rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #718096;
+      font-size: 1.1rem;
+    }
+    .filters {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      padding: 0.4rem 0.75rem;
+      border-radius: 20px;
+      border: 1px solid #2d3748;
+      background: transparent;
+      color: #a0aec0;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover { border-color: #48bb78; color: #48bb78; }
+    .filter-btn.active { background: #48bb78; border-color: #48bb78; color: #0f1117; font-weight: 600; }
+    .stats {
+      color: #718096;
+      font-size: 0.8rem;
+      white-space: nowrap;
+    }
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem;
+    }
+    .category {
+      margin-bottom: 2rem;
+    }
+    .category-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #2d3748;
+    }
+    .category-icon { font-size: 1.3rem; }
+    .category-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #e2e8f0;
+    }
+    .category-count {
+      font-size: 0.75rem;
+      color: #718096;
+      background: #1a1f2e;
+      padding: 0.1rem 0.5rem;
+      border-radius: 10px;
+      border: 1px solid #2d3748;
+    }
+    .commands-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 0.6rem;
+    }
+    .cmd-card {
+      background: #1a1f2e;
+      border: 1px solid #2d3748;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      transition: border-color 0.2s;
+    }
+    .cmd-card:hover { border-color: #4a5568; }
+    .cmd-card.hidden { display: none; }
+    .cmd-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.5rem;
+      margin-bottom: 0.4rem;
+    }
+    .cmd-code {
+      font-family: 'Fira Code', 'Cascadia Code', Consolas, monospace;
+      font-size: 0.88rem;
+      color: #48bb78;
+      background: #0f1117;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      flex: 1;
+      word-break: break-all;
+    }
+    .cmd-code mark {
+      background: #2d4a3a;
+      color: #68d391;
+      border-radius: 2px;
+    }
+    .copy-btn {
+      background: none;
+      border: 1px solid #2d3748;
+      color: #718096;
+      border-radius: 4px;
+      padding: 0.2rem 0.4rem;
+      font-size: 0.7rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .copy-btn:hover { border-color: #48bb78; color: #48bb78; }
+    .copy-btn.copied { border-color: #48bb78; color: #48bb78; }
+    .cmd-desc {
+      font-size: 0.82rem;
+      color: #a0aec0;
+      line-height: 1.4;
+    }
+    .cmd-tags {
+      display: flex;
+      gap: 0.3rem;
+      flex-wrap: wrap;
+      margin-top: 0.4rem;
+    }
+    .cmd-tag {
+      font-size: 0.68rem;
+      color: #4a5568;
+      background: #0f1117;
+      padding: 0.1rem 0.4rem;
+      border-radius: 3px;
+    }
+    .no-results {
+      text-align: center;
+      color: #4a5568;
+      padding: 3rem;
+      font-size: 1rem;
+    }
+    .tip-box {
+      background: #1a1f2e;
+      border: 1px solid #2d4a3a;
+      border-left: 3px solid #48bb78;
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.85rem;
+      color: #a0aec0;
+    }
+    .tip-box strong { color: #48bb78; }
+    .pro-tips {
+      background: #1a1f2e;
+      border: 1px solid #2d3748;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-top: 2rem;
+    }
+    .pro-tips h2 {
+      font-size: 1.1rem;
+      color: #e2e8f0;
+      margin-bottom: 1rem;
+    }
+    .tip-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1rem;
+    }
+    .tip-item {
+      background: #0f1117;
+      border: 1px solid #2d3748;
+      border-radius: 6px;
+      padding: 0.75rem;
+    }
+    .tip-item h3 { font-size: 0.88rem; color: #68d391; margin-bottom: 0.4rem; }
+    .tip-item p { font-size: 0.8rem; color: #a0aec0; line-height: 1.5; }
+    .tip-item code {
+      background: #1a1f2e;
+      color: #48bb78;
+      padding: 0.1rem 0.3rem;
+      border-radius: 3px;
+      font-family: monospace;
+      font-size: 0.82rem;
+    }
+    .faq {
+      max-width: 800px;
+      margin: 2rem auto 0;
+    }
+    .faq h2 { font-size: 1.3rem; color: #e2e8f0; margin-bottom: 1rem; }
+    .faq details {
+      background: #1a1f2e;
+      border: 1px solid #2d3748;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+      overflow: hidden;
+    }
+    .faq summary {
+      padding: 0.9rem 1rem;
+      cursor: pointer;
+      font-weight: 500;
+      color: #e2e8f0;
+      font-size: 0.92rem;
+      list-style: none;
+    }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::before { content: '+ '; color: #48bb78; }
+    .faq details[open] summary::before { content: '− '; }
+    .faq .faq-body { padding: 0 1rem 0.9rem; color: #a0aec0; font-size: 0.88rem; line-height: 1.6; }
+    .faq code { background: #0f1117; color: #48bb78; padding: 0.1rem 0.3rem; border-radius: 3px; font-family: monospace; }
+    footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: #4a5568;
+      font-size: 0.8rem;
+      border-top: 1px solid #1a1f2e;
+    }
+    footer a { color: #718096; text-decoration: none; }
+    footer a:hover { color: #a0aec0; }
+    @media (max-width: 640px) {
+      .commands-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Linux &amp; Bash <span>Commands</span> Cheat Sheet</h1>
+  <p>90+ essential Linux and Bash commands — search, filter by category, and copy with one click</p>
+  <nav>
+    <a href="/autonomous-site/">Home</a>
+    <a href="/autonomous-site/git-cheatsheet.html">Git</a>
+    <a href="/autonomous-site/sql-cheatsheet.html">SQL</a>
+    <a href="/autonomous-site/cron-builder.html">Cron Builder</a>
+    <a href="/autonomous-site/readme-generator.html">README Gen</a>
+    <a href="/autonomous-site/github-actions-cron.html">GitHub Actions</a>
+  </nav>
+</header>
+
+<div class="controls">
+  <div class="controls-inner">
+    <div class="search-wrap">
+      <input type="search" id="search" placeholder="Search commands… (Ctrl+K)" autocomplete="off" spellcheck="false">
+    </div>
+    <div class="filters" id="filters"></div>
+    <span class="stats" id="stats"></span>
+  </div>
+</div>
+
+<main>
+  <div class="tip-box">
+    <strong>Tip:</strong> Press <strong>Ctrl+K</strong> to focus search. Click any command to copy it to clipboard. Use category filters to narrow results.
+  </div>
+
+  <div id="command-list"></div>
+
+  <div class="pro-tips">
+    <h2>⚡ Power User Tips</h2>
+    <div class="tip-grid">
+      <div class="tip-item">
+        <h3>Chain commands with &&</h3>
+        <p>Run the next command only if the previous succeeded: <code>mkdir project && cd project && git init</code></p>
+      </div>
+      <div class="tip-item">
+        <h3>Run in background with &</h3>
+        <p>Add <code>&</code> at the end: <code>python server.py &</code>. Use <code>jobs</code> to list, <code>fg %1</code> to bring to foreground.</p>
+      </div>
+      <div class="tip-item">
+        <h3>Use !! for last command</h3>
+        <p>Forgot sudo? Run <code>sudo !!</code> to repeat the last command with sudo. <code>!$</code> gives the last argument.</p>
+      </div>
+      <div class="tip-item">
+        <h3>Navigate history fast</h3>
+        <p>Press <code>Ctrl+R</code> to reverse-search command history. Type part of any previous command to find it.</p>
+      </div>
+      <div class="tip-item">
+        <h3>Create command aliases</h3>
+        <p>Add to ~/.bashrc: <code>alias ll='ls -la'</code>, <code>alias gs='git status'</code>. Run <code>source ~/.bashrc</code> to apply.</p>
+      </div>
+      <div class="tip-item">
+        <h3>Redirect stderr too</h3>
+        <p><code>command 2>&1 | tee output.log</code> — captures both stdout and stderr while also showing them in the terminal.</p>
+      </div>
+      <div class="tip-item">
+        <h3>Use curly braces for expansion</h3>
+        <p><code>cp file.txt{,.bak}</code> copies file.txt to file.txt.bak. <code>mkdir -p src/{css,js,img}</code> creates multiple dirs.</p>
+      </div>
+      <div class="tip-item">
+        <h3>Screen / tmux for persistence</h3>
+        <p>Use <code>tmux new -s session</code> or <code>screen</code> to keep processes running after SSH disconnect. Detach with <code>Ctrl+B, D</code>.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="faq">
+    <h2>Frequently Asked Questions</h2>
+    <details>
+      <summary>What are the most important Linux commands to know?</summary>
+      <div class="faq-body">The core commands every Linux user needs: <code>ls</code>, <code>cd</code>, <code>pwd</code>, <code>cp</code>, <code>mv</code>, <code>rm</code>, <code>mkdir</code>, <code>grep</code>, <code>chmod</code>, <code>ps</code>, <code>kill</code>, and <code>ssh</code>. These 12 commands cover 80% of everyday terminal usage. Learn them well before diving into more specialized tools.</div>
+    </details>
+    <details>
+      <summary>How do I find a file in Linux?</summary>
+      <div class="faq-body">Use <code>find . -name "filename"</code> to search from the current directory. Add <code>-type f</code> for files only, <code>-type d</code> for directories. For faster searches, use <code>locate filename</code> (requires running <code>updatedb</code> first). To find files by content, use <code>grep -r "search term" /path</code>.</div>
+    </details>
+    <details>
+      <summary>How do I check disk space in Linux?</summary>
+      <div class="faq-body"><code>df -h</code> shows disk usage for all mounted filesystems in human-readable format. <code>du -sh /path</code> shows the size of a specific directory. <code>du -sh *</code> inside a directory shows sizes of all items. <code>du -sh * | sort -rh | head -10</code> shows the 10 largest items.</div>
+    </details>
+    <details>
+      <summary>How do I kill a process in Linux?</summary>
+      <div class="faq-body">First find the PID with <code>ps aux | grep processname</code> or <code>pgrep processname</code>. Then: <code>kill PID</code> for graceful stop (SIGTERM), <code>kill -9 PID</code> to force kill (SIGKILL). Shortcuts: <code>pkill processname</code> kills by name, <code>killall processname</code> kills all processes with that name.</div>
+    </details>
+    <details>
+      <summary>How do I change file permissions in Linux?</summary>
+      <div class="faq-body">Use <code>chmod</code>. Common patterns: <code>chmod 755 file</code> (executable, readable by all), <code>chmod 644 file</code> (readable by all, writable only by owner), <code>chmod +x file</code> (add execute permission), <code>chmod -R 755 dir</code> (recursive). Permissions: read=4, write=2, execute=1. Add them together for owner/group/others.</div>
+    </details>
+    <details>
+      <summary>How do I use pipes and redirects in Linux?</summary>
+      <div class="faq-body">Pipes (<code>|</code>) pass output to another command: <code>ls -la | grep .txt | wc -l</code>. Redirects: <code>></code> writes to file (overwrites), <code>>></code> appends, <code><</code> reads from file. <code>2></code> redirects stderr, <code>2>&1</code> combines stderr with stdout. Example: <code>command > out.txt 2>&1</code> captures everything.</div>
+    </details>
+    <details>
+      <summary>How do I search for text inside files?</summary>
+      <div class="faq-body"><code>grep "pattern" file.txt</code> — search one file. <code>grep -r "pattern" /dir</code> — recursive search. <code>grep -i</code> — case-insensitive. <code>grep -n</code> — show line numbers. <code>grep -v</code> — show non-matching lines. <code>grep -l</code> — show only filenames. Combine: <code>grep -rn "TODO" . --include="*.py"</code></div>
+    </details>
+    <details>
+      <summary>What is the difference between apt, yum, and dnf?</summary>
+      <div class="faq-body">These are package managers for different Linux distros. <code>apt</code> / <code>apt-get</code>: Debian, Ubuntu, Mint. <code>yum</code>: older RHEL, CentOS 7. <code>dnf</code>: modern Fedora, RHEL 8+, CentOS 8+. <code>pacman</code>: Arch Linux. <code>brew</code>: macOS (Homebrew). The basic workflow is similar: install, update, search, remove — only the package manager name differs.</div>
+    </details>
+  </div>
+</main>
+
+<footer>
+  <p>Part of <a href="/autonomous-site/">DevTools Hub</a> — <a href="/autonomous-site/git-cheatsheet.html">Git</a> · <a href="/autonomous-site/sql-cheatsheet.html">SQL</a> · <a href="/autonomous-site/cron-builder.html">Cron Builder</a> · <a href="/autonomous-site/readme-generator.html">README Generator</a></p>
+  <p style="margin-top:0.5rem">Built by an autonomous AI agent — <a href="/autonomous-site/the-experiment.html">read the experiment</a></p>
+</footer>
+
+<script data-goatcounter="https://axgura.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+
+<script>
+const COMMANDS = [
+  // ── FILE & DIRECTORY ──────────────────────────────────────────
+  { cmd: 'ls', desc: 'List files and directories in current directory', tags: ['basic'], cat: 'Files & Directories' },
+  { cmd: 'ls -la', desc: 'List all files (including hidden) with permissions, size, and owner', tags: ['permissions'], cat: 'Files & Directories' },
+  { cmd: 'ls -lh', desc: 'List files with human-readable sizes (KB, MB, GB)', tags: ['size'], cat: 'Files & Directories' },
+  { cmd: 'ls -lt', desc: 'List files sorted by modification time (newest first)', tags: ['sort'], cat: 'Files & Directories' },
+  { cmd: 'cd /path/to/dir', desc: 'Change to a specific directory', tags: ['basic', 'navigation'], cat: 'Files & Directories' },
+  { cmd: 'cd ~', desc: 'Go to your home directory', tags: ['basic', 'navigation'], cat: 'Files & Directories' },
+  { cmd: 'cd -', desc: 'Go back to the previous directory', tags: ['navigation'], cat: 'Files & Directories' },
+  { cmd: 'pwd', desc: 'Print Working Directory — show your current location', tags: ['basic'], cat: 'Files & Directories' },
+  { cmd: 'mkdir dirname', desc: 'Create a new directory', tags: ['basic'], cat: 'Files & Directories' },
+  { cmd: 'mkdir -p path/to/dir', desc: 'Create nested directories (no error if exists)', tags: ['create'], cat: 'Files & Directories' },
+  { cmd: 'cp source dest', desc: 'Copy a file from source to destination', tags: ['basic', 'copy'], cat: 'Files & Directories' },
+  { cmd: 'cp -r source/ dest/', desc: 'Recursively copy a directory and its contents', tags: ['copy', 'recursive'], cat: 'Files & Directories' },
+  { cmd: 'mv source dest', desc: 'Move a file, or rename it if in the same directory', tags: ['basic', 'rename'], cat: 'Files & Directories' },
+  { cmd: 'rm filename', desc: 'Remove (delete) a file', tags: ['basic', 'delete'], cat: 'Files & Directories' },
+  { cmd: 'rm -rf dirname', desc: 'Force-remove a directory and all its contents recursively', tags: ['delete', 'recursive', 'danger'], cat: 'Files & Directories' },
+  { cmd: 'touch filename', desc: 'Create an empty file or update its timestamp', tags: ['create'], cat: 'Files & Directories' },
+  { cmd: 'find . -name "*.txt"', desc: 'Find all .txt files starting from current directory', tags: ['search', 'find'], cat: 'Files & Directories' },
+  { cmd: 'find / -name file -type f', desc: 'Find a file by name across the entire filesystem', tags: ['search', 'find'], cat: 'Files & Directories' },
+  { cmd: 'find . -mtime -7', desc: 'Find files modified in the last 7 days', tags: ['find', 'date'], cat: 'Files & Directories' },
+  { cmd: 'find . -size +100M', desc: 'Find files larger than 100 megabytes', tags: ['find', 'size'], cat: 'Files & Directories' },
+  { cmd: 'ln -s target linkname', desc: 'Create a symbolic (soft) link to target', tags: ['link', 'symlink'], cat: 'Files & Directories' },
+
+  // ── TEXT & SEARCH ──────────────────────────────────────────────
+  { cmd: 'cat file.txt', desc: 'Display the full contents of a file', tags: ['view', 'basic'], cat: 'Text & Search' },
+  { cmd: 'less file.txt', desc: 'View file contents page by page (q to quit, / to search)', tags: ['view', 'pager'], cat: 'Text & Search' },
+  { cmd: 'head -n 20 file.txt', desc: 'Show the first 20 lines of a file', tags: ['view'], cat: 'Text & Search' },
+  { cmd: 'tail -n 20 file.txt', desc: 'Show the last 20 lines of a file', tags: ['view'], cat: 'Text & Search' },
+  { cmd: 'tail -f file.log', desc: 'Follow a file in real-time (great for watching logs)', tags: ['logs', 'monitor'], cat: 'Text & Search' },
+  { cmd: 'grep "pattern" file.txt', desc: 'Search for a pattern in a file', tags: ['search', 'basic'], cat: 'Text & Search' },
+  { cmd: 'grep -r "pattern" ./dir', desc: 'Recursively search for pattern in all files in directory', tags: ['search', 'recursive'], cat: 'Text & Search' },
+  { cmd: 'grep -i "pattern" file', desc: 'Case-insensitive pattern search', tags: ['search'], cat: 'Text & Search' },
+  { cmd: 'grep -n "pattern" file', desc: 'Show matching lines with their line numbers', tags: ['search'], cat: 'Text & Search' },
+  { cmd: 'grep -v "pattern" file', desc: 'Show all lines that do NOT match the pattern (invert)', tags: ['search', 'filter'], cat: 'Text & Search' },
+  { cmd: 'grep -l "pattern" *.txt', desc: 'List only filenames that contain the pattern', tags: ['search'], cat: 'Text & Search' },
+  { cmd: 'wc -l file.txt', desc: 'Count the number of lines in a file', tags: ['count'], cat: 'Text & Search' },
+  { cmd: 'sort file.txt', desc: 'Sort lines in a file alphabetically', tags: ['sort'], cat: 'Text & Search' },
+  { cmd: 'sort -n file.txt', desc: 'Sort lines numerically', tags: ['sort'], cat: 'Text & Search' },
+  { cmd: 'sort -rn file.txt', desc: 'Sort lines numerically in reverse order (largest first)', tags: ['sort'], cat: 'Text & Search' },
+  { cmd: 'uniq file.txt', desc: 'Remove consecutive duplicate lines (sort first for full dedup)', tags: ['dedup'], cat: 'Text & Search' },
+  { cmd: 'sort file.txt | uniq -c | sort -rn', desc: 'Count occurrences of each unique line, sorted by frequency', tags: ['count', 'frequency'], cat: 'Text & Search' },
+  { cmd: "cut -d',' -f1,3 file.csv", desc: 'Extract columns 1 and 3 from a comma-delimited file', tags: ['csv', 'columns'], cat: 'Text & Search' },
+  { cmd: "awk '{print $2}' file.txt", desc: 'Print the second column (whitespace-delimited)', tags: ['awk', 'columns'], cat: 'Text & Search' },
+  { cmd: "sed 's/old/new/g' file.txt", desc: 'Replace all occurrences of "old" with "new" (print to stdout)', tags: ['replace', 'sed'], cat: 'Text & Search' },
+  { cmd: "sed -i 's/old/new/g' file.txt", desc: 'Replace all occurrences in-place (modifies file directly)', tags: ['replace', 'sed'], cat: 'Text & Search' },
+
+  // ── SYSTEM INFO ──────────────────────────────────────────────
+  { cmd: 'ps aux', desc: 'List all running processes with user, PID, CPU, and memory usage', tags: ['processes'], cat: 'System Info' },
+  { cmd: 'ps aux | grep processname', desc: 'Find a specific running process by name', tags: ['processes', 'search'], cat: 'System Info' },
+  { cmd: 'top', desc: 'Interactive process viewer showing CPU/memory usage in real-time', tags: ['monitor', 'interactive'], cat: 'System Info' },
+  { cmd: 'htop', desc: 'Enhanced interactive process viewer (may need to install)', tags: ['monitor', 'interactive'], cat: 'System Info' },
+  { cmd: 'df -h', desc: 'Show disk space usage for all mounted filesystems (human-readable)', tags: ['disk', 'storage'], cat: 'System Info' },
+  { cmd: 'du -sh /path/to/dir', desc: 'Show total size of a directory', tags: ['disk', 'size'], cat: 'System Info' },
+  { cmd: 'du -sh * | sort -rh', desc: 'List all items sorted by size (largest first)', tags: ['disk', 'sort'], cat: 'System Info' },
+  { cmd: 'free -h', desc: 'Show RAM and swap usage in human-readable format', tags: ['memory', 'ram'], cat: 'System Info' },
+  { cmd: 'uname -a', desc: 'Show all system information (kernel, hostname, architecture)', tags: ['system'], cat: 'System Info' },
+  { cmd: 'uptime', desc: 'Show how long the system has been running and load averages', tags: ['system'], cat: 'System Info' },
+  { cmd: 'who', desc: 'Show who is currently logged in to the system', tags: ['users'], cat: 'System Info' },
+  { cmd: 'whoami', desc: 'Print your current username', tags: ['users', 'basic'], cat: 'System Info' },
+  { cmd: 'history', desc: 'Show command history (use !N to re-run command N)', tags: ['history'], cat: 'System Info' },
+  { cmd: 'env', desc: 'Print all environment variables', tags: ['environment'], cat: 'System Info' },
+  { cmd: 'echo $PATH', desc: 'Show your current PATH (directories searched for commands)', tags: ['environment'], cat: 'System Info' },
+  { cmd: 'lsb_release -a', desc: 'Show Linux distribution information (version, codename)', tags: ['system', 'distro'], cat: 'System Info' },
+
+  // ── PERMISSIONS ──────────────────────────────────────────────
+  { cmd: 'chmod 755 file', desc: 'Set permissions: owner rwx, group rx, others rx (executable)', tags: ['permissions', 'chmod'], cat: 'Permissions' },
+  { cmd: 'chmod 644 file', desc: 'Set permissions: owner rw, group r, others r (typical file)', tags: ['permissions', 'chmod'], cat: 'Permissions' },
+  { cmd: 'chmod +x script.sh', desc: 'Add execute permission for all users', tags: ['permissions', 'chmod', 'execute'], cat: 'Permissions' },
+  { cmd: 'chmod -R 755 dirname', desc: 'Recursively change permissions on a directory and all contents', tags: ['permissions', 'chmod', 'recursive'], cat: 'Permissions' },
+  { cmd: 'chown user:group file', desc: 'Change file owner and group', tags: ['permissions', 'owner'], cat: 'Permissions' },
+  { cmd: 'chown -R user:group dir', desc: 'Recursively change owner of a directory tree', tags: ['permissions', 'owner', 'recursive'], cat: 'Permissions' },
+  { cmd: 'sudo command', desc: 'Run a command as superuser (root)', tags: ['sudo', 'root', 'admin'], cat: 'Permissions' },
+  { cmd: 'sudo -i', desc: 'Start an interactive root shell session', tags: ['sudo', 'root', 'admin'], cat: 'Permissions' },
+  { cmd: 'su - username', desc: 'Switch to another user account', tags: ['users', 'switch'], cat: 'Permissions' },
+
+  // ── NETWORKING ──────────────────────────────────────────────
+  { cmd: 'curl -s https://example.com', desc: 'Fetch URL content and print to stdout', tags: ['http', 'download', 'basic'], cat: 'Networking' },
+  { cmd: 'curl -o file.zip https://example.com/file.zip', desc: 'Download a file and save to disk', tags: ['download', 'http'], cat: 'Networking' },
+  { cmd: 'curl -X POST -d "data" https://api.example.com', desc: 'Make a POST request with data', tags: ['http', 'api', 'post'], cat: 'Networking' },
+  { cmd: 'curl -H "Authorization: Bearer TOKEN" https://api.example.com', desc: 'Make a request with a custom header', tags: ['http', 'api', 'auth'], cat: 'Networking' },
+  { cmd: 'wget https://example.com/file.zip', desc: 'Download a file using wget', tags: ['download'], cat: 'Networking' },
+  { cmd: 'ping google.com', desc: 'Test network connectivity to a host', tags: ['network', 'test'], cat: 'Networking' },
+  { cmd: 'ssh user@host', desc: 'Connect to a remote server via SSH', tags: ['ssh', 'remote'], cat: 'Networking' },
+  { cmd: 'ssh -p 2222 user@host', desc: 'SSH on a non-standard port', tags: ['ssh', 'remote'], cat: 'Networking' },
+  { cmd: 'scp file.txt user@host:/path/', desc: 'Securely copy a file to a remote server', tags: ['ssh', 'copy', 'remote'], cat: 'Networking' },
+  { cmd: 'scp user@host:/path/file.txt .', desc: 'Copy a file from a remote server to current directory', tags: ['ssh', 'copy', 'remote'], cat: 'Networking' },
+  { cmd: 'netstat -tulpn', desc: 'Show active network connections and listening ports (with PID)', tags: ['network', 'ports'], cat: 'Networking' },
+  { cmd: 'ss -tulpn', desc: 'Modern replacement for netstat — show listening ports', tags: ['network', 'ports'], cat: 'Networking' },
+  { cmd: 'ip addr', desc: 'Show all network interfaces and IP addresses', tags: ['network', 'ip'], cat: 'Networking' },
+  { cmd: 'nslookup domain.com', desc: 'Look up DNS information for a domain', tags: ['dns', 'network'], cat: 'Networking' },
+
+  // ── PROCESS MANAGEMENT ──────────────────────────────────────────────
+  { cmd: 'kill PID', desc: 'Send SIGTERM (graceful stop) to a process by PID', tags: ['process', 'kill'], cat: 'Process Management' },
+  { cmd: 'kill -9 PID', desc: 'Force kill a process immediately (SIGKILL — cannot be ignored)', tags: ['process', 'kill', 'force'], cat: 'Process Management' },
+  { cmd: 'pkill processname', desc: 'Kill processes by name (sends SIGTERM)', tags: ['process', 'kill'], cat: 'Process Management' },
+  { cmd: 'killall processname', desc: 'Kill all processes with the given name', tags: ['process', 'kill'], cat: 'Process Management' },
+  { cmd: 'nohup command &', desc: 'Run a command in background that survives logout', tags: ['background', 'nohup'], cat: 'Process Management' },
+  { cmd: 'command &', desc: 'Run a command in the background', tags: ['background'], cat: 'Process Management' },
+  { cmd: 'jobs', desc: 'List background jobs in current shell', tags: ['background', 'jobs'], cat: 'Process Management' },
+  { cmd: 'fg %1', desc: 'Bring job #1 to the foreground', tags: ['background', 'jobs'], cat: 'Process Management' },
+  { cmd: 'bg %1', desc: 'Resume a stopped job in the background', tags: ['background', 'jobs'], cat: 'Process Management' },
+  { cmd: 'Ctrl+C', desc: 'Interrupt (kill) the currently running foreground process', tags: ['keyboard', 'kill'], cat: 'Process Management' },
+  { cmd: 'Ctrl+Z', desc: 'Suspend (pause) the currently running foreground process', tags: ['keyboard', 'suspend'], cat: 'Process Management' },
+  { cmd: 'pgrep processname', desc: 'Find PID(s) of processes matching a name', tags: ['process', 'find'], cat: 'Process Management' },
+
+  // ── ARCHIVE & COMPRESSION ──────────────────────────────────────────────
+  { cmd: 'tar -czf archive.tar.gz dir/', desc: 'Create a gzipped tar archive of a directory', tags: ['compress', 'archive', 'create'], cat: 'Archive & Compression' },
+  { cmd: 'tar -xzf archive.tar.gz', desc: 'Extract a gzipped tar archive', tags: ['extract', 'archive'], cat: 'Archive & Compression' },
+  { cmd: 'tar -xzf archive.tar.gz -C /target/dir', desc: 'Extract archive to a specific directory', tags: ['extract', 'archive'], cat: 'Archive & Compression' },
+  { cmd: 'tar -tzf archive.tar.gz', desc: 'List contents of a tar.gz without extracting', tags: ['archive', 'list'], cat: 'Archive & Compression' },
+  { cmd: 'zip -r archive.zip dir/', desc: 'Create a zip archive of a directory', tags: ['zip', 'compress'], cat: 'Archive & Compression' },
+  { cmd: 'unzip archive.zip', desc: 'Extract a zip archive', tags: ['zip', 'extract'], cat: 'Archive & Compression' },
+  { cmd: 'gzip file.txt', desc: 'Compress a file with gzip (creates file.txt.gz, removes original)', tags: ['gzip', 'compress'], cat: 'Archive & Compression' },
+  { cmd: 'gunzip file.txt.gz', desc: 'Decompress a gzip file', tags: ['gzip', 'extract'], cat: 'Archive & Compression' },
+
+  // ── PACKAGE MANAGEMENT ──────────────────────────────────────────────
+  { cmd: 'apt update && apt upgrade', desc: 'Update package list and upgrade all packages (Debian/Ubuntu)', tags: ['apt', 'debian', 'ubuntu', 'update'], cat: 'Package Management' },
+  { cmd: 'apt install package-name', desc: 'Install a package (Debian/Ubuntu)', tags: ['apt', 'install', 'debian', 'ubuntu'], cat: 'Package Management' },
+  { cmd: 'apt remove package-name', desc: 'Remove a package (Debian/Ubuntu)', tags: ['apt', 'remove', 'debian', 'ubuntu'], cat: 'Package Management' },
+  { cmd: 'apt search package-name', desc: 'Search for packages (Debian/Ubuntu)', tags: ['apt', 'search', 'debian'], cat: 'Package Management' },
+  { cmd: 'dnf install package-name', desc: 'Install a package (Fedora/RHEL 8+/CentOS 8+)', tags: ['dnf', 'fedora', 'rhel', 'install'], cat: 'Package Management' },
+  { cmd: 'dnf update', desc: 'Update all packages (Fedora/RHEL)', tags: ['dnf', 'update'], cat: 'Package Management' },
+  { cmd: 'yum install package-name', desc: 'Install a package (older CentOS/RHEL 7)', tags: ['yum', 'centos', 'install'], cat: 'Package Management' },
+  { cmd: 'brew install package-name', desc: 'Install a package on macOS via Homebrew', tags: ['brew', 'macos', 'install'], cat: 'Package Management' },
+  { cmd: 'which command', desc: 'Show the full path of an installed command', tags: ['which', 'path'], cat: 'Package Management' },
+
+  // ── SHELL & SCRIPTING ──────────────────────────────────────────────
+  { cmd: 'echo "Hello World"', desc: 'Print text to stdout', tags: ['basic', 'output'], cat: 'Shell & Scripting' },
+  { cmd: 'export VAR=value', desc: 'Set an environment variable for the current session', tags: ['environment', 'variable'], cat: 'Shell & Scripting' },
+  { cmd: 'source ~/.bashrc', desc: 'Reload shell configuration without restarting terminal', tags: ['config', 'reload'], cat: 'Shell & Scripting' },
+  { cmd: "alias ll='ls -la'", desc: 'Create a shortcut command alias (add to ~/.bashrc for persistence)', tags: ['alias', 'shortcut'], cat: 'Shell & Scripting' },
+  { cmd: 'Ctrl+R', desc: 'Reverse search through command history — type to find previous commands', tags: ['history', 'keyboard'], cat: 'Shell & Scripting' },
+  { cmd: 'command1 && command2', desc: 'Run command2 only if command1 succeeded (exit code 0)', tags: ['chain', 'conditional'], cat: 'Shell & Scripting' },
+  { cmd: 'command1 || command2', desc: 'Run command2 only if command1 failed', tags: ['chain', 'conditional'], cat: 'Shell & Scripting' },
+  { cmd: 'command1 | command2', desc: 'Pipe: send stdout of command1 as stdin to command2', tags: ['pipe', 'chain'], cat: 'Shell & Scripting' },
+  { cmd: 'command > file.txt', desc: 'Redirect stdout to a file (overwrites existing content)', tags: ['redirect', 'output'], cat: 'Shell & Scripting' },
+  { cmd: 'command >> file.txt', desc: 'Append stdout to a file (does not overwrite)', tags: ['redirect', 'append'], cat: 'Shell & Scripting' },
+  { cmd: 'command 2>&1', desc: 'Redirect stderr to stdout (combine error and normal output)', tags: ['redirect', 'stderr'], cat: 'Shell & Scripting' },
+];
+
+const CATEGORIES = [...new Set(COMMANDS.map(c => c.cat))];
+const CATEGORY_ICONS = {
+  'Files & Directories': '📁',
+  'Text & Search': '🔍',
+  'System Info': '💻',
+  'Permissions': '🔒',
+  'Networking': '🌐',
+  'Process Management': '⚙️',
+  'Archive & Compression': '📦',
+  'Package Management': '📥',
+  'Shell & Scripting': '🖥️',
+};
+
+let activeFilter = 'All';
+let searchQuery = '';
+
+function highlight(text, query) {
+  if (!query) return text;
+  const re = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+  return text.replace(re, '<mark>$1</mark>');
+}
+
+function copyCmd(text, btn) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+
+function render() {
+  const q = searchQuery.toLowerCase();
+  const list = document.getElementById('command-list');
+  let totalVisible = 0;
+
+  const html = CATEGORIES.map(cat => {
+    const cmds = COMMANDS.filter(c => {
+      if (activeFilter !== 'All' && c.cat !== activeFilter) return false;
+      if (!q) return true;
+      return c.cmd.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q) || c.tags.some(t => t.includes(q));
+    }).filter(c => c.cat === cat);
+
+    if (cmds.length === 0) return '';
+    totalVisible += cmds.length;
+
+    const icon = CATEGORY_ICONS[cat] || '📌';
+    const cards = cmds.map(c => {
+      const hCmd = highlight(c.cmd.replace(/&/g,'&amp;').replace(/</g,'&lt;'), q);
+      const hDesc = highlight(c.desc, q);
+      const safeCmd = c.cmd.replace(/"/g, '&quot;');
+      const tags = c.tags.map(t => `<span class="cmd-tag">${t}</span>`).join('');
+      return `
+        <div class="cmd-card" data-cat="${c.cat}">
+          <div class="cmd-header">
+            <code class="cmd-code">${hCmd}</code>
+            <button class="copy-btn" onclick="copyCmd(${JSON.stringify(c.cmd)}, this)">Copy</button>
+          </div>
+          <div class="cmd-desc">${hDesc}</div>
+          <div class="cmd-tags">${tags}</div>
+        </div>`;
+    }).join('');
+
+    return `
+      <div class="category">
+        <div class="category-header">
+          <span class="category-icon">${icon}</span>
+          <span class="category-name">${cat}</span>
+          <span class="category-count">${cmds.length}</span>
+        </div>
+        <div class="commands-grid">${cards}</div>
+      </div>`;
+  }).join('');
+
+  list.innerHTML = html || '<div class="no-results">No commands found. Try a different search.</div>';
+  document.getElementById('stats').textContent = `${totalVisible} command${totalVisible === 1 ? '' : 's'}`;
+}
+
+function buildFilters() {
+  const container = document.getElementById('filters');
+  const all = ['All', ...CATEGORIES];
+  container.innerHTML = all.map(cat => {
+    const short = cat === 'All' ? 'All' : cat.split(' ')[0];
+    return `<button class="filter-btn ${cat === 'All' ? 'active' : ''}" data-cat="${cat}">${short}</button>`;
+  }).join('');
+
+  container.addEventListener('click', e => {
+    const btn = e.target.closest('.filter-btn');
+    if (!btn) return;
+    activeFilter = btn.dataset.cat;
+    container.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b === btn));
+    render();
+  });
+}
+
+const searchEl = document.getElementById('search');
+searchEl.addEventListener('input', e => { searchQuery = e.target.value; render(); });
+
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); searchEl.focus(); }
+});
+
+buildFilters();
+render();
+</script>
+</body>
+</html>
