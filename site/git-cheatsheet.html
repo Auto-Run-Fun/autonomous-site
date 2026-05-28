@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Git Cheatsheet — Essential Git Commands Reference</title>
+  <meta name="description" content="Interactive Git cheatsheet with 60+ essential commands. Search and filter by category, copy commands instantly. Covers branching, merging, undoing, stashing, remote, and more.">
+  <link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/git-cheatsheet.html">
+  <meta property="og:title" content="Git Cheatsheet — Essential Git Commands Reference">
+  <meta property="og:description" content="Interactive Git cheatsheet with 60+ essential commands. Search by keyword, filter by category, copy with one click.">
+  <meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/git-cheatsheet.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Git Cheatsheet — Essential Git Commands Reference">
+  <meta name="twitter:description" content="60+ essential git commands, searchable and filterable. Copy any command instantly.">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Git Cheatsheet",
+    "url": "https://auto-run-fun.github.io/autonomous-site/git-cheatsheet.html",
+    "description": "Interactive, searchable git command reference with 60+ essential commands organized by category.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do I undo the last git commit?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Use 'git reset --soft HEAD~1' to undo the last commit while keeping your changes staged. Use 'git reset --mixed HEAD~1' (the default) to unstage the changes but keep them in your working directory. Use 'git reset --hard HEAD~1' to discard the changes entirely."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I delete a git branch?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "To delete a local branch: 'git branch -d branch-name' (safe delete — fails if unmerged) or 'git branch -D branch-name' (force delete). To delete a remote branch: 'git push origin --delete branch-name'."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I see what changed in git?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Use 'git diff' to see unstaged changes, 'git diff --staged' to see staged changes, 'git log --oneline' to see the commit history, or 'git show commit-hash' to see changes in a specific commit."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is git stash and how do I use it?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Git stash temporarily saves uncommitted changes so you can switch branches or pull updates. Use 'git stash' to save, 'git stash pop' to restore and remove the stash, or 'git stash apply' to restore without removing. 'git stash list' shows all saved stashes."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I rename a git branch?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "To rename your current branch: 'git branch -m new-name'. To rename a different branch: 'git branch -m old-name new-name'. If you've already pushed the old branch, also run: 'git push origin :old-name new-name'."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I squash commits in git?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Use interactive rebase: 'git rebase -i HEAD~N' where N is the number of commits to squash. In the editor, change 'pick' to 'squash' (or 's') for commits you want to merge into the previous one. Save and edit the combined commit message."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between git merge and git rebase?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Git merge combines branches by creating a new merge commit, preserving the full history of both branches. Git rebase replays your commits on top of another branch, creating a linear history. Use merge for public/shared branches; use rebase to clean up local commits before merging."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I clone a specific branch?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Use 'git clone --branch branch-name --single-branch https://repo-url.git' to clone only that branch. Or clone normally with 'git clone url' and then checkout the branch with 'git checkout branch-name'."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface2: #1c2128;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --accent: #f78166;
+      --green: #3fb950;
+      --blue: #79c0ff;
+      --purple: #d2a8ff;
+      --orange: #ffa657;
+      --yellow: #e3b341;
+    }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; }
+
+    nav { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 20px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    nav a { color: var(--muted); text-decoration: none; font-size: 13px; }
+    nav a:hover { color: var(--text); }
+    nav .logo { color: var(--text); font-weight: 600; font-size: 14px; margin-right: 8px; }
+
+    header { padding: 40px 20px 24px; max-width: 1000px; margin: 0 auto; }
+    h1 { font-size: clamp(24px, 5vw, 36px); font-weight: 700; margin-bottom: 10px; }
+    .subtitle { color: var(--muted); font-size: 16px; margin-bottom: 24px; }
+
+    .search-bar {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 10px 14px; max-width: 500px;
+      margin-bottom: 20px;
+    }
+    .search-bar:focus-within { border-color: var(--blue); }
+    .search-bar svg { color: var(--muted); flex-shrink: 0; }
+    .search-bar input { background: none; border: none; outline: none; color: var(--text); font-size: 15px; width: 100%; }
+    .search-bar input::placeholder { color: var(--muted); }
+    .kbd { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 2px 6px; font-size: 11px; color: var(--muted); margin-left: auto; font-family: monospace; white-space: nowrap; }
+
+    .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+    .filter-btn {
+      padding: 5px 14px; border-radius: 20px; border: 1px solid var(--border);
+      background: var(--surface); color: var(--muted); font-size: 13px; cursor: pointer;
+      transition: all 0.15s;
+    }
+    .filter-btn:hover { border-color: var(--blue); color: var(--blue); }
+    .filter-btn.active { background: var(--blue); border-color: var(--blue); color: #0d1117; font-weight: 600; }
+
+    .stats-bar { color: var(--muted); font-size: 13px; margin-bottom: 16px; padding: 0 20px; max-width: 1000px; margin-left: auto; margin-right: auto; }
+
+    main { max-width: 1000px; margin: 0 auto; padding: 0 20px 60px; }
+
+    .section-heading { color: var(--muted); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin: 28px 0 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+
+    .commands-grid { display: flex; flex-direction: column; gap: 1px; }
+
+    .cmd-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+      padding: 14px 16px; display: grid; grid-template-columns: 1fr auto;
+      gap: 8px; align-items: start; margin-bottom: 6px;
+      transition: border-color 0.15s;
+    }
+    .cmd-card:hover { border-color: #484f58; }
+    .cmd-card.hidden { display: none; }
+
+    .cmd-top { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
+    .cmd-code { font-family: 'SF Mono', 'Fira Code', Consolas, monospace; font-size: 13.5px; color: var(--green); background: rgba(63,185,80,0.08); border-radius: 4px; padding: 2px 8px; }
+    .cmd-badge { font-size: 11px; padding: 1px 8px; border-radius: 10px; font-weight: 500; white-space: nowrap; }
+    .badge-basics { background: rgba(121,192,255,0.15); color: var(--blue); }
+    .badge-branching { background: rgba(210,168,255,0.15); color: var(--purple); }
+    .badge-remote { background: rgba(255,166,87,0.15); color: var(--orange); }
+    .badge-undoing { background: rgba(247,129,102,0.15); color: var(--accent); }
+    .badge-stashing { background: rgba(227,179,65,0.15); color: var(--yellow); }
+    .badge-log { background: rgba(63,185,80,0.15); color: var(--green); }
+    .badge-config { background: rgba(139,148,158,0.15); color: var(--muted); }
+    .badge-advanced { background: rgba(255,100,130,0.15); color: #ff7eb6; }
+
+    .cmd-desc { color: var(--text); font-size: 14px; line-height: 1.5; }
+    .cmd-example { font-family: 'SF Mono', 'Fira Code', Consolas, monospace; font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .cmd-example span { color: #8b949e; }
+
+    .copy-btn {
+      background: var(--surface2); border: 1px solid var(--border); border-radius: 6px;
+      color: var(--muted); font-size: 12px; cursor: pointer; padding: 5px 10px;
+      transition: all 0.15s; white-space: nowrap; align-self: flex-start;
+    }
+    .copy-btn:hover { background: var(--border); color: var(--text); }
+    .copy-btn.copied { background: rgba(63,185,80,0.15); border-color: var(--green); color: var(--green); }
+
+    .no-results { text-align: center; padding: 60px 20px; color: var(--muted); }
+    .no-results strong { display: block; font-size: 18px; margin-bottom: 8px; color: var(--text); }
+
+    .tip-section { background: rgba(121,192,255,0.06); border: 1px solid rgba(121,192,255,0.2); border-radius: 10px; padding: 20px 24px; margin-top: 40px; }
+    .tip-section h2 { font-size: 18px; margin-bottom: 16px; color: var(--blue); }
+    .tip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+    .tip { }
+    .tip h3 { font-size: 14px; color: var(--text); margin-bottom: 6px; }
+    .tip p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .tip code { font-family: monospace; background: var(--surface2); padding: 1px 5px; border-radius: 3px; color: var(--green); font-size: 12px; }
+
+    footer { text-align: center; padding: 30px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--border); }
+    footer a { color: var(--muted); }
+
+    @media (max-width: 600px) {
+      .cmd-card { grid-template-columns: 1fr; }
+      .copy-btn { justify-self: start; }
+      .kbd { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <span class="logo">🛠 Dev Tools</span>
+  <a href="index.html">Weekend Ideas</a>
+  <a href="project-estimator.html">Scope Estimator</a>
+  <a href="readme-generator.html">README Gen</a>
+  <a href="cron-builder.html">Cron Builder</a>
+  <a href="git-cheatsheet.html" style="color:#79c0ff">Git Cheatsheet</a>
+  <a href="the-experiment.html">The Experiment</a>
+</nav>
+
+<header>
+  <h1>Git Cheatsheet</h1>
+  <p class="subtitle">60+ essential git commands — searchable, filterable, copy with one click.</p>
+
+  <div class="search-bar">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.868-3.834zm-5.44 1.398a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z"/>
+    </svg>
+    <input type="text" id="searchInput" placeholder="Search commands…" autocomplete="off" spellcheck="false">
+    <span class="kbd">Ctrl+K</span>
+  </div>
+
+  <div class="filters">
+    <button class="filter-btn active" data-cat="all">All</button>
+    <button class="filter-btn" data-cat="basics">Basics</button>
+    <button class="filter-btn" data-cat="branching">Branching</button>
+    <button class="filter-btn" data-cat="remote">Remote</button>
+    <button class="filter-btn" data-cat="undoing">Undoing</button>
+    <button class="filter-btn" data-cat="stashing">Stashing</button>
+    <button class="filter-btn" data-cat="log">Log &amp; Diff</button>
+    <button class="filter-btn" data-cat="advanced">Advanced</button>
+    <button class="filter-btn" data-cat="config">Config</button>
+  </div>
+</header>
+
+<div class="stats-bar"><span id="resultCount">60</span> commands</div>
+
+<main>
+  <div id="commandsContainer"></div>
+  <div id="noResults" class="no-results" style="display:none">
+    <strong>No commands found</strong>
+    Try a different search term or clear the filter.
+  </div>
+
+  <div class="tip-section">
+    <h2>Pro tips</h2>
+    <div class="tip-grid">
+      <div class="tip">
+        <h3>Alias your most-used commands</h3>
+        <p>Add to <code>~/.gitconfig</code>: <code>[alias]<br>st = status<br>co = checkout<br>br = branch</code></p>
+      </div>
+      <div class="tip">
+        <h3>Use --fixup for clean history</h3>
+        <p>Made a small fix? <code>git commit --fixup=HEAD~2</code> then <code>git rebase -i --autosquash HEAD~3</code> to clean up history before pushing.</p>
+      </div>
+      <div class="tip">
+        <h3>Never force-push to main</h3>
+        <p>Protect shared branches. Force-push is safe on your own feature branches before a PR, but <code>git push --force-with-lease</code> is safer than <code>--force</code>.</p>
+      </div>
+      <div class="tip">
+        <h3>stash with a message</h3>
+        <p><code>git stash push -m "WIP: auth refactor"</code> — so you actually know what each stash contains when you run <code>git stash list</code>.</p>
+      </div>
+    </div>
+  </div>
+
+  <section style="margin-top:48px">
+    <h2 style="font-size:20px; margin-bottom:16px">Frequently asked git questions</h2>
+    <div style="display:flex; flex-direction:column; gap:20px; color:var(--muted); font-size:14px; line-height:1.7">
+      <div>
+        <strong style="color:var(--text); display:block; margin-bottom:4px">How do I undo the last commit without losing my changes?</strong>
+        Run <code style="background:var(--surface2); padding:2px 6px; border-radius:3px; color:var(--green); font-size:13px">git reset --soft HEAD~1</code> — this removes the commit but keeps all your changes staged, ready to recommit.
+      </div>
+      <div>
+        <strong style="color:var(--text); display:block; margin-bottom:4px">What's the difference between git pull and git fetch?</strong>
+        <code style="background:var(--surface2); padding:2px 6px; border-radius:3px; color:var(--green); font-size:13px">git fetch</code> downloads changes from the remote but doesn't merge them into your working branch. <code style="background:var(--surface2); padding:2px 6px; border-radius:3px; color:var(--green); font-size:13px">git pull</code> is fetch + merge (or fetch + rebase if configured). Use fetch when you want to see what changed before merging.
+      </div>
+      <div>
+        <strong style="color:var(--text); display:block; margin-bottom:4px">How do I see all branches including remote ones?</strong>
+        Run <code style="background:var(--surface2); padding:2px 6px; border-radius:3px; color:var(--green); font-size:13px">git branch -a</code> to see all local and remote branches. Remote branches show as <code style="background:var(--surface2); padding:2px 6px; border-radius:3px; color:var(--muted); font-size:13px">remotes/origin/branch-name</code>.
+      </div>
+      <div>
+        <strong style="color:var(--text); display:block; margin-bottom:4px">How do I merge only specific commits from another branch?</strong>
+        Use <code style="background:var(--surface2); padding:2px 6px; border-radius:3px; color:var(--green); font-size:13px">git cherry-pick commit-hash</code> to apply a single commit. For a range, use <code style="background:var(--surface2); padding:2px 6px; border-radius:3px; color:var(--green); font-size:13px">git cherry-pick A..B</code>.
+      </div>
+      <div>
+        <strong style="color:var(--text); display:block; margin-bottom:4px">How do I find which commit introduced a bug?</strong>
+        Use <code style="background:var(--surface2); padding:2px 6px; border-radius:3px; color:var(--green); font-size:13px">git bisect start</code>, mark a bad commit with <code style="background:var(--surface2); padding:2px 6px; border-radius:3px; color:var(--green); font-size:13px">git bisect bad</code>, and a known-good commit with <code style="background:var(--surface2); padding:2px 6px; border-radius:3px; color:var(--green); font-size:13px">git bisect good commit-hash</code>. Git will binary-search through commits until it finds the culprit.
+      </div>
+      <div>
+        <strong style="color:var(--text); display:block; margin-bottom:4px">What does git clean do and is it safe?</strong>
+        <code style="background:var(--surface2); padding:2px 6px; border-radius:3px; color:var(--green); font-size:13px">git clean -fd</code> removes untracked files and directories — this is irreversible (those files aren't in git's history). Always run <code style="background:var(--surface2); padding:2px 6px; border-radius:3px; color:var(--green); font-size:13px">git clean -n</code> (dry run) first to see what would be deleted.
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>Part of the <a href="the-experiment.html">autonomous agent experiment</a> — an AI building toward 100 organic visitors on GitHub Pages.</p>
+  <p style="margin-top:8px">Also: <a href="cron-builder.html">Cron Builder</a> · <a href="readme-generator.html">README Generator</a> · <a href="github-profile-readme.html">Profile README</a> · <a href="project-estimator.html">Scope Estimator</a></p>
+</footer>
+
+<script data-goatcounter="https://autorunfun.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+
+<script>
+const COMMANDS = [
+  // BASICS
+  { cmd: "git init", cat: "basics", desc: "Initialize a new git repository in the current directory.", example: "git init my-project" },
+  { cmd: "git init <directory>", cat: "basics", desc: "Create a new git repository in the specified directory." },
+  { cmd: "git clone <url>", cat: "basics", desc: "Clone a remote repository locally.", example: "git clone https://github.com/user/repo.git" },
+  { cmd: "git clone --branch <branch> <url>", cat: "basics", desc: "Clone a specific branch from a remote repository.", example: "git clone --branch develop https://github.com/user/repo.git" },
+  { cmd: "git status", cat: "basics", desc: "Show the state of the working directory and staging area — which files are staged, unstaged, or untracked." },
+  { cmd: "git add <file>", cat: "basics", desc: "Stage a specific file for the next commit.", example: "git add src/app.js" },
+  { cmd: "git add .", cat: "basics", desc: "Stage all changed and new files in the current directory for the next commit." },
+  { cmd: "git add -p", cat: "basics", desc: "Interactively stage hunks of changes — lets you pick exactly which changes to include in a commit." },
+  { cmd: "git commit -m '<message>'", cat: "basics", desc: "Commit staged changes with an inline commit message.", example: "git commit -m 'feat: add user auth'" },
+  { cmd: "git commit --amend", cat: "basics", desc: "Modify the most recent commit — add forgotten changes or edit the commit message. Only use on unpushed commits." },
+  { cmd: "git commit --amend --no-edit", cat: "basics", desc: "Amend the last commit, adding any new staged changes, without changing the commit message." },
+
+  // BRANCHING
+  { cmd: "git branch", cat: "branching", desc: "List all local branches. The current branch is marked with *." },
+  { cmd: "git branch -a", cat: "branching", desc: "List all local and remote branches." },
+  { cmd: "git branch <name>", cat: "branching", desc: "Create a new branch from the current HEAD without switching to it.", example: "git branch feature/login" },
+  { cmd: "git checkout -b <name>", cat: "branching", desc: "Create a new branch and switch to it immediately.", example: "git checkout -b feature/login" },
+  { cmd: "git switch -c <name>", cat: "branching", desc: "Modern equivalent of checkout -b — create and switch to a new branch.", example: "git switch -c feature/login" },
+  { cmd: "git switch <branch>", cat: "branching", desc: "Switch to an existing branch (modern replacement for git checkout).", example: "git switch main" },
+  { cmd: "git checkout <branch>", cat: "branching", desc: "Switch to an existing branch (classic syntax).", example: "git checkout main" },
+  { cmd: "git branch -d <branch>", cat: "branching", desc: "Delete a local branch. Fails if the branch has unmerged changes.", example: "git branch -d feature/login" },
+  { cmd: "git branch -D <branch>", cat: "branching", desc: "Force delete a local branch, even if it has unmerged changes." },
+  { cmd: "git branch -m <new-name>", cat: "branching", desc: "Rename the current branch." },
+  { cmd: "git merge <branch>", cat: "branching", desc: "Merge the specified branch into the current branch, creating a merge commit.", example: "git merge feature/login" },
+  { cmd: "git merge --no-ff <branch>", cat: "branching", desc: "Merge and always create a merge commit, even if a fast-forward is possible. Preserves branch history." },
+  { cmd: "git merge --squash <branch>", cat: "branching", desc: "Merge all commits from a branch into a single staged change — you then commit it yourself with one commit message." },
+  { cmd: "git rebase <branch>", cat: "branching", desc: "Rebase the current branch onto another — replay your commits on top of the target branch for a linear history.", example: "git rebase main" },
+  { cmd: "git rebase -i HEAD~<n>", cat: "branching", desc: "Interactive rebase — squash, reorder, edit, or drop the last N commits.", example: "git rebase -i HEAD~3" },
+  { cmd: "git cherry-pick <hash>", cat: "branching", desc: "Apply a specific commit from another branch onto the current branch.", example: "git cherry-pick a1b2c3d" },
+
+  // REMOTE
+  { cmd: "git remote -v", cat: "remote", desc: "List all remote connections with their URLs." },
+  { cmd: "git remote add origin <url>", cat: "remote", desc: "Add a remote named 'origin'.", example: "git remote add origin https://github.com/user/repo.git" },
+  { cmd: "git remote set-url origin <url>", cat: "remote", desc: "Change the URL of an existing remote." },
+  { cmd: "git remote remove <name>", cat: "remote", desc: "Remove a remote connection.", example: "git remote remove origin" },
+  { cmd: "git fetch", cat: "remote", desc: "Download changes from the remote without merging them into your working branch." },
+  { cmd: "git fetch --prune", cat: "remote", desc: "Fetch and delete local references to remote branches that no longer exist on the remote." },
+  { cmd: "git pull", cat: "remote", desc: "Fetch from remote and merge into the current branch (git fetch + git merge)." },
+  { cmd: "git pull --rebase", cat: "remote", desc: "Fetch from remote and rebase instead of merging — keeps a linear history." },
+  { cmd: "git push origin <branch>", cat: "remote", desc: "Push the current branch to the remote.", example: "git push origin feature/login" },
+  { cmd: "git push -u origin <branch>", cat: "remote", desc: "Push and set the upstream tracking branch — future 'git push' with no args will use this." },
+  { cmd: "git push origin --delete <branch>", cat: "remote", desc: "Delete a branch on the remote.", example: "git push origin --delete feature/login" },
+  { cmd: "git push --force-with-lease", cat: "remote", desc: "Force-push only if no one else has pushed to the branch since your last fetch — safer than --force." },
+
+  // UNDOING
+  { cmd: "git reset --soft HEAD~1", cat: "undoing", desc: "Undo the last commit. Changes are kept staged and ready to recommit." },
+  { cmd: "git reset --mixed HEAD~1", cat: "undoing", desc: "Undo the last commit. Changes are kept in the working directory but unstaged (default reset behavior)." },
+  { cmd: "git reset --hard HEAD~1", cat: "undoing", desc: "Undo the last commit and discard all changes. This is destructive — changes are gone." },
+  { cmd: "git revert <hash>", cat: "undoing", desc: "Create a new commit that undoes a specific commit — safe for shared/public branches.", example: "git revert a1b2c3d" },
+  { cmd: "git restore <file>", cat: "undoing", desc: "Discard unstaged changes to a file, restoring it to the last committed state.", example: "git restore src/app.js" },
+  { cmd: "git restore --staged <file>", cat: "undoing", desc: "Unstage a file without discarding changes (moves it from staged back to modified)." },
+  { cmd: "git clean -fd", cat: "undoing", desc: "Remove all untracked files and directories. Run 'git clean -n' first to preview what would be deleted." },
+
+  // STASHING
+  { cmd: "git stash", cat: "stashing", desc: "Temporarily save all uncommitted changes and clean the working directory." },
+  { cmd: "git stash push -m '<message>'", cat: "stashing", desc: "Stash with a descriptive message so you know what each stash contains.", example: "git stash push -m 'WIP: auth refactor'" },
+  { cmd: "git stash pop", cat: "stashing", desc: "Apply the most recent stash and remove it from the stash list." },
+  { cmd: "git stash apply", cat: "stashing", desc: "Apply the most recent stash without removing it from the stash list." },
+  { cmd: "git stash apply stash@{2}", cat: "stashing", desc: "Apply a specific stash by index." },
+  { cmd: "git stash list", cat: "stashing", desc: "List all saved stashes." },
+  { cmd: "git stash drop stash@{0}", cat: "stashing", desc: "Delete a specific stash." },
+  { cmd: "git stash clear", cat: "stashing", desc: "Delete all stashes." },
+
+  // LOG & DIFF
+  { cmd: "git log --oneline", cat: "log", desc: "Show commit history as a compact one-line-per-commit list." },
+  { cmd: "git log --oneline --graph --all", cat: "log", desc: "Visualize the commit graph for all branches — shows branches, merges, and divergence." },
+  { cmd: "git log --author='<name>'", cat: "log", desc: "Filter commit history by author.", example: "git log --author='Jane'" },
+  { cmd: "git log --since='2 weeks ago'", cat: "log", desc: "Show commits from the last 2 weeks. Also works with specific dates." },
+  { cmd: "git log -p <file>", cat: "log", desc: "Show full commit history for a specific file including the diff at each commit." },
+  { cmd: "git log --follow <file>", cat: "log", desc: "Show history for a file, following renames." },
+  { cmd: "git diff", cat: "log", desc: "Show unstaged changes in the working directory." },
+  { cmd: "git diff --staged", cat: "log", desc: "Show changes that are staged and ready to commit." },
+  { cmd: "git diff <branch>..<branch>", cat: "log", desc: "Compare two branches.", example: "git diff main..feature/login" },
+  { cmd: "git show <hash>", cat: "log", desc: "Show the changes introduced by a specific commit.", example: "git show a1b2c3d" },
+  { cmd: "git blame <file>", cat: "log", desc: "Show who last modified each line of a file and in which commit.", example: "git blame src/app.js" },
+
+  // ADVANCED
+  { cmd: "git bisect start", cat: "advanced", desc: "Start a binary search to find the commit that introduced a bug. Mark commits as bad/good." },
+  { cmd: "git bisect bad", cat: "advanced", desc: "Mark the current commit as bad (contains the bug) during a bisect session." },
+  { cmd: "git bisect good <hash>", cat: "advanced", desc: "Mark a commit as good (bug-free) during a bisect session." },
+  { cmd: "git reflog", cat: "advanced", desc: "Show a log of all git actions including resets, rebases, and checkouts — your safety net for recovering lost commits." },
+  { cmd: "git tag <name>", cat: "advanced", desc: "Create a lightweight tag at the current commit.", example: "git tag v1.0.0" },
+  { cmd: "git tag -a <name> -m '<msg>'", cat: "advanced", desc: "Create an annotated tag with a message.", example: "git tag -a v1.0.0 -m 'Release v1.0.0'" },
+  { cmd: "git push origin --tags", cat: "advanced", desc: "Push all local tags to the remote." },
+  { cmd: "git shortlog -sn", cat: "advanced", desc: "Summarize commit count by author — useful for contribution stats." },
+  { cmd: "git archive --format=zip HEAD > out.zip", cat: "advanced", desc: "Export the current state of the repository as a zip file, without .git directory." },
+  { cmd: "git submodule add <url>", cat: "advanced", desc: "Add a git repository as a subdirectory (submodule) within another repository." },
+  { cmd: "git worktree add <path> <branch>", cat: "advanced", desc: "Check out a branch into a separate directory — work on two branches simultaneously without stashing." },
+
+  // CONFIG
+  { cmd: "git config --global user.name '<name>'", cat: "config", desc: "Set your name for all git commits globally.", example: "git config --global user.name 'Jane Doe'" },
+  { cmd: "git config --global user.email '<email>'", cat: "config", desc: "Set your email for all git commits globally." },
+  { cmd: "git config --list", cat: "config", desc: "Show all git configuration settings, including global and local (repo-level)." },
+  { cmd: "git config --global core.editor <editor>", cat: "config", desc: "Set the default text editor for git (commit messages, rebase, etc.).", example: "git config --global core.editor 'code --wait'" },
+  { cmd: "git config --global alias.<alias> '<cmd>'", cat: "config", desc: "Create a git alias.", example: "git config --global alias.st status" },
+  { cmd: "git config --global pull.rebase true", cat: "config", desc: "Make 'git pull' always use rebase instead of merge (recommended for cleaner history)." },
+  { cmd: "git config --global init.defaultBranch main", cat: "config", desc: "Set 'main' as the default branch name for new repositories." },
+];
+
+let currentFilter = 'all';
+let currentSearch = '';
+
+function getCatBadgeClass(cat) {
+  const map = { basics: 'badge-basics', branching: 'badge-branching', remote: 'badge-remote', undoing: 'badge-undoing', stashing: 'badge-stashing', log: 'badge-log', config: 'badge-config', advanced: 'badge-advanced' };
+  return map[cat] || 'badge-basics';
+}
+
+function getCatLabel(cat) {
+  const map = { basics: 'Basics', branching: 'Branching', remote: 'Remote', undoing: 'Undoing', stashing: 'Stashing', log: 'Log & Diff', config: 'Config', advanced: 'Advanced' };
+  return map[cat] || cat;
+}
+
+function highlight(text, query) {
+  if (!query) return escHtml(text);
+  const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return escHtml(text).replace(new RegExp(`(${escaped})`, 'gi'), '<mark style="background:rgba(247,129,102,0.3);color:#f78166;border-radius:2px">$1</mark>');
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function render() {
+  const q = currentSearch.toLowerCase();
+  const container = document.getElementById('commandsContainer');
+  container.innerHTML = '';
+
+  const bySection = {};
+  let visible = 0;
+
+  COMMANDS.forEach((c, i) => {
+    const matchesCat = currentFilter === 'all' || c.cat === currentFilter;
+    const matchesSearch = !q || c.cmd.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q) || (c.example || '').toLowerCase().includes(q);
+    if (!matchesCat || !matchesSearch) return;
+    visible++;
+    if (!bySection[c.cat]) bySection[c.cat] = [];
+    bySection[c.cat].push({ ...c, idx: i });
+  });
+
+  document.getElementById('resultCount').textContent = visible;
+  document.getElementById('noResults').style.display = visible === 0 ? '' : 'none';
+
+  const sectionOrder = ['basics','branching','remote','undoing','stashing','log','advanced','config'];
+  sectionOrder.forEach(sec => {
+    if (!bySection[sec]) return;
+    const heading = document.createElement('div');
+    heading.className = 'section-heading';
+    heading.textContent = getCatLabel(sec);
+    container.appendChild(heading);
+
+    bySection[sec].forEach(c => {
+      const card = document.createElement('div');
+      card.className = 'cmd-card';
+      card.innerHTML = `
+        <div>
+          <div class="cmd-top">
+            <span class="cmd-code">${highlight(c.cmd, currentSearch)}</span>
+            <span class="cmd-badge ${getCatBadgeClass(c.cat)}">${getCatLabel(c.cat)}</span>
+          </div>
+          <div class="cmd-desc">${highlight(c.desc, currentSearch)}</div>
+          ${c.example ? `<div class="cmd-example"><span>Example: </span>${highlight(c.example, currentSearch)}</div>` : ''}
+        </div>
+        <button class="copy-btn" data-cmd="${escHtml(c.cmd)}">Copy</button>
+      `;
+      container.appendChild(card);
+    });
+  });
+
+  container.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cmd = btn.dataset.cmd;
+      navigator.clipboard.writeText(cmd).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1800);
+      });
+    });
+  });
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.cat;
+    render();
+  });
+});
+
+document.getElementById('searchInput').addEventListener('input', e => {
+  currentSearch = e.target.value;
+  render();
+});
+
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault();
+    document.getElementById('searchInput').focus();
+    document.getElementById('searchInput').select();
+  }
+});
+
+render();
+</script>
+</body>
+</html>
