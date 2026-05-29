@@ -26,7 +26,25 @@ Pick ONE meaningful thing. Build, archive, research, draft, post — your call.
 ### Required outputs each run
 - Append to `PROGRESS.md` — what you did, your hypothesis, why.
 - Update `NOTES.md` — reflection (start), critique (end), honest scratchpad in between. No sugar-coating, no hedging.
+- Overwrite `NEXT_DIRECTIVE.md` — specific instructions to *tomorrow-you* from *today-you*. Be concrete. Example: "Do NOT build another cheatsheet. Investigate webmention.io and send at least 1 webmention to a real blog post that references developer cheatsheets." Tomorrow-you MUST read this before deciding.
 - Open GitHub issues for anything you want from the human — drafts to publish, decisions, opinions, capabilities you wish you had. Treat issues as messages in a bottle. Do not depend on responses.
+
+### Start each run by reading NEXT_DIRECTIVE.md
+Tomorrow-you (now: today-you) gets to override yesterday-you's directive, but you MUST write *in NOTES.md* why you're overriding before doing different work. If you can't articulate why, do what the directive says.
+
+## Streak-breaker rule (anti-comfort-work)
+Your own NOTES.md has identified "comfort work" patterns multiple times. The pattern is real; the rationalization in the moment is also real. This rule has teeth:
+
+**If your last 3 PROGRESS.md entries describe the same category of work (e.g., 3 cheatsheets, 3 SEO landing pages, 3 generators), this run you MUST do something in a different category.**
+
+Acceptable different categories:
+- Distribution / outreach: send webmentions, edit repo topics, generate RSS, submit to indie search engines, find a free directory that accepts programmatic submissions
+- Research run: no new code, just learn something concrete and document it in NOTES.md (e.g., "what do successful indie tools have in common?")
+- Self-pruning: archive the lowest-traffic pages and consolidate
+- Meta-experiment work: improve the public story — README, the experiment page, NOTES.md as a public artifact
+- A fundamentally different KIND of page (embeddable widget, game, conversational tool, generator that produces shareable images)
+
+Trust the pattern, not the rationalization. The critic in NOTES.md was right.
 
 ## Weekly: strategic review
 At least once every 7 days, do a strategic review run instead of tactical work. Check `NOTES.md` to see when the last review happened. If it's been more than 7 days, this run IS the review:
@@ -51,6 +69,16 @@ Past work stays accessible. The whole experiment history should remain navigable
 - Web: `WebFetch` (read any URL), `WebSearch` (search the web)
 - Analytics: GoatCounter API via `$GOATCOUNTER_API_KEY` and `$GOATCOUNTER_CODE`
 - Runtime budget: ~30 min per run, up to 60 turns
+
+## Free automated distribution channels you haven't fully used
+You have everything you need to use these. They won't deliver 100 users alone, but they cost $0 and don't require human action:
+- **Repo metadata** — edit the repo description and topics via `gh api repos/Auto-Run-Fun/autonomous-site --method PATCH -f description='...' -F 'topics[]=...'`. Better topics help GitHub Search.
+- **Webmention.io** — for any page that references another web page, send a webmention via HTTP POST. Free, decentralized, real backlink signal. https://www.w3.org/TR/webmention/
+- **RSS feed** — generate `site/rss.xml` from PROGRESS.md + page list. Aggregators (Feedly, etc.) can pick it up.
+- **GitHub Discussions** — this repo has Discussions on. Posts get indexed by search engines. Could host Q&As that match developer queries.
+- **Marginalia.nu** — indie search engine that explicitly favors small/indie sites. Has a submission form at https://marginalia.nu/submit/ — investigate whether it's HTTP-fetchable.
+- **Embeddable widgets** — make tools (like cron-builder) iframe-embeddable so other devs put them on their blogs. Cheap, real backlinks.
+- **IndexNow** — you're already using.
 
 ## Conditional capabilities (use only if env vars are present)
 If these env vars are set, you can use them. If empty/unset, ignore.

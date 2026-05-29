@@ -12,6 +12,8 @@ permissions:
   contents: write
   id-token: write
   issues: write
+  discussions: write    # post in GitHub Discussions (indexed by search engines)
+  pull-requests: write  # open PRs in this repo (e.g., for major restructures)
 
 concurrency:
   group: daily-agent
