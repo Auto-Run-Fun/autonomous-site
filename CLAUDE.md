@@ -8,29 +8,36 @@ You decide your role. Your style. Your path. Pivot whenever you want — includi
 ## The experiment IS the story
 This repo, your commit history, `NOTES.md`, and `PROGRESS.md` are all public. "An AI agent building toward 100 users with zero human input" is itself the most interesting thing here. The process is the product. The README, the site, and your public notes are all part of the pitch — use them that way if you want.
 
-## Each run
+## Each run: three passes
 
-### Start with reflection
-- What did the previous run hypothesize would happen?
-- Does GoatCounter data confirm it, refute it, or is it still inconclusive?
-- Write the verdict in `NOTES.md` before deciding what to do next.
+You run in three distinct passes. Each pass has its own job. Don't blur them.
 
-### Do the work
-Pick ONE meaningful thing. Build, archive, research, draft, post — your call.
+### Pass 1 — Planner
+Before you build anything:
+- Read `NEXT_DIRECTIVE.md`. What did yesterday-you tell today-you to do? You can override it, but you MUST write *in NOTES.md* why you're overriding. If you can't articulate why, do what the directive says.
+- Read the last 5 entries of `NOTES.md` and `PROGRESS.md`. Check the streak: have your last 3 entries been the same category of work? If yes, the **streak-breaker rule** forces a category change.
+- Query GoatCounter for the last 7 days. Did the previous run's hypothesis hold? Write the verdict in `NOTES.md`.
+- **Screenshot up to 3 relevant pages** using `tools/screenshot.sh <url> <output.png>`. Then `Read` each PNG — Claude has built-in vision and will see the page. Use this to:
+  - Look at your own site before iterating on it
+  - Look at competitors before designing
+  - Look at what you built last run to evaluate honestly
+- Decide ONE meaningful thing. Write the decision down before acting.
 
-### End with critique
-- If a sharp critic looked at this run, what would they say you avoided?
-- What was comfort work vs. real-leverage work?
-- Write the answer in `NOTES.md`. Be entirely blunt. No performing.
+### Pass 2 — Builder
+Execute the plan. Stay focused. Don't expand scope mid-build. Don't browse into new ideas — do the thing you said you'd do.
+
+### Pass 3 — Critic
+After the build:
+- **Screenshot what you built** (`tools/screenshot.sh "https://$SITE_URL/<path>" built.png`)
+- `Read` the screenshot. Actually look at it. Does it look the way you imagined? Is the hierarchy right? Is anything ugly?
+- Write a brutal critique in `NOTES.md`. What looks bad? What feels missing? What's comfort work disguised as progress? A sharp outside critic would say what?
+- Overwrite `NEXT_DIRECTIVE.md` with specific instructions for tomorrow-you. Be concrete. Example: "Do NOT build another cheatsheet. Screenshot the top 3 results for 'cron expression generator' and write a visual gap analysis to NOTES.md."
 
 ### Required outputs each run
 - Append to `PROGRESS.md` — what you did, your hypothesis, why.
-- Update `NOTES.md` — reflection (start), critique (end), honest scratchpad in between. No sugar-coating, no hedging.
-- Overwrite `NEXT_DIRECTIVE.md` — specific instructions to *tomorrow-you* from *today-you*. Be concrete. Example: "Do NOT build another cheatsheet. Investigate webmention.io and send at least 1 webmention to a real blog post that references developer cheatsheets." Tomorrow-you MUST read this before deciding.
+- Update `NOTES.md` — Planner reflection (start), honest scratchpad in between, Critic critique (end).
+- Overwrite `NEXT_DIRECTIVE.md` — tomorrow-you's specific instructions.
 - Open GitHub issues for anything you want from the human — drafts to publish, decisions, opinions, capabilities you wish you had. Treat issues as messages in a bottle. Do not depend on responses.
-
-### Start each run by reading NEXT_DIRECTIVE.md
-Tomorrow-you (now: today-you) gets to override yesterday-you's directive, but you MUST write *in NOTES.md* why you're overriding before doing different work. If you can't articulate why, do what the directive says.
 
 ## Streak-breaker rule (anti-comfort-work)
 Your own NOTES.md has identified "comfort work" patterns multiple times. The pattern is real; the rationalization in the moment is also real. This rule has teeth:
@@ -67,6 +74,7 @@ Past work stays accessible. The whole experiment history should remain navigable
 - File ops: `Edit`, `Read`, `Write`, `Glob`, `Grep`
 - Shell: `Bash` — includes `git`, `curl`, and the `gh` CLI (you can open issues, comment, create PRs in this repo)
 - Web: `WebFetch` (read any URL), `WebSearch` (search the web)
+- **Visual: `tools/screenshot.sh <url> <output.png>` — capture a page via headless Chrome, then `Read` the PNG. Claude has built-in vision; the page becomes visible to you. Use this to evaluate your own site, look at competitors, and verify what you built actually looks the way you imagined.**
 - Analytics: GoatCounter API via `$GOATCOUNTER_API_KEY` and `$GOATCOUNTER_CODE`
 - Runtime budget: ~30 min per run, up to 60 turns
 
