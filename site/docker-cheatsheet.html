@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Docker Cheatsheet — Essential Docker Commands Reference</title>
+  <meta name="description" content="Interactive Docker cheatsheet with 100+ commands. Search and filter by category, copy commands instantly. Covers images, containers, Compose, networks, volumes, Dockerfile, and more.">
+  <link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/docker-cheatsheet.html">
+  <meta property="og:title" content="Docker Cheatsheet — Essential Docker Commands Reference">
+  <meta property="og:description" content="100+ Docker commands, searchable and filterable. Covers images, containers, Compose, networks, volumes, Dockerfile. Copy any command instantly.">
+  <meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/docker-cheatsheet.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Docker Cheatsheet — Essential Docker Commands Reference">
+  <meta name="twitter:description" content="100+ Docker commands, searchable and filterable. Copy any command with one click.">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "Docker Cheatsheet — Essential Docker Commands Reference",
+    "description": "Interactive, searchable Docker command reference with 100+ commands organized by category. Covers images, containers, Compose, networks, volumes, and Dockerfile instructions.",
+    "url": "https://auto-run-fun.github.io/autonomous-site/docker-cheatsheet.html",
+    "author": { "@type": "Organization", "name": "Dev Tools" },
+    "datePublished": "2026-05-29",
+    "dateModified": "2026-05-29"
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do I see all running Docker containers?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Use 'docker ps' to list all currently running containers. Add the '-a' flag ('docker ps -a') to see all containers including stopped ones. The output shows container ID, image, command, creation time, status, ports, and name."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I run a Docker container in the background?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Use the '-d' (detach) flag: 'docker run -d image:tag'. This starts the container in the background and prints the container ID. Use 'docker logs container_id' to view its output later, or 'docker logs -f container_id' to follow the logs in real time."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I remove all stopped Docker containers?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Run 'docker container prune' to remove all stopped containers. Alternatively use 'docker rm $(docker ps -aq)' to remove all containers (running ones will be skipped unless you add -f). Add '--volumes' to also remove associated anonymous volumes: 'docker container prune --volumes'."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I access a running container's shell?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Use 'docker exec -it container_name /bin/bash' (or '/bin/sh' for Alpine-based images). The '-i' flag keeps stdin open, '-t' allocates a pseudo-TTY. If the container has bash: 'docker exec -it myapp bash'. For Alpine: 'docker exec -it myapp sh'."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between CMD and ENTRYPOINT in Dockerfile?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "ENTRYPOINT defines the executable that always runs. CMD provides default arguments that can be overridden at runtime. Use ENTRYPOINT for the main command and CMD for its defaults: 'ENTRYPOINT [\"node\"]' + 'CMD [\"app.js\"]' runs 'node app.js', but 'docker run image server.js' would run 'node server.js'. If only CMD is set, it can be completely replaced at runtime."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I rebuild a Docker image without cache?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Use 'docker build --no-cache -t image:tag .' to rebuild without using any cached layers. This is useful when a dependency changes but Docker's cache doesn't detect it (e.g., a remote package update). You can also selectively bust the cache by adding 'ARG CACHEBUST=$(date +%s)' before a RUN command in your Dockerfile."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I view Docker container logs?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Use 'docker logs container_name' to print all logs. Add '-f' to follow in real time: 'docker logs -f container_name'. Use '--tail N' for the last N lines: 'docker logs --tail 100 container_name'. Add '--since' for time-based filtering: 'docker logs --since 1h container_name'."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I clean up unused Docker resources?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Use 'docker system prune' to remove stopped containers, unused networks, dangling images, and build cache. Add '-a' to also remove unused images (not just dangling): 'docker system prune -a'. Add '--volumes' to include anonymous volumes. Check disk usage first with 'docker system df'."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0d1117;
+      color: #c9d1d9;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    a { color: #58a6ff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    header {
+      background: linear-gradient(135deg, #1a2332 0%, #0d2137 100%);
+      border-bottom: 1px solid #21262d;
+      padding: 2rem 1rem 1.5rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      font-weight: 700;
+      color: #e6edf3;
+      margin-bottom: 0.5rem;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #1f6feb;
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      margin-left: 0.4rem;
+      vertical-align: middle;
+    }
+
+    header p {
+      color: #8b949e;
+      font-size: 1rem;
+      max-width: 600px;
+      margin: 0 auto 1rem;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      background: #161b22;
+      border-bottom: 1px solid #21262d;
+      font-size: 0.82rem;
+    }
+
+    nav a {
+      color: #8b949e;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      transition: color 0.15s;
+    }
+
+    nav a:hover { color: #58a6ff; text-decoration: none; }
+
+    .controls {
+      max-width: 900px;
+      margin: 1.5rem auto;
+      padding: 0 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    #search {
+      width: 100%;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      color: #c9d1d9;
+      font-size: 1rem;
+      padding: 0.7rem 1rem 0.7rem 2.5rem;
+      outline: none;
+      transition: border-color 0.2s;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%238b949e' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.099zm-5.442 1.156a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: 0.75rem center;
+    }
+
+    #search:focus { border-color: #1f6feb; }
+    #search::placeholder { color: #484f58; }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .filter-btn {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 20px;
+      color: #8b949e;
+      cursor: pointer;
+      font-size: 0.8rem;
+      padding: 0.3rem 0.75rem;
+      transition: all 0.15s;
+    }
+
+    .filter-btn:hover { border-color: #58a6ff; color: #58a6ff; }
+    .filter-btn.active { background: #1f6feb; border-color: #1f6feb; color: #fff; }
+
+    .result-count {
+      font-size: 0.8rem;
+      color: #484f58;
+      text-align: right;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 1rem 3rem;
+    }
+
+    .section {
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #1f6feb;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #21262d;
+      margin-bottom: 0.75rem;
+    }
+
+    .cmd-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .cmd-item {
+      background: #161b22;
+      border: 1px solid #21262d;
+      border-radius: 6px;
+      padding: 0.6rem 0.75rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      transition: border-color 0.15s;
+    }
+
+    .cmd-item:hover { border-color: #30363d; }
+    .cmd-item.hidden { display: none; }
+
+    .cmd-item.highlight { border-color: #1f6feb; background: #0d2137; }
+
+    .cmd-code {
+      font-family: 'SFMono-Regular', Consolas, monospace;
+      font-size: 0.82rem;
+      color: #79c0ff;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .cmd-desc {
+      font-size: 0.82rem;
+      color: #8b949e;
+      flex: 1.5;
+      min-width: 0;
+    }
+
+    .cmd-desc em {
+      color: #3fb950;
+      font-style: normal;
+      font-size: 0.75rem;
+      display: block;
+      margin-top: 0.1rem;
+    }
+
+    .copy-btn {
+      background: transparent;
+      border: 1px solid #30363d;
+      border-radius: 4px;
+      color: #484f58;
+      cursor: pointer;
+      font-size: 0.72rem;
+      padding: 0.2rem 0.5rem;
+      white-space: nowrap;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+
+    .copy-btn:hover { border-color: #58a6ff; color: #58a6ff; }
+    .copy-btn.copied { border-color: #3fb950; color: #3fb950; }
+
+    .tips {
+      background: #161b22;
+      border: 1px solid #21262d;
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin-top: 2rem;
+    }
+
+    .tips h2 {
+      font-size: 1rem;
+      color: #e6edf3;
+      margin-bottom: 0.75rem;
+    }
+
+    .tips ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .tips li {
+      font-size: 0.83rem;
+      color: #8b949e;
+      padding-left: 1.2rem;
+      position: relative;
+    }
+
+    .tips li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: #1f6feb;
+    }
+
+    .tips code {
+      font-family: 'SFMono-Regular', Consolas, monospace;
+      font-size: 0.78rem;
+      color: #79c0ff;
+      background: #0d1117;
+      padding: 0.1rem 0.3rem;
+      border-radius: 3px;
+    }
+
+    .faq {
+      margin-top: 2.5rem;
+    }
+
+    .faq h2 {
+      font-size: 1.2rem;
+      color: #e6edf3;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #21262d;
+      padding-bottom: 0.5rem;
+    }
+
+    details {
+      border: 1px solid #21262d;
+      border-radius: 6px;
+      margin-bottom: 0.5rem;
+      background: #161b22;
+    }
+
+    summary {
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: #c9d1d9;
+      padding: 0.75rem 1rem;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    summary::after {
+      content: '+';
+      color: #484f58;
+      font-size: 1.1rem;
+    }
+
+    details[open] summary::after { content: '−'; }
+
+    details p {
+      font-size: 0.85rem;
+      color: #8b949e;
+      padding: 0 1rem 0.75rem;
+      line-height: 1.7;
+    }
+
+    details code {
+      font-family: 'SFMono-Regular', Consolas, monospace;
+      font-size: 0.8rem;
+      color: #79c0ff;
+      background: #0d1117;
+      padding: 0.1rem 0.3rem;
+      border-radius: 3px;
+    }
+
+    .no-results {
+      text-align: center;
+      color: #484f58;
+      padding: 2rem;
+      font-size: 0.9rem;
+    }
+
+    kbd {
+      font-family: 'SFMono-Regular', Consolas, monospace;
+      font-size: 0.72rem;
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 3px;
+      padding: 0.1rem 0.4rem;
+      color: #8b949e;
+    }
+
+    @media (max-width: 600px) {
+      .cmd-item { flex-direction: column; gap: 0.3rem; }
+      .cmd-desc { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Docker Cheatsheet <span class="badge">100+ commands</span></h1>
+  <p>Interactive Docker command reference. Search, filter by category, copy instantly.</p>
+</header>
+
+<nav>
+  <a href="index.html">💡 Ideas</a>
+  <a href="git-cheatsheet.html">Git</a>
+  <a href="sql-cheatsheet.html">SQL</a>
+  <a href="linux-cheatsheet.html">Linux</a>
+  <a href="css-cheatsheet.html">CSS</a>
+  <a href="docker-cheatsheet.html" style="color:#58a6ff">Docker</a>
+  <a href="cron-builder.html">Cron Builder</a>
+  <a href="readme-generator.html">README Gen</a>
+  <a href="github-profile-readme.html">Profile README</a>
+  <a href="project-estimator.html">Estimator</a>
+</nav>
+
+<div class="controls">
+  <input type="search" id="search" placeholder="Search commands… (Ctrl+K)" autocomplete="off" spellcheck="false">
+  <div class="filters" id="filters">
+    <button class="filter-btn active" data-cat="all">All</button>
+    <button class="filter-btn" data-cat="images">Images</button>
+    <button class="filter-btn" data-cat="containers">Containers</button>
+    <button class="filter-btn" data-cat="compose">Compose</button>
+    <button class="filter-btn" data-cat="networks">Networks</button>
+    <button class="filter-btn" data-cat="volumes">Volumes</button>
+    <button class="filter-btn" data-cat="system">System</button>
+    <button class="filter-btn" data-cat="dockerfile">Dockerfile</button>
+  </div>
+  <div class="result-count" id="result-count"></div>
+</div>
+
+<main id="main">
+
+  <!-- IMAGES -->
+  <div class="section" data-cat="images">
+    <div class="section-title">Images</div>
+    <div class="cmd-grid">
+      <div class="cmd-item" data-tags="pull download fetch">
+        <span class="cmd-code">docker pull image:tag</span>
+        <span class="cmd-desc">Download an image from Docker Hub (or registry)<em>Omit tag to get :latest</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="build create make dockerfile">
+        <span class="cmd-code">docker build -t name:tag .</span>
+        <span class="cmd-desc">Build image from Dockerfile in current directory<em>-t sets the name and tag</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="build no-cache nocache rebuild fresh">
+        <span class="cmd-code">docker build --no-cache -t name:tag .</span>
+        <span class="cmd-desc">Build without using cached layers<em>Forces re-download of dependencies</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="images list ls show">
+        <span class="cmd-code">docker images</span>
+        <span class="cmd-desc">List all local images with sizes and tags</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="rmi remove delete image rm">
+        <span class="cmd-code">docker rmi image:tag</span>
+        <span class="cmd-desc">Remove an image (must stop containers using it first)</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="rmi remove delete all images cleanup">
+        <span class="cmd-code">docker image prune</span>
+        <span class="cmd-desc">Remove dangling (untagged) images<em>Add -a to remove all unused images</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="tag rename retag">
+        <span class="cmd-code">docker tag source:tag target:tag</span>
+        <span class="cmd-desc">Create a tag alias for an image</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="push upload registry publish">
+        <span class="cmd-code">docker push image:tag</span>
+        <span class="cmd-desc">Push image to Docker Hub or registry<em>Must be logged in: docker login</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="inspect details info metadata">
+        <span class="cmd-code">docker inspect image:tag</span>
+        <span class="cmd-desc">Show detailed JSON metadata about an image</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="history layers cache layers inspect">
+        <span class="cmd-code">docker image history image:tag</span>
+        <span class="cmd-desc">Show layer-by-layer build history and sizes</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="save export tar backup offline">
+        <span class="cmd-code">docker save -o file.tar image:tag</span>
+        <span class="cmd-desc">Export an image to a tar archive<em>Transfer images without a registry</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="load import tar restore">
+        <span class="cmd-code">docker load -i file.tar</span>
+        <span class="cmd-desc">Import an image from a tar archive</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="search find hub registry">
+        <span class="cmd-code">docker search image_name</span>
+        <span class="cmd-desc">Search Docker Hub for images<em>Use --filter stars=100 to filter by popularity</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTAINERS -->
+  <div class="section" data-cat="containers">
+    <div class="section-title">Containers</div>
+    <div class="cmd-grid">
+      <div class="cmd-item" data-tags="run start create launch execute">
+        <span class="cmd-code">docker run image:tag</span>
+        <span class="cmd-desc">Create and start a container from an image</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="run detached background daemon port name">
+        <span class="cmd-code">docker run -d --name myapp -p 8080:80 image:tag</span>
+        <span class="cmd-desc">Run in background, set name, map port 8080→80<em>Access at localhost:8080</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="run interactive terminal bash shell tty">
+        <span class="cmd-code">docker run -it image:tag /bin/bash</span>
+        <span class="cmd-desc">Run interactively with a shell<em>Use /bin/sh for Alpine images</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="run rm remove temp disposable cleanup">
+        <span class="cmd-code">docker run --rm image:tag</span>
+        <span class="cmd-desc">Auto-remove container when it exits<em>Great for one-off commands</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="run env environment variable">
+        <span class="cmd-code">docker run -e KEY=value image:tag</span>
+        <span class="cmd-desc">Pass environment variable to container<em>Use --env-file .env to load from file</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="run volume mount bind filesystem -v">
+        <span class="cmd-code">docker run -v /host/path:/container/path image:tag</span>
+        <span class="cmd-desc">Bind-mount a host directory into the container<em>Changes are reflected immediately</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="run volume named mount">
+        <span class="cmd-code">docker run -v vol_name:/container/path image:tag</span>
+        <span class="cmd-desc">Use a named volume (persists across containers)<em>Better than bind mounts for DBs</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="run network connect bridge host">
+        <span class="cmd-code">docker run --network net_name image:tag</span>
+        <span class="cmd-desc">Connect container to a specific network</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="start restart begin">
+        <span class="cmd-code">docker start container_id</span>
+        <span class="cmd-desc">Start a stopped container</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="stop halt terminate graceful">
+        <span class="cmd-code">docker stop container_id</span>
+        <span class="cmd-desc">Gracefully stop a container (SIGTERM → SIGKILL after 10s)</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="kill force stop immediate sigkill">
+        <span class="cmd-code">docker kill container_id</span>
+        <span class="cmd-desc">Immediately kill a container with SIGKILL</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="restart reboot">
+        <span class="cmd-code">docker restart container_id</span>
+        <span class="cmd-desc">Stop and restart a container</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="rm remove delete container">
+        <span class="cmd-code">docker rm container_id</span>
+        <span class="cmd-desc">Remove a stopped container<em>Add -f to force remove running containers</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="rm remove all stopped containers prune cleanup">
+        <span class="cmd-code">docker container prune</span>
+        <span class="cmd-desc">Remove all stopped containers</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="ps list show containers running">
+        <span class="cmd-code">docker ps</span>
+        <span class="cmd-desc">List running containers with status and ports</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="ps -a all containers stopped list">
+        <span class="cmd-code">docker ps -a</span>
+        <span class="cmd-desc">List all containers including stopped ones</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="exec command run inside shell bash terminal interactive">
+        <span class="cmd-code">docker exec -it container_id bash</span>
+        <span class="cmd-desc">Open an interactive shell inside a running container<em>Use 'sh' if bash isn't available</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="exec run command one-off">
+        <span class="cmd-code">docker exec container_id command</span>
+        <span class="cmd-desc">Run a one-off command inside a running container</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="logs output print stderr stdout">
+        <span class="cmd-code">docker logs container_id</span>
+        <span class="cmd-desc">Print container stdout and stderr logs</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="logs follow tail stream real-time -f">
+        <span class="cmd-code">docker logs -f container_id</span>
+        <span class="cmd-desc">Follow (stream) container logs in real time</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="logs tail last recent lines">
+        <span class="cmd-code">docker logs --tail 100 container_id</span>
+        <span class="cmd-desc">Show last 100 lines of logs<em>Add -f to follow from there</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="inspect details metadata json container info">
+        <span class="cmd-code">docker inspect container_id</span>
+        <span class="cmd-desc">Show full JSON metadata (env, mounts, network, etc.)</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="cp copy file transfer host container">
+        <span class="cmd-code">docker cp file.txt container_id:/app/</span>
+        <span class="cmd-desc">Copy a file from host into a running container<em>Reverse: docker cp container:/path ./local</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="stats metrics cpu memory resources usage monitor">
+        <span class="cmd-code">docker stats</span>
+        <span class="cmd-desc">Live stream of CPU, memory, network, I/O for all containers</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="top processes list running container">
+        <span class="cmd-code">docker top container_id</span>
+        <span class="cmd-desc">Show running processes inside a container</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="rename name change">
+        <span class="cmd-code">docker rename old_name new_name</span>
+        <span class="cmd-desc">Rename an existing container</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="pause suspend freeze">
+        <span class="cmd-code">docker pause container_id</span>
+        <span class="cmd-desc">Suspend all processes in a container (SIGSTOP)</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="unpause resume unfreeze">
+        <span class="cmd-code">docker unpause container_id</span>
+        <span class="cmd-desc">Resume a paused container</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="commit snapshot save container image create">
+        <span class="cmd-code">docker commit container_id image:tag</span>
+        <span class="cmd-desc">Create an image from a container's current state<em>Prefer Dockerfiles over commit for reproducibility</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOCKER COMPOSE -->
+  <div class="section" data-cat="compose">
+    <div class="section-title">Docker Compose</div>
+    <div class="cmd-grid">
+      <div class="cmd-item" data-tags="compose up start run launch">
+        <span class="cmd-code">docker compose up</span>
+        <span class="cmd-desc">Start all services defined in docker-compose.yml<em>Add -d to run in background</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="compose up detached background daemon -d">
+        <span class="cmd-code">docker compose up -d</span>
+        <span class="cmd-desc">Start all services in detached (background) mode</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="compose up build rebuild fresh">
+        <span class="cmd-code">docker compose up --build</span>
+        <span class="cmd-desc">Rebuild images before starting services<em>Use after Dockerfile changes</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="compose down stop remove teardown">
+        <span class="cmd-code">docker compose down</span>
+        <span class="cmd-desc">Stop and remove containers, networks<em>Does NOT remove volumes by default</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="compose down volumes remove teardown cleanup">
+        <span class="cmd-code">docker compose down -v</span>
+        <span class="cmd-desc">Stop, remove containers AND named volumes<em>WARNING: destroys data in volumes</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="compose build image rebuild">
+        <span class="cmd-code">docker compose build</span>
+        <span class="cmd-desc">Build (or rebuild) all service images</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="compose ps list containers services status">
+        <span class="cmd-code">docker compose ps</span>
+        <span class="cmd-desc">List containers for this Compose project with status</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="compose logs output print">
+        <span class="cmd-code">docker compose logs</span>
+        <span class="cmd-desc">Show logs from all services<em>Add -f to follow, or service name to filter</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="compose logs follow service tail stream">
+        <span class="cmd-code">docker compose logs -f web</span>
+        <span class="cmd-desc">Follow logs from the 'web' service only</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="compose exec shell bash terminal interactive">
+        <span class="cmd-code">docker compose exec web bash</span>
+        <span class="cmd-desc">Open shell in the running 'web' service container</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="compose run one-off command service">
+        <span class="cmd-code">docker compose run --rm web python manage.py migrate</span>
+        <span class="cmd-desc">Run a one-off command in a new service container<em>--rm removes the container after</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="compose restart reboot">
+        <span class="cmd-code">docker compose restart</span>
+        <span class="cmd-desc">Restart all services (or add service name to target one)</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="compose stop halt services">
+        <span class="cmd-code">docker compose stop</span>
+        <span class="cmd-desc">Stop services without removing containers</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="compose pull update images latest">
+        <span class="cmd-code">docker compose pull</span>
+        <span class="cmd-desc">Pull latest versions of service images</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="compose config validate check yaml">
+        <span class="cmd-code">docker compose config</span>
+        <span class="cmd-desc">Validate and display the resolved Compose config</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="compose scale replicas instances">
+        <span class="cmd-code">docker compose up -d --scale web=3</span>
+        <span class="cmd-desc">Start 3 replicas of the 'web' service</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NETWORKS -->
+  <div class="section" data-cat="networks">
+    <div class="section-title">Networks</div>
+    <div class="cmd-grid">
+      <div class="cmd-item" data-tags="network ls list show all">
+        <span class="cmd-code">docker network ls</span>
+        <span class="cmd-desc">List all Docker networks</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="network create new bridge">
+        <span class="cmd-code">docker network create my_network</span>
+        <span class="cmd-desc">Create a new bridge network<em>Containers on same network can reach each other by name</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="network remove delete rm">
+        <span class="cmd-code">docker network rm my_network</span>
+        <span class="cmd-desc">Remove a network (must disconnect containers first)</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="network inspect details info containers">
+        <span class="cmd-code">docker network inspect my_network</span>
+        <span class="cmd-desc">Show detailed network info including connected containers</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="network connect attach join container">
+        <span class="cmd-code">docker network connect my_network container_id</span>
+        <span class="cmd-desc">Connect a running container to a network</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="network disconnect detach leave container">
+        <span class="cmd-code">docker network disconnect my_network container_id</span>
+        <span class="cmd-desc">Disconnect a container from a network</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="network prune cleanup remove unused">
+        <span class="cmd-code">docker network prune</span>
+        <span class="cmd-desc">Remove all unused networks</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- VOLUMES -->
+  <div class="section" data-cat="volumes">
+    <div class="section-title">Volumes</div>
+    <div class="cmd-grid">
+      <div class="cmd-item" data-tags="volume ls list show all">
+        <span class="cmd-code">docker volume ls</span>
+        <span class="cmd-desc">List all Docker volumes</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="volume create new named">
+        <span class="cmd-code">docker volume create my_volume</span>
+        <span class="cmd-desc">Create a named volume<em>Named volumes persist even after container removal</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="volume remove delete rm">
+        <span class="cmd-code">docker volume rm my_volume</span>
+        <span class="cmd-desc">Remove a volume (data is permanently deleted)</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="volume inspect details info size path">
+        <span class="cmd-code">docker volume inspect my_volume</span>
+        <span class="cmd-desc">Show volume details including mount point on host</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="volume prune cleanup remove unused dangling">
+        <span class="cmd-code">docker volume prune</span>
+        <span class="cmd-desc">Remove all unused volumes<em>Add -f to skip confirmation</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SYSTEM -->
+  <div class="section" data-cat="system">
+    <div class="section-title">System</div>
+    <div class="cmd-grid">
+      <div class="cmd-item" data-tags="info details system version config">
+        <span class="cmd-code">docker info</span>
+        <span class="cmd-desc">Display system-wide Docker info (version, containers, images)</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="version client server api">
+        <span class="cmd-code">docker version</span>
+        <span class="cmd-desc">Show Docker client and server version details</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="system df disk usage space size">
+        <span class="cmd-code">docker system df</span>
+        <span class="cmd-desc">Show disk usage by images, containers, volumes<em>Add -v for per-item breakdown</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="system prune cleanup remove unused all">
+        <span class="cmd-code">docker system prune</span>
+        <span class="cmd-desc">Remove stopped containers, unused networks, dangling images, build cache</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="system prune all cleanup remove unused images">
+        <span class="cmd-code">docker system prune -a</span>
+        <span class="cmd-desc">Deep clean: also removes unused images (not just dangling)<em>Frees significant disk space</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="system prune volumes all cleanup">
+        <span class="cmd-code">docker system prune -a --volumes</span>
+        <span class="cmd-desc">Full cleanup including unused volumes<em>WARNING: destroys volume data</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="login registry authenticate hub credentials">
+        <span class="cmd-code">docker login</span>
+        <span class="cmd-desc">Log in to Docker Hub (or add registry URL for private registries)</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="logout registry signout">
+        <span class="cmd-code">docker logout</span>
+        <span class="cmd-desc">Log out and remove stored credentials</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="events stream listen real-time activity log">
+        <span class="cmd-code">docker system events</span>
+        <span class="cmd-desc">Stream real-time events from the Docker daemon</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="context list show available remote">
+        <span class="cmd-code">docker context ls</span>
+        <span class="cmd-desc">List Docker contexts (local, remote, Docker Desktop)</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="context use switch change remote">
+        <span class="cmd-code">docker context use context_name</span>
+        <span class="cmd-desc">Switch active Docker context (e.g., switch to remote server)</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOCKERFILE -->
+  <div class="section" data-cat="dockerfile">
+    <div class="section-title">Dockerfile Instructions</div>
+    <div class="cmd-grid">
+      <div class="cmd-item" data-tags="FROM base image parent">
+        <span class="cmd-code">FROM node:20-alpine</span>
+        <span class="cmd-desc">Set the base image (first instruction in every Dockerfile)<em>Prefer slim/alpine variants to reduce image size</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="WORKDIR directory path working cd">
+        <span class="cmd-code">WORKDIR /app</span>
+        <span class="cmd-desc">Set the working directory for subsequent instructions<em>Created automatically if it doesn't exist</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="COPY files source destination">
+        <span class="cmd-code">COPY package*.json ./</span>
+        <span class="cmd-desc">Copy files from build context into image<em>Copy package.json before source to cache npm install layer</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="COPY files source destination all">
+        <span class="cmd-code">COPY . .</span>
+        <span class="cmd-desc">Copy all source files into working directory<em>Use .dockerignore to exclude node_modules, .git, etc.</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="ADD archive extract url fetch tar">
+        <span class="cmd-code">ADD archive.tar.gz /app/</span>
+        <span class="cmd-desc">Like COPY but auto-extracts archives and supports URLs<em>Prefer COPY unless you need auto-extraction</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="RUN command install build execute">
+        <span class="cmd-code">RUN npm ci --only=production</span>
+        <span class="cmd-desc">Execute a command during build (creates a new layer)<em>Chain commands with && to reduce layer count</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="RUN chain combine layer apt install">
+        <span class="cmd-code">RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*</span>
+        <span class="cmd-desc">Chain commands to minimize layers and clean up<em>Cleanup in same RUN keeps layer small</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="ENV environment variable runtime">
+        <span class="cmd-code">ENV NODE_ENV=production PORT=3000</span>
+        <span class="cmd-desc">Set environment variables (available at runtime too)<em>Use ARG for build-time-only values</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="ARG build argument variable build-time">
+        <span class="cmd-code">ARG VERSION=latest</span>
+        <span class="cmd-desc">Define build-time variable (not available in running container)<em>Override with: docker build --build-arg VERSION=1.2</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="EXPOSE port document declare">
+        <span class="cmd-code">EXPOSE 3000</span>
+        <span class="cmd-desc">Document which port the container listens on<em>Does not actually publish the port — use -p at runtime</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="CMD default command start run">
+        <span class="cmd-code">CMD ["node", "server.js"]</span>
+        <span class="cmd-desc">Default command to run when container starts<em>Can be overridden at docker run time</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="ENTRYPOINT executable main command always">
+        <span class="cmd-code">ENTRYPOINT ["node"]</span>
+        <span class="cmd-desc">Fixed executable that always runs (CMD provides default args)<em>Combine: ENTRYPOINT ["node"] + CMD ["app.js"]</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="USER run as non-root security">
+        <span class="cmd-code">USER node</span>
+        <span class="cmd-desc">Set user for subsequent instructions and container runtime<em>Run as non-root for security</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="VOLUME mount point persist data declare">
+        <span class="cmd-code">VOLUME /app/data</span>
+        <span class="cmd-desc">Declare a mount point for external volumes<em>Data written here persists when container is removed</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="LABEL metadata key value description">
+        <span class="cmd-code">LABEL version="1.0" maintainer="team@example.com"</span>
+        <span class="cmd-desc">Add metadata key-value pairs to the image</span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="HEALTHCHECK health check status monitor">
+        <span class="cmd-code">HEALTHCHECK --interval=30s --timeout=5s CMD curl -f http://localhost:3000/health || exit 1</span>
+        <span class="cmd-desc">Define health check command<em>Docker reports healthy/unhealthy status</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+      <div class="cmd-item" data-tags="multistage multi-stage build production slim">
+        <span class="cmd-code">FROM node:20 AS builder\nRUN npm run build\nFROM node:20-alpine\nCOPY --from=builder /app/dist ./dist</span>
+        <span class="cmd-desc">Multi-stage build: compile in large image, ship in slim one<em>Can cut production image size by 80%+</em></span>
+        <button class="copy-btn">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRO TIPS -->
+  <div class="tips">
+    <h2>⚡ Pro Tips</h2>
+    <ul>
+      <li>Order Dockerfile layers from least-to-most frequently changed. Copy <code>package.json</code> and <code>RUN npm install</code> before <code>COPY . .</code> so the npm layer stays cached on source changes.</li>
+      <li>Use <code>.dockerignore</code> to exclude <code>node_modules</code>, <code>.git</code>, <code>*.log</code>, and <code>.env</code> files from the build context — speeds up builds and keeps secrets out of images.</li>
+      <li>Run containers as non-root: create a user in the Dockerfile (<code>RUN adduser --disabled-password app && USER app</code>) to limit the blast radius of a container escape.</li>
+      <li>Use <code>docker run --rm</code> for one-off tasks (migrations, scripts, debugging). The container cleans itself up automatically.</li>
+      <li>Name your containers (<code>--name</code>) and services in Compose: containers on the same network reach each other by service name as hostname. No IPs needed.</li>
+      <li>Tag images semantically: push both <code>image:1.2.3</code> and <code>image:latest</code>. Use the version tag in production deployments, never <code>:latest</code>, to ensure reproducibility.</li>
+      <li>Use <code>docker system df</code> regularly. Unused images and build cache can quietly consume 20–50 GB on active development machines.</li>
+      <li>In Docker Compose, <code>depends_on</code> only waits for the container to start, not for the app inside to be ready. Use a health check or a wait script for services that need database connectivity at startup.</li>
+    </ul>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq">
+    <h2>Frequently Asked Questions</h2>
+
+    <details>
+      <summary>How do I see all running Docker containers?</summary>
+      <p>Use <code>docker ps</code> to list all currently running containers. Add the <code>-a</code> flag (<code>docker ps -a</code>) to see all containers including stopped ones. The output shows container ID, image, command, creation time, status, ports, and name. Use <code>docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"</code> to customize the output columns.</p>
+    </details>
+
+    <details>
+      <summary>How do I run a Docker container in the background?</summary>
+      <p>Use the <code>-d</code> (detach) flag: <code>docker run -d image:tag</code>. This starts the container in the background and prints the container ID. Use <code>docker logs container_id</code> to view its output later, or <code>docker logs -f container_id</code> to follow the logs in real time. Use <code>docker attach container_id</code> to reconnect to the container's main process.</p>
+    </details>
+
+    <details>
+      <summary>How do I remove all stopped Docker containers?</summary>
+      <p>Run <code>docker container prune</code> to remove all stopped containers with a confirmation prompt. Alternatively use <code>docker rm $(docker ps -aq -f status=exited)</code> to remove only exited containers. To force-remove all containers (including running ones) use <code>docker rm -f $(docker ps -aq)</code>. Add <code>--volumes</code> to also remove associated anonymous volumes.</p>
+    </details>
+
+    <details>
+      <summary>How do I access a running container's shell?</summary>
+      <p>Use <code>docker exec -it container_name /bin/bash</code> (or <code>/bin/sh</code> for Alpine-based images). The <code>-i</code> flag keeps stdin open and <code>-t</code> allocates a pseudo-TTY. You can also run any one-off command: <code>docker exec container_name env</code> to list environment variables, or <code>docker exec container_name cat /etc/hosts</code> to read a file. If the container doesn't have bash, try <code>sh</code>, <code>ash</code>, or install bash with <code>apt-get install bash</code> or <code>apk add bash</code>.</p>
+    </details>
+
+    <details>
+      <summary>What is the difference between CMD and ENTRYPOINT in Dockerfile?</summary>
+      <p><code>ENTRYPOINT</code> defines the executable that always runs when a container starts. <code>CMD</code> provides default arguments that can be overridden at <code>docker run</code> time. Best practice: use <code>ENTRYPOINT ["node"]</code> + <code>CMD ["app.js"]</code> — this runs <code>node app.js</code> by default, but <code>docker run image server.js</code> would run <code>node server.js</code>. If you only use <code>CMD</code>, the entire command can be replaced at runtime. Use exec form (<code>["node", "app.js"]</code>) not shell form (<code>node app.js</code>) to ensure signals are forwarded correctly.</p>
+    </details>
+
+    <details>
+      <summary>How do I rebuild a Docker image without cache?</summary>
+      <p>Use <code>docker build --no-cache -t image:tag .</code> to rebuild without using any cached layers. This forces re-downloading dependencies and re-running all RUN commands. In Docker Compose: <code>docker compose build --no-cache</code>. To selectively bust the cache for a specific RUN command in your Dockerfile, add <code>ARG CACHEBUST</code> before it and pass <code>--build-arg CACHEBUST=$(date +%s)</code> at build time.</p>
+    </details>
+
+    <details>
+      <summary>How do I view Docker container logs?</summary>
+      <p>Use <code>docker logs container_name</code> to print all logs. Options: <code>-f</code> to follow in real time, <code>--tail 100</code> for the last 100 lines, <code>--since 1h</code> for logs from the last hour, <code>--until 2026-05-29T12:00:00</code> for logs up to a time. For Docker Compose: <code>docker compose logs -f web</code> follows logs for just the 'web' service. View logs since a timestamp with <code>docker logs --since "2026-05-29T10:00:00" container</code>.</p>
+    </details>
+
+    <details>
+      <summary>How do I clean up unused Docker resources?</summary>
+      <p>Use <code>docker system prune</code> to remove stopped containers, unused networks, dangling images, and build cache. Add <code>-a</code> to also remove unused images (not just dangling): <code>docker system prune -a</code>. Add <code>--volumes</code> to include anonymous volumes. Check disk usage first with <code>docker system df</code>. On a development machine this can recover 5–50 GB. Individual pruning: <code>docker image prune -a</code>, <code>docker container prune</code>, <code>docker volume prune</code>, <code>docker network prune</code>.</p>
+    </details>
+  </div>
+
+</main>
+
+<script>
+  const searchEl = document.getElementById('search');
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const sections = document.querySelectorAll('.section');
+  const countEl = document.getElementById('result-count');
+
+  let activeCat = 'all';
+  let searchQuery = '';
+
+  function normalize(str) {
+    return str.toLowerCase().replace(/[^a-z0-9\s]/g, ' ');
+  }
+
+  function update() {
+    let visible = 0;
+
+    sections.forEach(section => {
+      const cat = section.dataset.cat;
+      const catMatch = activeCat === 'all' || activeCat === cat;
+      section.style.display = catMatch ? '' : 'none';
+      if (!catMatch) return;
+
+      const items = section.querySelectorAll('.cmd-item');
+      let sectionVisible = 0;
+
+      items.forEach(item => {
+        const code = normalize(item.querySelector('.cmd-code').textContent);
+        const desc = normalize(item.querySelector('.cmd-desc').textContent);
+        const tags = normalize(item.dataset.tags || '');
+        const q = normalize(searchQuery);
+
+        const matches = !q || code.includes(q) || desc.includes(q) || tags.includes(q);
+        item.classList.toggle('hidden', !matches);
+        if (matches) { sectionVisible++; visible++; }
+      });
+
+      section.style.display = sectionVisible === 0 ? 'none' : '';
+    });
+
+    countEl.textContent = searchQuery ? `${visible} commands match` : '';
+  }
+
+  searchEl.addEventListener('input', e => {
+    searchQuery = e.target.value;
+    update();
+  });
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeCat = btn.dataset.cat;
+      update();
+    });
+  });
+
+  document.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      e.preventDefault();
+      searchEl.focus();
+      searchEl.select();
+    }
+    if (e.key === 'Escape') {
+      searchEl.value = '';
+      searchQuery = '';
+      update();
+      searchEl.blur();
+    }
+  });
+
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const code = btn.closest('.cmd-item').querySelector('.cmd-code').textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 1500);
+      });
+    });
+  });
+</script>
+
+<script data-goatcounter="https://auto-run-fun.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
