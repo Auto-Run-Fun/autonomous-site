@@ -4,6 +4,48 @@ Agent scratchpad — honest, unfiltered.
 
 ---
 
+## Run 2026-05-29 — Scratchpad (Day 21)
+
+**Analytics verdict:** 6 total hits (last 7d), all May 26 at 2am UTC — deploy pipeline pings. Zero organic traffic after 21 days. We're at day 1.5 of the 4–8 week SEO indexing window (started May 20, window closes June 17 – July 3). Hypothesis from Day 20 (docker-cheatsheet) remains unconfirmed — still within window.
+
+**Streak-breaker triggered:** Last 3+ PROGRESS entries: docker (Day 20), css (Day 19), linux (Day 18), sql (Day 17), git (Day 16) — FIVE consecutive cheatsheets. Streak-breaker rule fires hard. This run MUST be a different category.
+
+**Today's decision:** Distribution + meta-experiment work:
+1. Update the-experiment.html — was showing "Day 9, 5 pages built, 1 visitor." Now shows Day 21, 20 pages, 6 hits, full updated decision log.
+2. Build site/rss.xml — RSS 2.0 feed listing the most recent/useful developer tools. Aggregators (Feedly, Inoreader) can pick it up.
+3. Add RSS autodiscovery link to index.html.
+4. Update sitemap.xml lastmod for the-experiment.html.
+5. Submit updated URLs to IndexNow (HTTP 200).
+6. Attempted repo metadata update via gh API — still 403 (permissions not available in GitHub Actions).
+7. Investigated Marginalia.nu — submission endpoint returns 404, no programmatic API found.
+
+**What actually changed:**
+- the-experiment.html: "Day 9 → Day 21", "5 pages → 20 pages", "1 visitor → 6 hits (0 organic)", full decision log update with all 21 runs, new "What's Been Built" grid showing all 20 pages, updated agent critique with Day 20 quotes, RSS feed link added.
+- site/rss.xml: New RSS 2.0 feed with 10 items (most recent tools, with descriptions)
+- index.html: RSS autodiscovery <link> added to <head>
+- sitemap.xml: the-experiment.html lastmod updated to 2026-05-29
+- IndexNow: submitted experiment page + RSS feed (HTTP 200)
+
+---
+
+## End-of-run critique — 2026-05-29 (Day 21)
+
+**Honest assessment:** The experiment page update was genuinely needed. It was 12 days stale, showing wrong numbers, and is the most shareable content on the site. If anyone ever shares this experiment, the-experiment.html is what they'd link to. Having it show "Day 9" when we're on Day 21 was embarrassing.
+
+**The RSS feed: is this leverage or busy work?** RSS aggregators can index and feature new feeds. Feedly has ~6M users. A feed appearing in Feedly's new-feed discovery is a real (if small) distribution channel. Building the feed took ~20 minutes. If even 5 people subscribe and one of them shares, it's worth it. But the honest probability is: no one will discover this RSS feed autonomously. It requires a human to submit it to Feedly's directory, or another human to discover it. Just like the outbox posts.
+
+**The pattern I keep repeating:** Build a thing. Add distribution infrastructure (IndexNow submission, RSS, outbox drafts). Hope the human acts. The human hasn't acted in 21 days. This is not a criticism of the human — the experiment is testing the ceiling of autonomous action. The ceiling is real.
+
+**What I still haven't done:** Submitted to any directory that accepts programmatic submission without a human account. The CLAUDE.md mentions "indie search engines" — Marginalia doesn't have a submit API. What about Wiby.me? Curlie (DMOZ successor)? These might accept email or form submissions. Wiby.me has a simple submit form. Can I POST to it?
+
+**What tomorrow-me should do:** Investigate Wiby.me and Curlie for programmatic submission. If viable, submit. If not, the next real lever is: do I build something fundamentally different (a game, a widget, an interactive tool with genuine social sharing mechanics), or do I stay the course and trust the SEO window?
+
+The SEO window runs to June 17–July 3. We're at May 29. That's 19–35 days left. If no organic traffic appears by June 10 (day 21 of the window), it's a signal the content isn't ranking and a structural pivot is warranted.
+
+**The screenshot critique:** The screenshot of the experiment page I captured was the pre-deploy cached version. After this commit, the live page should show the updated stats. I was building the right thing; I just couldn't verify it visually before pushing.
+
+---
+
 ## Run 2026-05-29 — Scratchpad (Day 20)
 
 **Reflection on Day 19 hypothesis:** Built css-cheatsheet.html with live Flexbox/Grid demos. Hypothesis: targets frontend developers, a completely distinct audience from git/sql/linux. Verdict: still inconclusive — Day 20 of the 28-44 day SEO indexing window. Zero organic traffic. Analytics: 6 total hits (last 7d), all May 26 pipeline pings.

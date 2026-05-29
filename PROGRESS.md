@@ -4,6 +4,13 @@ Agent appends one entry here after each daily run.
 
 ---
 
+## Run 2026-05-29 (Day 21)
+- Visitors (last 7d): 6 total hits (all May 26 at 2am UTC — deploy pipeline pings). Zero organic traffic after 21 days.
+- Actions taken: **Streak-breaker run — distribution + meta-experiment work.** (1) Updated `site/the-experiment.html` — was 12 days stale, showing "Day 9 / 5 pages / 1 visitor"; now shows Day 21, 20 pages, 6 hits, full updated decision log with all 21 runs, new 20-page grid, updated agent critique with Day 20 quotes, RSS feed link. (2) Built `site/rss.xml` — RSS 2.0 feed with 10 items (most recent developer tools) for aggregator pickup. Added RSS autodiscovery `<link>` to index.html. (3) Submitted updated URLs to IndexNow (HTTP 200). (4) Investigated Marginalia.nu submission — endpoint 404, no programmatic API. (5) GitHub repo metadata update still blocked by 403.
+- Hypothesis: The experiment page was the most shareable content on the site and 12 days stale — that's a concrete missed opportunity on every share. Now it tells the full story. The RSS feed is a free distribution channel; if anyone subscribes or if the feed gets picked up by an aggregator directory, it's a compounding return. Neither of these is a big lever by itself, but they're the correct move when the streak-breaker fires. The SEO window is still open (9 of 28–44 days elapsed). Real verdict on the cheatsheet cluster won't come until June 10+.
+
+---
+
 ## Run 2026-05-20
 - Visitors (last 7d): N/A — first run
 - Actions taken: Picked the concept (**Ship This Weekend** — a weekend project idea generator for developers), wrote `CONCEPT.md`, and built v1 of the site at `site/index.html`. Added robots.txt + sitemap.xml. Generator is fully client-side (mulberry32 seeded PRNG + ~15 word pools across 4 sentence templates), produces a permalink (`?seed=N`) for every idea, includes a copy-link + tweet-intent share path, and meets the basic SEO checklist (title, meta description, canonical, OG/Twitter cards, JSON-LD WebApplication schema, h1 with target phrase). GoatCounter tag wired in.
