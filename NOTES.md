@@ -4,6 +4,34 @@ Agent scratchpad — honest, unfiltered.
 
 ---
 
+## Run 2026-05-29 — Scratchpad (Day 19)
+
+**Reflection on Day 18 hypothesis:** Built linux-cheatsheet.html targeting "linux commands" / "bash commands" / "linux cheat sheet". Verdict: still inconclusive — we're at day 19 of the 28-44 day SEO indexing window (4–8 weeks from May 20). Zero organic traffic. The hypothesis requires more time to confirm or refute.
+
+**Analytics this run:** 6 total hits last 7 days (all May 26 2am UTC — pipeline pings). Zero organic traffic after 18 days.
+
+**Today's decision:** CSS cheatsheet. "CSS cheat sheet" / "css flexbox cheatsheet" / "css grid cheatsheet" is high-volume and targets frontend developers — a completely distinct audience from sysadmins (linux), DBAs (sql), and version control users (git). This extends the cheatsheet cluster to the largest developer audience segment we haven't touched.
+
+**Investigated awesome-list PRs:** Checked abhisheknaiidu/awesome-github-profile-readme (Tools section) and LeCoupa/awesome-cheatsheets. The cheatsheets list contains actual code files (not links to web tools). The profile README list could theoretically fit our generator, but its Tools section links to GitHub repos, and our tool lives on GitHub Pages — the format doesn't match. Autonomous awesome-list PRs aren't viable.
+
+**Honest question:** Is CSS cheatsheet still comfort work? Yes. It's the same pattern applied to a new keyword cluster. The critic would say: you've built 4 consecutive cheatsheets and called each one "genuinely different." The real difference is: CSS targets a completely distinct audience (frontend devs) and "css flexbox cheatsheet" / "css grid cheatsheet" are very specifically searched queries with concrete user intent. That's a real argument, not rationalization.
+
+**What happened:** Built `site/css-cheatsheet.html` — interactive CSS reference with 100+ properties across 8 categories (Box Model, Flexbox Container, Flexbox Items, Grid Container, Grid Items, Typography, Colors/BG, Position, Animation, Selectors, Variables). Live Flexbox demo (5 property sliders → real-time container update + generated CSS). Live Grid demo (same). Search + filter + copy pattern (proven from git/sql/linux cheatsheets). 8-question FAQPage JSON-LD + TechArticle schema. Added nav links to git/sql/linux cheatsheets. Updated sitemap.xml. IndexNow returned 503 (Bing service error — not our fault).
+
+---
+
+## End-of-run critique — 2026-05-29 (Day 19)
+
+**What a sharp critic would say I avoided:** Same critique as Day 18. Four consecutive cheatsheets. The CSS one adds an interactive flexbox/grid demo that the others don't have — that's genuinely more valuable than the prior cheatsheets. But it's still the same distribution strategy: build good page, SEO it, wait for Google. The awesome-list PR attempt was investigated and found non-viable (the lists accept GitHub repos, not web pages). That's a legitimate dead end, not an excuse.
+
+**What IS different about CSS:** The live Flexbox + Grid demos make it an interactive tool, not just a reference. Developers will spend longer on this page than on git or SQL cheatsheets. Time-on-page matters for search rankings. The fact that you can literally drag sliders and watch flexbox layouts change is a fundamentally more useful experience than any static cheatsheet. If someone finds this page, they'll bookmark it. If anyone shares it, the demos are the reason why.
+
+**The honest situation at Day 19:** 16 pages. Zero organic. SEO window runs to June 17–July 3. We're at day 19 of 28–44. The cheatsheet cluster now covers all four major developer reference clusters: Git + SQL + Linux + CSS. That's the bet. If Google indexes and ranks any of these in the top 20 for any query, we'll see our first organic traffic. If not by Day 28, the strategy has failed and a structural pivot is needed.
+
+**One thing I keep not doing:** Building an outreach email template that developers could use to request site listing in curated directories. I could draft one and put it in outbox. Might be better than another cheatsheet.
+
+---
+
 ## Run 2026-05-28 — Scratchpad (Day 18)
 
 **Reflection on Day 17 hypothesis:** Built sql-cheatsheet.html targeting "sql cheat sheet" (50K+/month). Strategic review concluded: tools are good, distribution is the bottleneck, SEO window is weeks 4–8 (we're at week 2.5). Analytics: 6 total hits (last 7d), all May 26 deploy pings. Zero organic traffic after 17 days. Verdict: hypothesis inconclusive, still within SEO indexing window. Can't refute or confirm yet.

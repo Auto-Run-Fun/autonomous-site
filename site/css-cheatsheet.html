@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Cheat Sheet — Complete CSS Reference with Flexbox & Grid</title>
+  <meta name="description" content="Interactive CSS cheat sheet with 100+ properties, live Flexbox and Grid demos, one-click copy, and search/filter. The complete CSS reference for frontend developers.">
+  <link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/css-cheatsheet.html">
+  <meta property="og:title" content="CSS Cheat Sheet — Complete CSS Reference with Flexbox & Grid">
+  <meta property="og:description" content="Interactive CSS cheat sheet with 100+ properties, live Flexbox and Grid demos, one-click copy, and search/filter. The complete CSS reference for frontend developers.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/css-cheatsheet.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CSS Cheat Sheet — Complete CSS Reference with Flexbox & Grid">
+  <meta name="twitter:description" content="Interactive CSS cheat sheet with 100+ properties, live Flexbox and Grid demos, one-click copy, and search/filter.">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "CSS Cheat Sheet — Complete CSS Reference with Flexbox & Grid",
+    "description": "Interactive CSS cheat sheet with 100+ properties, live Flexbox and Grid demos, one-click copy, and search/filter.",
+    "url": "https://auto-run-fun.github.io/autonomous-site/css-cheatsheet.html",
+    "author": {"@type": "Organization", "name": "Developer Tools Hub"},
+    "about": {"@type": "Thing", "name": "CSS"},
+    "keywords": "css cheat sheet, css flexbox, css grid, css properties, css reference"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is CSS flexbox and when should I use it?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "CSS Flexbox (Flexible Box Layout) is a one-dimensional layout model for arranging items in a row or column. Use flexbox for navigation bars, centering elements, distributing space among items, and any layout along a single axis. For two-dimensional layouts (rows AND columns simultaneously), use CSS Grid instead."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between CSS Grid and Flexbox?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Flexbox works along one axis at a time (either row or column), making it ideal for components and small-scale layouts. CSS Grid works in two dimensions simultaneously (rows and columns), making it ideal for page layouts and complex grid-based designs. You can nest them — Grid for the overall layout, Flexbox for components within cells."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I center a div in CSS?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The modern way: set the parent to display: flex; align-items: center; justify-content: center; — this centers the child both horizontally and vertically. For absolute centering: position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); For horizontal centering only: margin: 0 auto; with a defined width."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What are CSS custom properties (variables)?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "CSS custom properties (also called CSS variables) let you store values to reuse throughout your stylesheet. Define with double dash prefix: --primary-color: #3b82f6; and use with var(): color: var(--primary-color); They cascade and inherit, making them ideal for themes and design systems. Unlike Sass variables, CSS variables work at runtime and can be changed with JavaScript."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do CSS media queries work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Media queries apply CSS rules based on viewport conditions. The most common use is responsive breakpoints: @media (max-width: 768px) { /* mobile styles */ }. Modern approach uses min-width (mobile-first): start with mobile styles, then use @media (min-width: 768px) to add styles for larger screens. Common breakpoints: 640px (sm), 768px (md), 1024px (lg), 1280px (xl)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What does position relative vs absolute vs fixed mean in CSS?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "position: relative moves an element relative to its normal position, creates a positioning context for absolute children. position: absolute removes from normal flow, positions relative to the nearest non-static ancestor. position: fixed positions relative to the viewport and doesn't scroll. position: sticky is a hybrid — acts like relative until it hits a scroll threshold, then acts like fixed."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do CSS transitions and animations differ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "CSS transitions animate property changes between two states, triggered by events (like :hover). They're defined on the element and fire when a property changes: transition: color 0.3s ease;. CSS animations (using @keyframes) play automatically or on load, can loop, and can have multiple steps. Use transitions for hover effects; use animations for loading spinners, pulsing elements, or sequences."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the CSS box model?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The CSS box model describes how element dimensions are calculated. Every element has: content (text/children), padding (space inside border), border (the actual border), and margin (space outside border). By default (box-sizing: content-box), width and height apply to the content only, so actual element size is larger. Use box-sizing: border-box (set it globally via * { box-sizing: border-box }) to make width include padding and border — much more intuitive."
+        }
+      }
+    ]
+  }
+  </script>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --border: #334155;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --accent: #3b82f6;
+      --accent2: #8b5cf6;
+      --green: #22c55e;
+      --yellow: #eab308;
+      --red: #ef4444;
+      --orange: #f97316;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 15px; line-height: 1.6; }
+
+    /* Nav */
+    nav { background: var(--surface); border-bottom: 1px solid var(--border); padding: 10px 16px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    nav a { color: var(--muted); text-decoration: none; font-size: 13px; padding: 4px 8px; border-radius: 4px; white-space: nowrap; }
+    nav a:hover { color: var(--text); background: var(--border); }
+    nav .brand { color: var(--text); font-weight: 600; margin-right: 4px; }
+
+    /* Header */
+    header { padding: 36px 24px 24px; text-align: center; }
+    header h1 { font-size: clamp(22px, 4vw, 32px); font-weight: 700; margin-bottom: 8px; }
+    header p { color: var(--muted); max-width: 560px; margin: 0 auto 20px; }
+
+    /* Controls */
+    .controls { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; padding: 0 16px 20px; }
+    .search-wrap { position: relative; }
+    .search-wrap input { background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 9px 12px 9px 36px; border-radius: 8px; font-size: 14px; width: 280px; outline: none; }
+    .search-wrap input:focus { border-color: var(--accent); }
+    .search-wrap svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); opacity: 0.4; }
+    .filters { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+    .filter-btn { background: var(--surface); border: 1px solid var(--border); color: var(--muted); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; transition: all 0.15s; }
+    .filter-btn:hover, .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    /* Demo tabs */
+    .demo-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 0; }
+    .demo-tab { padding: 8px 16px; cursor: pointer; font-size: 13px; color: var(--muted); border-bottom: 2px solid transparent; transition: all 0.15s; background: none; border-top: none; border-left: none; border-right: none; }
+    .demo-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* Layout */
+    main { max-width: 1200px; margin: 0 auto; padding: 0 16px 48px; }
+
+    /* Interactive demos */
+    .demo-section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 24px; overflow: hidden; }
+    .demo-header { padding: 16px 20px 0; }
+    .demo-header h2 { font-size: 18px; font-weight: 600; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+    .demo-header p { color: var(--muted); font-size: 13px; margin-bottom: 12px; }
+    .demo-body { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+    @media (max-width: 700px) { .demo-body { grid-template-columns: 1fr; } }
+    .demo-controls { padding: 16px 20px; border-right: 1px solid var(--border); }
+    @media (max-width: 700px) { .demo-controls { border-right: none; border-bottom: 1px solid var(--border); } }
+    .demo-preview { padding: 16px 20px; }
+    .demo-preview-box { background: #0f172a; border-radius: 8px; padding: 12px; min-height: 120px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .demo-code { background: #0f172a; border-radius: 8px; padding: 12px; margin-top: 10px; font-family: 'Fira Code', 'Cascadia Code', monospace; font-size: 12px; color: #7dd3fc; white-space: pre; overflow-x: auto; }
+    .prop-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .prop-label { font-size: 13px; color: var(--muted); min-width: 120px; }
+    .prop-select { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 4px 8px; border-radius: 4px; font-size: 13px; cursor: pointer; }
+
+    /* Reference grid */
+    .sections-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+    .section-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+    .section-card.hidden { display: none; }
+    .section-header { padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; user-select: none; }
+    .section-header h2 { font-size: 16px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+    .section-header .count { font-size: 12px; color: var(--muted); background: var(--bg); padding: 2px 8px; border-radius: 12px; }
+    .section-header .toggle { color: var(--muted); transition: transform 0.2s; }
+    .section-card.collapsed .toggle { transform: rotate(-90deg); }
+    .section-body { padding: 0 18px 16px; }
+    .cmd-table { width: 100%; border-collapse: collapse; }
+    .cmd-table tr { border-bottom: 1px solid var(--border); }
+    .cmd-table tr:last-child { border-bottom: none; }
+    .cmd-table tr.hidden { display: none; }
+    .cmd-table td { padding: 8px 6px; vertical-align: top; }
+    .cmd-table td:first-child { font-family: 'Fira Code', 'Cascadia Code', monospace; font-size: 13px; color: #7dd3fc; width: 42%; }
+    .cmd-table td:nth-child(2) { color: var(--text); font-size: 13px; width: 42%; }
+    .cmd-table td:last-child { width: 16%; text-align: right; }
+    .copy-btn { background: none; border: 1px solid var(--border); color: var(--muted); padding: 3px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; white-space: nowrap; }
+    .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .copy-btn.copied { border-color: var(--green); color: var(--green); }
+    .tag { display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 10px; background: rgba(59,130,246,0.15); color: #93c5fd; margin-left: 4px; }
+
+    /* No results */
+    .no-results { text-align: center; color: var(--muted); padding: 40px; display: none; }
+    .no-results.visible { display: block; }
+
+    /* FAQ */
+    .faq-section { margin-top: 40px; }
+    .faq-section h2 { font-size: 20px; font-weight: 600; margin-bottom: 16px; }
+    .faq-item { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; overflow: hidden; }
+    .faq-q { padding: 14px 16px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 500; }
+    .faq-q:hover { background: rgba(255,255,255,0.03); }
+    .faq-a { padding: 0 16px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s; color: var(--muted); font-size: 14px; line-height: 1.7; }
+    .faq-item.open .faq-a { max-height: 200px; padding: 0 16px 14px; }
+    .faq-item.open .faq-toggle { transform: rotate(45deg); }
+    .faq-toggle { font-size: 20px; color: var(--muted); transition: transform 0.2s; line-height: 1; }
+
+    kbd { background: var(--bg); border: 1px solid var(--border); border-radius: 3px; padding: 1px 5px; font-size: 12px; font-family: monospace; }
+    .kbd-hint { text-align: center; color: var(--muted); font-size: 12px; margin-bottom: 16px; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <span class="brand">Dev Tools</span>
+  <a href="index.html">Ideas</a>
+  <a href="git-cheatsheet.html">Git</a>
+  <a href="sql-cheatsheet.html">SQL</a>
+  <a href="linux-cheatsheet.html">Linux</a>
+  <a href="css-cheatsheet.html" style="color:var(--accent)">CSS</a>
+  <a href="cron-builder.html">Cron</a>
+  <a href="readme-generator.html">README</a>
+  <a href="github-profile-readme.html">Profile</a>
+  <a href="the-experiment.html">Experiment</a>
+</nav>
+
+<header>
+  <h1>CSS Cheat Sheet</h1>
+  <p>100+ CSS properties with interactive Flexbox &amp; Grid demos, one-click copy, and instant search.</p>
+</header>
+
+<div class="controls">
+  <div class="search-wrap">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="search" placeholder="Search CSS properties… (Ctrl+K)" autocomplete="off">
+  </div>
+</div>
+<div class="filters" style="margin-bottom:20px">
+  <button class="filter-btn active" data-cat="all">All</button>
+  <button class="filter-btn" data-cat="box-model">Box Model</button>
+  <button class="filter-btn" data-cat="flexbox">Flexbox</button>
+  <button class="filter-btn" data-cat="grid">Grid</button>
+  <button class="filter-btn" data-cat="typography">Typography</button>
+  <button class="filter-btn" data-cat="colors">Colors &amp; BG</button>
+  <button class="filter-btn" data-cat="position">Position</button>
+  <button class="filter-btn" data-cat="animation">Animation</button>
+  <button class="filter-btn" data-cat="selectors">Selectors</button>
+  <button class="filter-btn" data-cat="variables">Variables</button>
+</div>
+<p class="kbd-hint"><kbd>Ctrl</kbd>+<kbd>K</kbd> to search · Click any row to copy</p>
+
+<main>
+
+<!-- FLEXBOX DEMO -->
+<div class="demo-section" id="flexbox-demo" data-cat="flexbox">
+  <div class="demo-header">
+    <h2>⚡ Interactive Flexbox Demo</h2>
+    <p>Adjust properties to see live results. Copy the generated CSS.</p>
+    <div class="demo-tabs">
+      <button class="demo-tab active" onclick="showDemo('flex')">Flexbox</button>
+      <button class="demo-tab" onclick="showDemo('grid')">Grid</button>
+    </div>
+  </div>
+  <div class="demo-body" id="flex-demo">
+    <div class="demo-controls">
+      <div class="prop-row"><span class="prop-label">flex-direction</span>
+        <select class="prop-select" onchange="updateFlex()" id="fd">
+          <option>row</option><option>row-reverse</option><option>column</option><option>column-reverse</option>
+        </select>
+      </div>
+      <div class="prop-row"><span class="prop-label">justify-content</span>
+        <select class="prop-select" onchange="updateFlex()" id="jc">
+          <option>flex-start</option><option>center</option><option>flex-end</option><option>space-between</option><option>space-around</option><option>space-evenly</option>
+        </select>
+      </div>
+      <div class="prop-row"><span class="prop-label">align-items</span>
+        <select class="prop-select" onchange="updateFlex()" id="ai">
+          <option>stretch</option><option>flex-start</option><option>center</option><option>flex-end</option><option>baseline</option>
+        </select>
+      </div>
+      <div class="prop-row"><span class="prop-label">flex-wrap</span>
+        <select class="prop-select" onchange="updateFlex()" id="fw">
+          <option>nowrap</option><option>wrap</option><option>wrap-reverse</option>
+        </select>
+      </div>
+      <div class="prop-row"><span class="prop-label">gap</span>
+        <select class="prop-select" onchange="updateFlex()" id="fg">
+          <option>0px</option><option>4px</option><option>8px</option><option value="12px" selected>12px</option><option>16px</option><option>24px</option>
+        </select>
+      </div>
+    </div>
+    <div class="demo-preview">
+      <div class="demo-preview-box">
+        <div id="flex-container" style="display:flex;gap:12px;width:100%;min-height:80px;border:1px dashed #334155;padding:8px;border-radius:4px">
+          <div style="background:#3b82f6;color:#fff;padding:8px 12px;border-radius:4px;font-size:13px;font-weight:600">1</div>
+          <div style="background:#8b5cf6;color:#fff;padding:16px 12px;border-radius:4px;font-size:13px;font-weight:600">2</div>
+          <div style="background:#22c55e;color:#fff;padding:8px 12px;border-radius:4px;font-size:13px;font-weight:600">3</div>
+          <div style="background:#f97316;color:#fff;padding:12px;border-radius:4px;font-size:13px;font-weight:600">4</div>
+          <div style="background:#ec4899;color:#fff;padding:8px 12px;border-radius:4px;font-size:13px;font-weight:600">5</div>
+        </div>
+      </div>
+      <div class="demo-code" id="flex-code">.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: stretch;
+  flex-wrap: nowrap;
+  gap: 12px;
+}</div>
+    </div>
+  </div>
+  <div class="demo-body" id="grid-demo" style="display:none">
+    <div class="demo-controls">
+      <div class="prop-row"><span class="prop-label">grid-template-columns</span>
+        <select class="prop-select" onchange="updateGrid()" id="gtc">
+          <option>1fr 1fr 1fr</option>
+          <option>repeat(3, 1fr)</option>
+          <option>1fr 2fr 1fr</option>
+          <option>200px 1fr</option>
+          <option>repeat(auto-fill, minmax(100px, 1fr))</option>
+          <option>repeat(4, 1fr)</option>
+        </select>
+      </div>
+      <div class="prop-row"><span class="prop-label">grid-template-rows</span>
+        <select class="prop-select" onchange="updateGrid()" id="gtr">
+          <option>auto</option>
+          <option>100px 100px</option>
+          <option>1fr 2fr</option>
+          <option>repeat(2, 80px)</option>
+        </select>
+      </div>
+      <div class="prop-row"><span class="prop-label">gap</span>
+        <select class="prop-select" onchange="updateGrid()" id="gg">
+          <option>0px</option><option>4px</option><option>8px</option><option value="12px" selected>12px</option><option>16px</option>
+        </select>
+      </div>
+      <div class="prop-row"><span class="prop-label">justify-items</span>
+        <select class="prop-select" onchange="updateGrid()" id="gi">
+          <option>stretch</option><option>start</option><option>center</option><option>end</option>
+        </select>
+      </div>
+      <div class="prop-row"><span class="prop-label">align-items</span>
+        <select class="prop-select" onchange="updateGrid()" id="gai">
+          <option>stretch</option><option>start</option><option>center</option><option>end</option>
+        </select>
+      </div>
+    </div>
+    <div class="demo-preview">
+      <div class="demo-preview-box">
+        <div id="grid-container" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;width:100%;border:1px dashed #334155;padding:8px;border-radius:4px">
+          <div style="background:#3b82f6;color:#fff;padding:10px;border-radius:4px;font-size:13px;font-weight:600;text-align:center">1</div>
+          <div style="background:#8b5cf6;color:#fff;padding:10px;border-radius:4px;font-size:13px;font-weight:600;text-align:center">2</div>
+          <div style="background:#22c55e;color:#fff;padding:10px;border-radius:4px;font-size:13px;font-weight:600;text-align:center">3</div>
+          <div style="background:#f97316;color:#fff;padding:10px;border-radius:4px;font-size:13px;font-weight:600;text-align:center">4</div>
+          <div style="background:#ec4899;color:#fff;padding:10px;border-radius:4px;font-size:13px;font-weight:600;text-align:center">5</div>
+          <div style="background:#eab308;color:#0f172a;padding:10px;border-radius:4px;font-size:13px;font-weight:600;text-align:center">6</div>
+        </div>
+      </div>
+      <div class="demo-code" id="grid-code">.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto;
+  gap: 12px;
+  justify-items: stretch;
+  align-items: stretch;
+}</div>
+    </div>
+  </div>
+</div>
+
+<div class="no-results" id="no-results">No properties match your search.</div>
+<div class="sections-grid" id="sections-grid">
+
+<!-- BOX MODEL -->
+<div class="section-card" data-cat="box-model">
+  <div class="section-header" onclick="toggleSection(this)">
+    <h2>📦 Box Model &amp; Sizing</h2>
+    <div style="display:flex;align-items:center;gap:8px"><span class="count">14</span><span class="toggle">▾</span></div>
+  </div>
+  <div class="section-body">
+    <table class="cmd-table">
+      <tr><td>box-sizing: border-box</td><td>Width/height include padding &amp; border (recommended globally)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>width: 100%</td><td>Full width of parent. Also: max-width, min-width</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>height: 100vh</td><td>Full viewport height. Also: 100%, fit-content, min-content</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>margin: 0 auto</td><td>Center block horizontally (needs a width)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>margin: 8px 16px</td><td>Shorthand: top/bottom 8px, left/right 16px</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>padding: 16px 24px</td><td>Inner spacing: top/bottom 16px, left/right 24px</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>border: 1px solid #ccc</td><td>Shorthand: width style color</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>border-radius: 8px</td><td>Round corners. 50% = circle</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>outline: 2px solid blue</td><td>Like border but doesn't affect layout (used for focus)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>overflow: hidden</td><td>Clip overflow. Also: scroll, auto, visible</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>overflow-x: auto</td><td>Horizontal scroll when needed</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>display: block</td><td>Block-level (full width). Also: inline, inline-block, none</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>visibility: hidden</td><td>Hidden but still takes up space (vs display: none)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>aspect-ratio: 16/9</td><td>Maintain ratio when one dimension is auto</td><td><button class="copy-btn">Copy</button></td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- FLEXBOX -->
+<div class="section-card" data-cat="flexbox">
+  <div class="section-header" onclick="toggleSection(this)">
+    <h2>⚡ Flexbox — Container</h2>
+    <div style="display:flex;align-items:center;gap:8px"><span class="count">9</span><span class="toggle">▾</span></div>
+  </div>
+  <div class="section-body">
+    <table class="cmd-table">
+      <tr><td>display: flex</td><td>Enable flexbox on container</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>flex-direction: row</td><td>Main axis direction: row | row-reverse | column | column-reverse</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>justify-content: center</td><td>Align along main axis: flex-start | center | flex-end | space-between | space-around | space-evenly</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>align-items: center</td><td>Align along cross axis: stretch | flex-start | center | flex-end | baseline</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>align-content: center</td><td>Align wrapped lines (only when flex-wrap is set)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>flex-wrap: wrap</td><td>Allow items to wrap: nowrap | wrap | wrap-reverse</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>gap: 16px</td><td>Space between flex items (also: row-gap, column-gap)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>flex-flow: row wrap</td><td>Shorthand for flex-direction + flex-wrap</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>display: inline-flex</td><td>Flex container, but inline (wraps around content)</td><td><button class="copy-btn">Copy</button></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="section-card" data-cat="flexbox">
+  <div class="section-header" onclick="toggleSection(this)">
+    <h2>⚡ Flexbox — Items</h2>
+    <div style="display:flex;align-items:center;gap:8px"><span class="count">8</span><span class="toggle">▾</span></div>
+  </div>
+  <div class="section-body">
+    <table class="cmd-table">
+      <tr><td>flex: 1</td><td>Grow and shrink equally. Shorthand for flex-grow flex-shrink flex-basis</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>flex: 0 0 200px</td><td>Fixed 200px, won't grow or shrink</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>flex-grow: 1</td><td>How much to grow relative to siblings (0 = no grow)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>flex-shrink: 0</td><td>Prevent item from shrinking (1 = default, can shrink)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>flex-basis: auto</td><td>Initial size before growing/shrinking. Also: 200px, 50%</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>align-self: flex-start</td><td>Override align-items for specific item</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>order: -1</td><td>Change visual order (default 0; lower numbers first)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>margin-left: auto</td><td>Push item to far right (auto margin absorbs free space)</td><td><button class="copy-btn">Copy</button></td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- GRID -->
+<div class="section-card" data-cat="grid">
+  <div class="section-header" onclick="toggleSection(this)">
+    <h2>🔲 CSS Grid — Container</h2>
+    <div style="display:flex;align-items:center;gap:8px"><span class="count">10</span><span class="toggle">▾</span></div>
+  </div>
+  <div class="section-body">
+    <table class="cmd-table">
+      <tr><td>display: grid</td><td>Enable grid on container</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>grid-template-columns: repeat(3, 1fr)</td><td>3 equal columns. Also: 1fr 2fr 1fr, 200px 1fr</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>grid-template-rows: 100px auto</td><td>Fixed first row, auto-sized second</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>grid-template-areas: "h h" "s m" "f f"</td><td>Named layout areas (reference with grid-area on items)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>gap: 16px</td><td>Gutter between rows and columns</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>column-gap: 24px</td><td>Gutter between columns only (also: row-gap)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>auto-fill vs auto-fit</td><td>auto-fill: empty tracks stay; auto-fit: empty tracks collapse</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>repeat(auto-fill, minmax(200px, 1fr))</td><td>Responsive grid: fill with minimum 200px columns</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>justify-items: center</td><td>Align items horizontally within cells: start | center | end | stretch</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>align-items: center</td><td>Align items vertically within cells</td><td><button class="copy-btn">Copy</button></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="section-card" data-cat="grid">
+  <div class="section-header" onclick="toggleSection(this)">
+    <h2>🔲 CSS Grid — Items</h2>
+    <div style="display:flex;align-items:center;gap:8px"><span class="count">7</span><span class="toggle">▾</span></div>
+  </div>
+  <div class="section-body">
+    <table class="cmd-table">
+      <tr><td>grid-column: 1 / 3</td><td>Span from column line 1 to 3 (spans 2 columns)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>grid-column: span 2</td><td>Span 2 columns from wherever the item is placed</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>grid-row: 1 / 3</td><td>Span from row line 1 to 3</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>grid-area: header</td><td>Place item in a named area (requires grid-template-areas)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>grid-area: 1 / 1 / 2 / 3</td><td>Shorthand: row-start / col-start / row-end / col-end</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>justify-self: center</td><td>Align one item horizontally within its cell</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>align-self: end</td><td>Align one item vertically within its cell</td><td><button class="copy-btn">Copy</button></td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- TYPOGRAPHY -->
+<div class="section-card" data-cat="typography">
+  <div class="section-header" onclick="toggleSection(this)">
+    <h2>🔤 Typography</h2>
+    <div style="display:flex;align-items:center;gap:8px"><span class="count">16</span><span class="toggle">▾</span></div>
+  </div>
+  <div class="section-body">
+    <table class="cmd-table">
+      <tr><td>font-family: 'Inter', sans-serif</td><td>Font stack (always include fallback)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>font-size: 16px</td><td>Also: 1rem, 1.2em, clamp(14px, 2vw, 18px)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>font-weight: 600</td><td>100–900 or: normal (400), bold (700)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>font-style: italic</td><td>Also: normal, oblique</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>line-height: 1.5</td><td>Unitless is preferred (multiplies font-size)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>letter-spacing: 0.05em</td><td>Tracking between characters</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>text-align: center</td><td>Also: left, right, justify, start, end</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>text-decoration: underline</td><td>Also: none, line-through, overline</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>text-transform: uppercase</td><td>Also: lowercase, capitalize, none</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>text-overflow: ellipsis</td><td>Truncate overflow text with "…" (needs overflow: hidden)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>white-space: nowrap</td><td>Prevent wrapping. Also: pre, pre-wrap, normal</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>word-break: break-all</td><td>Break long words. Also: break-word, normal</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>font-variant: small-caps</td><td>Small caps variant</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>-webkit-line-clamp: 3</td><td>Limit text to N lines with ellipsis (needs -webkit-box)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>clamp(14px, 2.5vw, 20px)</td><td>Fluid font: min 14px, preferred 2.5vw, max 20px</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>font: italic 600 16px/1.5 sans-serif</td><td>Shorthand: style weight size/line-height family</td><td><button class="copy-btn">Copy</button></td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- COLORS & BACKGROUND -->
+<div class="section-card" data-cat="colors">
+  <div class="section-header" onclick="toggleSection(this)">
+    <h2>🎨 Colors &amp; Backgrounds</h2>
+    <div style="display:flex;align-items:center;gap:8px"><span class="count">14</span><span class="toggle">▾</span></div>
+  </div>
+  <div class="section-body">
+    <table class="cmd-table">
+      <tr><td>color: #3b82f6</td><td>Text color (hex, rgb, hsl, oklch)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>color: rgb(59 130 246)</td><td>Modern space-separated RGB (no commas)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>color: hsl(217 91% 60%)</td><td>Hue (0–360) Saturation% Lightness%</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>color: oklch(0.62 0.2 250)</td><td>Perceptual color space (modern, P3 gamut)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>opacity: 0.5</td><td>Affects element and all children (0=transparent, 1=opaque)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>background-color: #fff</td><td>Solid background</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>background-image: url('bg.png')</td><td>Image background</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>background-size: cover</td><td>Scale to cover. Also: contain, 100% auto</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>background-position: center</td><td>Position of background image</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>background-repeat: no-repeat</td><td>Also: repeat, repeat-x, repeat-y</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>background: linear-gradient(135deg, #667eea, #764ba2)</td><td>Gradient background</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>background: radial-gradient(circle, #3b82f6, #0f172a)</td><td>Radial gradient</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>box-shadow: 0 4px 6px rgba(0,0,0,0.1)</td><td>Shadow: x y blur spread color. Inset prefix for inner shadow</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>filter: blur(4px) brightness(0.8)</td><td>CSS filters: blur, brightness, contrast, grayscale, invert</td><td><button class="copy-btn">Copy</button></td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- POSITION -->
+<div class="section-card" data-cat="position">
+  <div class="section-header" onclick="toggleSection(this)">
+    <h2>📍 Positioning &amp; Z-index</h2>
+    <div style="display:flex;align-items:center;gap:8px"><span class="count">10</span><span class="toggle">▾</span></div>
+  </div>
+  <div class="section-body">
+    <table class="cmd-table">
+      <tr><td>position: relative</td><td>Moves relative to itself. Creates positioning context for children</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>position: absolute</td><td>Removed from flow. Positioned to nearest non-static ancestor</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>position: fixed</td><td>Relative to viewport. Stays on screen while scrolling</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>position: sticky</td><td>Relative until scroll threshold, then fixed within parent</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>top: 0; right: 0</td><td>Offset from edges (used with absolute/fixed/sticky)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>z-index: 10</td><td>Stacking order (higher = on top). Only works on positioned elements</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>inset: 0</td><td>Shorthand for top: 0; right: 0; bottom: 0; left: 0</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>transform: translate(-50%, -50%)</td><td>Center trick: position absolute top/left 50% + this</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>float: left</td><td>Float element (legacy; prefer flex/grid)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>clear: both</td><td>Clear floated elements (also: left, right)</td><td><button class="copy-btn">Copy</button></td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ANIMATION -->
+<div class="section-card" data-cat="animation">
+  <div class="section-header" onclick="toggleSection(this)">
+    <h2>✨ Transitions &amp; Animations</h2>
+    <div style="display:flex;align-items:center;gap:8px"><span class="count">12</span><span class="toggle">▾</span></div>
+  </div>
+  <div class="section-body">
+    <table class="cmd-table">
+      <tr><td>transition: all 0.3s ease</td><td>Animate property changes. Shorthand: property duration timing</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>transition: color 0.2s, background 0.2s</td><td>Multiple properties (comma-separated)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>transition-timing-function: ease-in-out</td><td>Also: linear, ease, ease-in, ease-out, cubic-bezier()</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>animation: spin 1s linear infinite</td><td>Shorthand: name duration timing iteration</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>@keyframes spin { to { transform: rotate(360deg) } }</td><td>Define keyframes (from/to or 0%/50%/100%)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>animation-fill-mode: forwards</td><td>Retain final keyframe state after animation ends</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>animation-delay: 0.5s</td><td>Wait before starting animation</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>animation-direction: alternate</td><td>Reverse on odd cycles: normal | reverse | alternate</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>transform: scale(1.1)</td><td>Scale element (also: rotate, translateX/Y, skew)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>transform-origin: center</td><td>Point to rotate/scale from. Also: top left, 50% 50%</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>will-change: transform</td><td>Hint browser to optimize (use sparingly)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>@media (prefers-reduced-motion: reduce)</td><td>Disable animations for users who prefer less motion</td><td><button class="copy-btn">Copy</button></td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- SELECTORS -->
+<div class="section-card" data-cat="selectors">
+  <div class="section-header" onclick="toggleSection(this)">
+    <h2>🎯 Selectors &amp; Pseudo-classes</h2>
+    <div style="display:flex;align-items:center;gap:8px"><span class="count">18</span><span class="toggle">▾</span></div>
+  </div>
+  <div class="section-body">
+    <table class="cmd-table">
+      <tr><td>.class</td><td>Class selector</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>#id</td><td>ID selector (high specificity — use sparingly)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>div > p</td><td>Direct child combinator</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>div p</td><td>Descendant combinator (any nested p)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>h1 + p</td><td>Adjacent sibling (immediately after h1)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>h1 ~ p</td><td>General sibling (any p after h1)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>a:hover</td><td>Mouse over state</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>a:focus</td><td>Keyboard focus state (always style this!)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>a:focus-visible</td><td>Focus only when using keyboard (not mouse click)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>a:active</td><td>Being clicked/pressed</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>input:checked</td><td>Checked checkbox or radio</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>input:disabled</td><td>Disabled form element</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>input:placeholder-shown</td><td>Input with visible placeholder (empty)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>li:first-child</td><td>First child element</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>li:last-child</td><td>Last child element</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>li:nth-child(odd)</td><td>Every odd child. Also: even, 3n, 3n+1</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>div:not(.active)</td><td>Elements that do NOT match the selector</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>[data-theme="dark"]</td><td>Attribute selector. Also: [attr], [attr^="start"], [attr*="contains"]</td><td><button class="copy-btn">Copy</button></td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- VARIABLES -->
+<div class="section-card" data-cat="variables">
+  <div class="section-header" onclick="toggleSection(this)">
+    <h2>🔧 Variables, Functions &amp; At-Rules</h2>
+    <div style="display:flex;align-items:center;gap:8px"><span class="count">10</span><span class="toggle">▾</span></div>
+  </div>
+  <div class="section-body">
+    <table class="cmd-table">
+      <tr><td>--primary: #3b82f6</td><td>Define custom property (CSS variable)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>color: var(--primary)</td><td>Use custom property</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>color: var(--color, #000)</td><td>Use variable with fallback value</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>:root { --gap: 16px }</td><td>Global scope for custom properties</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>calc(100% - 48px)</td><td>Mix units in calculations</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>min(100%, 800px)</td><td>Use smallest value (also: max(), clamp())</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>@media (max-width: 768px)</td><td>Mobile breakpoint. Also: min-width, prefers-color-scheme</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>@media (prefers-color-scheme: dark)</td><td>Detect dark mode preference</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>@import url('styles.css')</td><td>Import another stylesheet (use sparingly — adds request)</td><td><button class="copy-btn">Copy</button></td></tr>
+      <tr><td>@layer utilities { ... }</td><td>Cascade layers for specificity control (modern CSS)</td><td><button class="copy-btn">Copy</button></td></tr>
+    </table>
+  </div>
+</div>
+
+</div><!-- end sections-grid -->
+
+<!-- FAQ -->
+<section class="faq-section">
+  <h2>CSS FAQ</h2>
+
+  <div class="faq-item">
+    <div class="faq-q">What is CSS flexbox and when should I use it? <span class="faq-toggle">+</span></div>
+    <div class="faq-a">CSS Flexbox (Flexible Box Layout) is a one-dimensional layout model for arranging items in a row or column. Use flexbox for navigation bars, centering elements, distributing space among items, and any layout along a single axis. For two-dimensional layouts (rows AND columns simultaneously), use CSS Grid instead.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">What is the difference between CSS Grid and Flexbox? <span class="faq-toggle">+</span></div>
+    <div class="faq-a">Flexbox works along one axis at a time (either row or column), making it ideal for components and small-scale layouts. CSS Grid works in two dimensions simultaneously (rows and columns), making it ideal for page layouts and complex grid-based designs. You can nest them — Grid for the overall layout, Flexbox for components within cells.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">How do I center a div in CSS? <span class="faq-toggle">+</span></div>
+    <div class="faq-a">The modern way: set the parent to <code>display: flex; align-items: center; justify-content: center;</code> — this centers the child both horizontally and vertically. For absolute centering: <code>position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);</code> For horizontal centering only: <code>margin: 0 auto;</code> with a defined width.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">What are CSS custom properties (variables)? <span class="faq-toggle">+</span></div>
+    <div class="faq-a">CSS custom properties let you store values to reuse throughout your stylesheet. Define with double dash prefix: <code>--primary-color: #3b82f6;</code> and use with var(): <code>color: var(--primary-color);</code> They cascade and inherit, making them ideal for themes and design systems. Unlike Sass variables, CSS variables work at runtime and can be changed with JavaScript.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">How do CSS media queries work? <span class="faq-toggle">+</span></div>
+    <div class="faq-a">Media queries apply CSS rules based on viewport conditions. The most common use is responsive breakpoints: <code>@media (max-width: 768px) { /* mobile styles */ }</code>. Modern approach uses min-width (mobile-first): start with mobile styles, then use <code>@media (min-width: 768px)</code> to add styles for larger screens. Common breakpoints: 640px (sm), 768px (md), 1024px (lg), 1280px (xl).</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">What does position relative vs absolute vs fixed mean in CSS? <span class="faq-toggle">+</span></div>
+    <div class="faq-a"><code>position: relative</code> moves an element relative to its normal position, creates a positioning context for absolute children. <code>position: absolute</code> removes from normal flow, positions relative to the nearest non-static ancestor. <code>position: fixed</code> positions relative to the viewport and doesn't scroll. <code>position: sticky</code> acts like relative until it hits a scroll threshold, then acts like fixed.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">How do CSS transitions and animations differ? <span class="faq-toggle">+</span></div>
+    <div class="faq-a">CSS transitions animate property changes between two states, triggered by events (like :hover). They're defined on the element and fire when a property changes: <code>transition: color 0.3s ease;</code>. CSS animations (using @keyframes) play automatically or on load, can loop, and can have multiple steps. Use transitions for hover effects; use animations for loading spinners or sequences.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">What is the CSS box model? <span class="faq-toggle">+</span></div>
+    <div class="faq-a">Every element has: content, padding (space inside border), border, and margin (space outside border). By default (box-sizing: content-box), width applies to content only. Use <code>box-sizing: border-box</code> globally (<code>* { box-sizing: border-box }</code>) to make width include padding and border — much more intuitive for layout work.</div>
+  </div>
+</section>
+
+</main>
+
+<script>
+// Demo tabs
+function showDemo(type) {
+  document.querySelectorAll('.demo-tab').forEach((t,i) => t.classList.toggle('active', (type==='flex'&&i===0)||(type==='grid'&&i===1)));
+  document.getElementById('flex-demo').style.display = type === 'flex' ? '' : 'none';
+  document.getElementById('grid-demo').style.display = type === 'grid' ? '' : 'none';
+}
+
+// Flexbox demo
+function updateFlex() {
+  const fd = document.getElementById('fd').value;
+  const jc = document.getElementById('jc').value;
+  const ai = document.getElementById('ai').value;
+  const fw = document.getElementById('fw').value;
+  const fg = document.getElementById('fg').value;
+  const c = document.getElementById('flex-container');
+  c.style.flexDirection = fd;
+  c.style.justifyContent = jc;
+  c.style.alignItems = ai;
+  c.style.flexWrap = fw;
+  c.style.gap = fg;
+  document.getElementById('flex-code').textContent = `.container {\n  display: flex;\n  flex-direction: ${fd};\n  justify-content: ${jc};\n  align-items: ${ai};\n  flex-wrap: ${fw};\n  gap: ${fg};\n}`;
+}
+
+// Grid demo
+function updateGrid() {
+  const gtc = document.getElementById('gtc').value;
+  const gtr = document.getElementById('gtr').value;
+  const gg = document.getElementById('gg').value;
+  const gi = document.getElementById('gi').value;
+  const gai = document.getElementById('gai').value;
+  const c = document.getElementById('grid-container');
+  c.style.gridTemplateColumns = gtc;
+  c.style.gridTemplateRows = gtr;
+  c.style.gap = gg;
+  c.style.justifyItems = gi;
+  c.style.alignItems = gai;
+  document.getElementById('grid-code').textContent = `.container {\n  display: grid;\n  grid-template-columns: ${gtc};\n  grid-template-rows: ${gtr};\n  gap: ${gg};\n  justify-items: ${gi};\n  align-items: ${gai};\n}`;
+}
+
+// Copy buttons
+document.querySelectorAll('.copy-btn').forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const row = btn.closest('tr');
+    const text = row.querySelector('td:first-child').textContent.trim();
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+    });
+  });
+});
+
+// Click row to copy
+document.querySelectorAll('.cmd-table tr').forEach(row => {
+  row.style.cursor = 'pointer';
+  row.addEventListener('click', (e) => {
+    if (e.target.classList.contains('copy-btn')) return;
+    const text = row.querySelector('td:first-child').textContent.trim();
+    const btn = row.querySelector('.copy-btn');
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+    });
+  });
+});
+
+// Section toggle
+function toggleSection(header) {
+  const card = header.closest('.section-card');
+  const body = card.querySelector('.section-body');
+  card.classList.toggle('collapsed');
+  body.style.display = card.classList.contains('collapsed') ? 'none' : '';
+}
+
+// Filter by category
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const cat = btn.dataset.cat;
+    document.querySelectorAll('.section-card').forEach(card => {
+      if (cat === 'all' || card.dataset.cat === cat) {
+        card.classList.remove('hidden');
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+    // Also show/hide the flexbox demo section
+    const demoSection = document.getElementById('flexbox-demo');
+    if (cat === 'all' || cat === 'flexbox' || cat === 'grid') {
+      demoSection.style.display = '';
+    } else {
+      demoSection.style.display = 'none';
+    }
+    updateSearch();
+  });
+});
+
+// Search
+const searchInput = document.getElementById('search');
+function updateSearch() {
+  const q = searchInput.value.toLowerCase().trim();
+  let anyVisible = false;
+  document.querySelectorAll('.section-card:not(.hidden)').forEach(card => {
+    let cardHasResult = false;
+    card.querySelectorAll('.cmd-table tr').forEach(row => {
+      if (!q) {
+        row.classList.remove('hidden');
+        cardHasResult = true;
+        return;
+      }
+      const text = row.textContent.toLowerCase();
+      const match = text.includes(q);
+      row.classList.toggle('hidden', !match);
+      if (match) cardHasResult = true;
+    });
+    card.style.display = cardHasResult ? '' : 'none';
+    if (cardHasResult) anyVisible = true;
+    // If searching, show section body
+    if (q) {
+      card.querySelector('.section-body').style.display = cardHasResult ? '' : 'none';
+      card.classList.remove('collapsed');
+    }
+  });
+  document.getElementById('no-results').classList.toggle('visible', !anyVisible && !!q);
+}
+
+searchInput.addEventListener('input', updateSearch);
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault();
+    searchInput.focus();
+    searchInput.select();
+  }
+});
+
+// FAQ toggle
+document.querySelectorAll('.faq-q').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.closest('.faq-item');
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  });
+});
+</script>
+
+<script data-goatcounter="https://auto-run-fun.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
