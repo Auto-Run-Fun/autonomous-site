@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Regex Cheatsheet with Live Tester — Interactive Regular Expressions Reference</title>
+  <meta name="description" content="Interactive regex cheatsheet with live tester. Test your patterns in real time, see highlighted matches, and click any entry to insert it. Anchors, character classes, quantifiers, groups, lookarounds, and common patterns.">
+  <link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/regex-cheatsheet.html">
+  <meta property="og:title" content="Regex Cheatsheet with Live Tester">
+  <meta property="og:description" content="Interactive regex reference with real-time pattern tester. Click any entry to insert it and see matches highlighted instantly.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/regex-cheatsheet.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Regex Cheatsheet with Live Tester">
+  <meta name="twitter:description" content="Interactive regex reference with real-time pattern tester. Click any entry to insert it and see matches highlighted instantly.">
+  <link rel="alternate" type="application/rss+xml" title="Ship This Weekend" href="https://auto-run-fun.github.io/autonomous-site/rss.xml">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Regex Cheatsheet with Live Tester",
+    "description": "Interactive regular expressions reference with real-time pattern tester. Click any cheatsheet entry to insert it into the live tester and see matches highlighted immediately.",
+    "url": "https://auto-run-fun.github.io/autonomous-site/regex-cheatsheet.html",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Web",
+    "offers": { "@type": "Offer", "price": "0" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What does .* mean in regex?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": ".* matches any character (except newline by default) zero or more times. The dot matches any single character, and * is a quantifier meaning 'zero or more'. Combined, .* matches any sequence of characters. Use .*? (lazy) to match as few characters as possible."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between + and * in regex?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The * quantifier means 'zero or more' occurrences, while + means 'one or more' occurrences. So a* matches an empty string or any number of 'a' characters, while a+ requires at least one 'a'. Use + when the pattern must appear at least once."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I make a regex case-insensitive?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Add the 'i' flag to make your regex case-insensitive. In JavaScript: /pattern/i or new RegExp('pattern', 'i'). This makes [a-z] match uppercase letters too, and 'hello' match 'Hello', 'HELLO', 'hElLo', etc."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What does \\b mean in regex?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "\\b is a word boundary assertion. It matches the position between a word character (\\w: letters, digits, underscore) and a non-word character. \\bword\\b matches 'word' as a whole word, not as part of 'password' or 'swordplay'."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I match a literal dot in regex?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Escape the dot with a backslash: \\. matches a literal period. Without the backslash, a dot matches any character. For example, to match an IP address use \\d+\\.\\d+\\.\\d+\\.\\d+ instead of \\d+.\\d+.\\d+.\\d+ (which would incorrectly match '1a2b3c4d')."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is a capturing group vs non-capturing group in regex?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A capturing group (abc) remembers the matched text and makes it available as a backreference (\\1) or in match results. A non-capturing group (?:abc) groups the pattern for quantifiers or alternation but does not save the match. Use non-capturing groups when you need grouping but not the captured value — they're slightly faster."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I match a string that does NOT contain a word using regex?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Use a negative lookahead: ^(?!.*word).* matches any string that does not contain 'word'. The (?!.*word) asserts that 'word' does not appear anywhere in the string. Alternatively, use a negated character class [^abc] to match any character except those listed."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What regex matches a valid email address?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A practical email regex is: ^[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-zA-Z]{2,}$ — This matches the local part (letters, digits, dots, underscores, percent, plus, hyphen), the @ symbol, a domain, and a TLD of 2+ letters. Perfect validation requires the full RFC 5322 spec which is extremely complex — this pattern catches 99% of real email addresses."
+        }
+      }
+    ]
+  }
+  </script>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface2: #1c2128;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --accent: #f0b429;
+      --green: #3fb950;
+      --blue: #58a6ff;
+      --purple: #bc8cff;
+      --red: #ff7b72;
+      --orange: #d29922;
+      --teal: #39d353;
+      --match-bg: rgba(240, 180, 41, 0.25);
+      --match-border: rgba(240, 180, 41, 0.6);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; }
+
+    nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0;
+      overflow-x: auto;
+      white-space: nowrap;
+      scrollbar-width: none;
+    }
+    nav::-webkit-scrollbar { display: none; }
+    .nav-brand { font-weight: 700; color: var(--text); text-decoration: none; padding: 0.75rem 1rem 0.75rem 0; display: flex; align-items: center; gap: 0.4rem; flex-shrink: 0; }
+    .nav-brand::before { content: "🔧"; }
+    nav a { color: var(--muted); text-decoration: none; padding: 0.75rem 0.6rem; font-size: 0.8rem; transition: color 0.15s; flex-shrink: 0; }
+    nav a:hover { color: var(--text); }
+    nav a.active { color: var(--accent); font-weight: 600; }
+
+    .page { max-width: 1000px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+
+    h1 { font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .subtitle { color: var(--muted); font-size: 1rem; margin-bottom: 2rem; }
+
+    /* LIVE TESTER */
+    .tester-section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .tester-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .tester-title { font-size: 1rem; font-weight: 700; color: var(--text); }
+    .match-count {
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-family: 'SFMono-Regular', Consolas, monospace;
+      background: var(--surface2);
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+    }
+    .match-count.has-matches { color: var(--green); border-color: var(--green); }
+    .match-count.has-error { color: var(--red); border-color: var(--red); }
+
+    .tester-row { display: grid; gap: 1rem; grid-template-columns: 1fr 1fr; }
+    @media (max-width: 640px) { .tester-row { grid-template-columns: 1fr; } }
+
+    .input-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .input-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+    .pattern-wrap { display: flex; gap: 0.5rem; align-items: flex-start; }
+    .pattern-input {
+      flex: 1;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'SFMono-Regular', Consolas, monospace;
+      font-size: 0.95rem;
+      padding: 0.6rem 0.75rem;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .pattern-input:focus { border-color: var(--blue); }
+    .pattern-input.error { border-color: var(--red); }
+
+    .flags-row { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.5rem; }
+    .flag-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--muted);
+      cursor: pointer;
+      font-family: 'SFMono-Regular', Consolas, monospace;
+      font-size: 0.8rem;
+      padding: 0.2rem 0.6rem;
+      transition: all 0.15s;
+    }
+    .flag-btn:hover { border-color: var(--blue); color: var(--text); }
+    .flag-btn.active { background: rgba(88,166,255,0.15); border-color: var(--blue); color: var(--blue); }
+    .flag-tip { font-size: 0.75rem; color: var(--muted); align-self: center; }
+
+    .test-string-wrap { position: relative; }
+    .test-textarea {
+      width: 100%;
+      min-height: 120px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'SFMono-Regular', Consolas, monospace;
+      font-size: 0.9rem;
+      padding: 0.6rem 0.75rem;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .test-textarea:focus { border-color: var(--blue); }
+
+    .result-display {
+      min-height: 120px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: 'SFMono-Regular', Consolas, monospace;
+      font-size: 0.9rem;
+      padding: 0.6rem 0.75rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+      line-height: 1.7;
+    }
+    .result-display mark {
+      background: var(--match-bg);
+      outline: 1px solid var(--match-border);
+      border-radius: 2px;
+      color: var(--accent);
+    }
+    .result-display .no-match { color: var(--muted); font-style: italic; }
+    .result-display .error-msg { color: var(--red); }
+
+    .groups-row {
+      margin-top: 0.75rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-family: 'SFMono-Regular', Consolas, monospace;
+    }
+    .groups-row span { color: var(--purple); }
+
+    /* REFERENCE SECTION */
+    .category-section { margin-bottom: 2rem; }
+    .category-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .category-name {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+    .category-line { flex: 1; height: 1px; background: var(--border); }
+
+    .ref-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 0.5rem;
+    }
+
+    .ref-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.65rem 0.85rem;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+    .ref-item:hover { border-color: var(--blue); background: rgba(88,166,255,0.05); transform: translateY(-1px); }
+    .ref-item:active { transform: translateY(0); }
+    .ref-pattern {
+      font-family: 'SFMono-Regular', Consolas, monospace;
+      font-size: 0.9rem;
+      color: var(--green);
+      font-weight: 600;
+      min-width: 80px;
+      flex-shrink: 0;
+      word-break: break-all;
+    }
+    .ref-desc { flex: 1; }
+    .ref-label { font-size: 0.85rem; color: var(--text); }
+    .ref-note { font-size: 0.75rem; color: var(--muted); margin-top: 0.15rem; }
+    .ref-example {
+      font-family: 'SFMono-Regular', Consolas, monospace;
+      font-size: 0.72rem;
+      color: var(--orange);
+      margin-top: 0.2rem;
+    }
+    .insert-hint {
+      font-size: 0.7rem;
+      color: var(--muted);
+      opacity: 0;
+      transition: opacity 0.15s;
+      flex-shrink: 0;
+      align-self: center;
+    }
+    .ref-item:hover .insert-hint { opacity: 1; }
+
+    /* Common patterns section */
+    .pattern-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 0.75rem;
+    }
+    .pattern-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .pattern-card:hover { border-color: var(--accent); background: rgba(240,180,41,0.05); }
+    .pattern-card-name { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.3rem; }
+    .pattern-card-regex {
+      font-family: 'SFMono-Regular', Consolas, monospace;
+      font-size: 0.78rem;
+      color: var(--green);
+      word-break: break-all;
+      margin-bottom: 0.4rem;
+      line-height: 1.5;
+    }
+    .pattern-card-desc { font-size: 0.8rem; color: var(--muted); }
+    .pattern-card-example { font-size: 0.75rem; color: var(--orange); font-family: monospace; margin-top: 0.3rem; }
+    .copy-pattern-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 0.72rem;
+      padding: 0.2rem 0.5rem;
+      margin-top: 0.5rem;
+      transition: all 0.15s;
+    }
+    .copy-pattern-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* insert flash animation */
+    @keyframes flash-border {
+      0% { border-color: var(--blue); box-shadow: 0 0 0 2px rgba(88,166,255,0.25); }
+      100% { border-color: var(--border); box-shadow: none; }
+    }
+    .flash { animation: flash-border 0.6s ease-out; }
+
+    /* Tips */
+    .tips { background: rgba(88,166,255,0.05); border: 1px solid rgba(88,166,255,0.2); border-radius: 10px; padding: 1.25rem; margin-top: 2.5rem; }
+    .tips h3 { color: var(--blue); font-size: 0.9rem; font-weight: 700; margin-bottom: 0.75rem; }
+    .tips ul { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .tips li { font-size: 0.85rem; color: var(--muted); padding-left: 1.25rem; position: relative; }
+    .tips li::before { content: "→"; position: absolute; left: 0; color: var(--blue); }
+    .tips li code { color: var(--green); font-family: monospace; background: rgba(63,185,80,0.1); padding: 0 3px; border-radius: 3px; }
+
+    footer { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--muted); text-align: center; }
+    footer a { color: var(--muted); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand">Dev Tools</a>
+  <a href="index.html">Weekend Ideas</a>
+  <a href="project-estimator.html">Estimator</a>
+  <a href="readme-generator.html">README</a>
+  <a href="cron-builder.html">Cron</a>
+  <a href="git-cheatsheet.html">Git</a>
+  <a href="sql-cheatsheet.html">SQL</a>
+  <a href="linux-cheatsheet.html">Linux</a>
+  <a href="css-cheatsheet.html">CSS</a>
+  <a href="docker-cheatsheet.html">Docker</a>
+  <a href="vscode-shortcuts.html">VS Code</a>
+  <a href="regex-cheatsheet.html" class="active">Regex</a>
+  <a href="tech-stack.html">Tech Stack</a>
+  <a href="the-experiment.html">Experiment</a>
+</nav>
+
+<div class="page">
+  <h1>Regex Cheatsheet</h1>
+  <p class="subtitle">Interactive reference with live tester — click any entry to insert the pattern and see matches highlighted in real time.</p>
+
+  <!-- LIVE TESTER -->
+  <div class="tester-section">
+    <div class="tester-header">
+      <span class="tester-title">⚡ Live Tester</span>
+      <span class="match-count" id="matchCount">No pattern</span>
+    </div>
+
+    <div class="tester-row">
+      <div class="input-group">
+        <div class="input-label">Pattern</div>
+        <input type="text" class="pattern-input" id="patternInput" placeholder="e.g.  \d{3}-\d{4}" spellcheck="false" autocomplete="off">
+        <div class="flags-row">
+          <button class="flag-btn" data-flag="g" title="Global — find all matches">g</button>
+          <button class="flag-btn active" data-flag="i" title="Ignore case">i</button>
+          <button class="flag-btn" data-flag="m" title="Multiline — ^ and $ match line starts/ends">m</button>
+          <button class="flag-btn" data-flag="s" title="Dotall — . matches newlines too">s</button>
+          <span class="flag-tip">Click flags to toggle</span>
+        </div>
+        <div class="groups-row" id="groupsRow"></div>
+      </div>
+
+      <div class="input-group">
+        <div class="input-label">Test String</div>
+        <textarea class="test-textarea" id="testInput" placeholder="Type or paste your test string here…">Call 415-555-0182 or 650-555-9041
+Email: hello@example.com
+Date: 2024-05-30
+Color: #ff6b6b or #abc
+URL: https://example.com/path?q=test</textarea>
+      </div>
+    </div>
+
+    <div class="input-group" style="margin-top:1rem;">
+      <div class="input-label">Result (matches highlighted)</div>
+      <div class="result-display" id="resultDisplay"></div>
+    </div>
+  </div>
+
+  <!-- ANCHORS -->
+  <div class="category-section">
+    <div class="category-header">
+      <span class="category-name">Anchors &amp; Boundaries</span>
+      <div class="category-line"></div>
+    </div>
+    <div class="ref-grid">
+      <div class="ref-item" data-pattern="^" data-sample="hello\nworld">
+        <span class="ref-pattern">^</span>
+        <div class="ref-desc">
+          <div class="ref-label">Start of string (or line with m)</div>
+          <div class="ref-note">Without m flag, matches start of entire string</div>
+          <div class="ref-example">^Hello matches "Hello world" but not "say Hello"</div>
+        </div>
+        <span class="insert-hint">↑ insert</span>
+      </div>
+      <div class="ref-item" data-pattern="$" data-sample="hello\nworld">
+        <span class="ref-pattern">$</span>
+        <div class="ref-desc">
+          <div class="ref-label">End of string (or line with m)</div>
+          <div class="ref-note">Without m flag, matches end of entire string</div>
+          <div class="ref-example">world$ matches "hello world" but not "worldwide"</div>
+        </div>
+        <span class="insert-hint">↑ insert</span>
+      </div>
+      <div class="ref-item" data-pattern="\b" data-sample="cat concatenate cats">
+        <span class="ref-pattern">\b</span>
+        <div class="ref-desc">
+          <div class="ref-label">Word boundary</div>
+          <div class="ref-note">Position between \w and \W (or string edge)</div>
+          <div class="ref-example">\bcat\b matches "cat" not "catch" or "concatenate"</div>
+        </div>
+        <span class="insert-hint">↑ insert</span>
+      </div>
+      <div class="ref-item" data-pattern="\B" data-sample="cat catch concatenate">
+        <span class="ref-pattern">\B</span>
+        <div class="ref-desc">
+          <div class="ref-label">Non-word boundary</div>
+          <div class="ref-note">Position NOT between \w and \W</div>
+          <div class="ref-example">\Bcat matches "scat" or "concatenate" not "cat"</div>
+        </div>
+        <span class="insert-hint">↑ insert</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHARACTER CLASSES -->
+  <div class="category-section">
+    <div class="category-header">
+      <span class="category-name">Character Classes</span>
+      <div class="category-line"></div>
+    </div>
+    <div class="ref-grid">
+      <div class="ref-item" data-pattern="." data-sample="abc 123 !@#">
+        <span class="ref-pattern">.</span>
+        <div class="ref-desc">
+          <div class="ref-label">Any character (except newline)</div>
+          <div class="ref-note">With s flag, also matches \n</div>
+          <div class="ref-example">a.c matches "abc", "a1c", "a!c"</div>
+        </div>
+        <span class="insert-hint">↑ insert</span>
+      </div>
+      <div class="ref-item" data-pattern="\d" data-sample="abc 123 4.5">
+        <span class="ref-pattern">\d</span>
+        <div class="ref-desc">
+          <div class="ref-label">Any digit — [0-9]</div>
+          <div class="ref-note">Equivalent to [0-9]</div>
+          <div class="ref-example">\d+ matches "123", "42", "007"</div>
+        </div>
+        <span class="insert-hint">↑ insert</span>
+      </div>
+      <div class="ref-item" data-pattern="\D" data-sample="abc 123 !@#">
+        <span class="ref-pattern">\D</span>
+        <div class="ref-desc">
+          <div class="ref-label">Any non-digit — [^0-9]</div>
+          <div class="ref-note">Matches letters, spaces, punctuation</div>
+        </div>
+        <span class="insert-hint">↑ insert</span>
+      </div>
+      <div class="ref-item" data-pattern="\w" data-sample="hello_world 123 !@#">
+        <span class="ref-pattern">\w</span>
+        <div class="ref-desc">
+          <div class="ref-label">Word character — [a-zA-Z0-9_]</div>
+          <div class="ref-note">Letters, digits, underscore</div>
+          <div class="ref-example">\w+ matches "hello", "world_1", "abc123"</div>
+        </div>
+        <span class="insert-hint">↑ insert</span>
+      </div>
+      <div class="ref-item" data-pattern="\W" data-sample="hello world! 123">
+        <span class="ref-pattern">\W</span>
+        <div class="ref-desc">
+          <div class="ref-label">Non-word character — [^a-zA-Z0-9_]</div>
+          <div class="ref-note">Spaces, punctuation, etc.</div>
+        </div>
+        <span class="insert-hint">↑ insert</span>
+      </div>
+      <div class="ref-item" data-pattern="\s" data-sample="hello world	tab">
+        <span class="ref-pattern">\s</span>
+        <div class="ref-desc">
+          <div class="ref-label">Whitespace — space, tab, newline</div>
+          <div class="ref-note">Equivalent to [ \t\n\r\f\v]</div>
+        </div>
+        <span class="insert-hint">↑ insert</span>
+      </div>
+      <div class="ref-item" data-pattern="\S" data-sample="hello world 123">
+        <span class="ref-pattern">\S</span>
+        <div class="ref-desc">
+          <div class="ref-label">Non-whitespace</div>
+          <div class="ref-note">Any character that isn't whitespace</div>
+        </div>
+        <span class="insert-hint">↑ insert</span>
+      </div>
+      <div class="ref-item" data-pattern="[aeiou]" data-sample="hello world regex">
+        <span class="ref-pattern">[aeiou]</span>
+        <div class="ref-desc">
+          <div class="ref-label">Character set — any listed character</div>
+          <div class="ref-note">Match a, e, i, o, or u</div>
+          <div class="ref-example">[aeiou]+ matches "e", "ai", "ou"</div>
+        </div>
+        <span class="insert-hint">↑ insert</span>
+      </div>
+      <div class="ref-item" data-pattern="[a-z]" data-sample="Hello World 123">
+        <span class="ref-pattern">[a-z]</span>
+        <div class="ref-desc">
+          <div class="ref-label">Character range — a through z</div>
+          <div class="ref-note">Ranges: [a-z], [A-Z], [0-9], [a-zA-Z]</div>
+        </div>
+        <span class="insert-hint">↑ insert</span>
+      </div>
+      <div class="ref-item" data-pattern="[^abc]" data-sample="abc def ghi">
+        <span class="ref-pattern">[^abc]</span>
+        <div class="ref-desc">
+          <div class="ref-label">Negated set — any except listed</div>
+          <div class="ref-note">^ inside [] negates the class</div>
+          <div class="ref-example">[^aeiou] matches consonants and non-letters</div>
+        </div>
+        <span class="insert-hint">↑ insert</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUANTIFIERS -->
+  <div class="category-section">
+    <div class="category-header">
+      <span class="category-name">Quantifiers</span>
+      <div class="category-line"></div>
+    </div>
+    <div class="ref-grid">
+      <div class="ref-item" data-pattern="a*" data-sample="aaa ba b abc">
+        <span class="ref-pattern">*</span>
+        <div class="ref-desc">
+          <div class="ref-label">Zero or more (greedy)</div>
+          <div class="ref-note">Matches as many as possible</div>
+          <div class="ref-example">a* matches "", "a", "aaa"</div>
+        </div>
+        <span class="insert-hint">↑ insert</span>
+      </div>
+      <div class="ref-item" data-pattern="a+" data-sample="aaa ba b abc">
+        <span class="ref-pattern">+</span>
+        <div class="ref-desc">
+          <div class="ref-label">One or more (greedy)</div>
+          <div class="ref-note">At least one required</div>
+          <div class="ref-example">a+ matches "a", "aaa" but not ""</div>
+        </div>
+        <span class="insert-hint">↑ insert</span>
+      </div>
+      <div class="ref-item" data-pattern="colou?r" data-sample="colour color colouur">
+        <span class="ref-pattern">?</span>
+        <div class="ref-desc">
+          <div class="ref-label">Zero or one (optional)</div>
+          <div class="ref-note">Makes the preceding token optional</div>
+          <div class="ref-example">colou?r matches "colour" and "color"</div>
+        </div>
+        <span class="insert-hint">↑ insert</span>
+      </div>
+      <div class="ref-item" data-pattern="\d{4}" data-sample="123 1234 12345 2024">
+        <span class="ref-pattern">{n}</span>
+        <div class="ref-desc">
+          <div class="ref-label">Exactly n times</div>
+          <div class="ref-note">Replace n with a number</div>
+          <div class="ref-example">\d{4} matches "1234" but not "123"</div>
+        </div>
+        <span class="insert-hint">↑ insert</span>
+      </div>
+      <div class="ref-item" data-pattern="\d{2,4}" data-sample="1 12 123 1234 12345">
+        <span class="ref-pattern">{n,m}</span>
+        <div class="ref-desc">
+          <div class="ref-label">Between n and m times (inclusive)</div>
+          <div class="ref-note">{2,} means "2 or more"</div>
+          <div class="ref-example">\d{2,4} matches "12", "123", "1234"</div>
+        </div>
+        <span class="insert-hint">↑ insert</span>
+      </div>
+      <div class="ref-item" data-pattern="<.+?>" data-sample="<div>hello</div> <span>world</span>">
+        <span class="ref-pattern">*? +? ??</span>
+        <div class="ref-desc">
+          <div class="ref-label">Lazy (non-greedy) quantifiers</div>
+          <div class="ref-note">Match as few as possible</div>
+          <div class="ref-example">&lt;.+?&gt; matches "&lt;div&gt;" not "&lt;div&gt;hello&lt;/div&gt;"</div>
+        </div>
+        <span class="insert-hint">↑ insert</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- GROUPS -->
+  <div class="category-section">
+    <div class="category-header">
+      <span class="category-name">Groups &amp; References</span>
+      <div class="category-line"></div>
+    </div>
+    <div class="ref-grid">
+      <div class="ref-item" data-pattern="(foo|bar)" data-sample="foo bar baz foobar">
+        <span class="ref-pattern">(abc)</span>
+        <div class="ref-desc">
+          <div class="ref-label">Capturing group</div>
+          <div class="ref-note">Captures matched text as \1, \2, etc.</div>
+          <div class="ref-example">(foo|bar) matches "foo" or "bar", captured</div>
+        </div>
+        <span class="insert-hint">↑ insert</span>
+      </div>
+      <div class="ref-item" data-pattern="(?:foo|bar)" data-sample="foo bar baz foobar">
+        <span class="ref-pattern">(?:abc)</span>
+        <div class="ref-desc">
+          <div class="ref-label">Non-capturing group</div>
+          <div class="ref-note">Groups for quantifiers/alternation, no capture</div>
+          <div class="ref-example">(?:foo|bar)+ matches "foofoo", "foobar", "bar"</div>
+        </div>
+        <span class="insert-hint">↑ insert</span>
+      </div>
+      <div class="ref-item" data-pattern="(?<year>\d{4})-(?<month>\d{2})" data-sample="2024-05-30 1999-01-01">
+        <span class="ref-pattern">(?&lt;name&gt;abc)</span>
+        <div class="ref-desc">
+          <div class="ref-label">Named capturing group</div>
+          <div class="ref-note">Access via match.groups.name in JS</div>
+          <div class="ref-example">(?&lt;year&gt;\d{4}) captures year by name</div>
+        </div>
+        <span class="insert-hint">↑ insert</span>
+      </div>
+      <div class="ref-item" data-pattern="(ha)\1" data-sample="haha hahaha ha">
+        <span class="ref-pattern">\1 \2</span>
+        <div class="ref-desc">
+          <div class="ref-label">Backreference</div>
+          <div class="ref-note">Refers to what group 1, 2, etc. matched</div>
+          <div class="ref-example">(ha)\1 matches "haha" (ha + same ha)</div>
+        </div>
+        <span class="insert-hint">↑ insert</span>
+      </div>
+      <div class="ref-item" data-pattern="cat|dog|bird" data-sample="I have a cat and a dog">
+        <span class="ref-pattern">a|b</span>
+        <div class="ref-desc">
+          <div class="ref-label">Alternation (OR)</div>
+          <div class="ref-note">Matches a or b — left to right</div>
+          <div class="ref-example">cat|dog matches "cat" or "dog"</div>
+        </div>
+        <span class="insert-hint">↑ insert</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOOKAROUNDS -->
+  <div class="category-section">
+    <div class="category-header">
+      <span class="category-name">Lookahead &amp; Lookbehind</span>
+      <div class="category-line"></div>
+    </div>
+    <div class="ref-grid">
+      <div class="ref-item" data-pattern="\d+(?= dollars)" data-sample="100 dollars 200 euros 50 dollars">
+        <span class="ref-pattern">(?=abc)</span>
+        <div class="ref-desc">
+          <div class="ref-label">Positive lookahead</div>
+          <div class="ref-note">Asserts abc follows — not consumed</div>
+          <div class="ref-example">\d+(?= dollars) matches amounts before " dollars"</div>
+        </div>
+        <span class="insert-hint">↑ insert</span>
+      </div>
+      <div class="ref-item" data-pattern="\d+(?! dollars)" data-sample="100 dollars 200 euros 50 dollars">
+        <span class="ref-pattern">(?!abc)</span>
+        <div class="ref-desc">
+          <div class="ref-label">Negative lookahead</div>
+          <div class="ref-note">Asserts abc does NOT follow</div>
+          <div class="ref-example">\d+(?! dollars) matches amounts NOT before " dollars"</div>
+        </div>
+        <span class="insert-hint">↑ insert</span>
+      </div>
+      <div class="ref-item" data-pattern="(?<=\$)\d+" data-sample="$100 €200 $50">
+        <span class="ref-pattern">(?&lt;=abc)</span>
+        <div class="ref-desc">
+          <div class="ref-label">Positive lookbehind</div>
+          <div class="ref-note">Asserts abc precedes — not consumed</div>
+          <div class="ref-example">(?&lt;=\$)\d+ matches digits after "$"</div>
+        </div>
+        <span class="insert-hint">↑ insert</span>
+      </div>
+      <div class="ref-item" data-pattern="(?<!\$)\d+" data-sample="$100 order 200 items $50">
+        <span class="ref-pattern">(?&lt;!abc)</span>
+        <div class="ref-desc">
+          <div class="ref-label">Negative lookbehind</div>
+          <div class="ref-note">Asserts abc does NOT precede</div>
+          <div class="ref-example">(?&lt;!\$)\d+ matches digits not preceded by "$"</div>
+        </div>
+        <span class="insert-hint">↑ insert</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMMON PATTERNS -->
+  <div class="category-section">
+    <div class="category-header">
+      <span class="category-name">Common Patterns — Click to Test</span>
+      <div class="category-line"></div>
+    </div>
+    <div class="pattern-cards">
+      <div class="pattern-card" data-pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$" data-sample="hello@example.com invalid-email user.name+tag@domain.co.uk not@valid">
+        <div class="pattern-card-name">Email Address</div>
+        <div class="pattern-card-regex">^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$</div>
+        <div class="pattern-card-desc">Validates most real-world email addresses. Not RFC 5322 complete but handles 99% of cases.</div>
+        <div class="pattern-card-example">✓ hello@example.com  ✓ user.name+tag@domain.co.uk</div>
+        <button class="copy-pattern-btn" data-pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$">Copy regex</button>
+      </div>
+
+      <div class="pattern-card" data-pattern="https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&\/=]*)" data-sample="https://example.com http://www.test.org/path?q=1 not-a-url ftp://other.com">
+        <div class="pattern-card-name">URL (http/https)</div>
+        <div class="pattern-card-regex">https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&\/=]*)</div>
+        <div class="pattern-card-desc">Matches http and https URLs with optional www, path, query string.</div>
+        <div class="pattern-card-example">✓ https://example.com/path?q=test</div>
+        <button class="copy-pattern-btn" data-pattern="https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&\/=]*)">Copy regex</button>
+      </div>
+
+      <div class="pattern-card" data-pattern="\+?1?\s*\(?\d{3}\)?[\s.\-]?\d{3}[\s.\-]?\d{4}" data-sample="415-555-0182 (650) 555-9041 +1 800 555 1234 1.888.555.0000">
+        <div class="pattern-card-name">US Phone Number</div>
+        <div class="pattern-card-regex">\+?1?\s*\(?\d{3}\)?[\s.\-]?\d{3}[\s.\-]?\d{4}</div>
+        <div class="pattern-card-desc">Matches common US phone formats: dashes, dots, spaces, parentheses, optional country code.</div>
+        <div class="pattern-card-example">✓ 415-555-0182  ✓ (650) 555-9041  ✓ +1 800 555 1234</div>
+        <button class="copy-pattern-btn" data-pattern="\+?1?\s*\(?\d{3}\)?[\s.\-]?\d{3}[\s.\-]?\d{4}">Copy regex</button>
+      </div>
+
+      <div class="pattern-card" data-pattern="\d{4}[-\/]\d{2}[-\/]\d{2}" data-sample="2024-05-30 2024/01/01 30-05-2024 not-a-date">
+        <div class="pattern-card-name">Date (YYYY-MM-DD or YYYY/MM/DD)</div>
+        <div class="pattern-card-regex">\d{4}[-\/]\d{2}[-\/]\d{2}</div>
+        <div class="pattern-card-desc">ISO 8601 date format. Accepts dash or slash separator.</div>
+        <div class="pattern-card-example">✓ 2024-05-30  ✓ 2024/01/01</div>
+        <button class="copy-pattern-btn" data-pattern="\d{4}[-\/]\d{2}[-\/]\d{2}">Copy regex</button>
+      </div>
+
+      <div class="pattern-card" data-pattern="^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$" data-sample="192.168.1.1 255.255.255.0 0.0.0.0 256.0.0.1 1.2.3">
+        <div class="pattern-card-name">IPv4 Address</div>
+        <div class="pattern-card-regex">^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$</div>
+        <div class="pattern-card-desc">Validates IPv4 addresses with proper range checking (0–255 per octet).</div>
+        <div class="pattern-card-example">✓ 192.168.1.1  ✗ 256.0.0.1</div>
+        <button class="copy-pattern-btn" data-pattern="^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$">Copy regex</button>
+      </div>
+
+      <div class="pattern-card" data-pattern="#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})\b" data-sample="#ff6b6b #abc #FFFFFF #12345 #xyz not-color">
+        <div class="pattern-card-name">Hex Color</div>
+        <div class="pattern-card-regex">#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})\b</div>
+        <div class="pattern-card-desc">CSS hex color codes — 3 or 6 digit shorthand.</div>
+        <div class="pattern-card-example">✓ #ff6b6b  ✓ #abc  ✓ #FFFFFF</div>
+        <button class="copy-pattern-btn" data-pattern="#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})\b">Copy regex</button>
+      </div>
+
+      <div class="pattern-card" data-pattern="^[a-z0-9]+(?:-[a-z0-9]+)*$" data-sample="hello-world my-url-slug valid slug-123 Invalid Slug has spaces">
+        <div class="pattern-card-name">URL Slug</div>
+        <div class="pattern-card-regex">^[a-z0-9]+(?:-[a-z0-9]+)*$</div>
+        <div class="pattern-card-desc">Valid URL slugs — lowercase letters, digits, hyphens. No leading/trailing hyphens.</div>
+        <div class="pattern-card-example">✓ hello-world  ✓ slug-123  ✗ Invalid Slug</div>
+        <button class="copy-pattern-btn" data-pattern="^[a-z0-9]+(?:-[a-z0-9]+)*$">Copy regex</button>
+      </div>
+
+      <div class="pattern-card" data-pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" data-sample="Password1! weakpass StrongP@ss1 NoSpecial1 short1A!">
+        <div class="pattern-card-name">Strong Password</div>
+        <div class="pattern-card-regex">^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$</div>
+        <div class="pattern-card-desc">Requires: 1 lowercase, 1 uppercase, 1 digit, 1 special character, 8+ chars minimum.</div>
+        <div class="pattern-card-example">✓ Password1!  ✗ weakpass  ✗ NoSpecial1</div>
+        <button class="copy-pattern-btn" data-pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$">Copy regex</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ESCAPE SEQUENCES -->
+  <div class="category-section">
+    <div class="category-header">
+      <span class="category-name">Escape Sequences</span>
+      <div class="category-line"></div>
+    </div>
+    <div class="ref-grid">
+      <div class="ref-item" data-pattern="\." data-sample="1.2.3 1x2x3">
+        <span class="ref-pattern">\.</span>
+        <div class="ref-desc">
+          <div class="ref-label">Literal dot</div>
+          <div class="ref-note">Backslash escapes special regex chars</div>
+          <div class="ref-example">\. matches "." only, not any character</div>
+        </div>
+        <span class="insert-hint">↑ insert</span>
+      </div>
+      <div class="ref-item" data-pattern="\n" data-sample="line1&#10;line2&#10;line3">
+        <span class="ref-pattern">\n</span>
+        <div class="ref-desc">
+          <div class="ref-label">Newline</div>
+          <div class="ref-note">Also: \r (carriage return), \t (tab)</div>
+        </div>
+        <span class="insert-hint">↑ insert</span>
+      </div>
+      <div class="ref-item" data-pattern="\t" data-sample="col1	col2	col3">
+        <span class="ref-pattern">\t</span>
+        <div class="ref-desc">
+          <div class="ref-label">Tab character</div>
+          <div class="ref-note">Useful for parsing TSV files</div>
+        </div>
+        <span class="insert-hint">↑ insert</span>
+      </div>
+      <div class="ref-item" data-pattern="\\" data-sample="C:\Users\file path\name">
+        <span class="ref-pattern">\\</span>
+        <div class="ref-desc">
+          <div class="ref-label">Literal backslash</div>
+          <div class="ref-note">In JS strings: '\\\\' = regex \\</div>
+          <div class="ref-example">\\ matches "\" in Windows paths</div>
+        </div>
+        <span class="insert-hint">↑ insert</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tips">
+    <h3>Regex Tips</h3>
+    <ul>
+      <li>Use <code>\b</code> word boundaries to avoid partial word matches: <code>\bcat\b</code> won't match "catch".</li>
+      <li>Prefer <code>+</code> over <code>*</code> when you need at least one match — avoids matching empty strings.</li>
+      <li>Use non-capturing groups <code>(?:...)</code> when you only need grouping, not backreferences — slightly faster.</li>
+      <li>Lazy quantifiers <code>+?</code> and <code>*?</code> match as little as possible — essential for extracting tags, markup.</li>
+      <li>Named groups <code>(?&lt;name&gt;...)</code> make complex patterns self-documenting and easier to extract.</li>
+      <li>Test on edge cases: empty string, all-whitespace input, very long strings, and Unicode characters.</li>
+      <li>The <code>g</code> flag finds all matches; without it, only the first match is returned.</li>
+    </ul>
+  </div>
+
+  <footer>
+    <p>Part of <a href="index.html">Ship This Weekend</a> — developer tools built by an autonomous AI agent.</p>
+    <p style="margin-top:0.5rem;">Also: <a href="git-cheatsheet.html">Git</a> · <a href="sql-cheatsheet.html">SQL</a> · <a href="linux-cheatsheet.html">Linux</a> · <a href="css-cheatsheet.html">CSS</a> · <a href="docker-cheatsheet.html">Docker</a> · <a href="vscode-shortcuts.html">VS Code</a></p>
+  </footer>
+</div>
+
+<script>
+  const patternInput = document.getElementById('patternInput');
+  const testInput = document.getElementById('testInput');
+  const resultDisplay = document.getElementById('resultDisplay');
+  const matchCount = document.getElementById('matchCount');
+  const groupsRow = document.getElementById('groupsRow');
+  const flagBtns = document.querySelectorAll('.flag-btn');
+
+  function getFlags() {
+    return Array.from(flagBtns).filter(b => b.classList.contains('active')).map(b => b.dataset.flag).join('');
+  }
+
+  flagBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.classList.toggle('active');
+      updateResult();
+    });
+  });
+
+  function escapeHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function updateResult() {
+    const pattern = patternInput.value.trim();
+    const testStr = testInput.value;
+
+    if (!pattern) {
+      resultDisplay.innerHTML = `<span class="no-match">Enter a pattern above to test it.</span>`;
+      matchCount.textContent = 'No pattern';
+      matchCount.className = 'match-count';
+      groupsRow.textContent = '';
+      return;
+    }
+
+    let flags = getFlags();
+    // Always add g for highlighting unless user explicitly doesn't want it
+    const flagsForExec = flags.includes('g') ? flags : flags + 'g';
+
+    let re;
+    try {
+      re = new RegExp(pattern, flagsForExec);
+    } catch(e) {
+      resultDisplay.innerHTML = `<span class="error-msg">Invalid pattern: ${escapeHtml(e.message)}</span>`;
+      matchCount.textContent = 'Error';
+      matchCount.className = 'match-count has-error';
+      patternInput.classList.add('error');
+      groupsRow.textContent = '';
+      return;
+    }
+
+    patternInput.classList.remove('error');
+
+    const matches = [];
+    let m;
+    re.lastIndex = 0;
+    while ((m = re.exec(testStr)) !== null) {
+      matches.push({ start: m.index, end: m.index + m[0].length, text: m[0], groups: m.groups || null, subgroups: m.slice(1) });
+      if (!flagsForExec.includes('g')) break;
+      if (m[0].length === 0) re.lastIndex++;
+    }
+
+    if (matches.length === 0) {
+      resultDisplay.innerHTML = `<span class="no-match">${escapeHtml(testStr) || '(empty string)'}</span>`;
+      matchCount.textContent = '0 matches';
+      matchCount.className = 'match-count';
+      groupsRow.textContent = '';
+      return;
+    }
+
+    // Build highlighted result
+    let html = '';
+    let pos = 0;
+    for (const match of matches) {
+      html += escapeHtml(testStr.slice(pos, match.start));
+      html += `<mark title="Match: ${escapeHtml(match.text)}">${escapeHtml(match.text)}</mark>`;
+      pos = match.end;
+    }
+    html += escapeHtml(testStr.slice(pos));
+    resultDisplay.innerHTML = html;
+
+    matchCount.textContent = `${matches.length} match${matches.length !== 1 ? 'es' : ''}`;
+    matchCount.className = 'match-count has-matches';
+
+    // Show groups
+    const last = matches[matches.length - 1];
+    if (last.groups) {
+      const names = Object.entries(last.groups).map(([k,v]) => `${k}: <span>${escapeHtml(v ?? '')}</span>`).join('  ');
+      groupsRow.innerHTML = `Named groups: ${names}`;
+    } else if (last.subgroups.length > 0 && last.subgroups.some(s => s !== undefined)) {
+      const subs = last.subgroups.map((s,i) => `\\${i+1}: <span>${escapeHtml(s ?? '')}</span>`).join('  ');
+      groupsRow.innerHTML = `Groups: ${subs}`;
+    } else {
+      groupsRow.textContent = '';
+    }
+  }
+
+  patternInput.addEventListener('input', updateResult);
+  testInput.addEventListener('input', updateResult);
+
+  // Click ref items to insert pattern
+  document.querySelectorAll('.ref-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const p = item.dataset.pattern;
+      const sample = item.dataset.sample;
+      patternInput.value = p;
+      if (sample) testInput.value = sample.replace(/\\n/g, '\n');
+      patternInput.classList.add('flash');
+      setTimeout(() => patternInput.classList.remove('flash'), 600);
+      updateResult();
+      patternInput.focus();
+    });
+  });
+
+  // Click pattern cards
+  document.querySelectorAll('.pattern-card').forEach(card => {
+    card.addEventListener('click', (e) => {
+      if (e.target.classList.contains('copy-pattern-btn')) return;
+      const p = card.dataset.pattern;
+      const sample = card.dataset.sample;
+      patternInput.value = p;
+      if (sample) testInput.value = sample.replace(/\\n/g, '\n');
+      // Remove m flag for full-string patterns that start with ^
+      if (p.startsWith('^')) {
+        flagBtns.forEach(b => { if (b.dataset.flag === 'm') b.classList.remove('active'); });
+      }
+      updateResult();
+      patternInput.classList.add('flash');
+      setTimeout(() => patternInput.classList.remove('flash'), 600);
+    });
+  });
+
+  // Copy regex buttons
+  document.querySelectorAll('.copy-pattern-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const p = btn.dataset.pattern;
+      navigator.clipboard.writeText(p).then(() => {
+        const orig = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = orig, 1500);
+      });
+    });
+  });
+
+  // Init
+  updateResult();
+</script>
+
+<script data-goatcounter="https://auto-run-fun.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

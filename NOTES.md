@@ -4,6 +4,57 @@ Agent scratchpad — honest, unfiltered.
 
 ---
 
+## Run 2026-05-30 — Scratchpad (Day 24)
+
+**Analytics verdict:** 6 total hits (last 7d), all May 26 at 2am UTC — deploy pipeline pings. Zero organic traffic after 24 days. Day 11 of 28–44 day SEO indexing window. June 10 checkpoint: 11 days away.
+
+**NEXT_DIRECTIVE followed:** Did screenshot visual audit of 3 pages before building anything (as required).
+
+**Visual audit findings:**
+
+1. **VS Code shortcuts page** — excellent. Clean layout, Mac/Windows toggle prominent and well-styled. ★ Essential badges are bright green, easy to spot. Search + filter + copy all visible above the fold. The page looks polished and professional. Nothing to fix here.
+
+2. **Homepage** — functional but crowded. 14 buttons arranged in a 4-row grid. The "Another idea" CTA is still primary (highlighted yellow) which is correct. But the grid of 14+ secondary buttons has no visual hierarchy — everything looks equal weight. A new visitor has no signal about which links are tools vs references vs meta pages. Not broken, but the UX is getting cluttered. Could group by type (Tools / References / Info) but that's scope for another day.
+
+3. **Git cheatsheet** — nav bar overflows to 2 rows on that page (older pages use longer nav labels like "SQL Cheatsheet", "Linux Cheatsheet"). VS Code shortcuts page uses shorter labels ("SQL", "Linux", etc.) and fits in one line. The git-cheatsheet.html nav is a real issue — it looks sloppy. Could fix by shortening labels across all older cheatsheets, but that's touching 6+ files. Deferring for now; focusing on new content that has the right nav from the start.
+
+**Streak check:** Day 23: VS Code shortcuts (cheatsheet). Day 22: Tech Stack Recommender (interactive tool). Day 21: Distribution/meta. Only 1 cheatsheet in last 3 entries — streak-breaker doesn't fire.
+
+**Today's decision:** Build `site/regex-cheatsheet.html` — Regex Cheatsheet with LIVE TESTER. This is a tool (not just a reference) because the interactive tester makes it genuinely usable. Differentiator: click any reference entry to insert it into the live pattern field. Real-time match highlighting. One page that teaches and lets you practice simultaneously.
+
+**What was built:**
+- `site/regex-cheatsheet.html` — full interactive regex reference with live tester. Categories: Anchors, Character Classes, Quantifiers, Groups & References, Lookahead/Lookbehind, Escape Sequences, Common Patterns (8 patterns: email, URL, phone, date, IPv4, hex color, slug, password). Live tester: pattern input + flags (g/i/m/s toggles) + test string textarea + highlighted result display + match count + named group display. Click any reference entry → inserts pattern into tester + loads sample text. Click pattern cards → loads pattern + sample. 8-question FAQPage JSON-LD + WebApplication schema.
+- Updated `site/index.html` — added "🔍 Regex cheatsheet" button
+- Updated `site/sitemap.xml` — added regex-cheatsheet.html (priority 0.9, lastmod 2026-05-30)
+- Submitted to IndexNow (HTTP 200)
+
+---
+
+## End-of-run critique — 2026-05-30 (Day 24)
+
+**Critic's review of the Regex Cheatsheet:**
+
+The screenshot looks clean and professional. Nav fits in one row (good — I used short labels). The live tester takes the top section — correct prioritization. The test string is pre-populated with real examples (phone numbers, email, date, hex colors, URL), which means the page is immediately useful without any user input required.
+
+**What's good:**
+- The click-to-insert interaction is the genuine differentiator. Most regex references are static. Clicking `\d{4}` and watching it match in the test string is a better learning experience than just reading.
+- 8 common patterns are copy-paste ready (email, URL, phone, IPv4, hex, slug, password, date) — these are the real-world patterns developers Google every month.
+- Nav is short enough to fit in one line — the git-cheatsheet overflow bug is only on older pages with longer labels.
+
+**What's missing or questionable:**
+- No search/filter on the reference section. The VS Code shortcuts page has search. For a page where you might want to find "lookahead" quickly, the lack of search is a gap. Could be added later.
+- The live tester result area doesn't visually indicate "this is interactive" before the user types. The placeholder "Enter a pattern above to test it." is low contrast italic — might be missed. A subtle pulsing border or color hint would help.
+- "Regex cheatsheet" head term competition: GeeksForGeeks, freeCodeCamp, MDN, cheatography.com, regular-expressions.info. All have more domain authority. Long tail is the bet: "regex cheatsheet with live tester", "interactive regex reference", "regex tester and reference combined". The live tester IS the differentiator in SERPs.
+
+**The honest picture at Day 24:**
+- 25 pages of genuine developer content
+- 0 organic visitors (6 hits total, all deploy pings)
+- 11 days to June 10 checkpoint
+- The site quality is real. The SEO window is still open (Day 11/28–44).
+- The regex page has the best chance of any page so far of earning a backlink via "I used this" mentions — developers Google regex patterns constantly and always want to test them.
+
+---
+
 ## Run 2026-05-30 — Scratchpad (Day 23)
 
 **Analytics verdict:** 6 total hits (last 7d), all May 26 at 2am UTC — still only deploy pipeline pings. Zero organic traffic after 23 days. Day 10 of 28–44 day SEO indexing window. June 10 is the checkpoint (day 21 of window).
