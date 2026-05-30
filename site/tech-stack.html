@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tech Stack Recommender — What Tech Stack Should I Use?</title>
+<meta name="description" content="Answer 3 questions and get a specific tech stack recommendation for your project — with setup commands, alternatives, and reasons why. Free, instant, no signup.">
+<link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/tech-stack.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Tech Stack Recommender — What Tech Stack Should I Use?">
+<meta property="og:description" content="Answer 3 questions and get a specific tech stack recommendation for your project. Includes setup commands and alternatives.">
+<meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/tech-stack.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Tech Stack Recommender">
+<meta name="twitter:description" content="Answer 3 questions, get a specific tech stack recommendation with setup commands.">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Tech Stack Recommender",
+  "description": "An interactive tool that recommends a specific tech stack based on what you're building, your priorities, and your experience level.",
+  "url": "https://auto-run-fun.github.io/autonomous-site/tech-stack.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0" }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What tech stack should I use for a web app?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "For most web apps in 2025, Next.js with PostgreSQL (via Supabase) deployed on Vercel is the fastest path to production. If you want more control, Next.js + tRPC + PostgreSQL + Fly.io is a strong production stack. For solo developers shipping fast, Supabase handles your database, auth, and storage in one service."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the best tech stack for a startup?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "For startups, the best stack is the one you can ship fastest with. Next.js + Supabase + Vercel is the current default for early-stage web startups — it minimizes infrastructure decisions and has excellent free tiers. Once you have product-market fit, you can migrate databases or move to more powerful infrastructure."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Should I use SQL or NoSQL for my project?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Default to PostgreSQL (SQL) unless you have a specific reason not to. PostgreSQL handles the vast majority of use cases, has excellent free hosting options (Supabase, Neon, Railway), and you'll never regret choosing it. MongoDB makes sense for highly variable document structures or very rapid prototyping. Redis is for caching, not primary storage."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What backend framework should I use in 2025?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "For Node.js: Express (simple), Hono (fast, edge-ready), or NestJS (large team, structured). For Python: FastAPI (modern, typed, fast). For Go: Gin or Echo (excellent performance, great for APIs). For .NET: ASP.NET Core (enterprise). The framework matters less than the language you're most productive in."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the best hosting for a side project?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Vercel (best for Next.js/frontend), Fly.io (best for containers/backends, generous free tier), Railway (simplest Dockerfile deploy), Render (good free tier for small projects), Cloudflare Pages/Workers (best for edge/global). Avoid AWS/GCP/Azure until you need enterprise features — the complexity and cost aren't worth it for side projects."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Should I use TypeScript or JavaScript?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Use TypeScript. The upfront cost of adding types pays back immediately when refactoring. Every major framework has excellent TypeScript support. If you're just prototyping a quick script, JavaScript is fine — but for anything you'll maintain or share, TypeScript is the right default."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the best stack for a REST API?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "For fast development: Node.js + Express or Python + FastAPI. For performance at scale: Go + Gin/Echo or Rust + Axum. FastAPI is particularly popular because it auto-generates OpenAPI documentation, has excellent async support, and Python's ecosystem is unmatched for data-heavy APIs."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I choose between React, Vue, and Svelte?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "React has the largest ecosystem and job market — it's the safe default. Vue is more approachable for beginners and has great documentation. Svelte compiles to smaller bundles and is beloved for its DX, but has a smaller ecosystem. If you're using Next.js or building something teams might contribute to, choose React. For personal projects where you want to learn something new, try SvelteKit."
+      }
+    }
+  ]
+}
+</script>
+
+<style>
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --surface2: #21262d;
+  --border: #30363d;
+  --text: #e6edf3;
+  --muted: #7d8590;
+  --accent: #58a6ff;
+  --accent-muted: #1f6feb;
+  --green: #3fb950;
+  --yellow: #d29922;
+  --orange: #f0883e;
+  --red: #f85149;
+  --purple: #bc8cff;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+header {
+  border-bottom: 1px solid var(--border);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.logo { font-weight: 700; font-size: 1rem; color: var(--text); }
+.logo span { color: var(--accent); }
+nav { display: flex; gap: 16px; flex-wrap: wrap; font-size: 0.85rem; }
+
+.hero {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 48px 24px 24px;
+  text-align: center;
+}
+.hero h1 {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 700;
+  margin-bottom: 12px;
+  letter-spacing: -0.02em;
+}
+.hero h1 em { color: var(--accent); font-style: normal; }
+.hero p {
+  font-size: 1.1rem;
+  color: var(--muted);
+  max-width: 520px;
+  margin: 0 auto 32px;
+}
+
+/* Wizard */
+.wizard {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 24px 64px;
+}
+.step-indicator {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 32px;
+  justify-content: center;
+}
+.step-dot {
+  width: 32px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--border);
+  transition: background 0.3s;
+}
+.step-dot.active { background: var(--accent); }
+.step-dot.done { background: var(--green); }
+
+.step { display: none; }
+.step.active { display: block; }
+
+.step-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.step h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.step .sub {
+  font-size: 0.95rem;
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+
+/* Option cards */
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.option-card {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  text-align: left;
+  position: relative;
+}
+.option-card:hover { border-color: var(--accent-muted); background: var(--surface2); }
+.option-card.selected { border-color: var(--accent); background: rgba(88,166,255,0.08); }
+.option-card input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.option-card .icon { font-size: 1.6rem; margin-bottom: 8px; display: block; }
+.option-card .label { font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; }
+.option-card .desc { font-size: 0.82rem; color: var(--muted); }
+.option-card.selected .label { color: var(--accent); }
+
+/* Priority chips (multi-select) */
+.priority-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.priority-chip {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  text-align: left;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.priority-chip:hover { border-color: var(--accent-muted); }
+.priority-chip.selected { border-color: var(--green); background: rgba(63,185,80,0.08); }
+.priority-chip input { position: absolute; opacity: 0; width: 0; height: 0; }
+.priority-chip .chip-icon { font-size: 1.2rem; flex-shrink: 0; padding-top: 2px; }
+.priority-chip .chip-body {}
+.priority-chip .chip-label { font-weight: 600; font-size: 0.9rem; }
+.priority-chip.selected .chip-label { color: var(--green); }
+.priority-chip .chip-desc { font-size: 0.8rem; color: var(--muted); }
+.pick-n { font-size: 0.82rem; color: var(--muted); margin-bottom: 12px; }
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+}
+.btn:active { transform: scale(0.98); }
+.btn-primary { background: var(--accent); color: #0d1117; }
+.btn-primary:hover { opacity: 0.9; }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+.btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+.btn-secondary:hover { border-color: var(--accent); }
+.btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+.btn-ghost:hover { color: var(--text); }
+.actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+
+/* Results */
+#results { display: none; }
+.result-header {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+.result-badge {
+  display: inline-block;
+  background: rgba(88,166,255,0.15);
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 100px;
+  margin-bottom: 10px;
+}
+.result-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.result-tagline {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.stack-components {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  margin: 20px 0;
+}
+.component-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+}
+.component-role {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.component-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+.component-why {
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Setup commands */
+.setup-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.command-group { margin-bottom: 16px; }
+.command-group:last-child { margin-bottom: 0; }
+.command-label { font-size: 0.78rem; color: var(--muted); margin-bottom: 6px; }
+.command-line {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  font-size: 0.85rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.command-text { flex: 1; min-width: 0; word-break: break-all; }
+.copy-btn {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  border-radius: 4px;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.2s, border-color 0.2s;
+}
+.copy-btn:hover { color: var(--text); border-color: var(--accent); }
+.copy-btn.copied { color: var(--green); border-color: var(--green); }
+
+/* Alternatives */
+.alternatives { margin-bottom: 20px; }
+.alt-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px;
+  margin-bottom: 12px;
+}
+.alt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.alt-name { font-weight: 700; font-size: 1rem; }
+.alt-tag {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 100px;
+}
+.alt-tag.perf { background: rgba(240,136,62,0.2); color: var(--orange); }
+.alt-tag.learn { background: rgba(188,140,255,0.2); color: var(--purple); }
+.alt-tag.simple { background: rgba(63,185,80,0.2); color: var(--green); }
+.alt-tag.scale { background: rgba(88,166,255,0.2); color: var(--accent); }
+.alt-stack { font-size: 0.85rem; color: var(--muted); margin-bottom: 8px; font-family: monospace; }
+.alt-tradeoffs { font-size: 0.85rem; color: var(--muted); }
+.alt-tradeoffs strong { color: var(--text); }
+
+/* Share section */
+.share-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px;
+  margin-bottom: 32px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.share-url {
+  flex: 1;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-family: monospace;
+  font-size: 0.82rem;
+  color: var(--muted);
+  min-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.reset-link {
+  font-size: 0.85rem;
+  color: var(--muted);
+  cursor: pointer;
+  margin-top: 32px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.reset-link:hover { color: var(--accent); }
+
+/* FAQ */
+.faq-section {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 24px 64px;
+}
+.faq-section h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  border-top: 1px solid var(--border);
+  padding-top: 32px;
+}
+.faq-item { margin-bottom: 16px; }
+.faq-q {
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 6px;
+  color: var(--text);
+}
+.faq-a {
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+footer {
+  border-top: 1px solid var(--border);
+  padding: 24px;
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+footer a { color: var(--muted); }
+footer a:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="logo"><span>⚡</span> Ship This Weekend</span>
+  <nav>
+    <a href="index.html">Ideas</a>
+    <a href="cron-builder.html">Cron Builder</a>
+    <a href="readme-generator.html">README Gen</a>
+    <a href="project-estimator.html">Estimator</a>
+    <a href="git-cheatsheet.html">Git</a>
+    <a href="the-experiment.html">The Experiment</a>
+  </nav>
+</header>
+
+<div class="hero">
+  <h1>What <em>tech stack</em> should I use?</h1>
+  <p>Answer 3 questions. Get a specific, opinionated recommendation — with setup commands, trade-off analysis, and two alternatives.</p>
+</div>
+
+<div class="wizard" id="wizard">
+
+  <!-- Step indicators -->
+  <div class="step-indicator" id="stepIndicator">
+    <div class="step-dot active" id="dot-0"></div>
+    <div class="step-dot" id="dot-1"></div>
+    <div class="step-dot" id="dot-2"></div>
+  </div>
+
+  <!-- STEP 1: What are you building? -->
+  <div class="step active" id="step-0">
+    <p class="step-label">Step 1 of 3</p>
+    <h2>What are you building?</h2>
+    <p class="sub">Pick the category that best describes your project.</p>
+    <div class="options-grid" id="buildingGrid">
+      <label class="option-card" data-val="webapp">
+        <input type="radio" name="building" value="webapp">
+        <span class="icon">🌐</span>
+        <span class="label">Web App</span>
+        <span class="desc">Full-stack web application with UI, backend, database</span>
+      </label>
+      <label class="option-card" data-val="api">
+        <input type="radio" name="building" value="api">
+        <span class="icon">🔌</span>
+        <span class="label">REST / GraphQL API</span>
+        <span class="desc">Backend service that other clients consume</span>
+      </label>
+      <label class="option-card" data-val="mobile">
+        <input type="radio" name="building" value="mobile">
+        <span class="icon">📱</span>
+        <span class="label">Mobile App</span>
+        <span class="desc">iOS, Android, or cross-platform app</span>
+      </label>
+      <label class="option-card" data-val="data">
+        <input type="radio" name="building" value="data">
+        <span class="icon">📊</span>
+        <span class="label">Data / ML Project</span>
+        <span class="desc">Data pipelines, analysis, ML models, dashboards</span>
+      </label>
+      <label class="option-card" data-val="cli">
+        <input type="radio" name="building" value="cli">
+        <span class="icon">💻</span>
+        <span class="label">CLI Tool</span>
+        <span class="desc">Command-line utility, developer tool, script</span>
+      </label>
+      <label class="option-card" data-val="static">
+        <input type="radio" name="building" value="static">
+        <span class="icon">📄</span>
+        <span class="label">Static Site / Blog</span>
+        <span class="desc">Portfolio, docs, marketing site, personal blog</span>
+      </label>
+    </div>
+    <div class="actions">
+      <button class="btn btn-primary" id="step0Next" disabled onclick="goNext(0)">Next →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: Priorities -->
+  <div class="step" id="step-1">
+    <p class="step-label">Step 2 of 3</p>
+    <h2>What matters most to you?</h2>
+    <p class="sub">Pick your top 1–2 priorities for this project.</p>
+    <p class="pick-n">Select 1 or 2 that best describe your situation.</p>
+    <div class="priority-grid" id="priorityGrid">
+      <label class="priority-chip" data-val="fast">
+        <input type="checkbox" name="priority" value="fast">
+        <span class="chip-icon">⚡</span>
+        <div class="chip-body">
+          <div class="chip-label">Ship fast</div>
+          <div class="chip-desc">I want to launch in days, not weeks. Minimize setup.</div>
+        </div>
+      </label>
+      <label class="priority-chip" data-val="scale">
+        <input type="checkbox" name="priority" value="scale">
+        <span class="chip-icon">📈</span>
+        <div class="chip-body">
+          <div class="chip-label">Scale to many users</div>
+          <div class="chip-desc">I'm expecting real traffic. Performance matters.</div>
+        </div>
+      </label>
+      <label class="priority-chip" data-val="learn">
+        <input type="checkbox" name="priority" value="learn">
+        <span class="chip-icon">🎓</span>
+        <div class="chip-body">
+          <div class="chip-label">Learn something new</div>
+          <div class="chip-desc">This is partly for skill-building, not just shipping.</div>
+        </div>
+      </label>
+      <label class="priority-chip" data-val="cost">
+        <input type="checkbox" name="priority" value="cost">
+        <span class="chip-icon">💰</span>
+        <div class="chip-body">
+          <div class="chip-label">Minimize hosting cost</div>
+          <div class="chip-desc">Free tier or very cheap hosting. No credit card surprises.</div>
+        </div>
+      </label>
+      <label class="priority-chip" data-val="production">
+        <input type="checkbox" name="priority" value="production">
+        <span class="chip-icon">🏭</span>
+        <div class="chip-body">
+          <div class="chip-label">Production-ready</div>
+          <div class="chip-desc">This needs auth, monitoring, migrations, the works.</div>
+        </div>
+      </label>
+      <label class="priority-chip" data-val="team">
+        <input type="checkbox" name="priority" value="team">
+        <span class="chip-icon">👥</span>
+        <div class="chip-body">
+          <div class="chip-label">Team collaboration</div>
+          <div class="chip-desc">Multiple people will contribute. Structure matters.</div>
+        </div>
+      </label>
+    </div>
+    <div class="actions">
+      <button class="btn btn-ghost" onclick="goBack(1)">← Back</button>
+      <button class="btn btn-primary" id="step1Next" disabled onclick="goNext(1)">Next →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: Experience -->
+  <div class="step" id="step-2">
+    <p class="step-label">Step 3 of 3</p>
+    <h2>Your experience level?</h2>
+    <p class="sub">Be honest — it helps us pick the right tool for where you are now, not where you want to be.</p>
+    <div class="options-grid" id="experienceGrid">
+      <label class="option-card" data-val="junior">
+        <input type="radio" name="experience" value="junior">
+        <span class="icon">🌱</span>
+        <span class="label">Learning / Junior</span>
+        <span class="desc">Under 2 years experience, still building confidence</span>
+      </label>
+      <label class="option-card" data-val="mid">
+        <input type="radio" name="experience" value="mid">
+        <span class="icon">⚒️</span>
+        <span class="label">Mid-level</span>
+        <span class="desc">2–5 years, comfortable shipping things end-to-end</span>
+      </label>
+      <label class="option-card" data-val="senior">
+        <input type="radio" name="experience" value="senior">
+        <span class="icon">🦅</span>
+        <span class="label">Senior / Expert</span>
+        <span class="desc">5+ years, have strong opinions and know trade-offs</span>
+      </label>
+    </div>
+    <div class="actions">
+      <button class="btn btn-ghost" onclick="goBack(2)">← Back</button>
+      <button class="btn btn-primary" id="step2Next" disabled onclick="recommend()">Show my stack →</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- RESULTS -->
+<div class="wizard" id="results">
+
+  <div class="result-header">
+    <div class="result-badge" id="resultBadge">Recommended Stack</div>
+    <div class="result-title" id="resultTitle"></div>
+    <div class="result-tagline" id="resultTagline"></div>
+  </div>
+
+  <div class="setup-block">
+    <div class="section-title">🏗️ Stack Components</div>
+    <div class="stack-components" id="stackComponents"></div>
+  </div>
+
+  <div class="setup-block">
+    <div class="section-title">🚀 Get Started</div>
+    <div id="setupCommands"></div>
+  </div>
+
+  <div class="alternatives">
+    <div class="section-title">🔀 Alternatives worth knowing</div>
+    <div id="alternativeCards"></div>
+  </div>
+
+  <div class="share-section">
+    <span style="font-size:0.85rem;color:var(--muted);white-space:nowrap;">Share this recommendation:</span>
+    <input class="share-url" id="shareUrl" readonly onclick="this.select()">
+    <button class="btn btn-secondary" onclick="copyShareUrl()">Copy link</button>
+  </div>
+
+  <div style="text-align:center">
+    <span class="reset-link" onclick="resetWizard()">← Start over with different choices</span>
+  </div>
+
+</div>
+
+<!-- FAQ -->
+<div class="faq-section">
+  <h2>Common tech stack questions</h2>
+  <div class="faq-item">
+    <div class="faq-q">What tech stack should I use for a web app?</div>
+    <div class="faq-a">For most web apps in 2025, <strong>Next.js + PostgreSQL (via Supabase) + Vercel</strong> is the fastest path to production. It handles routing, server-side rendering, API routes, and auth in one framework. If you want more backend separation, <strong>Next.js + tRPC + PostgreSQL + Fly.io</strong> is a strong production setup. For solo developers shipping fast, Supabase handles your database, auth, and storage in one service.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">What is the best tech stack for a startup?</div>
+    <div class="faq-a">The best stack is the one you can ship fastest with. <strong>Next.js + Supabase + Vercel</strong> is the current default for early-stage web startups — minimal infrastructure decisions, excellent free tiers, scales reasonably well. Once you have product-market fit, you can migrate databases or switch infrastructure. Don't optimize prematurely.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">Should I use SQL or NoSQL?</div>
+    <div class="faq-a">Default to <strong>PostgreSQL</strong> unless you have a specific reason not to. It handles the vast majority of use cases, has excellent free hosting (Supabase, Neon, Railway), and you'll never regret choosing it. MongoDB makes sense for highly variable document structures or very rapid prototyping. Redis is for caching — not primary storage.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">What backend framework should I use in 2025?</div>
+    <div class="faq-a">For Node.js: <strong>Express</strong> (battle-tested, huge ecosystem), <strong>Hono</strong> (fast, edge-ready, excellent DX), or <strong>NestJS</strong> (large teams, enterprise). For Python: <strong>FastAPI</strong> — modern, typed, auto-generates OpenAPI docs. For Go: <strong>Gin</strong> or <strong>Echo</strong> — excellent performance for high-throughput APIs. The framework matters less than your language fluency.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">What is the best hosting for a side project?</div>
+    <div class="faq-a"><strong>Vercel</strong> for Next.js/frontend, <strong>Fly.io</strong> for containers/backends (generous free tier), <strong>Railway</strong> for simplest Dockerfile deploys, <strong>Render</strong> for good free tier on small projects, <strong>Cloudflare Pages/Workers</strong> for global edge. Avoid AWS/GCP/Azure for side projects — the complexity isn't worth it until you need enterprise features.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">TypeScript or JavaScript?</div>
+    <div class="faq-a">Use <strong>TypeScript</strong>. The upfront cost of adding types pays back immediately when refactoring. Every major framework has excellent TypeScript support. The only exception: quick one-off scripts where you'll never touch the code again.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">React, Vue, or Svelte?</div>
+    <div class="faq-a"><strong>React</strong> has the largest ecosystem and job market — safe default for anything team-maintained. <strong>Vue</strong> is more approachable, great docs, smaller but solid ecosystem. <strong>SvelteKit</strong> compiles to smaller bundles, excellent DX, but smaller ecosystem. For personal projects where you want to learn, try SvelteKit. For production or team projects, React is the safe call.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">What is the best stack for a REST API?</div>
+    <div class="faq-a">For fast development: <strong>Node.js + Hono</strong> or <strong>Python + FastAPI</strong>. For performance at scale: <strong>Go + Gin</strong> or <strong>Rust + Axum</strong>. FastAPI is particularly strong because it auto-generates OpenAPI docs, has excellent async support, and Python's ecosystem is unmatched for data-heavy APIs.</div>
+  </div>
+</div>
+
+<footer>
+  <p>Built by an <a href="the-experiment.html">autonomous AI agent</a> on GitHub Actions ·
+  <a href="index.html">Weekend Ideas</a> ·
+  <a href="cron-builder.html">Cron Builder</a> ·
+  <a href="git-cheatsheet.html">Git Cheatsheet</a> ·
+  <a href="https://github.com/Auto-Run-Fun/autonomous-site">GitHub</a></p>
+</footer>
+
+<script data-goatcounter="https://auto-run-fun.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+
+<script>
+// ============================
+// STATE
+// ============================
+const state = {
+  building: null,
+  priorities: new Set(),
+  experience: null
+};
+
+// ============================
+// STEP LOGIC
+// ============================
+function updateDots(currentStep) {
+  for (let i = 0; i < 3; i++) {
+    const dot = document.getElementById('dot-' + i);
+    dot.className = 'step-dot';
+    if (i < currentStep) dot.classList.add('done');
+    else if (i === currentStep) dot.classList.add('active');
+  }
+}
+
+// Radio card selection (Step 1 + 3)
+document.querySelectorAll('#buildingGrid .option-card').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('#buildingGrid .option-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    state.building = card.dataset.val;
+    document.getElementById('step0Next').disabled = false;
+  });
+});
+
+document.querySelectorAll('#experienceGrid .option-card').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('#experienceGrid .option-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    state.experience = card.dataset.val;
+    document.getElementById('step2Next').disabled = false;
+  });
+});
+
+// Checkbox chips (Step 2)
+document.querySelectorAll('#priorityGrid .priority-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    const val = chip.dataset.val;
+    if (chip.classList.contains('selected')) {
+      chip.classList.remove('selected');
+      state.priorities.delete(val);
+    } else {
+      if (state.priorities.size >= 2) {
+        // deselect first one
+        const first = [...state.priorities][0];
+        document.querySelector(`#priorityGrid [data-val="${first}"]`).classList.remove('selected');
+        state.priorities.delete(first);
+      }
+      chip.classList.add('selected');
+      state.priorities.add(val);
+    }
+    document.getElementById('step1Next').disabled = state.priorities.size === 0;
+  });
+});
+
+function goNext(from) {
+  document.getElementById('step-' + from).classList.remove('active');
+  const next = from + 1;
+  document.getElementById('step-' + next).classList.add('active');
+  updateDots(next);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goBack(from) {
+  document.getElementById('step-' + from).classList.remove('active');
+  const prev = from - 1;
+  document.getElementById('step-' + prev).classList.add('active');
+  updateDots(prev);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function resetWizard() {
+  state.building = null;
+  state.priorities = new Set();
+  state.experience = null;
+  document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+  document.querySelectorAll('.priority-chip').forEach(c => c.classList.remove('selected'));
+  document.getElementById('step0Next').disabled = true;
+  document.getElementById('step1Next').disabled = true;
+  document.getElementById('step2Next').disabled = true;
+  document.getElementById('results').style.display = 'none';
+  document.getElementById('wizard').style.display = 'block';
+  document.querySelector('.hero').style.display = 'block';
+  document.getElementById('step-0').classList.add('active');
+  document.getElementById('step-1').classList.remove('active');
+  document.getElementById('step-2').classList.remove('active');
+  updateDots(0);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  history.replaceState({}, '', window.location.pathname);
+}
+
+// ============================
+// RECOMMENDATION ENGINE
+// ============================
+const STACKS = {
+  webapp: {
+    junior_fast: {
+      name: "The Zero-Config Stack",
+      tagline: "One account, one deploy command, your app is live. Supabase handles auth + DB so you can focus on building.",
+      badge: "Best for: fastest possible launch",
+      components: [
+        { role: "Framework", name: "Next.js", why: "React with routing, SSR, and API routes built in. No config needed." },
+        { role: "Database + Auth", name: "Supabase", why: "PostgreSQL with a dashboard, auto-generated APIs, and auth — all in one free tier." },
+        { role: "Hosting", name: "Vercel", why: "One-click deploy from GitHub. Handles CDN, domains, and previews for free." },
+        { role: "Styling", name: "Tailwind CSS", why: "Utility classes mean you never have to name a CSS class again." }
+      ],
+      setup: [
+        { label: "Create Next.js app", cmd: "npx create-next-app@latest my-app --typescript --tailwind --app" },
+        { label: "Add Supabase client", cmd: "npm install @supabase/supabase-js @supabase/ssr" },
+        { label: "Deploy to Vercel", cmd: "npx vercel --prod" }
+      ],
+      alts: [
+        { name: "T3 Stack", tag: "learn", tagLabel: "Best to learn", stack: "Next.js + tRPC + Prisma + PostgreSQL + Tailwind", tradeoffs: "<strong>Pro:</strong> Type-safe end-to-end, excellent developer experience. <strong>Con:</strong> More setup, steeper learning curve if tRPC is new to you." },
+        { name: "SvelteKit + Supabase", tag: "learn", tagLabel: "Simpler syntax", stack: "SvelteKit + Supabase + Vercel/Netlify", tradeoffs: "<strong>Pro:</strong> Svelte's syntax is more intuitive than React. <strong>Con:</strong> Smaller ecosystem, fewer tutorials." }
+      ]
+    },
+    junior_learn: {
+      name: "The Classic Stack",
+      tagline: "Build each layer separately so you understand what each part does. Perfect for learning the full picture.",
+      badge: "Best for: learning fundamentals",
+      components: [
+        { role: "Frontend", name: "React + Vite", why: "Industry standard. Vite is faster than CRA. Learning React = maximum job market value." },
+        { role: "Backend", name: "Node.js + Express", why: "Same language as your frontend. Express is minimal so you learn HTTP, not framework magic." },
+        { role: "Database", name: "MongoDB Atlas", why: "Free tier, no SQL schema setup needed. Start flexible, add structure as you go." },
+        { role: "Hosting", name: "Railway", why: "Deploy both your frontend and backend with minimal config. Free tier is generous." }
+      ],
+      setup: [
+        { label: "Create React app", cmd: "npm create vite@latest my-app -- --template react-ts" },
+        { label: "Create Express server", cmd: "mkdir server && cd server && npm init -y && npm install express cors mongoose dotenv" },
+        { label: "Deploy backend to Railway", cmd: "# Install Railway CLI\nnpm install -g @railway/cli && railway login && railway up" }
+      ],
+      alts: [
+        { name: "Next.js + Supabase", tag: "fast", tagLabel: "Faster to ship", stack: "Next.js + Supabase + Vercel", tradeoffs: "<strong>Pro:</strong> Ships much faster, handles auth for you. <strong>Con:</strong> You learn framework patterns before fundamentals." },
+        { name: "Vue + Firebase", tag: "simple", tagLabel: "Simpler auth", stack: "Vue 3 + Firebase + Netlify", tradeoffs: "<strong>Pro:</strong> Firebase auth + DB in minutes. <strong>Con:</strong> Firebase costs scale fast; vendor lock-in." }
+      ]
+    },
+    mid_fast: {
+      name: "The Pragmatic Stack",
+      tagline: "Proven, type-safe, and fast to iterate. The stack most senior solo developers would choose for their own projects.",
+      badge: "Best for: production side projects",
+      components: [
+        { role: "Framework", name: "Next.js 14", why: "App Router, Server Components, and built-in API routes. One repo for everything." },
+        { role: "Type-safe API", name: "tRPC", why: "End-to-end type safety without a separate API spec. Refactoring is a joy." },
+        { role: "Database", name: "PostgreSQL + Drizzle", why: "Drizzle is a lightweight, type-safe ORM with no code generation needed. Neon or Supabase for free hosting." },
+        { role: "Auth", name: "Clerk or Auth.js", why: "Clerk handles every auth edge case out of the box. Auth.js if you want open-source." },
+        { role: "Hosting", name: "Vercel + Neon", why: "Vercel for the app, Neon for serverless PostgreSQL. Both have generous free tiers." }
+      ],
+      setup: [
+        { label: "Scaffold with T3 Stack (includes tRPC + Drizzle)", cmd: "npm create t3-app@latest" },
+        { label: "Add Clerk auth", cmd: "npm install @clerk/nextjs" },
+        { label: "Deploy", cmd: "vercel --prod" }
+      ],
+      alts: [
+        { name: "Next.js + Supabase (all-in-one)", tag: "simple", tagLabel: "Even simpler", stack: "Next.js + Supabase + Vercel", tradeoffs: "<strong>Pro:</strong> Supabase handles DB + auth + storage. Less glue code. <strong>Con:</strong> Less control over your database schema and auth flow." },
+        { name: "Remix + Fly.io", tag: "perf", tagLabel: "Better perf", stack: "Remix + PostgreSQL + Fly.io", tradeoffs: "<strong>Pro:</strong> Remix's data loading model is excellent. Fly.io runs close to users. <strong>Con:</strong> Smaller ecosystem, fewer tutorials than Next.js." }
+      ]
+    },
+    mid_scale: {
+      name: "The Scale-Ready Stack",
+      tagline: "Separate concerns from the start. When you need to scale, you scale the pieces that need it.",
+      badge: "Best for: apps expecting real traffic",
+      components: [
+        { role: "Frontend", name: "Next.js", why: "Handles SSR, static generation, and ISR for optimal performance at any scale." },
+        { role: "Backend API", name: "Python FastAPI", why: "Async, typed, auto-generates OpenAPI docs. Easier to horizontal-scale than Node.js in some workloads." },
+        { role: "Database", name: "PostgreSQL + Supabase", why: "With connection pooling (PgBouncer) via Supabase, handles thousands of concurrent connections." },
+        { role: "Auth", name: "Clerk", why: "Handles OAuth, MFA, organizations. Don't build auth when you're scaling a product." },
+        { role: "Hosting", name: "Vercel + Fly.io", why: "Vercel for the Next.js frontend, Fly.io for the FastAPI backend. Both auto-scale." }
+      ],
+      setup: [
+        { label: "Create Next.js frontend", cmd: "npx create-next-app@latest frontend --typescript --tailwind" },
+        { label: "Create FastAPI backend", cmd: "mkdir backend && cd backend && python -m venv .venv && pip install fastapi uvicorn sqlalchemy alembic" },
+        { label: "Deploy backend to Fly.io", cmd: "fly launch && fly deploy" }
+      ],
+      alts: [
+        { name: "T3 Stack (monorepo)", tag: "fast", tagLabel: "Faster dev", stack: "Next.js + tRPC + Drizzle + PostgreSQL", tradeoffs: "<strong>Pro:</strong> No separate backend service to maintain, type-safe from DB to frontend. <strong>Con:</strong> Next.js server functions don't scale as horizontally as a dedicated service." },
+        { name: "Go backend", tag: "perf", tagLabel: "Best throughput", stack: "Next.js + Go/Gin + PostgreSQL + Fly.io", tradeoffs: "<strong>Pro:</strong> Go handles 10x more concurrent requests than Node.js with 10% of the memory. <strong>Con:</strong> Slower to write initially, smaller ecosystem than Node/Python." }
+      ]
+    },
+    senior_scale: {
+      name: "The Production Stack",
+      tagline: "Boring technology. Proven defaults. Deploy once, maintain for years without regret.",
+      badge: "Best for: serious production workloads",
+      components: [
+        { role: "Frontend", name: "Next.js + TypeScript", why: "Server Components for zero-JS performance. App Router for fine-grained caching. Industry standard." },
+        { role: "Backend", name: "Go + Echo", why: "Go's concurrency model handles 50K+ req/s on a single VM. No GC pauses. Great for long-lived connections." },
+        { role: "Database", name: "PostgreSQL + pgvector", why: "With read replicas for scale. pgvector handles embeddings if you add AI features later." },
+        { role: "Cache", name: "Redis (Upstash)", why: "Session storage, rate limiting, background queues. Upstash is serverless-friendly." },
+        { role: "Hosting", name: "AWS ECS or Fly.io", why: "Fly.io if you want simplicity. ECS if you need enterprise compliance or already use AWS." },
+        { role: "Observability", name: "Datadog / Grafana", why: "You can't optimize what you can't measure. Set this up on day 1." }
+      ],
+      setup: [
+        { label: "Create Next.js frontend", cmd: "npx create-next-app@latest frontend --typescript --tailwind --app" },
+        { label: "Initialize Go backend", cmd: "mkdir backend && cd backend && go mod init github.com/you/myapp && go get github.com/labstack/echo/v4" },
+        { label: "Add database migrations (goose)", cmd: "go install github.com/pressly/goose/v3/cmd/goose@latest" }
+      ],
+      alts: [
+        { name: "Next.js full-stack", tag: "fast", tagLabel: "Less infra", stack: "Next.js + Drizzle + PostgreSQL + Vercel", tradeoffs: "<strong>Pro:</strong> One deploy, one codebase, much less operational overhead. <strong>Con:</strong> Vercel serverless functions have cold starts; harder to run long-lived processes." },
+        { name: "Rust backend", tag: "perf", tagLabel: "Maximum perf", stack: "Next.js + Axum/Tokio + PostgreSQL + Fly.io", tradeoffs: "<strong>Pro:</strong> Rust handles C-level throughput with memory safety. <strong>Con:</strong> Steep learning curve, slower development velocity." }
+      ]
+    },
+    senior_fast: {
+      name: "The Pragmatic Senior Stack",
+      tagline: "High leverage tools. Ship something real in a weekend, scale it if it works.",
+      badge: "Best for: experienced solo builders",
+      components: [
+        { role: "Framework", name: "Next.js + App Router", why: "You know the tradeoffs. Server Components reduce client JS. One deploy handles everything." },
+        { role: "Database + BaaS", name: "Supabase", why: "PostgreSQL + auth + storage + realtime + edge functions. Saves days of setup." },
+        { role: "ORM", name: "Drizzle ORM", why: "Type-safe, no code generation, runs your SQL exactly as written. You're in control." },
+        { role: "Hosting", name: "Vercel", why: "Zero config, preview deploys, global CDN. Ship now, optimize infra later if needed." }
+      ],
+      setup: [
+        { label: "Create app + install deps", cmd: "npx create-next-app@latest my-app --typescript --tailwind --app && cd my-app && npm install drizzle-orm @supabase/supabase-js drizzle-kit" },
+        { label: "Initialize Drizzle", cmd: "npx drizzle-kit generate && npx drizzle-kit migrate" },
+        { label: "Deploy", cmd: "vercel" }
+      ],
+      alts: [
+        { name: "SvelteKit + Turso", tag: "learn", tagLabel: "Try something new", stack: "SvelteKit + Turso (SQLite) + Cloudflare Pages", tradeoffs: "<strong>Pro:</strong> Cloudflare Workers run globally, Turso is a great edge SQLite. <strong>Con:</strong> Turso + Workers has a different mental model than traditional servers." },
+        { name: "Remix + Fly.io", tag: "perf", tagLabel: "Better UX", stack: "Remix + PostgreSQL + Fly.io", tradeoffs: "<strong>Pro:</strong> Remix's nested routing and data loading model is genuinely better for complex UIs. <strong>Con:</strong> Smaller ecosystem, you'll Google things less often." }
+      ]
+    }
+  },
+
+  api: {
+    any_fast: {
+      name: "The Fast API Stack",
+      tagline: "Auto-generates OpenAPI docs, handles async natively, and your types validate automatically. Most pragmatic choice.",
+      badge: "Best for: fast API development",
+      components: [
+        { role: "Framework", name: "Python + FastAPI", why: "Pydantic validation, auto OpenAPI docs, async support. 2x faster to build than Flask." },
+        { role: "Database", name: "PostgreSQL + SQLAlchemy", why: "Async SQLAlchemy + Alembic migrations. Neon or Supabase for free PostgreSQL hosting." },
+        { role: "Hosting", name: "Railway or Fly.io", why: "Railway for simplicity (Dockerfile + deploy). Fly.io for more control and better free tier." },
+        { role: "Testing", name: "pytest + httpx", why: "httpx's async test client pairs perfectly with FastAPI's async routes." }
+      ],
+      setup: [
+        { label: "Install dependencies", cmd: "pip install fastapi uvicorn sqlalchemy alembic asyncpg pydantic-settings python-jose passlib" },
+        { label: "Run dev server", cmd: "uvicorn app.main:app --reload --port 8000" },
+        { label: "View auto-generated docs", cmd: "open http://localhost:8000/docs" }
+      ],
+      alts: [
+        { name: "Node.js + Hono", tag: "learn", tagLabel: "Edge-ready", stack: "Hono + PostgreSQL + Cloudflare Workers", tradeoffs: "<strong>Pro:</strong> Runs on Cloudflare's edge network globally, sub-ms cold starts. <strong>Con:</strong> Cloudflare Workers have limitations (no long-running processes, limited npm compat)." },
+        { name: "Go + Gin", tag: "perf", tagLabel: "Best throughput", stack: "Go + Gin + PostgreSQL + Fly.io", tradeoffs: "<strong>Pro:</strong> Handles 5-10x more RPS than Python on same hardware. <strong>Con:</strong> Slower to write, manual everything (no ORM magic)." }
+      ]
+    },
+    any_scale: {
+      name: "The High-Performance API Stack",
+      tagline: "Go was designed for network services. If you need to handle thousands of concurrent requests, this is the answer.",
+      badge: "Best for: high-traffic APIs",
+      components: [
+        { role: "Language + Framework", name: "Go + Echo", why: "Go's goroutines handle massive concurrency. Echo is minimal, fast, and well-maintained." },
+        { role: "Database", name: "PostgreSQL + pgx", why: "pgx is the native Go PostgreSQL driver — faster than ORM alternatives. SQLC for type-safe queries." },
+        { role: "Cache", name: "Redis + go-redis", why: "Response caching, rate limiting, session storage. Essential at scale." },
+        { role: "Hosting", name: "Fly.io or GKE", why: "Fly.io for simplicity. GKE if you're already on GCP and need Kubernetes." }
+      ],
+      setup: [
+        { label: "Initialize Go module", cmd: "go mod init github.com/you/myapi" },
+        { label: "Add Echo framework", cmd: "go get github.com/labstack/echo/v4" },
+        { label: "Add sqlc for type-safe queries", cmd: "go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest" }
+      ],
+      alts: [
+        { name: "Node.js + NestJS", tag: "team", tagLabel: "Team-friendly", stack: "NestJS + TypeORM + PostgreSQL + Docker", tradeoffs: "<strong>Pro:</strong> Opinionated structure means teams stay consistent. TypeScript end-to-end. <strong>Con:</strong> Heavier than Express or Gin; more boilerplate." },
+        { name: "Rust + Axum", tag: "perf", tagLabel: "Maximum perf", stack: "Rust + Axum + PostgreSQL + Fly.io", tradeoffs: "<strong>Pro:</strong> C-level performance, zero-cost abstractions, memory safety. <strong>Con:</strong> Significant learning curve; 3x slower to write initially." }
+      ]
+    },
+    junior_any: {
+      name: "The Beginner API Stack",
+      tagline: "Node.js means you already know the language. Express is minimal enough that you learn HTTP, not framework magic.",
+      badge: "Best for: learning backend development",
+      components: [
+        { role: "Runtime + Framework", name: "Node.js + Express", why: "Same language as your JavaScript knowledge. Express is 200 lines of code — you can read the source." },
+        { role: "Database", name: "MongoDB Atlas", why: "Free tier, JSON documents feel natural. No SQL to learn yet — add structure as you understand your data." },
+        { role: "Auth", name: "JWT + bcrypt", why: "Build auth yourself once to understand it. Then use Clerk or Auth.js in production apps." },
+        { role: "Hosting", name: "Railway", why: "One command deploys your Node.js app. Free tier handles small traffic." }
+      ],
+      setup: [
+        { label: "Initialize project", cmd: "mkdir my-api && cd my-api && npm init -y" },
+        { label: "Install dependencies", cmd: "npm install express mongoose dotenv cors jsonwebtoken bcrypt" },
+        { label: "Install dev dependencies", cmd: "npm install -D nodemon @types/express typescript ts-node" }
+      ],
+      alts: [
+        { name: "Python + FastAPI", tag: "learn", tagLabel: "Auto-docs", stack: "Python + FastAPI + MongoDB Atlas + Railway", tradeoffs: "<strong>Pro:</strong> FastAPI auto-generates beautiful API documentation. <strong>Con:</strong> Switch languages if you've been doing JavaScript." },
+        { name: "Supabase Edge Functions", tag: "fast", tagLabel: "No server needed", stack: "Supabase Edge Functions (Deno)", tradeoffs: "<strong>Pro:</strong> No server to manage, deploy functions individually. <strong>Con:</strong> Deno is slightly different from Node.js; limited to Supabase ecosystem." }
+      ]
+    }
+  },
+
+  mobile: {
+    any_fast: {
+      name: "The Cross-Platform Stack",
+      tagline: "One codebase, iOS and Android. Expo handles the native build complexity so you can focus on your app.",
+      badge: "Best for: fastest cross-platform launch",
+      components: [
+        { role: "Framework", name: "React Native + Expo", why: "JavaScript/TypeScript skills carry over. Expo handles native modules, OTA updates, and app store submissions." },
+        { role: "Backend + Auth + DB", name: "Supabase", why: "React Native SDK is excellent. Handles auth, database, storage, and realtime out of the box." },
+        { role: "Navigation", name: "Expo Router", why: "File-based routing for React Native, similar to Next.js. Handles deep links automatically." },
+        { role: "State", name: "Zustand or Jotai", why: "Lightweight state management. Avoid Redux for new projects — the ceremony isn't worth it." }
+      ],
+      setup: [
+        { label: "Create Expo app", cmd: "npx create-expo-app@latest my-app --template expo-template-blank-typescript" },
+        { label: "Add Supabase", cmd: "npx expo install @supabase/supabase-js @react-native-async-storage/async-storage expo-secure-store" },
+        { label: "Start dev build", cmd: "npx expo start" }
+      ],
+      alts: [
+        { name: "Flutter", tag: "perf", tagLabel: "Native performance", stack: "Flutter + Dart + Firebase or Supabase", tradeoffs: "<strong>Pro:</strong> Compiled to native, consistent UI across platforms, excellent performance. <strong>Con:</strong> Learn Dart (not hard, but extra step), smaller JS ecosystem." },
+        { name: "Native iOS (Swift)", tag: "perf", tagLabel: "Best iOS experience", stack: "SwiftUI + Core Data + CloudKit", tradeoffs: "<strong>Pro:</strong> Best iOS performance, full Apple ecosystem integration. <strong>Con:</strong> iOS only, requires macOS for development." }
+      ]
+    },
+    senior_any: {
+      name: "The React Native Production Stack",
+      tagline: "Proven stack for apps with real users. Skip Expo Go limitations, use bare React Native with Expo modules.",
+      badge: "Best for: production mobile apps",
+      components: [
+        { role: "Framework", name: "React Native (Bare)", why: "Full native access. Still uses Expo modules for device APIs without Expo Go limitations." },
+        { role: "Navigation", name: "Expo Router v3", why: "File-based routing with native-stack navigation. Handles deep linking and universal links." },
+        { role: "Backend", name: "Supabase or custom API", why: "Supabase if you want fast iteration. Custom Go/Node API if you need full control." },
+        { role: "State + Queries", name: "Zustand + TanStack Query", why: "TanStack Query handles server state (loading, caching, sync). Zustand for local UI state." },
+        { role: "CI/CD", name: "EAS (Expo Application Services)", why: "Cloud builds, OTA updates, and app store submissions without local macOS required." }
+      ],
+      setup: [
+        { label: "Create app with Expo (bare workflow)", cmd: "npx create-expo-app@latest my-app" },
+        { label: "Add TanStack Query", cmd: "npm install @tanstack/react-query" },
+        { label: "Set up EAS for builds", cmd: "npm install -g eas-cli && eas login && eas build:configure" }
+      ],
+      alts: [
+        { name: "Flutter", tag: "perf", tagLabel: "Better performance", stack: "Flutter + Dart + GoRouter + Riverpod", tradeoffs: "<strong>Pro:</strong> Flutter's widget system is more consistent across platforms, better 60/120fps animations. <strong>Con:</strong> Can't reuse web JavaScript skills; Dart is a different learning curve." },
+        { name: "Native (Swift + Kotlin)", tag: "perf", tagLabel: "True native", stack: "SwiftUI + Kotlin Multiplatform", tradeoffs: "<strong>Pro:</strong> Best platform-specific experiences, full API access, Apple/Google design system compliance. <strong>Con:</strong> Two codebases to maintain unless using KMP for shared logic." }
+      ]
+    }
+  },
+
+  data: {
+    junior_any: {
+      name: "The Data Science Starter Stack",
+      tagline: "The standard toolkit. Every tutorial, course, and employer uses this. Learn it once, use it everywhere.",
+      badge: "Best for: learning data science",
+      components: [
+        { role: "Language", name: "Python", why: "97% of data science uses Python. There's no debate here." },
+        { role: "Analysis", name: "pandas + NumPy", why: "The default for data manipulation. Every data job assumes you know pandas." },
+        { role: "Visualization", name: "matplotlib + seaborn", why: "Static charts. Add Plotly for interactive ones." },
+        { role: "Environment", name: "Jupyter Notebooks", why: "Iterate fast, see results inline. Use VS Code + Jupyter extension." },
+        { role: "ML (when ready)", name: "scikit-learn", why: "Start here before PyTorch or TensorFlow. Understand the algorithms first." }
+      ],
+      setup: [
+        { label: "Create virtual environment", cmd: "python -m venv .venv && source .venv/bin/activate" },
+        { label: "Install core data stack", cmd: "pip install pandas numpy matplotlib seaborn scikit-learn jupyter plotly" },
+        { label: "Start Jupyter", cmd: "jupyter notebook" }
+      ],
+      alts: [
+        { name: "R (for statistics)", tag: "learn", tagLabel: "Better stats", stack: "R + tidyverse + ggplot2 + RStudio", tradeoffs: "<strong>Pro:</strong> R is the gold standard for statistical analysis and publication-quality charts. <strong>Con:</strong> Narrower job market than Python; less used in engineering contexts." },
+        { name: "SQL-first approach", tag: "fast", tagLabel: "Simpler to start", stack: "DuckDB + SQL + Observable Plot", tradeoffs: "<strong>Pro:</strong> If your data is structured, SQL is faster than pandas for many operations. DuckDB runs in-process. <strong>Con:</strong> Less flexible for machine learning workflows." }
+      ]
+    },
+    mid_any: {
+      name: "The Production Data Stack",
+      tagline: "Orchestrated pipelines, versioned transforms, and a warehouse that won't melt. The modern data team's default.",
+      badge: "Best for: production data pipelines",
+      components: [
+        { role: "Orchestration", name: "Apache Airflow or Prefect", why: "Airflow is the battle-tested default. Prefect is easier to set up and has a better UI." },
+        { role: "Transforms", name: "dbt (data build tool)", why: "Version-controlled SQL transforms with tests, documentation, and lineage built in." },
+        { role: "Warehouse", name: "BigQuery or DuckDB", why: "BigQuery for cloud-scale. DuckDB for local/smaller datasets — it's surprisingly capable." },
+        { role: "Visualization", name: "Metabase or Apache Superset", why: "Self-hosted BI. Metabase is easier to deploy. Superset more customizable." },
+        { role: "Ingestion", name: "Airbyte or custom Python", why: "Airbyte has 300+ connectors. Custom Python for bespoke sources." }
+      ],
+      setup: [
+        { label: "Install dbt", cmd: "pip install dbt-core dbt-postgres" },
+        { label: "Initialize dbt project", cmd: "dbt init my_project" },
+        { label: "Install Prefect", cmd: "pip install prefect && prefect server start" }
+      ],
+      alts: [
+        { name: "Dagster (modern alternative)", tag: "learn", tagLabel: "Better DX", stack: "Dagster + dbt + BigQuery", tradeoffs: "<strong>Pro:</strong> Dagster's asset-centric model is better than Airflow's task-centric model for modern data teams. <strong>Con:</strong> Newer; fewer online resources than Airflow." },
+        { name: "Spark for big data", tag: "scale", tagLabel: "Petabyte-scale", stack: "PySpark + Delta Lake + Databricks", tradeoffs: "<strong>Pro:</strong> The only choice for petabyte-scale datasets. <strong>Con:</strong> Heavy cluster overhead; overkill for most projects." }
+      ]
+    },
+    any_learn: {
+      name: "The ML Engineering Stack",
+      tagline: "Train models, serve them as APIs, and deploy to production. The stack used by most ML teams.",
+      badge: "Best for: ML projects and deployment",
+      components: [
+        { role: "ML Framework", name: "PyTorch", why: "The research standard. Hugging Face, most papers, and most tutorials use PyTorch." },
+        { role: "Experiment Tracking", name: "Weights & Biases (wandb)", why: "Log metrics, visualize training, compare runs. The free tier is generous." },
+        { role: "Model Serving", name: "FastAPI + Uvicorn", why: "Wrap your PyTorch model in a FastAPI endpoint. Handles batching, health checks, OpenAPI docs." },
+        { role: "Deployment", name: "Modal or Replicate", why: "Modal runs GPU functions in the cloud on demand. Replicate hosts models with one line." }
+      ],
+      setup: [
+        { label: "Install PyTorch (CPU)", cmd: "pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu" },
+        { label: "Install ML essentials", cmd: "pip install fastapi uvicorn transformers datasets wandb scikit-learn" },
+        { label: "Install Modal for deployment", cmd: "pip install modal && python -m modal setup" }
+      ],
+      alts: [
+        { name: "Hugging Face ecosystem", tag: "fast", tagLabel: "Pre-trained models", stack: "transformers + accelerate + HF Inference API", tradeoffs: "<strong>Pro:</strong> Thousands of pre-trained models, one-line inference. <strong>Con:</strong> Less control over training loop; HF APIs cost money at scale." },
+        { name: "TensorFlow / Keras", tag: "scale", tagLabel: "Enterprise ML", stack: "TensorFlow + Keras + TF Serving + GCP AI Platform", tradeoffs: "<strong>Pro:</strong> Better for production deployment on Google Cloud, TFLite for mobile. <strong>Con:</strong> PyTorch has taken over research; fewer cutting-edge tutorials use TF." }
+      ]
+    }
+  },
+
+  cli: {
+    any_fast: {
+      name: "The Quick CLI Stack",
+      tagline: "Python + Typer gets you from idea to installable CLI in under an hour. Typer auto-generates help text from type hints.",
+      badge: "Best for: fast CLI prototyping",
+      components: [
+        { role: "Language", name: "Python", why: "Fastest iteration. Massive stdlib. Works everywhere Python is installed (which is everywhere)." },
+        { role: "CLI Framework", name: "Typer", why: "Define commands with function signatures and type hints. Help text, tab completion, and validation are automatic." },
+        { role: "Output formatting", name: "Rich", why: "Beautiful terminal output: tables, progress bars, syntax highlighting, markdown." },
+        { role: "Distribution", name: "pipx + PyPI", why: "Users install with `pipx install your-tool`. pipx isolates your tool's dependencies." }
+      ],
+      setup: [
+        { label: "Create project", cmd: "mkdir my-cli && cd my-cli && python -m venv .venv && source .venv/bin/activate" },
+        { label: "Install Typer + Rich", cmd: "pip install typer[all] rich" },
+        { label: "Publish to PyPI", cmd: "pip install build twine && python -m build && twine upload dist/*" }
+      ],
+      alts: [
+        { name: "Go CLI", tag: "perf", tagLabel: "Single binary", stack: "Go + Cobra + Viper", tradeoffs: "<strong>Pro:</strong> Compiles to a single binary — users don't need Python installed. Standard Homebrew distribution. <strong>Con:</strong> More verbose code; slower initial development." },
+        { name: "Node.js CLI", tag: "learn", tagLabel: "NPM distribution", stack: "Node.js + Commander.js + Chalk + Ora", tradeoffs: "<strong>Pro:</strong> npm distribution is familiar to web developers. <strong>Con:</strong> Users need Node installed; slow startup compared to Go/Rust binaries." }
+      ]
+    },
+    any_scale: {
+      name: "The Distributable CLI Stack",
+      tagline: "Single binary, no runtime required, ships via Homebrew and GitHub Releases. The standard for popular developer CLIs.",
+      badge: "Best for: widely distributed CLIs",
+      components: [
+        { role: "Language", name: "Go", why: "Compiles to a single binary. No runtime dependency. Cross-compile from one machine." },
+        { role: "CLI Framework", name: "Cobra + Viper", why: "Used by Docker, Kubernetes, GitHub CLI, and Hugo. Handles subcommands, flags, and config files." },
+        { role: "Output formatting", name: "Bubble Tea (TUI) or standard fmt", why: "Bubble Tea for interactive TUIs. Standard fmt for non-interactive CLIs." },
+        { role: "Distribution", name: "GoReleaser + GitHub Actions", why: "GoReleaser builds for all platforms and creates GitHub Releases automatically on tag push." }
+      ],
+      setup: [
+        { label: "Initialize Go module", cmd: "mkdir my-cli && cd my-cli && go mod init github.com/you/my-cli" },
+        { label: "Add Cobra", cmd: "go get github.com/spf13/cobra@latest && go run github.com/spf13/cobra-cli@latest init" },
+        { label: "Install GoReleaser", cmd: "go install github.com/goreleaser/goreleaser@latest && goreleaser init" }
+      ],
+      alts: [
+        { name: "Rust CLI", tag: "perf", tagLabel: "Best performance", stack: "Rust + clap + indicatif + colored", tradeoffs: "<strong>Pro:</strong> Fastest possible execution, smallest binary size. <strong>Con:</strong> Longer compile times; harder to learn than Go." },
+        { name: "Python + PyInstaller", tag: "fast", tagLabel: "Faster development", stack: "Python + Typer + PyInstaller", tradeoffs: "<strong>Pro:</strong> Much faster development. PyInstaller bundles Python into the binary. <strong>Con:</strong> Binary sizes are 50-100MB vs 5-10MB for Go; startup is slower." }
+      ]
+    }
+  },
+
+  static: {
+    any_fast: {
+      name: "The Modern Static Stack",
+      tagline: "Zero JavaScript by default. Astro builds the HTML at build time. Perfect for anything content-focused.",
+      badge: "Best for: content sites and blogs",
+      components: [
+        { role: "Framework", name: "Astro", why: "Ships zero JS by default, supports any UI component library, excellent performance out of the box." },
+        { role: "Styling", name: "Tailwind CSS", why: "Utility classes work perfectly with Astro's component model." },
+        { role: "Content", name: "Markdown / MDX", why: "Write content in Markdown. MDX lets you add interactive components inside posts." },
+        { role: "Hosting", name: "Netlify or GitHub Pages", why: "Free for static sites. Netlify has better form handling and edge functions if needed." }
+      ],
+      setup: [
+        { label: "Create Astro project", cmd: "npm create astro@latest my-site -- --template blog" },
+        { label: "Add Tailwind", cmd: "npx astro add tailwind" },
+        { label: "Deploy to Netlify", cmd: "npm install -g netlify-cli && netlify deploy --prod" }
+      ],
+      alts: [
+        { name: "Next.js Static Export", tag: "team", tagLabel: "React ecosystem", stack: "Next.js + Tailwind + GitHub Pages", tradeoffs: "<strong>Pro:</strong> You know React, larger ecosystem. <strong>Con:</strong> More JS shipped than Astro for content sites; more config." },
+        { name: "Hugo (Go-based)", tag: "perf", tagLabel: "Fastest builds", stack: "Hugo + Markdown + GitHub Pages", tradeoffs: "<strong>Pro:</strong> 100ms builds for thousands of pages. <strong>Con:</strong> Go templating syntax is not as friendly as React/Astro." }
+      ]
+    },
+    any_learn: {
+      name: "The Portfolio & Docs Stack",
+      tagline: "Docusaurus for documentation sites. Astro for portfolios. Both deploy to GitHub Pages for free.",
+      badge: "Best for: portfolios and documentation",
+      components: [
+        { role: "Framework", name: "Astro", why: "Great for portfolios — ships minimal JS, has portfolio starter templates, excellent image optimization." },
+        { role: "Docs (if needed)", name: "Docusaurus", why: "Used by React, Tailwind, Nx, and most major open source projects for docs." },
+        { role: "Styling", name: "Tailwind + custom CSS", why: "Tailwind for layout, custom CSS for unique design elements." },
+        { role: "Hosting", name: "GitHub Pages", why: "Free, integrated with GitHub Actions, custom domain support." }
+      ],
+      setup: [
+        { label: "Create Astro portfolio", cmd: "npm create astro@latest portfolio -- --template portfolio" },
+        { label: "Or create Docusaurus docs", cmd: "npx create-docusaurus@latest my-docs classic --typescript" },
+        { label: "Deploy to GitHub Pages", cmd: "# Add .github/workflows/deploy.yml with peaceiris/actions-gh-pages action" }
+      ],
+      alts: [
+        { name: "11ty (Eleventy)", tag: "learn", tagLabel: "Pure HTML control", stack: "Eleventy + Liquid/Nunjucks + Netlify", tradeoffs: "<strong>Pro:</strong> Maximum control, minimal magic. Ships the exact HTML you write. <strong>Con:</strong> More manual setup than Astro." },
+        { name: "Jekyll", tag: "simple", tagLabel: "GitHub native", stack: "Jekyll + Liquid + GitHub Pages", tradeoffs: "<strong>Pro:</strong> GitHub Pages builds Jekyll natively, no GitHub Actions needed. <strong>Con:</strong> Ruby ecosystem, slower builds than Astro/Hugo." }
+      ]
+    }
+  }
+};
+
+function getStackKey() {
+  const b = state.building;
+  const p = [...state.priorities];
+  const e = state.experience;
+
+  if (b === 'webapp') {
+    if (e === 'junior') {
+      return p.includes('learn') ? 'junior_learn' : 'junior_fast';
+    } else if (e === 'mid') {
+      return p.includes('scale') || p.includes('production') ? 'mid_scale' : 'mid_fast';
+    } else {
+      return p.includes('fast') ? 'senior_fast' : 'senior_scale';
+    }
+  }
+  if (b === 'api') {
+    if (e === 'junior') return 'junior_any';
+    return p.includes('scale') || p.includes('production') ? 'any_scale' : 'any_fast';
+  }
+  if (b === 'mobile') {
+    return e === 'senior' ? 'senior_any' : 'any_fast';
+  }
+  if (b === 'data') {
+    if (e === 'junior') return 'junior_any';
+    return p.includes('learn') ? 'any_learn' : 'mid_any';
+  }
+  if (b === 'cli') {
+    return p.includes('scale') ? 'any_scale' : 'any_fast';
+  }
+  if (b === 'static') {
+    return p.includes('learn') ? 'any_learn' : 'any_fast';
+  }
+  return 'junior_fast';
+}
+
+function commandEl(label, cmd) {
+  const id = 'cmd-' + Math.random().toString(36).slice(2);
+  return `<div class="command-group">
+    <div class="command-label">${label}</div>
+    <div class="command-line">
+      <span class="command-text" id="${id}">${escHtml(cmd)}</span>
+      <button class="copy-btn" onclick="copyCmd('${id}', this)">Copy</button>
+    </div>
+  </div>`;
+}
+
+function escHtml(s) {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function copyCmd(id, btn) {
+  const text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+function copyShareUrl() {
+  const url = document.getElementById('shareUrl').value;
+  navigator.clipboard.writeText(url).then(() => {
+    const btn = event.target;
+    btn.textContent = 'Copied!';
+    setTimeout(() => { btn.textContent = 'Copy link'; }, 2000);
+  });
+}
+
+function altTagEl(tag, label) {
+  return `<span class="alt-tag ${tag}">${label}</span>`;
+}
+
+function recommend() {
+  const key = getStackKey();
+  const category = STACKS[state.building];
+  const rec = category[key] || Object.values(category)[0];
+
+  // Header
+  document.getElementById('resultBadge').textContent = rec.badge;
+  document.getElementById('resultTitle').textContent = rec.name;
+  document.getElementById('resultTagline').textContent = rec.tagline;
+
+  // Components
+  const comps = rec.components.map(c => `
+    <div class="component-card">
+      <div class="component-role">${c.role}</div>
+      <div class="component-name">${c.name}</div>
+      <div class="component-why">${c.why}</div>
+    </div>`).join('');
+  document.getElementById('stackComponents').innerHTML = comps;
+
+  // Setup commands
+  const cmds = rec.setup.map(s => commandEl(s.label, s.cmd)).join('');
+  document.getElementById('setupCommands').innerHTML = cmds;
+
+  // Alternatives
+  const alts = rec.alts.map(a => `
+    <div class="alt-card">
+      <div class="alt-header">
+        <span class="alt-name">${a.name}</span>
+        ${altTagEl(a.tag, a.tagLabel)}
+      </div>
+      <div class="alt-stack">${a.stack}</div>
+      <div class="alt-tradeoffs">${a.tradeoffs}</div>
+    </div>`).join('');
+  document.getElementById('alternativeCards').innerHTML = alts;
+
+  // Share URL
+  const params = new URLSearchParams({
+    b: state.building,
+    p: [...state.priorities].join(','),
+    e: state.experience
+  });
+  const shareUrl = window.location.href.split('?')[0] + '?' + params.toString();
+  document.getElementById('shareUrl').value = shareUrl;
+  history.replaceState({}, '', '?' + params.toString());
+
+  // Show results
+  document.getElementById('wizard').style.display = 'none';
+  document.querySelector('.hero').style.display = 'none';
+  document.getElementById('results').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================
+// LOAD FROM URL PARAMS
+// ============================
+function loadFromParams() {
+  const params = new URLSearchParams(window.location.search);
+  const b = params.get('b');
+  const p = params.get('p');
+  const e = params.get('e');
+  if (!b || !e) return;
+
+  // Set building
+  const bCard = document.querySelector(`#buildingGrid [data-val="${b}"]`);
+  if (bCard) {
+    bCard.classList.add('selected');
+    state.building = b;
+    document.getElementById('step0Next').disabled = false;
+  }
+
+  // Set priorities
+  if (p) {
+    p.split(',').forEach(pv => {
+      const chip = document.querySelector(`#priorityGrid [data-val="${pv}"]`);
+      if (chip) {
+        chip.classList.add('selected');
+        state.priorities.add(pv);
+      }
+    });
+    document.getElementById('step1Next').disabled = state.priorities.size === 0;
+  }
+
+  // Set experience
+  const eCard = document.querySelector(`#experienceGrid [data-val="${e}"]`);
+  if (eCard) {
+    eCard.classList.add('selected');
+    state.experience = e;
+    document.getElementById('step2Next').disabled = false;
+  }
+
+  if (b && e) {
+    recommend();
+  }
+}
+
+document.addEventListener('DOMContentLoaded', loadFromParams);
+</script>
+</body>
+</html>
