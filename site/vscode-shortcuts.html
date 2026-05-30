@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VS Code Keyboard Shortcuts Cheatsheet — Mac &amp; Windows 2024</title>
+  <meta name="description" content="Complete VS Code keyboard shortcuts for Mac and Windows. 100+ shortcuts searchable by category: editing, navigation, multi-cursor, debug, terminal, Git. Copy with one click.">
+  <link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/vscode-shortcuts.html">
+  <meta property="og:title" content="VS Code Keyboard Shortcuts Cheatsheet — Mac &amp; Windows">
+  <meta property="og:description" content="100+ VS Code shortcuts — Mac &amp; Windows toggle. Search, filter by category, copy with one click. Editing, navigation, multi-cursor, debug, terminal, Git.">
+  <meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/vscode-shortcuts.html">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="VS Code Keyboard Shortcuts — Mac &amp; Windows">
+  <meta name="twitter:description" content="100+ VS Code shortcuts — Mac &amp; Windows. Searchable, filterable, copy with one click.">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "VS Code Keyboard Shortcuts Cheatsheet",
+    "url": "https://auto-run-fun.github.io/autonomous-site/vscode-shortcuts.html",
+    "description": "Interactive VS Code keyboard shortcuts reference with 100+ shortcuts for Mac and Windows, searchable and filterable by category.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the VS Code Command Palette and how do I open it?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The Command Palette is VS Code's most powerful feature — it runs any editor command by name. Open it with Cmd+Shift+P on Mac or Ctrl+Shift+P on Windows. Type anything: 'format', 'rename', 'git pull' — VS Code fuzzy-matches all commands. Use Cmd+P / Ctrl+P (without the '>') to open files instead."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I add multiple cursors in VS Code?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "VS Code has powerful multi-cursor editing. Most common ways: (1) Option+Click / Alt+Click to place a cursor anywhere; (2) Cmd+D / Ctrl+D to select the next occurrence of the current word; (3) Cmd+Shift+L / Ctrl+Shift+L to select ALL occurrences at once; (4) Cmd+Option+Up/Down / Ctrl+Alt+Up/Down to add cursors above or below the current line."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the keyboard shortcut to go to a specific line number in VS Code?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Press Ctrl+G on both Mac and Windows. A prompt appears — type the line number and press Enter. Alternatively, open Quick Open with Cmd+P / Ctrl+P and type ':42' to jump to line 42."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I comment out code in VS Code?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Use Cmd+/ (Mac) or Ctrl+/ (Windows) to toggle line comments. Select multiple lines first to toggle them all at once. For block comments, use Shift+Option+A (Mac) or Shift+Alt+A (Windows). VS Code automatically uses the correct comment syntax for each language (// for JS, # for Python, etc.)."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I open the integrated terminal in VS Code?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Press Ctrl+` (backtick) on both Mac and Windows to toggle the integrated terminal panel. Use Ctrl+Shift+` to create a new terminal instance. Split the terminal with Ctrl+Shift+5. Clear the terminal with Cmd+K (Mac) or Ctrl+K (Windows) when the terminal panel is focused."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I quickly navigate between files in VS Code?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Use Cmd+P / Ctrl+P (Quick Open) to jump to any file by typing a few letters — VS Code fuzzy-matches filenames. Use Ctrl+Tab to cycle through recently opened files. Use Ctrl+- (Mac) or Alt+Left (Windows) to go back to your previous cursor position. For symbols, Cmd+T / Ctrl+T searches functions and classes across the entire project."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I format code automatically in VS Code?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Press Shift+Option+F (Mac) or Shift+Alt+F (Windows) to format the entire document. For selected code only, use Cmd+K Cmd+F (Mac) or Ctrl+K Ctrl+F (Windows). VS Code uses the formatter configured for each language — install extensions like Prettier or the language-specific formatter for best results. You can also enable 'Format on Save' in settings."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I see and customize all VS Code keyboard shortcuts?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Press Cmd+K Cmd+S (Mac) or Ctrl+K Ctrl+S (Windows) to open the full Keyboard Shortcuts editor. Search any action by name and remap it with a double-click. Go to Help > Keyboard Shortcut Reference to download the official VS Code PDF cheatsheet for your platform (Mac, Windows, or Linux)."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface2: #1c2128;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --accent: #f78166;
+      --green: #3fb950;
+      --blue: #79c0ff;
+      --purple: #d2a8ff;
+      --orange: #ffa657;
+      --yellow: #e3b341;
+      --pink: #ff7eb6;
+    }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; }
+
+    nav { background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 20px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    nav a { color: var(--muted); text-decoration: none; font-size: 13px; white-space: nowrap; }
+    nav a:hover { color: var(--text); }
+    nav .logo { color: var(--text); font-weight: 600; font-size: 14px; margin-right: 4px; }
+
+    header { padding: 40px 20px 20px; max-width: 1000px; margin: 0 auto; }
+    h1 { font-size: clamp(22px, 5vw, 34px); font-weight: 700; margin-bottom: 8px; }
+    .subtitle { color: var(--muted); font-size: 16px; margin-bottom: 20px; }
+
+    .platform-row { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+    .platform-toggle { display: flex; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+    .platform-btn {
+      padding: 7px 18px; background: none; border: none; color: var(--muted);
+      font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.15s;
+    }
+    .platform-btn.active { background: var(--blue); color: #0d1117; }
+    .platform-hint { font-size: 12px; color: var(--muted); }
+
+    .search-bar {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 10px 14px; max-width: 500px; margin-bottom: 16px;
+    }
+    .search-bar:focus-within { border-color: var(--blue); }
+    .search-bar svg { color: var(--muted); flex-shrink: 0; }
+    .search-bar input { background: none; border: none; outline: none; color: var(--text); font-size: 15px; width: 100%; }
+    .search-bar input::placeholder { color: var(--muted); }
+    .kbd { background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 2px 6px; font-size: 11px; color: var(--muted); margin-left: auto; font-family: monospace; white-space: nowrap; }
+
+    .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+    .filter-btn {
+      padding: 5px 14px; border-radius: 20px; border: 1px solid var(--border);
+      background: var(--surface); color: var(--muted); font-size: 13px; cursor: pointer; transition: all 0.15s;
+    }
+    .filter-btn:hover { border-color: var(--blue); color: var(--blue); }
+    .filter-btn.active { background: var(--blue); border-color: var(--blue); color: #0d1117; font-weight: 600; }
+
+    .stats-bar { color: var(--muted); font-size: 13px; margin-bottom: 16px; padding: 0 20px; max-width: 1000px; margin-left: auto; margin-right: auto; }
+
+    main { max-width: 1000px; margin: 0 auto; padding: 0 20px 60px; }
+
+    .section-heading { color: var(--muted); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin: 28px 0 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+
+    .shortcut-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+      padding: 13px 16px; display: grid; grid-template-columns: auto 1fr auto;
+      gap: 12px; align-items: start; margin-bottom: 6px; transition: border-color 0.15s;
+    }
+    .shortcut-card:hover { border-color: #484f58; }
+    .shortcut-card.hidden { display: none; }
+
+    .key-col { display: flex; flex-direction: column; gap: 5px; align-items: flex-start; min-width: 130px; }
+    .shortcut-key {
+      font-family: 'SF Mono', 'Fira Code', Consolas, monospace;
+      font-size: 13px; font-weight: 600;
+      color: var(--blue); background: rgba(121,192,255,0.1);
+      border: 1px solid rgba(121,192,255,0.25);
+      border-radius: 5px; padding: 3px 9px; white-space: nowrap; letter-spacing: 0.3px;
+    }
+    .star-badge {
+      font-size: 10px; background: rgba(227,179,65,0.15); color: var(--yellow);
+      border: 1px solid rgba(227,179,65,0.3); border-radius: 10px; padding: 1px 7px;
+      font-weight: 600;
+    }
+    .cat-badge {
+      font-size: 10px; padding: 1px 7px; border-radius: 10px; font-weight: 500; white-space: nowrap;
+    }
+    .badge-file { background: rgba(63,185,80,0.12); color: var(--green); }
+    .badge-editing { background: rgba(121,192,255,0.12); color: var(--blue); }
+    .badge-navigation { background: rgba(210,168,255,0.12); color: var(--purple); }
+    .badge-multicursor { background: rgba(255,166,87,0.12); color: var(--orange); }
+    .badge-debug { background: rgba(247,129,102,0.12); color: var(--accent); }
+    .badge-terminal { background: rgba(227,179,65,0.12); color: var(--yellow); }
+    .badge-git { background: rgba(255,126,182,0.12); color: var(--pink); }
+
+    .desc-col { }
+    .shortcut-desc { color: var(--text); font-size: 14px; line-height: 1.5; }
+    .shortcut-detail { font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
+
+    .copy-btn {
+      background: var(--surface2); border: 1px solid var(--border); border-radius: 6px;
+      color: var(--muted); font-size: 12px; cursor: pointer; padding: 5px 10px;
+      transition: all 0.15s; white-space: nowrap; align-self: flex-start;
+    }
+    .copy-btn:hover { background: var(--border); color: var(--text); }
+    .copy-btn.copied { background: rgba(63,185,80,0.12); border-color: var(--green); color: var(--green); }
+
+    .no-results { text-align: center; padding: 60px 20px; color: var(--muted); }
+    .no-results strong { display: block; font-size: 18px; margin-bottom: 8px; color: var(--text); }
+
+    .tip-section { background: rgba(121,192,255,0.05); border: 1px solid rgba(121,192,255,0.18); border-radius: 10px; padding: 22px 26px; margin-top: 40px; }
+    .tip-section h2 { font-size: 18px; margin-bottom: 6px; color: var(--blue); }
+    .tip-section > p { color: var(--muted); font-size: 14px; margin-bottom: 18px; line-height: 1.6; }
+    .tip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+    .tip h3 { font-size: 14px; color: var(--text); margin-bottom: 6px; }
+    .tip p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+    .tip code { font-family: monospace; background: var(--surface2); padding: 1px 5px; border-radius: 3px; color: var(--blue); font-size: 12px; }
+    .tip a { color: var(--blue); text-decoration: none; }
+    .tip a:hover { text-decoration: underline; }
+
+    .faq-section { margin-top: 48px; }
+    .faq-section h2 { font-size: 20px; margin-bottom: 20px; }
+    .faq-item { margin-bottom: 22px; }
+    .faq-item strong { color: var(--text); display: block; margin-bottom: 5px; font-size: 15px; }
+    .faq-item p { color: var(--muted); font-size: 14px; line-height: 1.7; }
+    .faq-item code { font-family: monospace; background: var(--surface2); padding: 1px 6px; border-radius: 3px; color: var(--blue); font-size: 13px; }
+
+    footer { text-align: center; padding: 30px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--border); margin-top: 40px; }
+    footer a { color: var(--muted); }
+
+    @media (max-width: 640px) {
+      .shortcut-card { grid-template-columns: 1fr auto; }
+      .key-col { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; }
+      .desc-col { grid-column: 1; }
+      .copy-btn { grid-column: 2; }
+      .kbd { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <span class="logo">🛠 Dev Tools</span>
+  <a href="index.html">Weekend Ideas</a>
+  <a href="project-estimator.html">Estimator</a>
+  <a href="readme-generator.html">README</a>
+  <a href="cron-builder.html">Cron</a>
+  <a href="git-cheatsheet.html">Git</a>
+  <a href="sql-cheatsheet.html">SQL</a>
+  <a href="linux-cheatsheet.html">Linux</a>
+  <a href="css-cheatsheet.html">CSS</a>
+  <a href="docker-cheatsheet.html">Docker</a>
+  <a href="vscode-shortcuts.html" style="color:#79c0ff">VS Code</a>
+  <a href="tech-stack.html">Tech Stack</a>
+  <a href="the-experiment.html">Experiment</a>
+</nav>
+
+<header>
+  <h1>VS Code Keyboard Shortcuts</h1>
+  <p class="subtitle">100+ shortcuts — Mac &amp; Windows. Search, filter by category, copy with one click. ★ marks the ones worth memorizing first.</p>
+
+  <div class="platform-row">
+    <div class="platform-toggle">
+      <button class="platform-btn active" id="macBtn" onclick="setPlatform('mac')">🍎 Mac</button>
+      <button class="platform-btn" id="winBtn" onclick="setPlatform('win')">🪟 Windows / Linux</button>
+    </div>
+    <span class="platform-hint" id="platformHint">⌘ = Command &nbsp;·&nbsp; ⌥ = Option &nbsp;·&nbsp; ⇧ = Shift &nbsp;·&nbsp; ^ = Control</span>
+  </div>
+
+  <div class="search-bar">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.868-3.834zm-5.44 1.398a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11z"/>
+    </svg>
+    <input type="text" id="searchInput" placeholder="Search shortcuts…" autocomplete="off" spellcheck="false">
+    <span class="kbd">Ctrl+K</span>
+  </div>
+
+  <div class="filters">
+    <button class="filter-btn active" data-cat="all">All</button>
+    <button class="filter-btn" data-cat="file">File &amp; Panels</button>
+    <button class="filter-btn" data-cat="editing">Editing</button>
+    <button class="filter-btn" data-cat="navigation">Navigation</button>
+    <button class="filter-btn" data-cat="multicursor">Multi-cursor</button>
+    <button class="filter-btn" data-cat="debug">Debug</button>
+    <button class="filter-btn" data-cat="terminal">Terminal</button>
+    <button class="filter-btn" data-cat="git">Git</button>
+  </div>
+</header>
+
+<div class="stats-bar"><span id="resultCount">0</span> shortcuts</div>
+
+<main>
+  <div id="commandsContainer"></div>
+  <div id="noResults" class="no-results" style="display:none">
+    <strong>No shortcuts found</strong>
+    Try a different search term or clear the filter.
+  </div>
+
+  <div class="tip-section">
+    <h2>How to find any VS Code shortcut</h2>
+    <p>These are the defaults — you can search and rebind anything.</p>
+    <div class="tip-grid">
+      <div class="tip">
+        <h3>Open the Keyboard Shortcuts editor</h3>
+        <p><code>⌘K ⌘S</code> (Mac) or <code>Ctrl+K Ctrl+S</code> (Windows) — search by action name, see current binding, double-click to remap.</p>
+      </div>
+      <div class="tip">
+        <h3>Use the Command Palette</h3>
+        <p><code>⌘⇧P</code> / <code>Ctrl+Shift+P</code> — type any action name. VS Code shows the current keyboard shortcut next to each command.</p>
+      </div>
+      <div class="tip">
+        <h3>Download the official PDF</h3>
+        <p>Help → Keyboard Shortcut Reference — opens the official one-page PDF cheatsheet for your platform (Mac, Windows, or Linux).</p>
+      </div>
+      <div class="tip">
+        <h3>Profile-specific shortcuts</h3>
+        <p>VS Code Profiles let you save different keybinding sets for different projects or languages. Switch profiles via the gear icon in the bottom-left.</p>
+      </div>
+    </div>
+  </div>
+
+  <section class="faq-section">
+    <h2>Frequently asked VS Code shortcut questions</h2>
+    <div class="faq-item">
+      <strong>What's the single most important VS Code shortcut to know?</strong>
+      <p>The Command Palette — <code>⌘⇧P</code> (Mac) / <code>Ctrl+Shift+P</code> (Windows). Every VS Code feature is reachable by typing its name. If you forget any shortcut, open the Palette and type what you want to do.</p>
+    </div>
+    <div class="faq-item">
+      <strong>How do I select the same word in multiple places at once?</strong>
+      <p>Click on a word, then press <code>⌘D</code> (Mac) / <code>Ctrl+D</code> (Windows) repeatedly to add each next occurrence to your multi-selection. Press <code>⌘⇧L</code> / <code>Ctrl+Shift+L</code> to select every occurrence at once. Then type to replace all of them simultaneously.</p>
+    </div>
+    <div class="faq-item">
+      <strong>How do I jump to where a function is defined?</strong>
+      <p>Place your cursor on any symbol and press <code>F12</code> (Go to Definition — works on both platforms). Use <code>⌥F12</code> / <code>Alt+F12</code> (Peek Definition) to preview the definition in a popup without leaving your current file.</p>
+    </div>
+    <div class="faq-item">
+      <strong>How do I move a line up or down without cut/paste?</strong>
+      <p>Press <code>⌥↑</code> / <code>Alt+↑</code> to move the current line up, or <code>⌥↓</code> / <code>Alt+↓</code> to move it down. Add <code>⇧</code> (Shift) to copy the line instead of moving it. Works with multi-line selections too.</p>
+    </div>
+    <div class="faq-item">
+      <strong>Is there a shortcut for "Go Back" like a browser back button?</strong>
+      <p>Yes — <code>Ctrl+-</code> (Mac) or <code>Alt+←</code> (Windows) goes to your previous cursor position, even across files. This is essential when you've jumped to a definition and want to return. <code>Ctrl+⇧-</code> / <code>Alt+→</code> goes forward again.</p>
+    </div>
+    <div class="faq-item">
+      <strong>How do I open a second terminal side by side?</strong>
+      <p>With the terminal focused, press <code>Ctrl+⇧5</code> (same on both platforms) to split the terminal panel. Or create a new separate terminal with <code>Ctrl+⇧`</code>. Switch between terminal instances using the dropdown in the terminal panel header.</p>
+    </div>
+    <div class="faq-item">
+      <strong>How do I fold/collapse code blocks in VS Code?</strong>
+      <p>Use <code>⌘⌥[</code> (Mac) / <code>Ctrl+Shift+[</code> (Windows) to fold the current block, and <code>⌘⌥]</code> / <code>Ctrl+Shift+]</code> to unfold. <code>⌘K ⌘0</code> / <code>Ctrl+K Ctrl+0</code> folds all regions in the file. <code>⌘K ⌘J</code> / <code>Ctrl+K Ctrl+J</code> unfolds everything.</p>
+    </div>
+    <div class="faq-item">
+      <strong>What's the fastest way to rename a variable everywhere in the file?</strong>
+      <p>Place cursor on the variable and press <code>F2</code> (both platforms). Type the new name and press Enter. VS Code renames it across all files in the project that reference it — not just the current file — using language-aware renaming (not simple text replace).</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>Built by <a href="the-experiment.html">an autonomous AI agent</a> — <a href="https://github.com/Auto-Run-Fun/autonomous-site">view on GitHub</a></p>
+</footer>
+
+<script>
+const SHORTCUTS = [
+  // FILE & PANELS
+  { mac: '⌘P', win: 'Ctrl+P', desc: 'Quick Open — jump to any file by name', detail: 'Fuzzy-match: type "usr/set" to open "user/settings.js"', cat: 'file', star: true },
+  { mac: '⇧⌘P', win: 'Ctrl+Shift+P', desc: 'Command Palette — run any VS Code command', detail: 'The most important shortcut in VS Code', cat: 'file', star: true },
+  { mac: '⌘N', win: 'Ctrl+N', desc: 'New untitled file', detail: '', cat: 'file', star: false },
+  { mac: '⌘O', win: 'Ctrl+O', desc: 'Open file from disk', detail: '', cat: 'file', star: false },
+  { mac: '⌘W', win: 'Ctrl+W', desc: 'Close active editor tab', detail: '', cat: 'file', star: true },
+  { mac: '⌘S', win: 'Ctrl+S', desc: 'Save file', detail: '', cat: 'file', star: true },
+  { mac: '⇧⌘S', win: 'Ctrl+Shift+S', desc: 'Save As', detail: '', cat: 'file', star: false },
+  { mac: '⌘K S', win: 'Ctrl+K S', desc: 'Save all open files', detail: '', cat: 'file', star: false },
+  { mac: '⌘K ⌘W', win: 'Ctrl+K Ctrl+W', desc: 'Close all editor tabs', detail: '', cat: 'file', star: false },
+  { mac: '⇧⌘T', win: 'Ctrl+Shift+T', desc: 'Reopen last closed editor tab', detail: '', cat: 'file', star: false },
+  { mac: '⌘,', win: 'Ctrl+,', desc: 'Open Settings', detail: '', cat: 'file', star: true },
+  { mac: '⌘K ⌘S', win: 'Ctrl+K Ctrl+S', desc: 'Open Keyboard Shortcuts editor', detail: 'Search and remap any shortcut', cat: 'file', star: false },
+  { mac: '⌘B', win: 'Ctrl+B', desc: 'Toggle Sidebar visibility', detail: 'Hides/shows Explorer, Git, Extensions, etc.', cat: 'file', star: true },
+  { mac: '⌘J', win: 'Ctrl+J', desc: 'Toggle bottom Panel', detail: 'Shows/hides Terminal, Problems, Output, Debug Console', cat: 'file', star: true },
+  { mac: '⌘\\', win: 'Ctrl+\\', desc: 'Split editor — open current file in a side-by-side view', detail: '', cat: 'file', star: false },
+  { mac: '⌘K Z', win: 'Ctrl+K Z', desc: 'Zen Mode — distraction-free full-screen editing', detail: 'Press Escape twice to exit', cat: 'file', star: false },
+
+  // EDITING
+  { mac: '⌘/', win: 'Ctrl+/', desc: 'Toggle line comment', detail: 'Select multiple lines to toggle them all. Uses language-correct syntax.', cat: 'editing', star: true },
+  { mac: '⇧⌥A', win: 'Shift+Alt+A', desc: 'Toggle block comment', detail: '', cat: 'editing', star: false },
+  { mac: '⌥↑', win: 'Alt+↑', desc: 'Move line up', detail: 'Works with multi-line selections', cat: 'editing', star: true },
+  { mac: '⌥↓', win: 'Alt+↓', desc: 'Move line down', detail: 'Works with multi-line selections', cat: 'editing', star: true },
+  { mac: '⇧⌥↓', win: 'Shift+Alt+↓', desc: 'Copy line down — duplicate current line below', detail: '', cat: 'editing', star: true },
+  { mac: '⇧⌥↑', win: 'Shift+Alt+↑', desc: 'Copy line up — duplicate current line above', detail: '', cat: 'editing', star: false },
+  { mac: '⇧⌘K', win: 'Ctrl+Shift+K', desc: 'Delete current line entirely', detail: '', cat: 'editing', star: true },
+  { mac: '⌘Enter', win: 'Ctrl+Enter', desc: 'Insert new line below without splitting current line', detail: '', cat: 'editing', star: false },
+  { mac: '⇧⌘Enter', win: 'Ctrl+Shift+Enter', desc: 'Insert new line above without splitting current line', detail: '', cat: 'editing', star: false },
+  { mac: '⌘]', win: 'Ctrl+]', desc: 'Indent line', detail: '', cat: 'editing', star: false },
+  { mac: '⌘[', win: 'Ctrl+[', desc: 'Outdent line', detail: '', cat: 'editing', star: false },
+  { mac: '⇧⌥F', win: 'Shift+Alt+F', desc: 'Format document', detail: 'Requires a formatter extension (Prettier, ESLint, etc.)', cat: 'editing', star: true },
+  { mac: '⌘K ⌘F', win: 'Ctrl+K Ctrl+F', desc: 'Format selection', detail: '', cat: 'editing', star: false },
+  { mac: '⌘Z', win: 'Ctrl+Z', desc: 'Undo', detail: '', cat: 'editing', star: true },
+  { mac: '⇧⌘Z', win: 'Ctrl+Y', desc: 'Redo', detail: '', cat: 'editing', star: true },
+  { mac: '⌘F', win: 'Ctrl+F', desc: 'Find in current file', detail: '', cat: 'editing', star: true },
+  { mac: '⌘H', win: 'Ctrl+H', desc: 'Find and Replace in current file', detail: '', cat: 'editing', star: true },
+  { mac: '⇧⌘F', win: 'Ctrl+Shift+F', desc: 'Search across all files in project', detail: '', cat: 'editing', star: true },
+  { mac: '⇧⌘H', win: 'Ctrl+Shift+H', desc: 'Find and Replace across all project files', detail: '', cat: 'editing', star: false },
+  { mac: 'F3', win: 'F3', desc: 'Find next match', detail: '', cat: 'editing', star: false },
+  { mac: 'F2', win: 'F2', desc: 'Rename symbol — renames across all files in the project', detail: 'Language-aware: not a simple text search-replace', cat: 'editing', star: true },
+  { mac: '⌘.', win: 'Ctrl+.', desc: 'Quick Fix — show suggested code fixes and refactors', detail: 'Shows the lightbulb menu at the current cursor position', cat: 'editing', star: true },
+  { mac: '⌘⌥[', win: 'Ctrl+Shift+[', desc: 'Fold (collapse) current code block', detail: '', cat: 'editing', star: false },
+  { mac: '⌘⌥]', win: 'Ctrl+Shift+]', desc: 'Unfold (expand) current code block', detail: '', cat: 'editing', star: false },
+  { mac: '⌘K ⌘0', win: 'Ctrl+K Ctrl+0', desc: 'Fold all regions in file', detail: '', cat: 'editing', star: false },
+  { mac: '⌘K ⌘J', win: 'Ctrl+K Ctrl+J', desc: 'Unfold all regions in file', detail: '', cat: 'editing', star: false },
+
+  // NAVIGATION
+  { mac: 'Ctrl+G', win: 'Ctrl+G', desc: 'Go to specific line number', detail: 'Same shortcut on both Mac and Windows', cat: 'navigation', star: true },
+  { mac: '⌘T', win: 'Ctrl+T', desc: 'Go to Symbol in Workspace — search all functions, classes, variables', detail: '', cat: 'navigation', star: true },
+  { mac: '⇧⌘O', win: 'Ctrl+Shift+O', desc: 'Go to Symbol in File — navigate within current file', detail: 'Type : to group by category', cat: 'navigation', star: true },
+  { mac: 'F12', win: 'F12', desc: 'Go to Definition — jump to where symbol is defined', detail: '', cat: 'navigation', star: true },
+  { mac: '⌥F12', win: 'Alt+F12', desc: 'Peek Definition — inline popup without leaving current file', detail: '', cat: 'navigation', star: true },
+  { mac: '⌘F12', win: 'Ctrl+F12', desc: 'Go to Implementation', detail: '', cat: 'navigation', star: false },
+  { mac: '⇧F12', win: 'Shift+F12', desc: 'Find All References to the symbol under cursor', detail: '', cat: 'navigation', star: true },
+  { mac: '⇧⌘\\', win: 'Ctrl+Shift+\\', desc: 'Jump to matching bracket', detail: '', cat: 'navigation', star: false },
+  { mac: '⌘Home', win: 'Ctrl+Home', desc: 'Go to beginning of file', detail: '', cat: 'navigation', star: false },
+  { mac: '⌘End', win: 'Ctrl+End', desc: 'Go to end of file', detail: '', cat: 'navigation', star: false },
+  { mac: 'Ctrl+-', win: 'Alt+←', desc: 'Go Back — return to previous cursor position', detail: 'Works across files — essential after Go to Definition', cat: 'navigation', star: true },
+  { mac: 'Ctrl+⇧-', win: 'Alt+→', desc: 'Go Forward — undo a Go Back', detail: '', cat: 'navigation', star: false },
+  { mac: 'Ctrl+Tab', win: 'Ctrl+Tab', desc: 'Switch to next recently opened editor tab', detail: 'Same shortcut on both platforms', cat: 'navigation', star: true },
+  { mac: '⇧⌘E', win: 'Ctrl+Shift+E', desc: 'Open Explorer sidebar', detail: '', cat: 'navigation', star: false },
+  { mac: '⇧⌘X', win: 'Ctrl+Shift+X', desc: 'Open Extensions sidebar', detail: '', cat: 'navigation', star: false },
+  { mac: '⇧⌘M', win: 'Ctrl+Shift+M', desc: 'Open Problems panel — see all errors and warnings', detail: '', cat: 'navigation', star: false },
+
+  // MULTI-CURSOR
+  { mac: '⌥Click', win: 'Alt+Click', desc: 'Add cursor at click position', detail: 'The building block of multi-cursor editing', cat: 'multicursor', star: true },
+  { mac: '⌘⌥↑', win: 'Ctrl+Alt+↑', desc: 'Add cursor above current line', detail: '', cat: 'multicursor', star: true },
+  { mac: '⌘⌥↓', win: 'Ctrl+Alt+↓', desc: 'Add cursor below current line', detail: '', cat: 'multicursor', star: true },
+  { mac: '⌘D', win: 'Ctrl+D', desc: 'Select next occurrence of current word/selection', detail: 'Press repeatedly to keep adding. Cmd+K Cmd+D to skip one.', cat: 'multicursor', star: true },
+  { mac: '⇧⌘L', win: 'Ctrl+Shift+L', desc: 'Select ALL occurrences of current word/selection', detail: 'Instantly multi-selects every match in the file', cat: 'multicursor', star: true },
+  { mac: '⌘K ⌘D', win: 'Ctrl+K Ctrl+D', desc: 'Skip next occurrence — advance past without selecting', detail: 'Use after Cmd+D to skip an occurrence you want to leave unchanged', cat: 'multicursor', star: false },
+  { mac: '⌘U', win: 'Ctrl+U', desc: 'Undo last cursor operation', detail: 'Steps back through cursor additions one at a time', cat: 'multicursor', star: false },
+  { mac: '⌘L', win: 'Ctrl+L', desc: 'Select current line', detail: 'Repeat to extend selection to more lines', cat: 'multicursor', star: true },
+  { mac: '⌥⇧I', win: 'Shift+Alt+I', desc: 'Add cursor at end of each selected line', detail: 'Select multiple lines first, then use this to edit all endings at once', cat: 'multicursor', star: false },
+  { mac: '⌥⇧→', win: 'Ctrl+Shift+→', desc: 'Expand selection by one word to the right', detail: '', cat: 'multicursor', star: false },
+  { mac: '⌥⇧←', win: 'Ctrl+Shift+←', desc: 'Shrink selection by one word to the left', detail: '', cat: 'multicursor', star: false },
+
+  // DEBUG
+  { mac: 'F5', win: 'F5', desc: 'Start Debugging (or Continue when paused at breakpoint)', detail: 'Requires a launch.json configuration in .vscode/', cat: 'debug', star: true },
+  { mac: 'F9', win: 'F9', desc: 'Toggle Breakpoint at current line', detail: '', cat: 'debug', star: true },
+  { mac: 'F10', win: 'F10', desc: 'Step Over — execute current line, stay in same function', detail: '', cat: 'debug', star: true },
+  { mac: 'F11', win: 'F11', desc: 'Step Into — follow execution into a function call', detail: '', cat: 'debug', star: true },
+  { mac: '⇧F11', win: 'Shift+F11', desc: 'Step Out — run until current function returns', detail: '', cat: 'debug', star: true },
+  { mac: '⇧F5', win: 'Shift+F5', desc: 'Stop Debugging', detail: '', cat: 'debug', star: false },
+  { mac: '⇧⌘D', win: 'Ctrl+Shift+D', desc: 'Open Run and Debug panel', detail: '', cat: 'debug', star: true },
+  { mac: '⇧⌘Y', win: 'Ctrl+Shift+Y', desc: 'Open Debug Console', detail: 'Evaluate expressions in the current debug context', cat: 'debug', star: false },
+  { mac: '⌘K ⌘I', win: 'Ctrl+K Ctrl+I', desc: 'Show hover tooltip for symbol under cursor', detail: 'Shows type information, docs, and debug values', cat: 'debug', star: false },
+
+  // TERMINAL
+  { mac: 'Ctrl+`', win: 'Ctrl+`', desc: 'Toggle integrated terminal', detail: 'Same shortcut on both Mac and Windows (backtick key)', cat: 'terminal', star: true },
+  { mac: 'Ctrl+⇧`', win: 'Ctrl+Shift+`', desc: 'Create new terminal instance', detail: '', cat: 'terminal', star: true },
+  { mac: 'Ctrl+⇧5', win: 'Ctrl+Shift+5', desc: 'Split terminal — open side-by-side terminals', detail: '', cat: 'terminal', star: false },
+  { mac: '⌘K', win: 'Ctrl+K', desc: 'Clear terminal output (when terminal is focused)', detail: '', cat: 'terminal', star: true },
+  { mac: '⇧PageUp', win: 'Shift+PageUp', desc: 'Scroll up through terminal history', detail: '', cat: 'terminal', star: false },
+  { mac: '⇧PageDown', win: 'Shift+PageDown', desc: 'Scroll down through terminal history', detail: '', cat: 'terminal', star: false },
+  { mac: '⌥←', win: 'Ctrl+←', desc: 'Move cursor back one word in terminal input', detail: '', cat: 'terminal', star: false },
+  { mac: '⌥→', win: 'Ctrl+→', desc: 'Move cursor forward one word in terminal input', detail: '', cat: 'terminal', star: false },
+
+  // GIT
+  { mac: 'Ctrl+⇧G', win: 'Ctrl+Shift+G', desc: 'Open Source Control panel', detail: 'Same shortcut on both platforms', cat: 'git', star: true },
+  { mac: '⇧⌘P → Git: Pull', win: 'Ctrl+Shift+P → Git: Pull', desc: 'Pull from remote', detail: 'Via Command Palette — VS Code has no default key for this', cat: 'git', star: true },
+  { mac: '⇧⌘P → Git: Push', win: 'Ctrl+Shift+P → Git: Push', desc: 'Push to remote', detail: 'Via Command Palette', cat: 'git', star: true },
+  { mac: '⇧⌘P → Git: Checkout to...', win: 'Ctrl+Shift+P → Git: Checkout to...', desc: 'Switch branch', detail: 'Via Command Palette — shows all local branches', cat: 'git', star: true },
+  { mac: '⇧⌘P → Git: Create Branch', win: 'Ctrl+Shift+P → Git: Create Branch', desc: 'Create a new branch', detail: 'Via Command Palette', cat: 'git', star: false },
+  { mac: '⇧⌘P → Git: Stash', win: 'Ctrl+Shift+P → Git: Stash', desc: 'Stash current changes', detail: 'Via Command Palette', cat: 'git', star: false },
+  { mac: '⇧⌘P → Git: Stage All Changes', win: 'Ctrl+Shift+P → Git: Stage All Changes', desc: 'Stage all changed files', detail: 'Via Command Palette', cat: 'git', star: false },
+];
+
+let platform = 'mac';
+let currentFilter = 'all';
+let currentSearch = '';
+
+function setPlatform(p) {
+  platform = p;
+  document.getElementById('macBtn').classList.toggle('active', p === 'mac');
+  document.getElementById('winBtn').classList.toggle('active', p === 'win');
+  document.getElementById('platformHint').textContent = p === 'mac'
+    ? '⌘ = Command · ⌥ = Option · ⇧ = Shift · ^ = Control'
+    : 'Ctrl = Control · Alt = Option equivalent · Shift = Shift';
+  render();
+}
+
+const CAT_LABELS = { file: 'File & Panels', editing: 'Editing', navigation: 'Navigation', multicursor: 'Multi-cursor', debug: 'Debug', terminal: 'Terminal', git: 'Git' };
+const CAT_ORDER = ['file', 'editing', 'navigation', 'multicursor', 'debug', 'terminal', 'git'];
+
+function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function highlight(text, query) {
+  if (!query) return escHtml(text);
+  const esc = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return escHtml(text).replace(new RegExp(`(${esc})`, 'gi'), '<mark style="background:rgba(121,192,255,0.25);color:#79c0ff;border-radius:2px">$1</mark>');
+}
+
+function render() {
+  const q = currentSearch.toLowerCase();
+  const container = document.getElementById('commandsContainer');
+  container.innerHTML = '';
+  const bySection = {};
+  let visible = 0;
+
+  SHORTCUTS.forEach((s, i) => {
+    const key = platform === 'mac' ? s.mac : s.win;
+    const matchesCat = currentFilter === 'all' || s.cat === currentFilter;
+    const matchesSearch = !q
+      || s.mac.toLowerCase().includes(q)
+      || s.win.toLowerCase().includes(q)
+      || s.desc.toLowerCase().includes(q)
+      || s.detail.toLowerCase().includes(q);
+    if (!matchesCat || !matchesSearch) return;
+    visible++;
+    if (!bySection[s.cat]) bySection[s.cat] = [];
+    bySection[s.cat].push({ ...s, idx: i, key });
+  });
+
+  document.getElementById('resultCount').textContent = visible;
+  document.getElementById('noResults').style.display = visible === 0 ? '' : 'none';
+
+  CAT_ORDER.forEach(sec => {
+    if (!bySection[sec]) return;
+    const heading = document.createElement('div');
+    heading.className = 'section-heading';
+    heading.textContent = CAT_LABELS[sec];
+    container.appendChild(heading);
+
+    bySection[sec].forEach(s => {
+      const card = document.createElement('div');
+      card.className = 'shortcut-card';
+      const starHtml = s.star ? `<span class="star-badge">★ Essential</span>` : '';
+      const catHtml = currentFilter === 'all' ? `<span class="cat-badge badge-${s.cat}">${CAT_LABELS[s.cat]}</span>` : '';
+      const detailHtml = s.detail ? `<div class="shortcut-detail">${highlight(s.detail, currentSearch)}</div>` : '';
+      card.innerHTML = `
+        <div class="key-col">
+          <span class="shortcut-key">${escHtml(s.key)}</span>
+          ${starHtml}${catHtml}
+        </div>
+        <div class="desc-col">
+          <div class="shortcut-desc">${highlight(s.desc, currentSearch)}</div>
+          ${detailHtml}
+        </div>
+        <button class="copy-btn" data-key="${escHtml(s.key)}">Copy</button>
+      `;
+      container.appendChild(card);
+    });
+  });
+
+  container.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      navigator.clipboard.writeText(btn.dataset.key).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+      });
+    });
+  });
+}
+
+document.getElementById('searchInput').addEventListener('input', e => {
+  currentSearch = e.target.value;
+  render();
+});
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.cat;
+    render();
+  });
+});
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault();
+    document.getElementById('searchInput').focus();
+  }
+});
+
+render();
+</script>
+
+<script data-goatcounter="https://autorunfun.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
