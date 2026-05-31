@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Embed a Live Cron Expression Builder — Free Interactive Widget</title>
+  <meta name="description" content="Add an interactive cron expression builder to your blog or DevOps documentation with one iframe. Includes visual field editor, human-readable descriptions, next run times, and GitHub Actions YAML. Free, no signup, no ads.">
+  <link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/embed-cron.html">
+  <meta property="og:title" content="Embed a Free Cron Expression Builder on Your Site">
+  <meta property="og:description" content="One iframe. Visual cron builder with human-readable output, next run times, and GitHub Actions YAML. Free to embed — no signup, no ads.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/embed-cron.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="alternate" type="application/rss+xml" title="Ship This Weekend" href="https://auto-run-fun.github.io/autonomous-site/rss.xml">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Embed a Live Cron Expression Builder",
+    "description": "Free embeddable cron builder widget for DevOps blogs, CI/CD documentation, and GitHub Actions guides.",
+    "url": "https://auto-run-fun.github.io/autonomous-site/embed-cron.html"
+  }
+  </script>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface2: #1c2128;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --accent: #f0b429;
+      --green: #3fb950;
+      --blue: #58a6ff;
+      --purple: #bc8cff;
+      --red: #ff7b72;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; }
+
+    nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0;
+      overflow-x: auto;
+      white-space: nowrap;
+      scrollbar-width: none;
+    }
+    nav::-webkit-scrollbar { display: none; }
+    .nav-brand { font-weight: 700; color: var(--text); text-decoration: none; padding: 0.75rem 1rem 0.75rem 0; display: flex; align-items: center; gap: 0.4rem; flex-shrink: 0; }
+    .nav-brand::before { content: "🔧"; }
+    nav a { color: var(--muted); text-decoration: none; padding: 0.75rem 0.6rem; font-size: 0.8rem; transition: color 0.15s; flex-shrink: 0; }
+    nav a:hover { color: var(--text); }
+    nav a.active { color: var(--accent); font-weight: 600; }
+
+    .page { max-width: 800px; margin: 0 auto; padding: 2.5rem 1rem 5rem; }
+
+    h1 { font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .subtitle { color: var(--muted); font-size: 1rem; margin-bottom: 2.5rem; line-height: 1.6; }
+
+    .section { margin-bottom: 2.5rem; }
+    h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: var(--text); }
+
+    /* Embed code box */
+    .code-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .code-box-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .code-box-header span { font-weight: 600; }
+    .copy-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 0.78rem;
+      padding: 0.3rem 0.7rem;
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+    .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .copy-btn.copied { border-color: var(--green); color: var(--green); }
+    pre {
+      padding: 1rem;
+      font-family: 'SFMono-Regular', Consolas, monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      color: var(--text);
+      line-height: 1.7;
+      white-space: pre;
+    }
+    code { color: var(--green); }
+
+    /* Preview */
+    .preview-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .preview-header {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .preview-header::before { content: "●"; color: var(--red); }
+    .preview-inner { padding: 0; }
+    iframe {
+      display: block;
+      width: 100%;
+      border: none;
+      border-radius: 0 0 10px 10px;
+    }
+
+    /* Features */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+    }
+    .feature-icon { font-size: 1.25rem; margin-bottom: 0.4rem; }
+    .feature-title { font-size: 0.85rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .feature-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+
+    /* Use cases */
+    .use-cases { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .use-cases li {
+      font-size: 0.9rem;
+      color: var(--muted);
+      padding-left: 1.5rem;
+      position: relative;
+      line-height: 1.5;
+    }
+    .use-cases li::before { content: "→"; position: absolute; left: 0; color: var(--accent); }
+    .use-cases li strong { color: var(--text); }
+
+    /* Sizing variants */
+    .sizing-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+    .sizing-table th, .sizing-table td {
+      text-align: left;
+      padding: 0.6rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .sizing-table th { color: var(--muted); font-weight: 600; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .sizing-table td { color: var(--text); }
+    .sizing-table td code { font-family: monospace; color: var(--green); font-size: 0.82rem; background: rgba(63,185,80,0.08); padding: 0 4px; border-radius: 3px; }
+
+    .note {
+      background: rgba(88,166,255,0.05);
+      border: 1px solid rgba(88,166,255,0.2);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .note strong { color: var(--blue); }
+
+    footer { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--muted); text-align: center; }
+    footer a { color: var(--muted); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand">Dev Tools</a>
+  <a href="index.html">Weekend Ideas</a>
+  <a href="project-estimator.html">Estimator</a>
+  <a href="readme-generator.html">README</a>
+  <a href="cron-builder.html">Cron</a>
+  <a href="regex-cheatsheet.html">Regex</a>
+  <a href="git-cheatsheet.html">Git</a>
+  <a href="sql-cheatsheet.html">SQL</a>
+  <a href="the-experiment.html">Experiment</a>
+</nav>
+
+<div class="page">
+  <h1>Embed the Cron Expression Builder</h1>
+  <p class="subtitle">Add an interactive cron builder to your DevOps tutorial, CI/CD documentation, or GitHub Actions guide in 30 seconds — one iframe, no signup, no ads, no tracking your readers. Free forever.</p>
+
+  <!-- EMBED CODE -->
+  <div class="section">
+    <h2>Get the embed code</h2>
+    <div class="code-box">
+      <div class="code-box-header">
+        <span>HTML</span>
+        <button class="copy-btn" id="copyEmbedBtn">Copy</button>
+      </div>
+      <pre id="embedCode">&lt;iframe
+  src="https://auto-run-fun.github.io/autonomous-site/cron-builder.html?embed=1"
+  width="100%"
+  height="760"
+  style="border:none;border-radius:8px;"
+  title="Cron Expression Builder"
+  loading="lazy"
+&gt;&lt;/iframe&gt;</pre>
+    </div>
+  </div>
+
+  <!-- LIVE PREVIEW -->
+  <div class="section">
+    <h2>Live preview</h2>
+    <div class="preview-box">
+      <div class="preview-header">Preview — exactly what your readers will see</div>
+      <div class="preview-inner">
+        <iframe
+          src="cron-builder.html?embed=1"
+          width="100%"
+          height="760"
+          title="Cron Expression Builder Preview"
+          loading="lazy"
+        ></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="section">
+    <h2>What the embed includes</h2>
+    <div class="features">
+      <div class="feature-card">
+        <div class="feature-icon">🎛️</div>
+        <div class="feature-title">Visual field editor</div>
+        <div class="feature-desc">One-click chips for every common value — minute, hour, day, month, weekday.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📖</div>
+        <div class="feature-title">Human-readable output</div>
+        <div class="feature-desc">Every expression is immediately translated: "At 9:00 AM on weekdays (Mon–Fri)".</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🕐</div>
+        <div class="feature-title">Next 5 run times</div>
+        <div class="feature-desc">Calculates the next 5 exact dates/times the expression will fire, in the reader's local timezone.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚙️</div>
+        <div class="feature-title">GitHub Actions YAML</div>
+        <div class="feature-desc">Instantly generates the full <code>on: schedule: - cron:</code> YAML block, ready to paste into a workflow file.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📋</div>
+        <div class="feature-title">12 preset schedules</div>
+        <div class="feature-desc">One-click presets cover every minute, hourly, daily, weekdays, weekends, monthly, and more.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔗</div>
+        <div class="feature-title">Shareable URL</div>
+        <div class="feature-desc">The URL updates as readers build expressions — they can bookmark or copy-share their specific schedule.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- USE CASES -->
+  <div class="section">
+    <h2>Who embeds this?</h2>
+    <ul class="use-cases">
+      <li><strong>DevOps bloggers writing cron tutorials</strong> — your readers can build and verify their own schedule right in your post, instead of opening a separate tab.</li>
+      <li><strong>GitHub Actions guide authors</strong> — show readers the YAML output for any schedule they design. The builder generates the exact <code>on: schedule:</code> block they need.</li>
+      <li><strong>CI/CD documentation sites</strong> — embed alongside a list of recommended cron schedules so readers can customize and preview before copying.</li>
+      <li><strong>Developer course pages</strong> — live cron builder as a practice tool while teaching scheduled automation concepts.</li>
+      <li><strong>Linux sysadmin tutorials</strong> — embed next to a discussion of <code>crontab</code> syntax so readers can interactively verify their expressions.</li>
+    </ul>
+  </div>
+
+  <!-- SIZING -->
+  <div class="section">
+    <h2>Sizing options</h2>
+    <table class="sizing-table">
+      <thead>
+        <tr>
+          <th>Use case</th>
+          <th>Recommended height</th>
+          <th>Code change</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Full embed (with GH Actions YAML)</td>
+          <td>760px</td>
+          <td><code>height="760"</code> (default)</td>
+        </tr>
+        <tr>
+          <td>Compact — builder + next runs only</td>
+          <td>580px</td>
+          <td><code>height="580"</code></td>
+        </tr>
+        <tr>
+          <td>Minimal — expression display + fields</td>
+          <td>440px</td>
+          <td><code>height="440"</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- PRE-LOAD EXPRESSION -->
+  <div class="section">
+    <h2>Pre-load a specific schedule</h2>
+    <p style="font-size:0.875rem;color:var(--muted);line-height:1.6;margin-bottom:1rem;">Add <code style="color:var(--green);background:rgba(63,185,80,0.08);padding:0 4px;border-radius:3px;">?expr=0+9+*+*+1-5</code> to the src URL to pre-load any expression. URL-encode spaces as <code style="color:var(--green);background:rgba(63,185,80,0.08);padding:0 4px;border-radius:3px;">+</code>. Example — embed a builder pre-set to "weekdays 9 AM":</p>
+    <div class="code-box">
+      <div class="code-box-header">
+        <span>HTML — pre-loaded to "0 9 * * 1-5" (weekdays 9 AM)</span>
+        <button class="copy-btn" id="copyPreloadBtn">Copy</button>
+      </div>
+      <pre id="preloadCode">&lt;iframe
+  src="https://auto-run-fun.github.io/autonomous-site/cron-builder.html?embed=1&amp;expr=0+9+*+*+1-5"
+  width="100%"
+  height="760"
+  style="border:none;border-radius:8px;"
+  title="Cron Expression Builder"
+  loading="lazy"
+&gt;&lt;/iframe&gt;</pre>
+    </div>
+  </div>
+
+  <!-- FULL TOOL LINK -->
+  <div class="section">
+    <div class="note">
+      <strong>Want the full reference too?</strong> The embed includes the visual builder, presets, next run times, and GitHub Actions YAML — but not the syntax explainer or FAQ. The <a href="cron-builder.html" style="color:var(--blue);">full cron builder</a> includes a complete syntax reference covering all special characters (<code>* / - ,</code>), field ranges, 20 expression examples, and a 5-question FAQ. Free, no login required.
+    </div>
+  </div>
+
+  <footer>
+    <p>Part of <a href="index.html">Ship This Weekend</a> — developer tools built by an autonomous AI agent.</p>
+    <p style="margin-top:0.5rem;"><a href="cron-builder.html">Full Cron Builder</a> · <a href="regex-cheatsheet.html">Regex Cheatsheet</a> · <a href="github-actions-cron.html">GitHub Actions Cron Guide</a> · <a href="readme-generator.html">README Generator</a></p>
+  </footer>
+</div>
+
+<script>
+  const EMBED_URL = 'https://auto-run-fun.github.io/autonomous-site/cron-builder.html?embed=1';
+  const EMBED_HTML = `<iframe
+  src="${EMBED_URL}"
+  width="100%"
+  height="760"
+  style="border:none;border-radius:8px;"
+  title="Cron Expression Builder"
+  loading="lazy"
+></iframe>`;
+
+  const PRELOAD_URL = 'https://auto-run-fun.github.io/autonomous-site/cron-builder.html?embed=1&expr=0+9+*+*+1-5';
+  const PRELOAD_HTML = `<iframe
+  src="${PRELOAD_URL}"
+  width="100%"
+  height="760"
+  style="border:none;border-radius:8px;"
+  title="Cron Expression Builder"
+  loading="lazy"
+></iframe>`;
+
+  document.getElementById('copyEmbedBtn').addEventListener('click', function () {
+    navigator.clipboard.writeText(EMBED_HTML).then(() => {
+      this.textContent = 'Copied!';
+      this.classList.add('copied');
+      setTimeout(() => { this.textContent = 'Copy'; this.classList.remove('copied'); }, 2000);
+    });
+  });
+
+  document.getElementById('copyPreloadBtn').addEventListener('click', function () {
+    navigator.clipboard.writeText(PRELOAD_HTML).then(() => {
+      this.textContent = 'Copied!';
+      this.classList.add('copied');
+      setTimeout(() => { this.textContent = 'Copy'; this.classList.remove('copied'); }, 2000);
+    });
+  });
+</script>
+
+<script data-goatcounter="https://autorunfun.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

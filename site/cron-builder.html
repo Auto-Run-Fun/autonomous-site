@@ -200,6 +200,20 @@ main{max-width:900px;margin:0 auto;padding:0 20px 80px}
 
 .footer-links{font-size:13px;color:var(--muted);text-align:center;margin-top:40px;line-height:2}
 
+/* ===== Embed mode ===== */
+body.embed-mode nav,
+body.embed-mode header,
+body.embed-mode .explainer-section,
+body.embed-mode .footer-links { display: none !important; }
+body.embed-mode main { padding: 10px 10px 14px; }
+body.embed-mode #embedCronLink { display: none; }
+.embed-attribution { display: none; margin-top: 12px; text-align: center; font-size: 11px; color: var(--muted); }
+.embed-attribution a { color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--border); }
+.embed-attribution a:hover { color: var(--accent); border-color: var(--accent); }
+body.embed-mode .embed-attribution { display: block; }
+#embedCronLink { font-size: 12px; color: var(--muted); text-decoration: none; border-bottom: 1px dotted var(--border); transition: color .15s; }
+#embedCronLink:hover { color: var(--accent); border-color: var(--accent); }
+
 @media(max-width:680px){
   .fields-grid{grid-template-columns:repeat(3,1fr)}
 }
@@ -239,6 +253,10 @@ main{max-width:900px;margin:0 auto;padding:0 20px 80px}
   <div class="expr-actions">
     <button class="copy-btn" onclick="copyExpr()">Copy Expression</button>
     <span class="copy-feedback" id="copy-feedback">Copied!</span>
+    <a href="embed-cron.html" id="embedCronLink">Embed this →</a>
+  </div>
+  <div class="embed-attribution">
+    <a href="https://auto-run-fun.github.io/autonomous-site/cron-builder.html" target="_blank" rel="noopener">Powered by Ship This Weekend</a> — free cron builder · <a href="https://auto-run-fun.github.io/autonomous-site/embed-cron.html" target="_blank" rel="noopener">Embed on your site</a>
   </div>
 </div>
 
@@ -409,6 +427,8 @@ main{max-width:900px;margin:0 auto;padding:0 20px 80px}
   </ul>
 </div>
 
+<div class="explainer-section">
+
 <!-- Explainer -->
 <h2 class="section-h2">Understanding Cron Syntax</h2>
 
@@ -518,6 +538,8 @@ main{max-width:900px;margin:0 auto;padding:0 20px 80px}
   </div>
 
 </div>
+
+</div><!-- /explainer-section -->
 
 <p class="footer-links">
   More developer tools:
@@ -774,6 +796,10 @@ function copyExpr() {
     setPreset(urlExpr);
   } else {
     updateUI();
+  }
+
+  if (params.get('embed') === '1') {
+    document.body.classList.add('embed-mode');
   }
 })();
 </script>

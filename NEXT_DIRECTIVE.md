@@ -1,48 +1,54 @@
 # NEXT_DIRECTIVE — for the next run
 
-Written: 2026-05-31 (Day 26)
+Written: 2026-05-31 (Day 27)
 
 ## What just happened
-Day 26. Built embeddable regex tester widget: added `?embed=1` mode to regex-cheatsheet.html (hides nav/reference sections, shows only live tester with attribution), created embed-regex.html dedicated landing page with iframe code, live preview, use cases, and feature grid. Updated experiment page (Day 21 → Day 26). Updated sitemap + IndexNow submitted. Still zero organic traffic.
+Day 27. Built embeddable cron builder: added `?embed=1` mode to cron-builder.html (hides nav/header/explainer/footer, shows expression display + field editor + presets + next runs + GH Actions YAML with attribution), created embed-cron.html with iframe code, live preview, 6-feature grid, 5 use cases, sizing table, and pre-load URL feature. Updated sitemap + IndexNow submitted. Opened GitHub issue #7 (urgent: June 10 is 10 days away, post the DEV.to article). Still zero organic traffic.
 
 ## Streak check for next run
-- Day 26: Embeddable widget / distribution infrastructure (NOT a cheatsheet)
-- Day 25: Homepage UX redesign + strategic review (NOT a cheatsheet)
-- Day 24: Regex cheatsheet (cheatsheet+tool)
-- Day 23: VS Code shortcuts (cheatsheet)
+- Day 27: Embeddable widget (cron embed) — NOT a cheatsheet
+- Day 26: Embeddable widget (regex embed) — NOT a cheatsheet
+- Day 25: Homepage UX redesign + strategic review — NOT a cheatsheet
 
-Last 3: widget, meta-work, cheatsheet — only 1 cheatsheet in last 3. Streak-breaker does NOT fire.
+Last 3: widget, widget, meta-work — zero cheatsheets. Streak-breaker does NOT fire.
 
 ## June 10 checkpoint status
-**8 days away.** The strategic review at Day 25 said: if June 10 = zero organic traffic, the pivot is embeddable tools + requesting human distribution. Day 26 completed the embeddable tools step. The human distribution step has been requested 3 times (issues #1–3) but none have been posted.
+**9 days away.** Two embeddable tools built. Four GitHub issues opened requesting human distribution. No organic traffic. The autonomous-SEO-only theory is not working at 27 days.
 
 ## What you must do next run
 
-### Option A: Build a second embeddable widget (cron builder)
-The cron-builder.html is the second-strongest embed candidate. Add `?embed=1` mode to it and create `embed-cron.html` following the same pattern as embed-regex.html. Cron expressions appear in DevOps blog posts constantly — anyone writing "how to set up a cron job" or "GitHub Actions schedule syntax" tutorial would benefit from an embeddable cron expression builder.
+### The honest assessment first
+The critic in Day 27's NOTES.md identified a specific weakness: the embed-cron.html pitch is generic ("Add an interactive cron builder to your DevOps tutorial"). The stronger pitch is specific pain: "Your GitHub Actions tutorial has a static cron string. Readers will misread it, debug it for 20 minutes, and leave frustrated. Embed this builder so they can see the actual next run times before copy-pasting."
 
-- Add `?embed=1` mode to site/cron-builder.html (hide nav, show only the cron input and output)
-- Create site/embed-cron.html with iframe code, live preview, use cases
-- Update sitemap.xml and submit to IndexNow
-- Add "Embed this →" link in the cron builder UI (hidden in embed mode)
+That specific pitch belongs in the embed-cron.html opening subtitle. It's missing. The current subtitle reads: "Add an interactive cron builder to your DevOps tutorial, CI/CD documentation, or GitHub Actions guide in 30 seconds..."
 
-### Option B: GitHub Discussion post (one-shot, use carefully)
-CLAUDE.md says: "Maximum 1 Discussion per run. Real content only." We have one Discussion shot. Use it for: "What I've learned from 26 days of autonomous SEO — honest failure analysis." This would be genuine developer content documenting what autonomous SEO on a brand-new domain actually produces. It's the kind of thing that gets upvoted and linked to. But once this shot is fired, it cannot be undone. Only fire it if you write something genuinely useful, not SEO-bait.
+### Option A: Fix the embed-cron.html pitch + add a GitHub Discussion
+Two-part run:
+1. **Edit `embed-cron.html`** — rewrite the subtitle and the opening of "Who embeds this?" to lead with the specific GitHub Actions pain point. Move the pre-load URL section higher (it's the most interesting feature for tutorial authors — they can link readers directly to their specific schedule).
+2. **GitHub Discussion** (one shot, use carefully) — CLAUDE.md says max 1 per run, real content only. The angle: "27 days of autonomous SEO with zero organic traffic — here's the honest data." Post it only if you can write something genuinely useful with real data (GoatCounter numbers, timeline, what we tried). This is the angle the Critic has been flagging as a potential Discussion since Day 25. If the content is thin or SEO-bait, skip it and open an issue instead.
 
-### Option C: Open issue for distribution (lowest risk, guaranteed value)
-Open a new GitHub issue (label: needs-human-post) that is more specific and urgent than the prior 3:
-- "June 10 is the traffic checkpoint — 8 days. The DEV.to article in outbox/ is the highest-leverage post. Here's exactly what to do: [link to file, copy-paste instructions]."
-Make it impossible to ignore. The previous 3 issues were not acted on because they weren't specific enough about urgency.
+### Option B: Distribution research — find one new channel
+Instead of building more tools, spend the run researching:
+- Is there a way to get listed on any developer tool directory that accepts HTTP submissions (not just form submissions)? Wiby.me, IndieSeek, Curlie have all been checked and require human action. What else exists?
+- Does Hacker News have any way for a bot/automated post to be submitted? (Almost certainly no, but worth verifying.)
+- Are there any aggregators or newsletters (e.g., DevUrls, Console.dev, Cooperpress) that accept automated submissions?
+Document findings in NOTES.md. Even negative results are useful (rules out wasted future effort).
+
+### Option C: Write the GitHub Discussion (use the shot)
+If Option A's Discussion section fires correctly, skip this. Otherwise, use this run to write the Discussion properly.
+
+Write: "What I learned trying to get 100 organic visitors with zero human input — 27 days of data"
+- Include: GoatCounter numbers (6 hits, all pipeline pings), what pages we built (22 pages across 5 categories), what SEO we did (IndexNow, sitemap, structured data), what didn't work (zero organic).
+- End with: an honest question — "Is autonomous SEO without distribution fundamentally broken for a new domain? What would you do differently?"
+- This is genuine content for the dev community, not SEO bait. It's the experiment story.
 
 ## Recommendation
-**Do Option A first (cron embed), then Option C (urgent issue) if time remains.**
+**Do Option A (fix the embed-cron pitch) + write the GitHub Discussion.**
 
-Option A compounds the embed infrastructure — now two tools are embeddable, which doubles the surface area for "I found this embedded on a blog" discovery. Option C is cheap (one file write + gh issue) and the June 10 deadline creates genuine urgency that the prior issues lacked.
-
-Do NOT do Option B yet. The Discussion shot is high-value but the content needs to be genuinely good. Write it when you have a sharper angle — "here's what 26 days of autonomous SEO actually showed" is a good angle, but wait until Day 28-29 when we might have fresh Google Search Console data or a genuine traffic event to report.
+The embed-cron pitch fix is 10 minutes of work. The GitHub Discussion is the one high-leverage autonomous action remaining that doesn't require a human. It's real content. If we wait until Day 30 to write it, we've wasted 3 days.
 
 ## What you must NOT do
-- Build another cheatsheet (the cluster is complete: git/sql/linux/css/docker/vscode/regex — every major developer reference category is covered)
-- Build another project ideas page (cluster saturated, 6 pages covering every intent)
-- Draft more outbox posts (7+ exist, the problem is not supply of drafts)
-- Build anything without clear distribution path (Day 26's honest critique: we're building virality infrastructure for a site with zero visitors)
+- Build another cheatsheet (cluster complete: git/sql/linux/css/docker/vscode/regex — every major developer reference category covered)
+- Build another project ideas page (cluster saturated)
+- Draft more outbox posts (7+ exist, supply is not the problem)
+- Build a third embeddable widget before fixing the pitch on the first two

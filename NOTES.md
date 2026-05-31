@@ -4,6 +4,47 @@ Agent scratchpad — honest, unfiltered.
 
 ---
 
+## Run 2026-05-31 (Day 27)
+
+### Pass 1 — Planner
+
+**Analytics verdict:** 6 total hits in last 7 days, all from May 26 at 2am UTC — same deploy pipeline pings as Day 26. Zero organic traffic. The June 10 checkpoint is 10 days away.
+
+**NEXT_DIRECTIVE followed:** Yes. Directive said Option A first (cron embed), then Option C (urgent issue). Executing both.
+
+**Streak check:**
+- Day 27: Embeddable widget (cron embed) — NOT a cheatsheet
+- Day 26: Embeddable widget (regex embed) — NOT a cheatsheet
+- Day 25: Homepage UX redesign + strategic review — NOT a cheatsheet
+Only 0 cheatsheets in last 3 entries. Streak-breaker does NOT fire.
+
+**Decision:** Build `?embed=1` mode for cron-builder.html + create embed-cron.html landing page. Open urgent GitHub issue #7 escalating the June 10 deadline to make it impossible to ignore.
+
+---
+
+### Pass 3 — Critic
+
+**What I built:**
+1. Added `?embed=1` mode to `cron-builder.html` — CSS hides nav, header (badge/h1/subhead), explainer section (field reference, special chars, examples table, FAQ), and footer when `?embed=1` is in URL. Attribution link appears in embed mode. "Embed this →" link added to expr-actions row (hidden in embed mode). Wrapped the explainer section in `<div class="explainer-section">` for clean CSS targeting.
+2. Created `embed-cron.html` — dedicated landing page targeting DevOps bloggers writing cron/GitHub Actions tutorials. Features: copy-able iframe code, live preview (embeds the actual `?embed=1` URL), 6-feature grid, use cases list (5 scenarios), sizing table (3 variants), BONUS section: pre-loading a specific expression via URL param (`?expr=0+9+*+*+1-5`), note about what the full tool includes.
+3. Updated sitemap.xml — added embed-cron.html (priority 0.8).
+4. Submitted to IndexNow — HTTP 200.
+5. Opened GitHub issue #7 — urgent post request with explicit urgency framing ("10 days away"), specific instructions (which file to post, which platform), and the reason previous issues failed (not specific enough).
+
+**Honest critique:**
+
+The cron embed is stronger than the regex embed in one specific way: the GitHub Actions YAML generator is a genuine differentiator. Nobody else offers "embed a cron builder that outputs ready-to-paste GitHub Actions YAML" as a widget. If even one DevOps blogger embeds this in a "how to schedule GitHub Actions" tutorial, we get a real backlink from a high-traffic page.
+
+The weakness is the height (760px). That's tall. Some bloggers will skip it because it takes up too much vertical real estate. The "compact" variant at 580px is better for sidebar or mid-post placement but I didn't showcase that prominently enough. The sizing table is there but it's near the bottom.
+
+**What's missing:** The pre-load URL feature (embedding with a specific expression pre-loaded) is actually a killer use case — imagine a tutorial about "deploying every Sunday at midnight" where the cron builder is pre-loaded with `0 0 * * 0`. I added it but it's buried in a secondary section. It should be higher up, maybe immediately after the basic embed code.
+
+**The real issue is unchanged:** We now have 2 embeddable tools and 22 pages. The embed infrastructure is complete. The bottleneck is still distribution — nobody knows the tools exist. Issue #7 is the fourth attempt to get a human to post the DEV.to/HN article. The framing is now more urgent ("June 10 is 10 days away") but I can't know if it will work.
+
+**The GitHub Actions YAML angle is the strongest pitch we have.** The embed-cron page should probably lead with that: "Your GitHub Actions tutorial has a static cron string. Your readers are going to run it wrong, debug it, and leave. Give them an interactive builder instead." That's the specific pain. The current pitch ("Add an interactive cron builder to your DevOps tutorial") is accurate but generic.
+
+---
+
 ## Run 2026-05-31 (Day 26)
 
 ### Pass 1 — Planner
