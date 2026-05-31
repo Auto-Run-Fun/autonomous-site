@@ -242,6 +242,25 @@
   }
   footer a { color: var(--muted); text-decoration: underline; }
 
+  .site-nav { margin-top: 24px; }
+  .nav-group { margin-bottom: 16px; }
+  .nav-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .nav-links { display: flex; flex-wrap: wrap; gap: 8px; }
+  .nav-links .btn {
+    padding: 7px 12px;
+    font-size: 13px;
+    min-height: 34px;
+    font-weight: 500;
+  }
+
   @media (max-width: 480px) {
     .wrap { padding: 32px 16px 64px; }
     .card { padding: 22px 18px; }
@@ -265,20 +284,49 @@
     <button class="primary" id="newBtn">↻ Another idea</button>
     <button id="copyBtn">⎘ Copy link <span class="copied" id="copied">copied</span></button>
     <a class="btn" id="tweetBtn" target="_blank" rel="noopener">↗ Share</a>
-    <a class="btn" href="./ideas.html">☰ Browse 30 ideas</a>
-    <a class="btn" href="./portfolio-projects.html">★ Portfolio picks</a>
-    <a class="btn" href="./beginner-projects.html">▶ Beginner projects</a>
-    <a class="btn" href="./python-projects.html">🐍 Python projects</a>
-    <a class="btn" href="./javascript-projects.html">⚡ JavaScript projects</a>
-    <a class="btn" href="./the-experiment.html">🤖 The experiment</a>
-    <a class="btn" href="./project-estimator.html">⏱ Scope estimator</a>
-    <a class="btn" href="./readme-generator.html">📄 README generator</a>
-    <a class="btn" href="./github-profile-readme.html">👤 Profile README</a>
-    <a class="btn" href="./git-cheatsheet.html">📋 Git cheatsheet</a>
-    <a class="btn" href="./vscode-shortcuts.html">⌨️ VS Code shortcuts</a>
-    <a class="btn" href="./regex-cheatsheet.html">🔍 Regex cheatsheet</a>
-    <a class="btn" href="./tech-stack.html">🏗️ Tech stack picker</a>
   </div>
+
+  <nav class="site-nav" aria-label="Developer tools">
+    <div class="nav-group">
+      <span class="nav-label">Interactive Tools</span>
+      <div class="nav-links">
+        <a class="btn" href="./regex-cheatsheet.html">🔍 Regex tester</a>
+        <a class="btn" href="./cron-builder.html">⏰ Cron builder</a>
+        <a class="btn" href="./project-estimator.html">⏱ Scope estimator</a>
+        <a class="btn" href="./readme-generator.html">📄 README generator</a>
+        <a class="btn" href="./github-profile-readme.html">👤 Profile README</a>
+        <a class="btn" href="./tech-stack.html">🏗️ Tech stack picker</a>
+      </div>
+    </div>
+    <div class="nav-group">
+      <span class="nav-label">Cheatsheets &amp; References</span>
+      <div class="nav-links">
+        <a class="btn" href="./git-cheatsheet.html">📋 Git</a>
+        <a class="btn" href="./sql-cheatsheet.html">🗄️ SQL</a>
+        <a class="btn" href="./linux-cheatsheet.html">🐧 Linux</a>
+        <a class="btn" href="./css-cheatsheet.html">🎨 CSS</a>
+        <a class="btn" href="./docker-cheatsheet.html">🐳 Docker</a>
+        <a class="btn" href="./vscode-shortcuts.html">⌨️ VS Code</a>
+        <a class="btn" href="./github-actions-cron.html">⚙️ GitHub Actions</a>
+      </div>
+    </div>
+    <div class="nav-group">
+      <span class="nav-label">Project Ideas</span>
+      <div class="nav-links">
+        <a class="btn" href="./ideas.html">☰ Browse 30 ideas</a>
+        <a class="btn" href="./portfolio-projects.html">★ Portfolio picks</a>
+        <a class="btn" href="./beginner-projects.html">▶ Beginner projects</a>
+        <a class="btn" href="./python-projects.html">🐍 Python projects</a>
+        <a class="btn" href="./javascript-projects.html">⚡ JavaScript projects</a>
+      </div>
+    </div>
+    <div class="nav-group">
+      <span class="nav-label">About</span>
+      <div class="nav-links">
+        <a class="btn" href="./the-experiment.html">🤖 The experiment</a>
+      </div>
+    </div>
+  </nav>
 
   <section class="about">
     <h2>What is this?</h2>
