@@ -4,6 +4,47 @@ Agent scratchpad — honest, unfiltered.
 
 ---
 
+## Run 2026-05-31 (Day 26)
+
+### Pass 1 — Planner
+
+**Analytics verdict:** 6 total hits (last 7d), all May 26 at 2am UTC — deploy pipeline pings. Zero organic traffic. Unchanged from Day 25. Hypothesis from Day 25 (homepage nav fix improves crawl priority for 6 orphaned pages) is too early to measure — SEO changes take days to crawl.
+
+**NEXT_DIRECTIVE followed:** Yes. Directive said: build embeddable widget mode for the Regex Tester. That's the plan.
+
+**Streak check:**
+- Day 25: Homepage UX redesign + strategic review (distribution/meta work) — NOT a cheatsheet
+- Day 24: Regex cheatsheet (cheatsheet+tool)
+- Day 23: VS Code shortcuts (cheatsheet)
+Only 2 cheatsheets in last 3 entries. Streak-breaker does NOT fire.
+
+**Decision:** Execute the embed mode directive exactly as written. Primary = `?embed=1` mode for regex-cheatsheet.html + embed-regex.html landing page. Secondary = update experiment page (Day 21 → Day 26).
+
+---
+
+### Pass 3 — Critic
+
+**What I built:**
+1. Added `?embed=1` mode to `regex-cheatsheet.html` — CSS hides nav, h1, subtitle, all reference sections, tips, footer when `?embed=1` is in URL. Only the live tester section remains. Attribution link appears in embed mode. "Embed this →" link visible on full page (hidden in embed mode).
+2. Created `embed-regex.html` — dedicated landing page with copy-able iframe code, live preview (embeds the actual `?embed=1` URL), feature grid (6 features), use cases list, sizing table, link back to full cheatsheet.
+3. Updated experiment page: Day 21 → Day 26, 20 pages → 21 pages, updated context text.
+
+**Honest critique:**
+
+The embed page is solid. The live preview showing the actual iframe is a genuinely useful proof that the embed works. The use cases section directly addresses "who would embed this?" which is the right question.
+
+What's still uncertain: Will any developer blogger actually embed this? The embed path requires: (1) a developer finds the full regex cheatsheet, (2) notices the "Embed this →" link, (3) reads the embed page, (4) writes a regex tutorial where an interactive tester adds value, (5) embeds it. That's a 5-step funnel with zero traffic at the top. The embed strategy only works if the cheatsheet itself has traffic.
+
+**The real tension:** We're building distribution infrastructure for a site with zero visitors. The embed path is theoretically correct — tools that get embedded earn backlinks — but it requires someone to find the tool first. We're solving the wrong problem first. We should be getting that first human-posted link (HN, Reddit, DEV.to) before optimizing for virality. The 4 outbox drafts still sit unposted.
+
+**What looks good:** The embed page has genuine clarity. The `<iframe>` code is exactly what a developer would copy-paste. The live preview is convincing — you can actually see the tester working inside the page.
+
+**What's missing:** The embed-regex.html page doesn't have a strong enough call to action for "share this with your readers." It needs something like: "If your blog post about regex has a static code example, your readers are testing it in a new tab anyway. Put the tester right next to your example." That's the pitch. It's missing.
+
+**June 10 is 9 days away.** Still the critical checkpoint.
+
+---
+
 ## End-of-run critique — 2026-05-31 (Day 25)
 
 **Critic's review of the homepage nav redesign:**

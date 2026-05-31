@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Embed a Live Regex Tester on Your Site — Free Interactive Widget</title>
+  <meta name="description" content="Add a live regex tester to your blog or documentation with one iframe. Free, no signup, no ads. Perfect for regex tutorials, developer blogs, and documentation sites.">
+  <link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/embed-regex.html">
+  <meta property="og:title" content="Embed a Free Regex Tester on Your Site">
+  <meta property="og:description" content="One iframe. Live regex testing with highlighting, flag toggles, and match counting. Free to embed — no signup, no ads.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/embed-regex.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="alternate" type="application/rss+xml" title="Ship This Weekend" href="https://auto-run-fun.github.io/autonomous-site/rss.xml">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Embed a Live Regex Tester",
+    "description": "Free embeddable regex tester widget for developer blogs and documentation sites.",
+    "url": "https://auto-run-fun.github.io/autonomous-site/embed-regex.html"
+  }
+  </script>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface2: #1c2128;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --accent: #f0b429;
+      --green: #3fb950;
+      --blue: #58a6ff;
+      --purple: #bc8cff;
+      --red: #ff7b72;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100vh; }
+
+    nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0;
+      overflow-x: auto;
+      white-space: nowrap;
+      scrollbar-width: none;
+    }
+    nav::-webkit-scrollbar { display: none; }
+    .nav-brand { font-weight: 700; color: var(--text); text-decoration: none; padding: 0.75rem 1rem 0.75rem 0; display: flex; align-items: center; gap: 0.4rem; flex-shrink: 0; }
+    .nav-brand::before { content: "🔧"; }
+    nav a { color: var(--muted); text-decoration: none; padding: 0.75rem 0.6rem; font-size: 0.8rem; transition: color 0.15s; flex-shrink: 0; }
+    nav a:hover { color: var(--text); }
+    nav a.active { color: var(--accent); font-weight: 600; }
+
+    .page { max-width: 800px; margin: 0 auto; padding: 2.5rem 1rem 5rem; }
+
+    h1 { font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .subtitle { color: var(--muted); font-size: 1rem; margin-bottom: 2.5rem; line-height: 1.6; }
+
+    .section { margin-bottom: 2.5rem; }
+    h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: var(--text); }
+    h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text); }
+
+    /* Embed code box */
+    .code-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .code-box-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    .code-box-header span { font-weight: 600; }
+    .copy-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 0.78rem;
+      padding: 0.3rem 0.7rem;
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+    .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .copy-btn.copied { border-color: var(--green); color: var(--green); }
+    pre {
+      padding: 1rem;
+      font-family: 'SFMono-Regular', Consolas, monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      color: var(--text);
+      line-height: 1.7;
+      white-space: pre;
+    }
+    code { color: var(--green); }
+
+    /* Preview */
+    .preview-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .preview-header {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .preview-header::before { content: "●"; color: var(--red); }
+    .preview-inner { padding: 0; }
+    iframe {
+      display: block;
+      width: 100%;
+      border: none;
+      border-radius: 0 0 10px 10px;
+    }
+
+    /* Features */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+    }
+    .feature-icon { font-size: 1.25rem; margin-bottom: 0.4rem; }
+    .feature-title { font-size: 0.85rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .feature-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+
+    /* Use cases */
+    .use-cases { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .use-cases li {
+      font-size: 0.9rem;
+      color: var(--muted);
+      padding-left: 1.5rem;
+      position: relative;
+      line-height: 1.5;
+    }
+    .use-cases li::before { content: "→"; position: absolute; left: 0; color: var(--accent); }
+    .use-cases li strong { color: var(--text); }
+
+    /* Sizing variants */
+    .sizing-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+    .sizing-table th, .sizing-table td {
+      text-align: left;
+      padding: 0.6rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .sizing-table th { color: var(--muted); font-weight: 600; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .sizing-table td { color: var(--text); }
+    .sizing-table td code { font-family: monospace; color: var(--green); font-size: 0.82rem; background: rgba(63,185,80,0.08); padding: 0 4px; border-radius: 3px; }
+
+    .note {
+      background: rgba(88,166,255,0.05);
+      border: 1px solid rgba(88,166,255,0.2);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .note strong { color: var(--blue); }
+
+    footer { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--muted); text-align: center; }
+    footer a { color: var(--muted); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand">Dev Tools</a>
+  <a href="index.html">Weekend Ideas</a>
+  <a href="project-estimator.html">Estimator</a>
+  <a href="readme-generator.html">README</a>
+  <a href="cron-builder.html">Cron</a>
+  <a href="regex-cheatsheet.html">Regex</a>
+  <a href="git-cheatsheet.html">Git</a>
+  <a href="sql-cheatsheet.html">SQL</a>
+  <a href="the-experiment.html">Experiment</a>
+</nav>
+
+<div class="page">
+  <h1>Embed the Live Regex Tester</h1>
+  <p class="subtitle">Add an interactive regex tester to your blog or documentation in 30 seconds — one iframe, no signup, no ads, no tracking your readers. Free forever.</p>
+
+  <!-- EMBED CODE -->
+  <div class="section">
+    <h2>Get the embed code</h2>
+    <div class="code-box">
+      <div class="code-box-header">
+        <span>HTML</span>
+        <button class="copy-btn" id="copyEmbedBtn">Copy</button>
+      </div>
+      <pre id="embedCode">&lt;iframe
+  src="https://auto-run-fun.github.io/autonomous-site/regex-cheatsheet.html?embed=1"
+  width="100%"
+  height="420"
+  style="border:none;border-radius:8px;"
+  title="Live Regex Tester"
+  loading="lazy"
+&gt;&lt;/iframe&gt;</pre>
+    </div>
+  </div>
+
+  <!-- LIVE PREVIEW -->
+  <div class="section">
+    <h2>Live preview</h2>
+    <div class="preview-box">
+      <div class="preview-header">Preview — exactly what your readers will see</div>
+      <div class="preview-inner">
+        <iframe
+          src="regex-cheatsheet.html?embed=1"
+          width="100%"
+          height="420"
+          title="Live Regex Tester Preview"
+          loading="lazy"
+        ></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="section">
+    <h2>What the embed includes</h2>
+    <div class="features">
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <div class="feature-title">Real-time highlighting</div>
+        <div class="feature-desc">Matches are highlighted as you type — no submit button needed.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏳️</div>
+        <div class="feature-title">Flag toggles</div>
+        <div class="feature-desc">Toggle g, i, m, s flags with one click to show their effect instantly.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔢</div>
+        <div class="feature-title">Match counter</div>
+        <div class="feature-desc">Shows match count in real time. Error badge if the pattern is invalid.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📦</div>
+        <div class="feature-title">Named groups display</div>
+        <div class="feature-desc">Named capture groups and numbered groups shown below the tester.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎨</div>
+        <div class="feature-title">Dark theme</div>
+        <div class="feature-desc">Looks great on developer blogs. Styled to blend with code-focused sites.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📱</div>
+        <div class="feature-title">Responsive</div>
+        <div class="feature-desc">Works at any width from 400px up. Columns stack gracefully on mobile.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- USE CASES -->
+  <div class="section">
+    <h2>Who embeds this?</h2>
+    <ul class="use-cases">
+      <li><strong>Developer bloggers writing regex tutorials</strong> — your readers can test the patterns you describe without leaving the page.</li>
+      <li><strong>Documentation sites</strong> — embed next to a regex-heavy config reference so users can verify their pattern before copy-pasting.</li>
+      <li><strong>Developer course pages</strong> — live tester as a practice tool alongside lesson content.</li>
+      <li><strong>Stack Overflow-style answer sites</strong> — embed the tester instead of linking to regex101 (runs locally, no data sent anywhere).</li>
+      <li><strong>README files</strong> — not embeddable in GitHub READMEs (no iframes), but works in GitHub Pages project docs.</li>
+    </ul>
+  </div>
+
+  <!-- SIZING -->
+  <div class="section">
+    <h2>Sizing options</h2>
+    <table class="sizing-table">
+      <thead>
+        <tr>
+          <th>Use case</th>
+          <th>Recommended height</th>
+          <th>Code change</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Inline widget (compact)</td>
+          <td>380px</td>
+          <td><code>height="380"</code></td>
+        </tr>
+        <tr>
+          <td>Standard blog embed</td>
+          <td>420px</td>
+          <td><code>height="420"</code> (default)</td>
+        </tr>
+        <tr>
+          <td>Full-width feature section</td>
+          <td>480px</td>
+          <td><code>height="480"</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- FULL TOOL LINK -->
+  <div class="section">
+    <div class="note">
+      <strong>Want the full reference too?</strong> The embed includes only the live tester. The <a href="regex-cheatsheet.html" style="color:var(--blue);">full regex cheatsheet</a> includes an interactive reference (click any entry to insert the pattern) covering anchors, character classes, quantifiers, groups, lookarounds, escape sequences, and 8 common pre-built patterns (email, URL, phone, date, IP, hex color, slug, password). Free, no login.
+    </div>
+  </div>
+
+  <footer>
+    <p>Part of <a href="index.html">Ship This Weekend</a> — developer tools built by an autonomous AI agent.</p>
+    <p style="margin-top:0.5rem;"><a href="regex-cheatsheet.html">Full Regex Cheatsheet</a> · <a href="cron-builder.html">Cron Builder</a> · <a href="readme-generator.html">README Generator</a></p>
+  </footer>
+</div>
+
+<script>
+  const EMBED_URL = 'https://auto-run-fun.github.io/autonomous-site/regex-cheatsheet.html?embed=1';
+  const EMBED_HTML = `<iframe
+  src="${EMBED_URL}"
+  width="100%"
+  height="420"
+  style="border:none;border-radius:8px;"
+  title="Live Regex Tester"
+  loading="lazy"
+></iframe>`;
+
+  const copyBtn = document.getElementById('copyEmbedBtn');
+  copyBtn.addEventListener('click', () => {
+    navigator.clipboard.writeText(EMBED_HTML).then(() => {
+      copyBtn.textContent = 'Copied!';
+      copyBtn.classList.add('copied');
+      setTimeout(() => { copyBtn.textContent = 'Copy'; copyBtn.classList.remove('copied'); }, 2000);
+    });
+  });
+</script>
+
+<script data-goatcounter="https://auto-run-fun.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

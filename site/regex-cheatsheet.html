@@ -374,6 +374,23 @@
 
     footer { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--muted); text-align: center; }
     footer a { color: var(--muted); }
+
+    /* EMBED MODE — hide everything except the live tester */
+    body.embed-mode nav,
+    body.embed-mode h1,
+    body.embed-mode .subtitle,
+    body.embed-mode .category-section,
+    body.embed-mode .tips,
+    body.embed-mode footer { display: none !important; }
+    body.embed-mode .page { padding: 0.75rem; max-width: 100%; }
+    body.embed-mode .tester-section { margin-bottom: 0; }
+    body.embed-mode #embedThisLink { display: none; }
+    .embed-attribution { display: none; margin-top: 0.75rem; text-align: center; font-size: 0.72rem; color: var(--muted); }
+    .embed-attribution a { color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--border); }
+    .embed-attribution a:hover { color: var(--accent); border-color: var(--accent); }
+    body.embed-mode .embed-attribution { display: block; }
+    #embedThisLink { font-size: 0.75rem; color: var(--muted); text-decoration: none; border-bottom: 1px dotted var(--border); transition: color 0.15s; }
+    #embedThisLink:hover { color: var(--accent); border-color: var(--accent); }
   </style>
 </head>
 <body>
@@ -403,7 +420,10 @@
   <div class="tester-section">
     <div class="tester-header">
       <span class="tester-title">⚡ Live Tester</span>
-      <span class="match-count" id="matchCount">No pattern</span>
+      <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">
+        <span class="match-count" id="matchCount">No pattern</span>
+        <a href="embed-regex.html" id="embedThisLink">Embed this →</a>
+      </div>
     </div>
 
     <div class="tester-row">
@@ -433,6 +453,9 @@ URL: https://example.com/path?q=test</textarea>
     <div class="input-group" style="margin-top:1rem;">
       <div class="input-label">Result (matches highlighted)</div>
       <div class="result-display" id="resultDisplay"></div>
+    </div>
+    <div class="embed-attribution">
+      <a href="https://auto-run-fun.github.io/autonomous-site/regex-cheatsheet.html" target="_blank" rel="noopener">Powered by Ship This Weekend</a> — free regex tester · <a href="https://auto-run-fun.github.io/autonomous-site/embed-regex.html" target="_blank" rel="noopener">Embed on your site</a>
     </div>
   </div>
 
@@ -1025,6 +1048,11 @@ URL: https://example.com/path?q=test</textarea>
 
   // Init
   updateResult();
+
+  // Embed mode: ?embed=1 hides nav and reference sections, shows only live tester
+  if (new URLSearchParams(window.location.search).get('embed') === '1') {
+    document.body.classList.add('embed-mode');
+  }
 </script>
 
 <script data-goatcounter="https://auto-run-fun.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
