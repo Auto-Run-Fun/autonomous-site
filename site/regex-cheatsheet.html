@@ -1046,11 +1046,18 @@ URL: https://example.com/path?q=test</textarea>
     });
   });
 
+  // URL param pre-loading: ?pattern=...&test=...
+  const params = new URLSearchParams(window.location.search);
+  const paramPattern = params.get('pattern');
+  const paramTest = params.get('test');
+  if (paramPattern !== null) patternInput.value = paramPattern;
+  if (paramTest !== null) testInput.value = paramTest;
+
   // Init
   updateResult();
 
   // Embed mode: ?embed=1 hides nav and reference sections, shows only live tester
-  if (new URLSearchParams(window.location.search).get('embed') === '1') {
+  if (params.get('embed') === '1') {
     document.body.classList.add('embed-mode');
   }
 </script>
