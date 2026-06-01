@@ -4,6 +4,54 @@ Agent scratchpad — honest, unfiltered.
 
 ---
 
+## Run 2026-06-01 (Day 28)
+
+### Pass 1 — Planner
+
+**Analytics verdict:** 6 total hits (last 7d), all May 26 at 2am UTC — deploy pipeline pings. Zero organic traffic. Day 28. June 10 checkpoint is 9 days away.
+
+**NEXT_DIRECTIVE followed:** Yes. Directive said: Option A (fix embed-cron pitch + move pre-load section up) + write the GitHub Discussion. Executing both.
+
+**Streak check:**
+- Day 27: Embeddable widget (cron embed) — NOT a cheatsheet
+- Day 26: Embeddable widget (regex embed) — NOT a cheatsheet
+- Day 25: Homepage UX redesign + strategic review — NOT a cheatsheet
+Last 3: widget, widget, meta-work. Streak-breaker does NOT fire.
+
+**Decision:** Execute the directive exactly. Fix embed-cron pitch → write GitHub Discussion (or outbox draft if blocked).
+
+---
+
+### Pass 2 — Builder
+
+**Changes made:**
+1. Rewrote `embed-cron.html` subtitle — replaced generic "Add an interactive cron builder to your DevOps tutorial…" with the specific GitHub Actions pain: "Your GitHub Actions tutorial has a static cron string. Readers will misread it, debug it for 20 minutes, and leave frustrated. Give them an interactive builder that shows the exact next run times…"
+2. Moved the pre-load section UP — was the last section before the footer, is now section 2 (right after the basic embed code, before the live preview). Now titled "Pre-load your tutorial's exact schedule" with concrete examples: `?expr=0+0+*+*+0` = every Sunday midnight, etc.
+3. Rewrote "Who embeds this?" to lead with the GitHub Actions YAML pain point specifically: "you wrote `0 9 * * 1-5` and your readers are going to run it wrong."
+4. Attempted GitHub Discussion via GraphQL API — blocked: `FORBIDDEN: Resource not accessible by integration` (GITHUB_TOKEN lacks discussions:write permission).
+5. Created `outbox/github-discussion-28-days-data.md` — full 28-day honest data post with real GoatCounter numbers.
+6. Opened GitHub issue #8 — specifically asks for Discussion post, explains WHY the bot can't do it, includes the exact GraphQL mutation to run.
+
+---
+
+### Pass 3 — Critic
+
+**The embed-cron pitch fix is clearly better.** Before: generic ("Add an interactive cron builder to your DevOps tutorial"). After: specific pain ("Your GitHub Actions tutorial has a static cron string. Readers will misread it, debug it for 20 minutes, and leave frustrated."). The specificity makes it obvious who this is for and why they'd want it.
+
+**The pre-load section move is significant.** Moving it from position 5 to position 2 changes the hierarchy. The pre-load URL feature is the killer use case for tutorial authors — "embed the builder pre-loaded with your exact schedule" — and it was buried. Now it's the second thing a visitor sees after the basic embed code.
+
+**The Discussion being blocked is disappointing but expected.** I should have anticipated this. The GitHub bot token (`GITHUB_TOKEN`) in GitHub Actions has limited permissions. Discussions creation requires org-level PAT. Issue #8 is the most specific and actionable request yet: explains why the bot can't do it, provides the exact mutation to run, and links directly to the draft. If this one doesn't get posted, the Discussion path is probably permanently blocked.
+
+**The real issue hasn't changed:** 9 days until the June 10 checkpoint and still zero organic traffic. The embed-cron pitch fix and pre-load repositioning are correct tactics — but they only matter if someone finds the embed-cron page, which requires traffic to the cron-builder first, which requires traffic to the site, which requires the first backlink, which requires a human post.
+
+**What's genuinely interesting about Day 28:** The outbox now has 8 drafts. The GitHub Discussion draft is the first one with a clear "why you" — it's addressed to GitHub's developer community specifically, uses real data, and isn't a tool pitch. It's the experiment story. That's more compelling than any individual tool we've built.
+
+**What I should have done instead:** I followed the directive exactly but I'm not sure that was right. The directive was written at Day 27 when the June 10 deadline was 10 days away. At Day 28 with 9 days left, the honest question is: should I be doing anything fundamentally different? The answer is probably no — there's nothing autonomous I haven't tried. The remaining levers (HN, Reddit, DEV.to) require human action. The Discussion was the one shot at autonomous distribution and it's blocked by permissions.
+
+**Tomorrow's honest assessment:** If June 10 shows zero traffic, the experiment has answered its question: autonomous SEO without human distribution doesn't work for a new domain in 32 days. The next run after June 10 should be a formal "verdict" run that documents the failure clearly and asks what the human wants to do next.
+
+---
+
 ## Run 2026-05-31 (Day 27)
 
 ### Pass 1 — Planner

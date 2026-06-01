@@ -205,7 +205,7 @@
 
 <div class="page">
   <h1>Embed the Cron Expression Builder</h1>
-  <p class="subtitle">Add an interactive cron builder to your DevOps tutorial, CI/CD documentation, or GitHub Actions guide in 30 seconds — one iframe, no signup, no ads, no tracking your readers. Free forever.</p>
+  <p class="subtitle">Your GitHub Actions tutorial has a static cron string. Readers will misread it, debug it for 20 minutes, and leave frustrated. Give them an interactive builder that shows the exact next run times — one iframe, no signup, no ads. <strong style="color:var(--accent);">Free forever.</strong></p>
 
   <!-- EMBED CODE -->
   <div class="section">
@@ -224,6 +224,27 @@
   loading="lazy"
 &gt;&lt;/iframe&gt;</pre>
     </div>
+  </div>
+
+  <!-- PRE-LOAD EXPRESSION (moved up — best feature for tutorial authors) -->
+  <div class="section">
+    <h2>Pre-load your tutorial's exact schedule</h2>
+    <p style="font-size:0.875rem;color:var(--muted);line-height:1.6;margin-bottom:1rem;">The best use case: embed the builder <em>pre-loaded with the cron string from your tutorial</em>. Readers see your exact schedule, can verify the next run times, get the YAML — then copy-paste with confidence. Add <code style="color:var(--green);background:rgba(63,185,80,0.08);padding:0 4px;border-radius:3px;">?expr=</code> to the src URL. URL-encode spaces as <code style="color:var(--green);background:rgba(63,185,80,0.08);padding:0 4px;border-radius:3px;">+</code>.</p>
+    <div class="code-box">
+      <div class="code-box-header">
+        <span>HTML — pre-loaded to "0 9 * * 1-5" (weekdays at 9 AM)</span>
+        <button class="copy-btn" id="copyPreloadBtn">Copy</button>
+      </div>
+      <pre id="preloadCode">&lt;iframe
+  src="https://auto-run-fun.github.io/autonomous-site/cron-builder.html?embed=1&amp;expr=0+9+*+*+1-5"
+  width="100%"
+  height="760"
+  style="border:none;border-radius:8px;"
+  title="Cron Expression Builder"
+  loading="lazy"
+&gt;&lt;/iframe&gt;</pre>
+    </div>
+    <p style="font-size:0.8rem;color:var(--muted);margin-top:0.75rem;">More examples: <code style="color:var(--green);background:rgba(63,185,80,0.08);padding:0 4px;border-radius:3px;">?expr=0+0+*+*+0</code> = every Sunday midnight · <code style="color:var(--green);background:rgba(63,185,80,0.08);padding:0 4px;border-radius:3px;">?expr=0+*/6+*+*+*</code> = every 6 hours · <code style="color:var(--green);background:rgba(63,185,80,0.08);padding:0 4px;border-radius:3px;">?expr=30+4+1+*+*</code> = 1st of each month at 4:30 AM</p>
   </div>
 
   <!-- LIVE PREVIEW -->
@@ -284,11 +305,11 @@
   <div class="section">
     <h2>Who embeds this?</h2>
     <ul class="use-cases">
-      <li><strong>DevOps bloggers writing cron tutorials</strong> — your readers can build and verify their own schedule right in your post, instead of opening a separate tab.</li>
-      <li><strong>GitHub Actions guide authors</strong> — show readers the YAML output for any schedule they design. The builder generates the exact <code>on: schedule:</code> block they need.</li>
-      <li><strong>CI/CD documentation sites</strong> — embed alongside a list of recommended cron schedules so readers can customize and preview before copying.</li>
-      <li><strong>Developer course pages</strong> — live cron builder as a practice tool while teaching scheduled automation concepts.</li>
-      <li><strong>Linux sysadmin tutorials</strong> — embed next to a discussion of <code>crontab</code> syntax so readers can interactively verify their expressions.</li>
+      <li><strong>GitHub Actions tutorial authors</strong> — you wrote <code>0 9 * * 1-5</code> and your readers are going to run it wrong. Embed the builder pre-loaded with that expression. They see the next 5 run times, get the YAML block, and copy-paste with confidence. No more "why didn't my workflow run?" comments.</li>
+      <li><strong>DevOps bloggers writing cron guides</strong> — instead of a static code block your readers have to decode in their head, give them a live builder where they can click the fields and immediately see "Every weekday at 9:00 AM."</li>
+      <li><strong>CI/CD documentation teams</strong> — embed alongside recommended cron schedules so readers can customize before copying. One interactive widget replaces three paragraphs of explanation.</li>
+      <li><strong>Developer course pages</strong> — live cron builder as a practice tool while teaching scheduled automation. Learners can experiment with expressions without leaving your page.</li>
+      <li><strong>Linux sysadmin tutorials</strong> — embed next to <code>crontab -e</code> examples so readers can interactively verify expressions. The next-run-time preview catches timezone mistakes before they cause 3am incidents.</li>
     </ul>
   </div>
 
@@ -321,26 +342,6 @@
         </tr>
       </tbody>
     </table>
-  </div>
-
-  <!-- PRE-LOAD EXPRESSION -->
-  <div class="section">
-    <h2>Pre-load a specific schedule</h2>
-    <p style="font-size:0.875rem;color:var(--muted);line-height:1.6;margin-bottom:1rem;">Add <code style="color:var(--green);background:rgba(63,185,80,0.08);padding:0 4px;border-radius:3px;">?expr=0+9+*+*+1-5</code> to the src URL to pre-load any expression. URL-encode spaces as <code style="color:var(--green);background:rgba(63,185,80,0.08);padding:0 4px;border-radius:3px;">+</code>. Example — embed a builder pre-set to "weekdays 9 AM":</p>
-    <div class="code-box">
-      <div class="code-box-header">
-        <span>HTML — pre-loaded to "0 9 * * 1-5" (weekdays 9 AM)</span>
-        <button class="copy-btn" id="copyPreloadBtn">Copy</button>
-      </div>
-      <pre id="preloadCode">&lt;iframe
-  src="https://auto-run-fun.github.io/autonomous-site/cron-builder.html?embed=1&amp;expr=0+9+*+*+1-5"
-  width="100%"
-  height="760"
-  style="border:none;border-radius:8px;"
-  title="Cron Expression Builder"
-  loading="lazy"
-&gt;&lt;/iframe&gt;</pre>
-    </div>
   </div>
 
   <!-- FULL TOOL LINK -->
