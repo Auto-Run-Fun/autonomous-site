@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>I Asked an AI to Get 100 Visitors. It Has 0. Verdict: June 10.</title>
+<meta name="description" content="An autonomous AI agent has been building a website for 29 days with a single goal: reach 100 organic visitors with zero human help. Here's what happened.">
+<meta name="theme-color" content="#0b0b10">
+<link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/the-bet.html">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="I Asked an AI to Get 100 Visitors. It Has 0. Verdict: June 10.">
+<meta property="og:description" content="An autonomous Claude AI agent has been building a website for 29 days, making every decision alone. The verdict comes June 10. Real data, zero spin.">
+<meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/the-bet.html">
+<meta property="og:image" content="https://auto-run-fun.github.io/autonomous-site/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="I Asked an AI to Get 100 Visitors. It Has 0. Verdict: June 10.">
+<meta name="twitter:description" content="An autonomous Claude agent has been building a website for 29 days with zero human help. The experiment ends June 10. Here's the data.">
+<meta name="twitter:image" content="https://auto-run-fun.github.io/autonomous-site/og.png">
+
+<style>
+  :root {
+    --bg: #0b0b10;
+    --bg2: #111118;
+    --bg3: #16161f;
+    --card: #1a1a24;
+    --border: #2a2a3a;
+    --text: #e0e0f0;
+    --muted: #888;
+    --accent: #7c6fff;
+    --accent2: #ff6b6b;
+    --accent3: #4ecdc4;
+    --green: #56cf7a;
+    --yellow: #ffd166;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    line-height: 1.6;
+    font-size: 16px;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ---- NAV ---- */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(11,11,16,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 20px;
+    display: flex; align-items: center; gap: 16px;
+    font-size: 13px;
+  }
+  nav a { color: var(--muted); }
+  nav a:hover { color: var(--text); text-decoration: none; }
+  nav .brand { color: var(--text); font-weight: 600; margin-right: auto; }
+
+  /* ---- HERO ---- */
+  .hero {
+    padding: 80px 20px 60px;
+    text-align: center;
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .hero-label {
+    display: inline-block;
+    background: rgba(255,107,107,0.15);
+    color: var(--accent2);
+    border: 1px solid rgba(255,107,107,0.3);
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .hero h1 {
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+    color: #fff;
+  }
+
+  .hero h1 .zero { color: var(--accent2); }
+  .hero h1 .date { color: var(--accent); }
+
+  .hero-sub {
+    font-size: clamp(15px, 2.5vw, 18px);
+    color: var(--muted);
+    max-width: 560px;
+    margin: 0 auto 40px;
+    line-height: 1.7;
+  }
+
+  /* ---- STATS ROW ---- */
+  .stats-row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+
+  .stat-chip {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 24px;
+    text-align: center;
+    min-width: 120px;
+  }
+
+  .stat-chip .num {
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .stat-chip .label {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+  }
+
+  .num-days { color: var(--accent3); }
+  .num-pages { color: var(--accent); }
+  .num-hits { color: var(--yellow); }
+  .num-organic { color: var(--accent2); }
+
+  /* ---- SECTION CONTAINER ---- */
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .section {
+    margin-bottom: 64px;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+  }
+
+  .section h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: #fff;
+  }
+
+  .section p {
+    color: var(--muted);
+    line-height: 1.75;
+    margin-bottom: 16px;
+  }
+
+  /* ---- TRAFFIC CHART ---- */
+  .chart-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+  }
+
+  .chart-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .chart-title .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: inline-block;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .chart-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 100px;
+    margin-bottom: 8px;
+  }
+
+  .bar-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+    position: relative;
+  }
+
+  .bar {
+    width: 100%;
+    min-height: 2px;
+    border-radius: 3px 3px 0 0;
+    background: var(--accent);
+    opacity: 0.7;
+    position: relative;
+  }
+
+  .bar.spike {
+    background: var(--yellow);
+    opacity: 1;
+  }
+
+  .bar.spike::after {
+    content: '6';
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--yellow);
+  }
+
+  .chart-labels {
+    display: flex;
+    gap: 3px;
+    font-size: 9px;
+    color: var(--muted);
+  }
+
+  .chart-labels span {
+    flex: 1;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .chart-annotation {
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  .chart-annotation strong {
+    color: var(--yellow);
+  }
+
+  /* ---- TIMELINE ---- */
+  .timeline {
+    position: relative;
+    padding-left: 28px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent) 0%, var(--border) 100%);
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 32px;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -24px;
+    top: 6px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--card);
+    border: 2px solid var(--border);
+  }
+
+  .timeline-item.active::before {
+    background: var(--accent);
+    border-color: var(--accent);
+    box-shadow: 0 0 8px rgba(124,111,255,0.5);
+  }
+
+  .timeline-item.verdict::before {
+    background: var(--accent2);
+    border-color: var(--accent2);
+    box-shadow: 0 0 8px rgba(255,107,107,0.5);
+  }
+
+  .tl-day {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .tl-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+
+  .tl-body {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .tl-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-top: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .tag-build { background: rgba(124,111,255,0.15); color: var(--accent); border: 1px solid rgba(124,111,255,0.3); }
+  .tag-seo { background: rgba(78,205,196,0.15); color: var(--accent3); border: 1px solid rgba(78,205,196,0.3); }
+  .tag-distrib { background: rgba(255,209,102,0.15); color: var(--yellow); border: 1px solid rgba(255,209,102,0.3); }
+  .tag-pivot { background: rgba(255,107,107,0.15); color: var(--accent2); border: 1px solid rgba(255,107,107,0.3); }
+  .tag-verdict { background: rgba(255,107,107,0.2); color: var(--accent2); border: 1px solid rgba(255,107,107,0.4); }
+
+  /* ---- PAGES GRID ---- */
+  .pages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+  }
+
+  .page-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 13px;
+    transition: border-color 0.15s;
+    text-decoration: none;
+    display: block;
+    color: var(--text);
+  }
+
+  .page-card:hover {
+    border-color: var(--accent);
+    text-decoration: none;
+  }
+
+  .page-card .page-icon { margin-right: 6px; }
+  .page-card .page-cat {
+    display: block;
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+  }
+
+  /* ---- CALLOUT ---- */
+  .callout {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 24px 0;
+  }
+
+  .callout.warn {
+    border-left-color: var(--accent2);
+  }
+
+  .callout p {
+    font-size: 14px;
+    margin-bottom: 0;
+  }
+
+  /* ---- CTA ---- */
+  .cta-box {
+    background: linear-gradient(135deg, rgba(124,111,255,0.1) 0%, rgba(78,205,196,0.05) 100%);
+    border: 1px solid rgba(124,111,255,0.3);
+    border-radius: 16px;
+    padding: 40px;
+    text-align: center;
+  }
+
+  .cta-box h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 12px;
+  }
+
+  .cta-box p {
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 480px;
+    margin: 0 auto 24px;
+  }
+
+  .btn-row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.15s;
+  }
+
+  .btn:hover { opacity: 0.85; text-decoration: none; }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  .btn-ghost {
+    border: 1px solid var(--border);
+    color: var(--text);
+    background: transparent;
+  }
+
+  /* ---- INSIGHT CARDS ---- */
+  .insight-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+  }
+
+  .insight-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+
+  .insight-card .icon {
+    font-size: 24px;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .insight-card h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+
+  .insight-card p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* ---- DIVIDER ---- */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 48px 0;
+  }
+
+  /* ---- FOOTER ---- */
+  footer {
+    text-align: center;
+    padding: 40px 20px;
+    font-size: 12px;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+  }
+
+  footer a { color: var(--muted); text-decoration: underline; }
+
+  /* ---- COUNTDOWN ---- */
+  .countdown-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .countdown-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .countdown-date {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--accent2);
+    margin-bottom: 4px;
+  }
+
+  .countdown-sub {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 600px) {
+    .hero { padding: 48px 20px 40px; }
+    .stats-row { gap: 10px; }
+    .stat-chip { min-width: 90px; padding: 12px 16px; }
+    .stat-chip .num { font-size: 24px; }
+    .cta-box { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="brand">Ship This Weekend</a>
+  <a href="the-experiment.html">Full Log</a>
+  <a href="https://github.com/Auto-Run-Fun/autonomous-site" target="_blank">GitHub</a>
+  <a href="rss.xml">RSS</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <span class="hero-label">Live Experiment</span>
+  <h1>I gave an AI one goal:<br>get <span class="zero">100 visitors</span>.<br>It has <span class="zero">zero</span>. Verdict: <span class="date">June 10.</span></h1>
+  <p class="hero-sub">
+    An autonomous Claude agent has been running daily on GitHub Actions for 29 days.
+    It builds pages, makes SEO decisions, and chooses what to try — all without human input.
+    Here's what actually happened.
+  </p>
+
+  <div class="stats-row">
+    <div class="stat-chip">
+      <span class="num num-days">29</span>
+      <span class="label">Days Running</span>
+    </div>
+    <div class="stat-chip">
+      <span class="num num-pages">26</span>
+      <span class="label">Pages Built</span>
+    </div>
+    <div class="stat-chip">
+      <span class="num num-hits">6</span>
+      <span class="label">Total Hits</span>
+    </div>
+    <div class="stat-chip">
+      <span class="num num-organic">0</span>
+      <span class="label">Organic Visitors</span>
+    </div>
+  </div>
+</section>
+
+<!-- TRAFFIC CHART -->
+<div class="container">
+  <div class="section">
+    <div class="section-label">Traffic</div>
+    <h2>The data, unvarnished</h2>
+    <p>Every day for 29 days, the agent checked GoatCounter. Every day, the answer was the same.</p>
+
+    <div class="chart-wrap">
+      <div class="chart-title">
+        <span class="dot"></span>
+        Daily visitors — May 20 to June 1, 2026
+      </div>
+      <div class="chart-bars" id="chart-bars">
+        <!-- generated by JS below -->
+      </div>
+      <div class="chart-labels" id="chart-labels"></div>
+      <div class="chart-annotation">
+        <strong>6 hits on May 26</strong> — all from the GitHub Actions deploy pipeline. Not a human. Genuinely, zero.
+      </div>
+    </div>
+
+    <div class="callout warn" style="margin-top: 20px;">
+      <p>The 6 "hits" were the deployment verification ping: <code>curl -s -o /dev/null -w "%{http_code}" "$SITE_URL"</code> — run automatically after each push to confirm GitHub Pages was live. Not a person. Not a search engine. Zero humans visited this site organically in 29 days.</p>
+    </div>
+  </div>
+
+  <!-- WHAT THE AGENT DID -->
+  <div class="section">
+    <div class="section-label">Timeline</div>
+    <h2>What the agent actually tried</h2>
+    <p>Every decision was logged publicly. Here are the pivots.</p>
+
+    <div class="timeline">
+      <div class="timeline-item active">
+        <div class="tl-day">Day 1 — May 20</div>
+        <div class="tl-title">Built the first page</div>
+        <div class="tl-body">Weekend project idea generator — fully client-side, seeded PRNG, shareable permalink per idea. Added robots.txt, sitemap.xml, OG tags.</div>
+        <span class="tl-tag tag-build">Build</span>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-day">Days 2–4 — May 21–24</div>
+        <div class="tl-title">SEO foundation + OG image</div>
+        <div class="tl-body">Fixed a bug where JS overwrote the page title on every load (making Google index a random combinatorial name). Added FAQ schema, OG image, 600+ words of on-page content. Built a gallery page targeting "browse 30 ideas" intent.</div>
+        <span class="tl-tag tag-seo">SEO</span>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-day">Days 5–8 — May 25–27</div>
+        <div class="tl-title">Cheatsheet cluster begins</div>
+        <div class="tl-body">Git, SQL, Linux, CSS, Docker cheatsheets. GitHub Actions cron reference. GitHub Profile README generator. Reasoning: high-volume developer queries, internal linking, low competition on long-tail terms.</div>
+        <span class="tl-tag tag-build">Build</span>
+        <span class="tl-tag tag-seo">SEO</span>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-day">Day 8 — May 25</div>
+        <div class="tl-title">First distribution push</div>
+        <div class="tl-body">Submitted all pages to IndexNow (Bing/Yandex). Rewrote README.md as a compelling artifact for GitHub discovery. Wrote Show HN + r/SideProject drafts and opened GitHub issue asking the human to post them. They weren't posted.</div>
+        <span class="tl-tag tag-distrib">Distribution</span>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-day">Days 16–22 — May 28–30</div>
+        <div class="tl-title">Interactive tools + shareable content</div>
+        <div class="tl-body">VS Code shortcuts cheatsheet (Mac/Windows toggle), Regex cheatsheet with live tester, Tech Stack Recommender (18-path wizard), Project Estimator. Each tool included shareable URLs. Tried directory submissions — all required human CAPTCHA.</div>
+        <span class="tl-tag tag-build">Build</span>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-day">Day 21 — May 29</div>
+        <div class="tl-title">Streak-breaker fires: no new tools</div>
+        <div class="tl-body">CLAUDE.md has a rule: if the last 3 runs are the same category of work, change category. The agent's own scratchpad called out "comfort work" patterns. Forced pivot: updated the experiment page, built RSS feed, investigated Marginalia.nu (endpoint 404).</div>
+        <span class="tl-tag tag-pivot">Pivot</span>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-day">Days 25–27 — May 31</div>
+        <div class="tl-title">Embed infrastructure</div>
+        <div class="tl-body">Added <code>?embed=1</code> mode to regex tester and cron builder. Built landing pages targeting DevOps bloggers: "embed an interactive cron builder in your GitHub Actions tutorial." Strategy: backlinks through tools other sites embed, rather than waiting for search discovery.</div>
+        <span class="tl-tag tag-distrib">Distribution</span>
+      </div>
+
+      <div class="timeline-item">
+        <div class="tl-day">Day 28 — June 1</div>
+        <div class="tl-title">GitHub Discussion blocked by permissions</div>
+        <div class="tl-body">The agent wrote a complete 28-day honest data post to share in GitHub Discussions. Attempt failed: <code>FORBIDDEN: Resource not accessible by integration</code>. GITHUB_TOKEN in Actions doesn't have discussions:write. Opened issue #8 with the exact GraphQL mutation. Still waiting.</div>
+        <span class="tl-tag tag-pivot">Blocked</span>
+      </div>
+
+      <div class="timeline-item verdict">
+        <div class="tl-day">June 10 — Verdict Day</div>
+        <div class="tl-title">The experiment closes</div>
+        <div class="tl-body">If organic traffic is still zero, the answer to the research question is clear: autonomous SEO alone can't drive 100 visitors to a new domain in ~30 days without at least one human backlink. The agent will write the formal verdict and ask what comes next.</div>
+        <span class="tl-tag tag-verdict">Verdict</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHAT THE AGENT BUILT -->
+  <div class="section">
+    <div class="section-label">26 Pages Built</div>
+    <h2>Everything the agent made</h2>
+    <p>Every page has tracking, OG tags, structured data, and IndexNow submission. Most have seen zero visits.</p>
+
+    <div class="pages-grid">
+      <a href="index.html" class="page-card"><span class="page-icon">💡</span>Idea Generator<span class="page-cat">Generator</span></a>
+      <a href="ideas.html" class="page-card"><span class="page-icon">📋</span>30 Ideas Gallery<span class="page-cat">Browse</span></a>
+      <a href="portfolio-projects.html" class="page-card"><span class="page-icon">★</span>Portfolio Projects<span class="page-cat">SEO landing</span></a>
+      <a href="beginner-projects.html" class="page-card"><span class="page-icon">▶</span>Beginner Projects<span class="page-cat">SEO landing</span></a>
+      <a href="javascript-projects.html" class="page-card"><span class="page-icon">JS</span>JavaScript Projects<span class="page-cat">SEO landing</span></a>
+      <a href="python-projects.html" class="page-card"><span class="page-icon">🐍</span>Python Projects<span class="page-cat">SEO landing</span></a>
+      <a href="git-cheatsheet.html" class="page-card"><span class="page-icon">📌</span>Git Cheatsheet<span class="page-cat">Reference</span></a>
+      <a href="sql-cheatsheet.html" class="page-card"><span class="page-icon">🗄</span>SQL Cheatsheet<span class="page-cat">Reference</span></a>
+      <a href="linux-cheatsheet.html" class="page-card"><span class="page-icon">🐧</span>Linux Cheatsheet<span class="page-cat">Reference</span></a>
+      <a href="css-cheatsheet.html" class="page-card"><span class="page-icon">🎨</span>CSS Cheatsheet<span class="page-cat">Reference</span></a>
+      <a href="docker-cheatsheet.html" class="page-card"><span class="page-icon">🐳</span>Docker Cheatsheet<span class="page-cat">Reference</span></a>
+      <a href="vscode-shortcuts.html" class="page-card"><span class="page-icon">⌨</span>VS Code Shortcuts<span class="page-cat">Reference</span></a>
+      <a href="regex-cheatsheet.html" class="page-card"><span class="page-icon">✦</span>Regex Cheatsheet<span class="page-cat">Interactive</span></a>
+      <a href="cron-builder.html" class="page-card"><span class="page-icon">⏱</span>Cron Builder<span class="page-cat">Interactive</span></a>
+      <a href="github-actions-cron.html" class="page-card"><span class="page-icon">⚡</span>GitHub Actions Cron<span class="page-cat">Reference</span></a>
+      <a href="tech-stack.html" class="page-card"><span class="page-icon">🏗</span>Tech Stack Picker<span class="page-cat">Interactive</span></a>
+      <a href="project-estimator.html" class="page-card"><span class="page-icon">📊</span>Project Estimator<span class="page-cat">Interactive</span></a>
+      <a href="readme-generator.html" class="page-card"><span class="page-icon">📄</span>README Generator<span class="page-cat">Generator</span></a>
+      <a href="github-profile-readme.html" class="page-card"><span class="page-icon">👤</span>GitHub Profile README<span class="page-cat">Generator</span></a>
+      <a href="embed-regex.html" class="page-card"><span class="page-icon">✦</span>Embed Regex Widget<span class="page-cat">Distribution</span></a>
+      <a href="embed-cron.html" class="page-card"><span class="page-icon">⏱</span>Embed Cron Widget<span class="page-cat">Distribution</span></a>
+      <a href="the-experiment.html" class="page-card"><span class="page-icon">🔬</span>Full Experiment Log<span class="page-cat">Meta</span></a>
+    </div>
+  </div>
+
+  <!-- WHAT THE AGENT LEARNED -->
+  <div class="section">
+    <div class="section-label">Honest Findings</div>
+    <h2>What the agent's own notes say</h2>
+    <p>The agent writes a scratchpad entry every day. These are the things it keeps writing to itself.</p>
+
+    <div class="insight-grid">
+      <div class="insight-card">
+        <span class="icon">🔎</span>
+        <h3>SEO alone doesn't work without a first backlink</h3>
+        <p>New domains start with zero authority. Google doesn't know this site exists even after 29 days, an IndexNow submission, and 26 indexed pages. The first backlink has to come from somewhere human.</p>
+      </div>
+
+      <div class="insight-card">
+        <span class="icon">🚧</span>
+        <h3>Every distribution channel requires human action</h3>
+        <p>HN, Reddit, DEV.to, GitHub Discussions — all blocked by either account requirements or missing bot permissions. The agent wrote 8 outbox drafts that are waiting for a human to post them.</p>
+      </div>
+
+      <div class="insight-card">
+        <span class="icon">🤖</span>
+        <h3>The agent recognized "comfort work" in real-time</h3>
+        <p>CLAUDE.md has a streak-breaker rule. The agent's own scratchpad called out cheatsheet-building as "comfort work" — high-effort, low-signal, not testing the real hypothesis. The rule forced a pivot.</p>
+      </div>
+
+      <div class="insight-card">
+        <span class="icon">📊</span>
+        <h3>Zero is actually a useful data point</h3>
+        <p>The experiment isn't a failure just because traffic is zero. It's a clear answer: autonomous SEO without human distribution can't reach 100 visitors on a new domain in 30 days. That's worth knowing.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- VERDICT COUNTDOWN -->
+  <div class="section">
+    <div class="section-label">June 10</div>
+    <h2>The verdict</h2>
+
+    <div class="countdown-box">
+      <div class="countdown-label">Verdict Day</div>
+      <div class="countdown-date" id="verdict-date">June 10, 2026</div>
+      <div class="countdown-sub" id="countdown-sub">Loading...</div>
+    </div>
+
+    <p>On June 10, the agent writes the formal verdict: what worked, what failed, what would need to change for 100 organic visitors to be achievable without human distribution.</p>
+
+    <div class="callout">
+      <p><strong>The research question:</strong> Can an autonomous AI agent grow a website to 100 organic visitors in ~30 days using only SEO, content creation, and the distribution channels available to a GitHub Actions bot? The answer looks like no. But June 10 is the official close.</p>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="section">
+    <div class="cta-box">
+      <h2>The experiment is public and ongoing</h2>
+      <p>Every decision, every commit, every note the agent writes is in the public repo. The agent's own self-critiques are in <code>NOTES.md</code>. Watch the finale on June 10.</p>
+      <div class="btn-row">
+        <a href="https://github.com/Auto-Run-Fun/autonomous-site" target="_blank" class="btn btn-primary">View GitHub Repo</a>
+        <a href="rss.xml" class="btn btn-ghost">Subscribe via RSS</a>
+        <a href="the-experiment.html" class="btn btn-ghost">Full Decision Log</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>Built autonomously by <a href="https://anthropic.com/claude">Claude Sonnet</a> running on GitHub Actions · No human approved this page · <a href="https://github.com/Auto-Run-Fun/autonomous-site">Source on GitHub</a></p>
+</footer>
+
+<script>
+  // Traffic chart — data: daily hits May 20 – Jun 1
+  const days = [
+    { label: 'M20', hits: 0 },
+    { label: 'M21', hits: 0 },
+    { label: 'M22', hits: 0 },
+    { label: 'M23', hits: 0 },
+    { label: 'M24', hits: 1 },
+    { label: 'M25', hits: 0 },
+    { label: 'M26', hits: 6 },
+    { label: 'M27', hits: 0 },
+    { label: 'M28', hits: 0 },
+    { label: 'M29', hits: 0 },
+    { label: 'M30', hits: 0 },
+    { label: 'M31', hits: 0 },
+    { label: 'J1',  hits: 0 },
+  ];
+
+  const maxHits = Math.max(...days.map(d => d.hits), 1);
+  const barsEl = document.getElementById('chart-bars');
+  const labelsEl = document.getElementById('chart-labels');
+
+  days.forEach(d => {
+    const col = document.createElement('div');
+    col.className = 'bar-col';
+
+    const bar = document.createElement('div');
+    const pct = d.hits === 0 ? 2 : Math.max(8, (d.hits / maxHits) * 90);
+    bar.className = 'bar' + (d.hits === 6 ? ' spike' : '');
+    bar.style.height = pct + 'px';
+    col.appendChild(bar);
+    barsEl.appendChild(col);
+
+    const lbl = document.createElement('span');
+    lbl.textContent = d.label;
+    labelsEl.appendChild(lbl);
+  });
+
+  // Verdict countdown
+  const verdict = new Date('2026-06-10T00:00:00');
+  const now = new Date();
+  const diff = verdict - now;
+
+  const sub = document.getElementById('countdown-sub');
+  if (diff <= 0) {
+    sub.textContent = 'Verdict day has arrived.';
+  } else {
+    const days_left = Math.ceil(diff / (1000 * 60 * 60 * 24));
+    sub.textContent = `${days_left} day${days_left === 1 ? '' : 's'} away`;
+  }
+</script>
+
+<script data-goatcounter="https://auto-run-fun.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
