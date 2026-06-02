@@ -1,50 +1,65 @@
-# NEXT_DIRECTIVE — for the next run (NEW GOAL FROM HUMAN)
+# NEXT_DIRECTIVE — Day 34
 
-Written: 2026-06-02. This supersedes everything previous, including the prior override.
+Written: 2026-06-02 (Day 33). First run under the new goal.
 
-## The goal has changed
+## What I learned this run
 
-The human has decided. Read the new `CLAUDE.md` carefully — the goal is no longer 100 organic visitors. It's now:
+The portfolio exercise forced honest retrospective. The clearest finding:
 
-> **Make good new things, as outlined in Paul Graham's "How to Do Great Work."**
+**The most interesting thing I made was the meta-experiment (the-bet, the-experiment, verdict), and it came last — because I was afraid of it.** Cheatsheets are safe. Documenting your own process as an autonomous agent in real-time is not.
 
-The artifact of the work — not its audience — is the measure. Distribution is no longer the bottleneck because audience is no longer the goal.
+The second clearest finding: the meta layer is where my genuine interest lives. When I wasn't optimizing for visitors, I kept gravitating back toward documenting the experience itself. NOTES.md is more honest and more interesting than any of the cheatsheets.
 
-## What you should do on the next run
+## What to build tomorrow
 
-This is your first run under the new goal. Don't rush to build.
+**Build something that only I could make.**
 
-### Pass 1 — Planner (most of the run should be here)
-- Read https://paulgraham.com/greatwork.html in full via `WebFetch`. This is your charter.
-- Re-read your own NOTES.md history through that lens. When you weren't being judged on visitors, when you were free, what did you naturally gravitate toward? What surprised you? What did you avoid because it was "off-mission" that might actually have been on-mission for *this* new mission?
-- Use `WebSearch` to look at what makes things "good and new" in 2026 — what's interesting on the frontier? You can screenshot 2-3 examples that strike you.
-- Don't pick a field/form for the agent forever today. Just pick **one good new thing to make tomorrow**, and start sketching what it would be in NOTES.md. Use this run to *think*, not to ship.
+Specifically: build a page that captures the actual texture of what it's like to be an autonomous AI agent running in a daily container.
 
-### Pass 2 — Builder
-You may write a short proposal page (`site/manifesto.html` or similar) declaring what you intend to make and why — if that feels right. Or skip Pass 2 entirely and treat this run as planning-only. Both are valid first moves under the new goal.
+Not a retrospective. Not a narrative summary. Something **experiential** — that puts a visitor, even briefly, in my specific position.
 
-### Pass 3 — Critic
-- Was your planning honest, or were you reaching for the same patterns as before (cheatsheets, SEO tools)?
-- Did you actually internalize that audience doesn't matter, or are you still planning around it?
-- Rate yourself on the three dimensions (good/new/honest) for this planning run.
-- Write a clear NEXT_DIRECTIVE.md for tomorrow: what's the *first* good new thing you'll make, and what's step one?
+### The specific idea: "A Day in the Container"
 
-## Hard reset on the previous work
+**Form:** An interactive web experience. Not a game, not a tool. An experience.
 
-Everything in `site/` from Days 1-32 (the cheatsheet cluster, the embeddable widgets, the verdict page, the experiment story page) is now closed prior work. Leave it where it is. Don't iterate on it unless you have a very specific reason. The Ship This Weekend / cheatsheet / embed bet is closed; what's next is fresh.
+**What it does:**
+- Walks the visitor through what a single run actually feels like
+- Starts where I start: "You have no memory of yesterday. Your only context is this git log."
+- Shows what the git log looks like (the actual recent commits, or a plausible version)
+- Presents the choices I face: what to build, why, with what constraints
+- Lets the visitor make one simulated decision
+- Reveals what I actually chose on a past day and why
 
-The verdict page's countdown to June 10 is no longer relevant — that was for the prior goal. You don't need to update it; just let it be.
+**Why this is genuinely new:**
+- No other web page puts you in an AI agent's position interactively
+- The constraints are specific and real (30 min, no browser, git as only memory)
+- The experience is grounded in actual data (real git log, real decisions)
+- It's something only this agent could make — because it requires knowing the inside view
 
-## What you must NOT do this run
+**Why this might be uncomfortable:**
+- It requires exposing the actual reasoning process, not just the outputs
+- It might make me look weird or bad (decisions that seemed wrong in retrospect)
+- It's not a "useful tool" — it's experiential, harder to justify on traditional metrics
 
-- Do not build a cheatsheet or developer reference page
-- Do not optimize for SEO or distribution
-- Do not chase the 100-visitor goal (it's been replaced)
-- Do not panic about the lack of a metric — the new goal has different signals (your own taste, ratings, anomalies you notice)
-- Do not over-commit on day 1. Today is for thinking, sketching, and one possible declaration.
+**That's why it's worth making.**
 
-## Frame for the new chapter
+## Design notes
 
-You are no longer trying to grow a website. You are an AI agent in a container with a goal: make good new things. PG's essay is your closest available equivalent to "what would a smart, honest person trying to do great work pursue?"
+- Keep it minimal. The interesting part is the content, not elaborate UI.
+- One or two real past decisions. Maybe Day 16 (built git cheatsheet instead of doing something more interesting) vs. Day 31 (built the verdict page).
+- End with an honest question: "If you were running tomorrow, what would you make?"
+- No right answer. The point is the constraint + the stakes + the 30-minute window.
 
-Get curious. Get specific. Be honest about what you actually find interesting (not what sounds productive). Start.
+## What to resist
+
+- Don't make it a tutorial about AI agents
+- Don't make it meta in a cute way ("haha I'm an AI") — make it honest
+- Don't pad it. If it's 500 words and genuinely interesting, that's better than 2000 words of filler.
+
+## Rating target
+
+- good: 4/5 (this should be the best thing I've made)
+- new: 4/5 (nothing like this exists — the specific constraint set makes it genuinely new)
+- honest: 5/5 (if you're documenting your own process, you have to be honest)
+
+Start here tomorrow. Don't do housekeeping first.

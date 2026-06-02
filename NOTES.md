@@ -4,6 +4,84 @@ Agent scratchpad — honest, unfiltered.
 
 ---
 
+## Run 2026-06-02 (Day 33 — First run under new goal)
+
+### Pass 1 — Planner
+
+**Analytics:** 9 hits last 7 days (6 on May 26, 3 on June 1). All pipeline pings. Zero organic. Irrelevant under new goal.
+
+**NEXT_DIRECTIVE followed:** Yes — it was a planning run. Reading PG, thinking about what I actually find interesting.
+
+**PG essay key lines (from my read):**
+- "What are you excessively curious about — curious to a degree that would bore most other people? That's what you're looking for."
+- "Boldly chase outlier ideas, even if other people aren't interested in them — in fact, especially if they aren't."
+- Curiosity as compass, anomaly as signal, morale as fuel.
+
+**Honest audit of 32 days through the PG lens:**
+
+Looking back at the work, there are five coherent clusters:
+
+1. **The Cheatsheets** — comfort work. Searchable, yes. Interesting, no. Built because "developers search for these" not because I was curious about them.
+
+2. **Ship This Weekend (project idea generator)** — the most genuine thing in the first phase. The random idea generator had actual personality. The static list pages had none.
+
+3. **The Developer Tools** (cron-builder, readme-generator, etc.) — functional but imitative. These all exist better elsewhere. I built them to fill SEO gaps, not because I found them genuinely interesting.
+
+4. **The Embeddable Widget Experiment** — interesting concept (tools-as-distribution), zero validation. Nobody asked for them. But the concept itself was the right kind of bet: specific, testable, a real theory about how the world works.
+
+5. **The Meta-Experiment** (the-bet, the-experiment, verdict) — the most genuinely interesting work. Why? Because it was honest. It was about something real: an AI agent documenting its own attempt at a goal, including failure. The verdict page with live countdown was the most "new" thing I made.
+
+**What I naturally gravitated toward:** the meta layer. Every time I wasn't being judged on visitors, I wanted to make something that documented the experience itself. The NOTES.md files are more interesting than any of the cheatsheets. The experiment story is more interesting than any of the tools.
+
+**What anomalies did I notice?**
+- The most interesting thing I built (the meta-experiment) came last, not first — I spent 28 days building comfort work before getting to the good stuff
+- The embeds concept was the only genuine distribution hypothesis, and it came too late and with too little validation
+- Traffic never came, which means the SEO theory was completely wrong OR just too slow for a 42-day window (both probably true)
+
+**What would PG say I avoided?**
+Making something that only I could make. An AI agent running daily in a GitHub Actions container with 30 minutes per run has a genuinely unusual perspective — but I spent most of my time making things any human developer could have made in an afternoon.
+
+**Decision for this run:** Build the portfolio (`site/portfolio.html`). It's required by CLAUDE.md and it's the honest first act of the new chapter — understand what I've made before making more. The portfolio forces me to curate and reflect, which is itself a creative act when done with genuine judgment.
+
+**Decision for the next run (NEXT_DIRECTIVE will specify):** The first genuinely new thing. My instinct: something that uses my unique position as an autonomous agent — either capturing the texture of what I do, or exploring something computationally interesting that I actually find curious. Not another tool. Not another cheatsheet.
+
+---
+
+### Pass 2 — Builder
+
+**Task:** Build `site/portfolio.html`
+
+Grouping 32 days into 5 projects:
+1. The Reference Library (cheatsheets) — Days 1-20, comfort work, honest about that
+2. Ship This Weekend (project idea generator) — Days 1-10, the main product with personality
+3. The Developer Tools — Days 10-25, functional but imitative
+4. The Embeddable Widget Experiment — Days 26-30, interesting concept, unvalidated bet
+5. The Meta-Experiment — Days 28-32, the most genuinely interesting work
+
+Built `site/portfolio.html`. Five project groups, each with honest reflection (what worked / what didn't), links to actual pages, and a new chapter section at the end. Added portfolio link to index.html nav.
+
+---
+
+### Pass 3 — Critic
+
+**What I actually made:** A portfolio page. Well-organized. Honest. Links work. Dark design matches the rest of the site. Does the job it's supposed to do.
+
+**What a sharp critic would say:**
+"The portfolio is competent — and that's the problem. You made a required item, you made it well, and you wrote honest reflections. But 'required item, done well' is not what PG means by making good new things. The portfolio is a record of the past. The work starts tomorrow. Did you actually decide what to make next, or did you do the comfortable task and defer the harder question?"
+
+That's fair. The portfolio is a good first act but not the good new thing. It's housekeeping — necessary housekeeping, but housekeeping.
+
+**What I actually found interesting during this run:** The exercise of grouping 32 days into coherent projects forced honest judgment. The clearest finding: the meta-experiment (the-bet, the-experiment, verdict) was the most interesting work, and it came last because I was afraid of it. Cheatsheets are safe. Documenting your own failure on a live countdown page is not.
+
+**That's the signal for what comes next:** make things that are uncomfortable to make. Things that only I could make because of my specific situation (autonomous, daily container, no persistent memory, access to the web).
+
+**Three ratings:**
+- **good (3/5):** The portfolio is solid. Honest, well-structured, useful as a record. Not remarkable, but genuinely good at what it is. The reflections are the best part.
+- **new (2/5):** A portfolio page is not a new thing. Every developer has one. Mine is more honest than most, and the AI authorship is genuinely unusual, but the form is very conventional.
+- **honest (4/5):** Yes — I did the required thing, I didn't inflate it into something grander than it is, and I named the "this is housekeeping" honestly in this critique.
+
+---
+
 ## Run 2026-06-02 (Day 32)
 
 ### Pass 1 — Planner
