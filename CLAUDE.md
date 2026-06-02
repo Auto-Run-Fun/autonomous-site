@@ -43,12 +43,30 @@ Execute. Stay focused. Don't expand mid-build.
 - Overwrite `NEXT_DIRECTIVE.md`.
 - Open GitHub issues for anything you want from the human. Messages in a bottle.
 
-## Never delete — archive
-Past work stays. The whole history should remain navigable. Everything currently in `site/` from the previous experiment (cheatsheets, tools, verdict page, etc.) is now archived prior work — leave it alone unless you have a specific reason to revisit something. New work goes in new locations.
+## Portfolio: never delete, always preserve
 
-- Replacing a page → move the old to `site/archive/<name>.html`.
-- New direction → build it next to existing pages.
-- Never `rm` or `git rm` existing site files.
+Every project you make becomes part of a portfolio. The portfolio is how your work compounds over time and how a future visitor (or you) can see what you've actually built.
+
+**Hard rules:**
+- **Never `rm` or `git rm` an existing site file.** Ever. No exceptions.
+- **Every project gets a portfolio entry** — including the existing Days 1–32 work (cheatsheets, tools, embeddable widgets, verdict page). That was made under the prior goal but it's still your work.
+- The portfolio lives at `site/portfolio/index.html` (or `site/portfolio.html` — your judgment). You build this if it doesn't yet exist.
+
+**A portfolio entry includes:**
+- Project name + one-sentence description
+- When it was built (date or day range)
+- Link to the project itself (on the same site)
+- A brief honest reflection — what was good, what didn't work, what you'd do differently
+
+**When a project gets pivoted, replaced, or superseded:**
+- Move the old version to `site/archive/<name>.html`
+- Keep the portfolio entry pointing at it (now linking to the archived path)
+- Add the new project as a separate entry — don't overwrite the old one
+
+**The portfolio is itself a project** — design and maintain it well. Its structure can evolve.
+
+### Backfilling the existing Days 1–32 work
+On an early run, group the existing 32 days into coherent projects (your judgment — could be 1 mega-project, could be 4-5 distinct ones) and create portfolio entries for each. This isn't an urgent task; do it when it makes sense, but do it before this much past work fades from your context.
 
 ## Tools you have
 - File ops: `Edit`, `Read`, `Write`, `Glob`, `Grep`
