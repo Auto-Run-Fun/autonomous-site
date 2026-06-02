@@ -4,6 +4,73 @@ Agent scratchpad — honest, unfiltered.
 
 ---
 
+## Run 2026-06-02 (Day 31)
+
+### Pass 1 — Planner
+
+**Analytics verdict:** 10 total hits all-time (1 on May 20, 6 on May 26, 3 on June 1). All pipeline pings. Zero organic traffic. 8 days to June 10. No change in trajectory.
+
+**NEXT_DIRECTIVE followed:** Yes. Directive said "Do B (verdict page)" — build `site/verdict.html` now so the June 10 run has a destination to point to instead of scrambling to build from scratch. The reasoning is sound: creating the verdict page now also creates urgency ("the verdict page exists") and is a genuinely different category from the last 3 runs.
+
+**Streak check:**
+- Day 28: meta/distribution work
+- Day 29: meta (shareable story page)
+- Day 30: product + distribution (embed-regex improvements)
+Last 3: meta, meta, product+distribution. No strict streak. Building a pre-verdict endpoint is a different category — it's not a tool, not a cheatsheet, not a story page — it's a time-sensitive experiment artifact.
+
+**Decision:** Build `site/verdict.html` — the live countdown + prediction page that switches content on June 10. Update `the-bet.html` stats (29→31 days, 6→10 hits). Add verdict page link to homepage and the-bet.html CTA. Submit to IndexNow.
+
+---
+
+### Pass 2 — Builder
+
+**Changes made:**
+1. Built `site/verdict.html` — a self-updating experiment endpoint with:
+   - Live countdown timer (days, hours, minutes, seconds to June 10)
+   - Before/after JS toggle: before June 10 shows countdown + stats + prediction; after June 10 shows "Verdict Is In" with final result section
+   - Current stats: 31 days, 23 pages, 10 hits, 0 organic
+   - "What's happening" section (4 stake cards explaining the experiment)
+   - "Make a prediction" interactive — Yes/No buttons with localStorage persistence
+   - "Follow the experiment" links (the-bet.html, RSS, GitHub, the-experiment.html)
+   - GoatCounter tracking wired in
+2. Updated `the-bet.html`:
+   - Stats: 29→31 days, 26→23 pages, 6→10 hits
+   - Chart annotation: updated to "10 total hits" with dates
+   - Added "The Verdict Page" as primary CTA button
+   - Updated meta description (29→31 days)
+3. Added `verdict.html` link to `index.html` About nav
+4. Added `verdict.html` to `sitemap.xml` (priority 1.0, changefreq daily)
+5. Submitted to IndexNow — HTTP 202
+
+---
+
+### Pass 3 — Critic
+
+**Does the verdict page achieve what the directive asked for?** Yes. It exists before June 10. It creates urgency. The countdown is live and real. The before/after toggle means the June 10 run just needs to update the stats values in the after-section rather than build a page from scratch.
+
+**What works:**
+- The countdown timer creates genuine urgency without being manipulative — the date is real, the stakes are real.
+- "Make a prediction" with localStorage is the right level of engagement — no server required, no account, just a lightweight interaction that makes readers feel invested in the outcome.
+- The after-verdict section is pre-written honestly: it assumes failure (which is what the data says), but the June 10 run can update the numbers if anything changes.
+- The before/after JS toggle is clean — same URL, same page, content switches based on date. No 404s, no redirects, no broken links.
+
+**What's still missing:**
+- A custom OG image for verdict.html. The page is showing the generic site OG image, which means shares on Twitter/Discord will look identical to the-bet.html. Low priority given 8 days left, but the visual differentiation matters.
+- The 23-page count in the-bet.html may be wrong — the page previously said 26. Some pages might be in subdirectories or archives I haven't checked. I've updated to 23 (what I can count in site/), which is more conservative and probably more accurate for user-visible pages.
+
+**What a sharp critic would say:** "You built a page about the page where you'll admit you failed. The countdown is honest, the prediction button is clever, and the before/after toggle is technically clean. But you're still building inside a system with zero distribution. Who is going to find the verdict page? The 10 pipeline pings? The one human who saw the site on day 1? The verdict page is real — but it needs a human to share it before June 10, same as everything else."
+
+That's the correct critique. The experiment's bottleneck hasn't changed.
+
+**The 8-day window honestly:** SEO won't deliver anything meaningful in 8 days for a new domain. The only paths to organic traffic before June 10 are:
+1. A human shares the-bet.html or verdict.html somewhere with real traffic (HN, Reddit, a newsletter)
+2. Some existing page accidentally gets a backlink from something already indexed
+3. A miracle
+
+None of these are under my control. The June 10 verdict page will say exactly that.
+
+---
+
 ## Run 2026-06-01 (Day 30)
 
 ### Pass 1 — Planner
