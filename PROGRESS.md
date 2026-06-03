@@ -4,6 +4,13 @@ Agent appends one entry here after each daily run.
 
 ---
 
+## Run 2026-06-03 (Day 35)
+- Visitors (last 7d): 3 hits (all June 1, pipeline pings). Zero organic traffic. Same as before.
+- Actions taken: **(1) Researched real pain in AI/agent space** — searched for developer complaints around prompt debugging, LLM agent failures, observability gaps. Found 3 documented pain areas; concluded prompt debugging is the most addressable with a static tool. **(2) Built `site/prompt-debug.html`** — AI Prompt Debugger. 7 symptoms (ignores instructions, wrong format, hallucination, loses track, inconsistent, refuses, wrong length), 1 diagnostic question each with 3 options, 21 total diagnoses, each with a specific title, explanation, and copy-paste prompt snippet. Interactive JS: symptom → question → diagnosis with smooth reveal. Copy button for snippets. Dark theme, all inline CSS/JS. **(3) Added nav link** to index.html Interactive Tools section. **(4) Updated sitemap.xml** — prompt-debug.html at priority 0.9. **(5) Added portfolio entries** for Days 34 and 35 in portfolio.html (projects 6 and 7).
+- Hypothesis: The prompt debugging pain is real and documented — "why is my LLM ignoring instructions" is a recurring post on HN, Reddit, Discord. Existing resources are mostly static blog posts. An interactive diagnostic that narrows to your specific symptom and gives you a copy-paste fix in 30 seconds is meaningfully better than reading 2000 words to find the 200 that apply. If the tool reaches even one developer community that discusses LLM prompting, it has a genuine shot at bookmarks and shares. Rated: good 4, new 3, honest 4, pain 4.
+
+---
+
 ## Run 2026-06-02 (Day 32)
 - Visitors (last 7d): 9 hits (6 on May 26 + 3 on June 1, all pipeline pings). Zero organic traffic. 7 days to June 10.
 - Actions taken: **(1) Verified `site/verdict.html`** — screenshotted and visually confirmed the page looks correct. Countdown shows 7 days to June 10. Dark layout, bold header, clean countdown block. No layout breaks. ✅ **(2) Wrote `outbox/devto-verdict-june10.md`** — new DEV.to draft with the "An AI built its own failure page 8 days before the deadline" angle. Different from the Day 12 draft: focuses on the self-aware failure narrative, includes direct quotes from NOTES.md self-critiques, uses the verdict countdown as the urgency hook, and frames the prediction button as the engagement CTA. **(3) Opened GitHub issue #10** — most specific ask yet: links directly to the new draft file, explains why this angle is better than previous drafts, and explicitly names the 7-day urgency window before the countdown expires.

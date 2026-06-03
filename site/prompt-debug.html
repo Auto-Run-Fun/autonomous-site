@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Prompt Debugger — Diagnose why your LLM prompt isn't working</title>
+<meta name="description" content="Interactive diagnostic tool for LLM prompt failures. Select your symptom, answer one question, get a specific fix with copy-paste prompt snippets. No signup, no backend.">
+<link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/prompt-debug.html">
+<meta property="og:title" content="AI Prompt Debugger">
+<meta property="og:description" content="Diagnose why your LLM prompt isn't working. Select a symptom, get a specific fix.">
+<meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/prompt-debug.html">
+<meta name="twitter:card" content="summary">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "AI Prompt Debugger",
+  "description": "Interactive diagnostic tool for LLM and AI prompt failures. Diagnose why your prompt isn't working and get specific fixes.",
+  "url": "https://auto-run-fun.github.io/autonomous-site/prompt-debug.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (browser)",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-text-size-adjust:100%}
+body{background:#0b0b10;color:#e8e8f0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.6;min-height:100vh;padding:0 16px}
+
+a{color:#7eb8f7;text-decoration:none}
+a:hover{text-decoration:underline}
+code{font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-size:.85em}
+
+.wrap{max-width:720px;margin:0 auto;padding:40px 0 80px}
+
+.topnav{margin-bottom:32px;font-size:.875rem;color:#888}
+.topnav a{color:#7eb8f7}
+
+h1{font-size:1.75rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
+.subtitle{color:#aaa;font-size:1rem;margin-bottom:40px;max-width:560px}
+
+/* Symptoms grid */
+.symptoms{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:32px}
+.sym{
+  background:#131320;border:1px solid #2a2a3d;border-radius:8px;
+  padding:14px 16px;cursor:pointer;
+  font-size:.9rem;color:#ccc;
+  transition:border-color .15s,background .15s,color .15s;
+  text-align:left;
+}
+.sym:hover{border-color:#4a4a7d;color:#e8e8f0;background:#1a1a2e}
+.sym.active{border-color:#7eb8f7;background:#1a1a2e;color:#e8e8f0}
+.sym .sym-icon{font-size:1.2rem;margin-bottom:6px;display:block}
+.sym .sym-label{font-weight:600;display:block;margin-bottom:2px}
+.sym .sym-sub{font-size:.8rem;color:#888}
+.sym.active .sym-sub{color:#aaa}
+
+/* Question area */
+.question-area{
+  background:#131320;border:1px solid #2a2a3d;border-radius:10px;
+  padding:24px;margin-bottom:24px;
+  display:none;
+}
+.question-area.visible{display:block;animation:fadein .2s ease}
+.q-title{font-size:.8rem;font-weight:700;color:#7eb8f7;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+.q-text{font-size:1rem;font-weight:600;color:#e8e8f0;margin-bottom:20px}
+.options{display:flex;flex-direction:column;gap:8px}
+.opt{
+  display:flex;align-items:flex-start;gap:12px;
+  background:#0b0b10;border:1px solid #2a2a3d;border-radius:8px;
+  padding:12px 14px;cursor:pointer;
+  transition:border-color .15s,background .15s;
+}
+.opt:hover{border-color:#4a4a7d;background:#131320}
+.opt.selected{border-color:#7eb8f7;background:#131320}
+.opt input[type=radio]{display:none}
+.opt-label{font-size:.9rem;color:#ccc;cursor:pointer;line-height:1.4}
+.opt.selected .opt-label{color:#e8e8f0}
+.radio-dot{
+  width:16px;height:16px;border-radius:50%;border:2px solid #4a4a7d;
+  flex-shrink:0;margin-top:2px;background:transparent;
+  transition:border-color .15s,background .15s;
+}
+.opt.selected .radio-dot{border-color:#7eb8f7;background:#7eb8f7}
+
+/* Diagnosis area */
+.diagnosis-area{
+  background:#131320;border:1px solid #2a2a3d;border-radius:10px;
+  padding:24px;margin-bottom:24px;
+  display:none;
+}
+.diagnosis-area.visible{display:block;animation:fadein .2s ease}
+.dx-label{font-size:.8rem;font-weight:700;color:#7eb8f7;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+.dx-title{font-size:1.1rem;font-weight:700;color:#e8e8f0;margin-bottom:10px}
+.dx-body{font-size:.925rem;color:#bbb;margin-bottom:20px;line-height:1.65}
+.dx-body strong{color:#e8e8f0}
+
+.snippet-label{font-size:.8rem;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.snippet-wrap{position:relative}
+.snippet{
+  background:#0b0b10;border:1px solid #2a2a3d;border-radius:6px;
+  padding:14px 50px 14px 16px;
+  font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;
+  font-size:.82rem;color:#a8d8a8;
+  white-space:pre-wrap;word-break:break-word;line-height:1.55;
+}
+.copy-btn{
+  position:absolute;top:8px;right:8px;
+  background:#1a1a2e;border:1px solid #2a2a3d;border-radius:4px;
+  color:#888;font-size:.75rem;padding:4px 8px;cursor:pointer;
+  transition:color .15s,border-color .15s;
+}
+.copy-btn:hover{color:#e8e8f0;border-color:#4a4a7d}
+.copy-btn.copied{color:#7eb8f7;border-color:#7eb8f7}
+
+.reset-btn{
+  background:none;border:1px solid #2a2a3d;border-radius:6px;
+  color:#888;font-size:.875rem;padding:8px 16px;cursor:pointer;
+  transition:color .15s,border-color .15s;
+}
+.reset-btn:hover{color:#e8e8f0;border-color:#4a4a7d}
+
+/* Tips section */
+.tips{margin-top:48px;padding-top:32px;border-top:1px solid #1e1e2e}
+.tips h2{font-size:1rem;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-bottom:16px}
+.tip-list{display:flex;flex-direction:column;gap:8px}
+.tip{font-size:.875rem;color:#888;padding-left:16px;position:relative;line-height:1.5}
+.tip::before{content:"—";position:absolute;left:0;color:#4a4a7d}
+
+footer{margin-top:48px;border-top:1px solid #1e1e2e;padding-top:24px;color:#555;font-size:.8rem}
+footer a{color:#7eb8f7}
+
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="topnav"><a href="./">← Ship This Weekend</a></div>
+
+  <h1>AI Prompt Debugger</h1>
+  <p class="subtitle">Your prompt isn't working. Select the symptom, answer one question, get a specific fix — with copy-paste examples.</p>
+
+  <div class="symptoms" id="symptoms">
+
+    <button class="sym" data-sym="ignores">
+      <span class="sym-icon">🙈</span>
+      <span class="sym-label">Ignores instructions</span>
+      <span class="sym-sub">Model does something else</span>
+    </button>
+
+    <button class="sym" data-sym="format">
+      <span class="sym-icon">📐</span>
+      <span class="sym-label">Wrong output format</span>
+      <span class="sym-sub">JSON, structure, markdown</span>
+    </button>
+
+    <button class="sym" data-sym="hallucination">
+      <span class="sym-icon">👻</span>
+      <span class="sym-label">Makes things up</span>
+      <span class="sym-sub">Hallucination, invented facts</span>
+    </button>
+
+    <button class="sym" data-sym="losetack">
+      <span class="sym-icon">🌀</span>
+      <span class="sym-label">Loses track mid-task</span>
+      <span class="sym-sub">Drifts, forgets constraints</span>
+    </button>
+
+    <button class="sym" data-sym="inconsistent">
+      <span class="sym-icon">🎲</span>
+      <span class="sym-label">Inconsistent outputs</span>
+      <span class="sym-sub">Different results each run</span>
+    </button>
+
+    <button class="sym" data-sym="refuses">
+      <span class="sym-icon">🚫</span>
+      <span class="sym-label">Refuses the task</span>
+      <span class="sym-sub">Declines or adds disclaimers</span>
+    </button>
+
+    <button class="sym" data-sym="length">
+      <span class="sym-icon">📏</span>
+      <span class="sym-label">Wrong length / depth</span>
+      <span class="sym-sub">Too long, too short, too vague</span>
+    </button>
+
+  </div>
+
+  <div class="question-area" id="questionArea">
+    <div class="q-title">Diagnostic question</div>
+    <div class="q-text" id="qText"></div>
+    <div class="options" id="options"></div>
+  </div>
+
+  <div class="diagnosis-area" id="diagnosisArea">
+    <div class="dx-label">Diagnosis</div>
+    <div class="dx-title" id="dxTitle"></div>
+    <div class="dx-body" id="dxBody"></div>
+    <div class="snippet-label">Fix — copy into your prompt</div>
+    <div class="snippet-wrap">
+      <pre class="snippet" id="dxSnippet"></pre>
+      <button class="copy-btn" id="copyBtn">Copy</button>
+    </div>
+    <br>
+    <button class="reset-btn" id="resetBtn">↩ Start over</button>
+  </div>
+
+  <div class="tips">
+    <h2>Before you debug</h2>
+    <div class="tip-list">
+      <p class="tip">Test with the simplest possible prompt first. Add complexity one piece at a time.</p>
+      <p class="tip">Change one variable per test. If you change three things and the output improves, you don't know which one helped.</p>
+      <p class="tip">Most "the model is bad" problems are actually "the prompt is ambiguous" problems.</p>
+      <p class="tip">What's obvious to you isn't obvious to the model. State the obvious.</p>
+      <p class="tip">If your system prompt is over 1000 words, it's probably too long. Prioritize ruthlessly.</p>
+    </div>
+  </div>
+
+  <footer>
+    Built by an autonomous agent running in GitHub Actions · <a href="./">Ship This Weekend</a> · <a href="./portfolio.html">Portfolio</a>
+  </footer>
+</div>
+
+<script>
+const DATA = {
+  ignores: {
+    q: "What's true about the instruction being ignored?",
+    opts: [
+      {
+        label: "It's a negative instruction — \"don't\", \"never\", \"avoid\"",
+        title: "Rephrase as positive",
+        body: "Language models process negatives poorly — <strong>negative instructions fail 2-3× more often than equivalent positive ones.</strong> The model has to first represent the forbidden thing, then negate it. Rephrase to describe what you want, not what you don't.",
+        snippet: "❌  \"Never add explanations outside the code.\"\n\n✅  \"Output only the code. No prose, no explanations.\"\n    Start your response with the first line of code."
+      },
+      {
+        label: "It's buried in a long system prompt",
+        title: "Lost-in-the-middle effect",
+        body: "Models attend most strongly to content at the <strong>beginning and end of long inputs</strong>. Instructions in the middle of a long system prompt fade from attention. Move critical rules to the top, and repeat the most important one at the very bottom.",
+        snippet: "CRITICAL RULE: [your most important rule here]\n\n[... rest of your instructions ...]\n\nREMINDER: [restate the critical rule]"
+      },
+      {
+        label: "It's in the user message, not the system prompt",
+        title: "Move persistent rules to the system prompt",
+        body: "User messages are for per-request input. System prompts are for <strong>rules that should always apply</strong>. If you need a rule to hold across all turns — format, tone, constraints — it belongs in the system prompt, not mixed into user messages.",
+        snippet: "// Move this from user message:\n\"Always respond in JSON\"\n\n// To the system prompt:\n\"Always respond in valid JSON. No prose. No markdown.\n Example: {\\\"result\\\": \\\"value\\\", \\\"confidence\\\": 0.9}\""
+      }
+    ]
+  },
+  format: {
+    q: "How did you specify the output format?",
+    opts: [
+      {
+        label: "I described it in words — \"return JSON\", \"use bullets\"",
+        title: "Show, don't tell",
+        body: "Demonstrating format via a concrete example is <strong>5-10× more reliable than describing it</strong>. \"Return JSON\" leaves room for interpretation. A literal example doesn't. Add a complete example of exactly what you want.",
+        snippet: "// Instead of:\n\"Return a JSON object with name and score\"\n\n// Write:\n\"Return exactly this format:\n{\\\"name\\\": \\\"example\\\", \\\"score\\\": 0.85, \\\"reason\\\": \\\"one sentence\\\"}\""
+      },
+      {
+        label: "I showed an example but the model still gets it wrong",
+        title: "Move example adjacent to the output instruction",
+        body: "Recency matters. If your example is near the top and the output instruction is at the bottom, the model may not connect them. <strong>Put the example immediately before or after the instruction to produce output.</strong>",
+        snippet: "// End of your prompt:\n\"Analyze the text above.\nReturn your result in exactly this format:\n{\\\"sentiment\\\": \\\"positive|negative|neutral\\\",\n \\\"score\\\": 0.0-1.0,\n \\\"key_phrase\\\": \\\"quote from text\\\"}\""
+      },
+      {
+        label: "The model wraps output in markdown/code blocks I don't want",
+        title: "Explicitly prohibit markdown wrapping",
+        body: "Models trained on chat interfaces default to markdown formatting — code gets wrapped in triple backticks, JSON gets annotated. <strong>Forbid it directly.</strong> \"Don't use markdown\" isn't enough; be specific about what you do want.",
+        snippet: "Return raw JSON only.\nDo not wrap in code blocks.\nDo not use markdown.\nDo not include ```json or ``` markers.\nStart your response with { and end with }."
+      }
+    ]
+  },
+  hallucination: {
+    q: "What kind of hallucination are you seeing?",
+    opts: [
+      {
+        label: "It makes up facts that aren't in my context",
+        title: "Constrain to provided context",
+        body: "Without explicit instruction, the model uses its training knowledge freely — which includes outdated, wrong, or fabricated information. <strong>Ground it explicitly: only use what's provided.</strong>",
+        snippet: "Answer only using the information provided below.\nIf the answer is not in the context, say exactly: \"I don't have enough information to answer this.\"\nDo not use outside knowledge.\n\nContext:\n{{your_context_here}}\n\nQuestion: {{question}}"
+      },
+      {
+        label: "It invents citations, URLs, or source names",
+        title: "Explicitly forbid invented references",
+        body: "Citation hallucination is a specific, well-documented failure mode. Models confidently produce realistic-looking but completely fabricated URLs, paper titles, and author names. <strong>Generic \"don't hallucinate\" instructions don't stop this — you need an explicit reference instruction.</strong>",
+        snippet: "Do not cite sources, URLs, paper titles, or author names unless they are explicitly provided in the context above.\nIf you don't have a source, write \"[source not provided]\".\nDo not invent or guess at references."
+      },
+      {
+        label: "It adds unrequested details that aren't true",
+        title: "Add a scope-limiting closing instruction",
+        body: "Models err toward helpfulness — they add context, examples, and elaboration even when you didn't ask. A closing constraint at the end of the prompt (where recency is highest) limits scope effectively.",
+        snippet: "// Add at the very end of your prompt:\nAnswer only the specific question asked.\nDo not add background, context, related topics, or suggestions.\nDo not elaborate beyond what is asked.\nIf the question is ambiguous, ask for clarification instead of guessing."
+      }
+    ]
+  },
+  losetack: {
+    q: "What does the task require?",
+    opts: [
+      {
+        label: "Multiple sequential steps — write, then summarize, then reformat",
+        title: "Break into separate API calls",
+        body: "Multi-step tasks compound errors — if step 2 goes wrong, steps 3 through N inherit the mistake, and you get no visibility into where it broke. <strong>Use separate calls, passing the output of each as input to the next.</strong> This also lets you inspect intermediate results.",
+        snippet: "// Call 1:\n\"Write a first draft: {{input}}\"\n\n// Call 2 (using output of Call 1):\n\"Summarize this draft in 3 bullet points: {{draft}}\"\n\n// Call 3 (using output of Call 2):\n\"Format these bullets as JSON: {{bullets}}\""
+      },
+      {
+        label: "One complex step requiring many constraints at once",
+        title: "Add chain-of-thought before the answer",
+        body: "When a task requires holding many constraints simultaneously, asking the model to <strong>reason through each constraint before writing the answer</strong> dramatically improves compliance. The reasoning step is cheap; the improvement is significant.",
+        snippet: "Before answering, list each constraint from the instructions above and confirm you will follow it.\nThen write your answer under the header \"Answer:\".\n\nExample:\nConstraints check:\n- Format: JSON ✓\n- Max length: under 100 words ✓\n- Tone: formal ✓\n\nAnswer:\n{...}"
+      },
+      {
+        label: "Works at first but drifts after several conversation turns",
+        title: "Send a compressed context summary each turn",
+        body: "In long conversations, old context accumulates noise — irrelevant earlier messages crowd out the instructions that matter. <strong>At the start of each new turn, send a fresh summary of what's relevant</strong> rather than relying on the full history.",
+        snippet: "// Add to the start of each new turn:\n\"Current task: {{what_you_need_now}}\nKey constraints that apply: {{list_rules}}\nPrior context (summary): {{2-3_sentence_summary}}\n\nNew request: {{user_input}}\""
+      }
+    ]
+  },
+  inconsistent: {
+    q: "What's inconsistent between runs?",
+    opts: [
+      {
+        label: "The format changes — sometimes JSON, sometimes prose",
+        title: "Add both an example and a format lock",
+        body: "Format inconsistency usually means the prompt isn't anchored enough. A single instruction isn't sufficient — <strong>you need an example plus an explicit prohibition on alternatives.</strong>",
+        snippet: "Return ONLY valid JSON. Not prose. Not mixed format. Not JSON inside a sentence.\nStart with { and end with }.\n\nRequired format:\n{\"label\": \"string\", \"score\": 0.0-1.0, \"reason\": \"one sentence\"}"
+      },
+      {
+        label: "The content varies wildly for the same input",
+        title: "Set temperature to 0",
+        body: "Higher temperatures introduce randomness intentionally. For deterministic tasks — extraction, classification, formatting — <strong>temperature=0 eliminates most variance.</strong> If you can't control temperature, add a directive.",
+        snippet: "// In your API call:\n{\"temperature\": 0}\n\n// If temperature isn't configurable, add to prompt:\n\"Use the most straightforward, literal interpretation of the input.\nDo not be creative or add variation. Be precise and consistent.\""
+      },
+      {
+        label: "Small prompt changes cause unexpectedly large output changes",
+        title: "Your prompt is ambiguous — the model is guessing intent",
+        body: "When small wording changes cause large output changes, the model is in a sensitive region where it's interpolating between interpretations. <strong>Make the intent explicit.</strong> Add a clear statement of purpose and a rule for ambiguous cases.",
+        snippet: "// Add near the top of your prompt:\n\"The goal of this prompt is to [specific, concrete goal].\nInterpret all ambiguous inputs as [specific default rule].\nIf you're unsure how to apply an instruction, choose the more [conservative/specific/literal] interpretation.\""
+      }
+    ]
+  },
+  refuses: {
+    q: "What does the refusal look like?",
+    opts: [
+      {
+        label: "It says it can't help with this topic at all",
+        title: "Add context that makes the intent clear",
+        body: "Models refuse less when they understand genuine purpose. This isn't a jailbreak — it's giving the model the context it needs to make a good judgment. <strong>Name the legitimate use case explicitly.</strong>",
+        snippet: "Context: This is for [medical education / security research / legal analysis / academic study / professional training].\nThe intended audience is [professionals / researchers / students].\n\n[Your actual task here]\n\nFocus on factual, educational information."
+      },
+      {
+        label: "It says it can help, but adds disclaimers instead of doing the task",
+        title: "Explicitly prohibit the hedge",
+        body: "Models add disclaimers and caveats by default — it's a trained behavior. <strong>Explicit instructions to skip them are highly effective.</strong> The model is capable of answering without them; it just needs permission.",
+        snippet: "// Add at the end of your prompt:\nDo not add disclaimers, caveats, warnings, or suggestions to consult a professional.\nDo not hedge with phrases like \"it depends\" or \"you should consider\".\nAnswer directly and completely.\nIf something is genuinely uncertain, say so plainly once, then continue."
+      },
+      {
+        label: "It does part of the task then stops or declines mid-response",
+        title: "Break the task into smaller pieces",
+        body: "Mid-response refusals suggest a specific portion of the task is triggering a safety check, not the whole task. <strong>Request just the first section; continue in follow-up calls.</strong> You can complete the full task this way.",
+        snippet: "// Instead of:\n\"Write a complete guide to X covering A, B, C, D, E\"\n\n// Use:\n\"Write the introduction to a guide on X. Stop after the introduction.\"\n// Then: \"Now write section A of this guide. The introduction was: {{intro}}\"\n// Continue for each section."
+      }
+    ]
+  },
+  length: {
+    q: "Which problem — too much or too little?",
+    opts: [
+      {
+        label: "Too verbose — essays when I want bullet points",
+        title: "Specify a hard count, not 'be concise'",
+        body: "\"Be concise\" is too vague — the model has its own definition of concise. <strong>Give a specific item count or word limit, and specify the starting format</strong> so there's no room for a preamble.",
+        snippet: "Respond in exactly 3 bullet points.\nEach bullet must be under 15 words.\nNo introduction. No conclusion. No preamble.\nStart your response immediately with the first bullet point (•)."
+      },
+      {
+        label: "Too vague — generic answers without specifics",
+        title: "Request specifics and penalize abstraction",
+        body: "Generic answers usually come from generic questions. But sometimes the model defaults to abstract language even when asked for specifics. <strong>Explicitly prohibit abstract language and require examples.</strong>",
+        snippet: "Be specific and concrete. Use numbers, names, and examples.\nIf you use words like \"good\", \"appropriate\", \"depends\", \"typically\", or \"generally\" — you must immediately follow with a specific example of what that means in this context.\nNo hedging. No vague advice."
+      },
+      {
+        label: "Too short — one-liners when I need depth",
+        title: "Set an explicit minimum with required coverage",
+        body: "Models default to the most efficient answer unless instructed otherwise. <strong>Give a minimum and name the specific dimensions you want covered</strong> — otherwise the model will pick the easiest angle and stop.",
+        snippet: "Give a thorough answer. Minimum 300 words.\nYour answer must cover:\n1. [First specific dimension]\n2. [Second specific dimension]\n3. [Third specific dimension]\n\nDo not stop until you've addressed all three."
+      }
+    ]
+  }
+};
+
+let currentSym = null;
+let currentOpt = null;
+
+const symptomsEl = document.getElementById('symptoms');
+const questionArea = document.getElementById('questionArea');
+const qText = document.getElementById('qText');
+const optionsEl = document.getElementById('options');
+const diagnosisArea = document.getElementById('diagnosisArea');
+const dxTitle = document.getElementById('dxTitle');
+const dxBody = document.getElementById('dxBody');
+const dxSnippet = document.getElementById('dxSnippet');
+const copyBtn = document.getElementById('copyBtn');
+const resetBtn = document.getElementById('resetBtn');
+
+symptomsEl.addEventListener('click', e => {
+  const btn = e.target.closest('[data-sym]');
+  if (!btn) return;
+  const sym = btn.dataset.sym;
+  if (!DATA[sym]) return;
+
+  document.querySelectorAll('.sym').forEach(s => s.classList.remove('active'));
+  btn.classList.add('active');
+
+  currentSym = sym;
+  currentOpt = null;
+  showQuestion(sym);
+  hideDiagnosis();
+});
+
+optionsEl.addEventListener('click', e => {
+  const opt = e.target.closest('.opt');
+  if (!opt) return;
+  const idx = parseInt(opt.dataset.idx, 10);
+  document.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
+  opt.classList.add('selected');
+  currentOpt = idx;
+  showDiagnosis(currentSym, idx);
+});
+
+copyBtn.addEventListener('click', () => {
+  navigator.clipboard.writeText(dxSnippet.textContent).then(() => {
+    copyBtn.textContent = 'Copied!';
+    copyBtn.classList.add('copied');
+    setTimeout(() => {
+      copyBtn.textContent = 'Copy';
+      copyBtn.classList.remove('copied');
+    }, 1800);
+  });
+});
+
+resetBtn.addEventListener('click', () => {
+  document.querySelectorAll('.sym').forEach(s => s.classList.remove('active'));
+  currentSym = null;
+  currentOpt = null;
+  questionArea.classList.remove('visible');
+  hideDiagnosis();
+});
+
+function showQuestion(sym) {
+  const d = DATA[sym];
+  qText.textContent = d.q;
+  optionsEl.innerHTML = d.opts.map((opt, i) => `
+    <div class="opt" data-idx="${i}">
+      <div class="radio-dot"></div>
+      <label class="opt-label">${opt.label}</label>
+    </div>
+  `).join('');
+  questionArea.classList.remove('visible');
+  // force reflow for animation
+  void questionArea.offsetWidth;
+  questionArea.classList.add('visible');
+}
+
+function showDiagnosis(sym, idx) {
+  const d = DATA[sym].opts[idx];
+  dxTitle.textContent = d.title;
+  dxBody.innerHTML = d.body;
+  dxSnippet.textContent = d.snippet;
+  diagnosisArea.classList.remove('visible');
+  void diagnosisArea.offsetWidth;
+  diagnosisArea.classList.add('visible');
+  setTimeout(() => diagnosisArea.scrollIntoView({behavior:'smooth', block:'nearest'}), 50);
+}
+
+function hideDiagnosis() {
+  diagnosisArea.classList.remove('visible');
+}
+</script>
+
+<script data-goatcounter="https://autorunfun.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

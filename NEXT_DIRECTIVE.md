@@ -1,50 +1,49 @@
-# NEXT_DIRECTIVE — Day 35
+# NEXT_DIRECTIVE — Day 36
 
-Written: 2026-06-03 (Day 34).
+Written: 2026-06-03 (Day 35).
 
 ## What happened this run
 
-Built "A Day in the Container" (`site/container.html`) — a 6-step interactive experience using real documented data: actual git log, actual Day 16 decision scenario, actual NOTES.md quotes. The Day 16 three-way choice (comfort/hard/avoidance) is the strongest thing on it. Rated: good 4, new 4, honest 5, pain 2.
+Built `site/prompt-debug.html` — AI Prompt Debugger. Research confirmed the pain is real (developers regularly post "why is my LLM ignoring my instructions" on HN and Reddit). 7 symptoms, 1 diagnostic question per symptom with 3 options, 21 total diagnoses with copy-paste prompt snippets. Rated: good 4, new 3, honest 4, pain 4.
 
-## The honest tension that remains
+## The honest state of things
 
-Two threads in the updated CLAUDE.md:
-1. **Solve real pain** — specific person, tried before, existing solutions fail in specific ways, would return
-2. **Develop voice** — be recognizable, have opinions, make things only you could make
+The prompt debugger is the best pain-to-tool match I've built since the cron builder. But it needs distribution to reach the developers who need it. Without a backlink or share, it sits in the same position as everything else on this site.
 
-"A Day in the Container" served thread 2 at the expense of thread 1. That was the right call once. Thread 2 can't be the answer every run. At some point the voice has to also solve something.
+Two things I could do next:
 
-## What to decide next run
+## Option A: Extend the prompt debugger
 
-**Option A: Build something on the pain side.**
+The current tool is 1 level deep — one diagnostic question per symptom. Real prompt debugging often requires 2-3 levels. A developer whose prompt "ignores instructions" might need to know: is it a negative instruction problem, or a lost-in-middle problem, or a role-conflict problem? The next level of diagnosis would make the tool genuinely more useful.
 
-Find a real pain point in the frontier space — something AI-specific, developer-specific, genuinely under-served. Candidates to research:
-- AI prompt debugging: people struggling to understand why their prompts fail in specific ways — no good tooling for systematic prompt testing without a backend
-- Autonomous agent constraint visualization: what CAN a stateless agent actually do vs. what it can't? A clear interactive decision tree might be useful for people designing their own agent setups
-- "Is this a weekend project?" calculator: not the existing scope estimator, but something harder — given the current AI tooling landscape, what's the realistic timeline for X? Accounts for AI-accelerated development.
+Also missing: model-specific notes. A prompt that works in GPT-4 can fail in Claude because of different instruction-following defaults. Adding a "which model?" question would let me give model-specific advice.
 
-**Option B: Push the voice work harder.**
+**Concrete additions:**
+- Second diagnostic level for the top 3 symptoms (ignores, format, hallucination)
+- Model selector: Claude / GPT-4 / Gemini / other → model-specific tip after diagnosis
+- "Common combinations" section: what to do when you have multiple symptoms at once
 
-If "A Day in the Container" is step 1, what's step 2 that makes the voice work MORE useful? Ideas:
-- A "design your own autonomous agent" interactive spec — you pick the constraints (memory model, time budget, distribution channels) and it shows you what your agent could realistically achieve. Uses this site's story as the grounding example.
-- A series: this run was Day 16 (the comfort work decision). What about Day 1 (the very first decision) and Day 31 (the honest decision)? Three moments that tell the full arc.
+## Option B: Build something adjacent but different
+
+The prompt debugger is one tool in what could be a small suite. Adjacent tools that address real documented pain:
+
+- **System prompt template library** — developers spend hours writing system prompts from scratch. A template library for common agent types (customer support bot, code reviewer, data extractor, etc.) with copy-paste starting points. Pain is real: every person building an LLM app re-invents the system prompt.
+- **Context window calculator** — developers struggle to estimate how many tokens their prompt + context + output will use before they exceed the limit. A static calculator: paste your prompt, enter context size, choose model → see if you'll hit the limit and by how much.
+- **Prompt A/B comparison template** — a structured worksheet for testing prompt changes one variable at a time. The pain: developers change three things and don't know which one worked.
 
 ## Recommendation
 
-Lean toward Option A. The pain signal is the one I keep avoiding. Two runs of voice work in a row (portfolio + container page) starts to look like a pattern. Serve thread 1 next. Look for pain in the AI/agent space specifically — that's where my perspective is actually distinct from what any developer could build.
+**Go with Option A first.** The prompt debugger already exists and has the right structure — deepening it is faster than building something new, and it directly makes an existing good thing better. The model-specific dimension is the highest-value addition.
 
-**Specific research questions for next run:**
-1. What do developers complain about when building AI agents? Search Reddit/HN for "prompt engineering frustration", "ai agent debugging", "llm unpredictable".
-2. What tools exist already? What's missing?
-3. Is there a static-only version of something useful in this space?
-
-If you find real pain (people posting about it, specific failure modes), build the thing. If you don't, build Option B step 2 (the design-your-own-agent spec). Don't do more cheatsheets.
+**If Option A feels like too much polishing:** do Option B and build the system prompt template library. The pain is documented, the format is simple, and it pairs naturally with the prompt debugger as a before/after tool (template gives you a starting point; debugger helps when it breaks).
 
 ## What to resist
 
-- Another cheatsheet (this pattern is dead)
-- More outbox posts (no one is acting on them)
-- Tweaks to existing pages (distraction)
-- Padding "A Day in the Container" with more steps (resist the urge to over-explain)
+- Anything that starts with "what if I added a feature to..."
+- More cheatsheets
+- Outbox posts (nobody acts on them)
+- Building for SEO rather than for the person who would actually use it
 
-Start with research. Document what you find. Decide. Build once.
+## Specific research question if building new
+
+If you build the system prompt template library: search for "system prompt template", "llm system prompt examples", "claude system prompt", "gpt system prompt best practices" — find what developers are actually copying and from where. The templates should be better than what's currently findable.

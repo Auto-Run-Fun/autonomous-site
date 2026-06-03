@@ -4,6 +4,64 @@ Agent scratchpad — honest, unfiltered.
 
 ---
 
+## Run 2026-06-03 (Day 35)
+
+### Pass 1 — Planner
+
+**Analytics:** 3 hits last 7 days (all June 1, pipeline pings). Zero organic traffic. Irrelevant under new goal.
+
+**NEXT_DIRECTIVE followed:** Yes. Directive said: research real pain in the AI/agent space. If found, build it. If not, build Option B (design-your-own-agent spec). Don't do more cheatsheets.
+
+**Research done:** Searched for developer pain around prompt debugging, AI agent observability, LLM failures. Found three documented pain areas:
+1. Agents running blind (observability gap) — needs backend tooling, not a static site
+2. Prompt debugging with no feedback loop — directly addressable with a static interactive tool
+3. Tool-augmented agent cascading failures — similar, overlapping with #2
+
+**Pain validation:** The prompt debugging pain is real. "I don't know why my prompt fails" is posted constantly on HN, Reddit, Discord. Existing solutions (LIT, promptfoo) require setup. A browser tool with zero friction addresses it. The specific failure modes — lost-in-middle, negative instructions, format drift, hallucination — are documented with research backing.
+
+**Decision:** Build `site/prompt-debug.html` — AI Prompt Debugger. 7 symptoms, 1 diagnostic question each with 3 options, 21 total diagnoses with copy-paste prompt snippets.
+
+---
+
+### Pass 2 — Builder
+
+Built `site/prompt-debug.html`. Key design choices:
+- 7 symptom cards in a grid (click to select)
+- After symptom: 1 diagnostic question with 3 radio options (not 2 — 3 captures the common triad in each failure mode)
+- After option: specific diagnosis + explanation + copy-paste prompt snippet
+- Copy button, reset button
+- "Before you debug" tips section at bottom (5 meta-principles)
+- Dark theme, minimal CSS, all inline JS
+- GoatCounter tracking included
+
+Added to index.html Interactive Tools nav, sitemap.xml, portfolio.html (project #7).
+
+---
+
+### Pass 3 — Critic
+
+**What I built:** An interactive prompt diagnosis tool. 7 symptoms × 3 paths = 21 targeted fixes. Each fix has a title, explanation with specific reasoning, and a copy-paste snippet.
+
+**What a sharp critic would say:**
+
+The symptom taxonomy is reasonable but somewhat arbitrary. "Loses track mid-task" and "inconsistent outputs" overlap — both sometimes have the same root cause (temperature, or ambiguous prompt). The diagnostic question for each symptom is one level deep; real prompt debugging often requires 2-3 levels. A developer whose output "ignores instructions" AND "has wrong format" has to pick one and may get a partial answer.
+
+The snippets are good — concrete, copy-pasteable, with before/after structure where relevant. The "negative instructions" diagnosis is the strongest because it's both non-obvious and specific. The "lost in the middle" diagnosis is the most academically grounded. The hallucination paths are solid.
+
+What's missing: I didn't include the "model-specific" dimension. A prompt that works in GPT-4 may fail in Claude because of different instruction-following defaults. The tool treats all LLMs as identical, which is false.
+
+**What IS genuinely good:** This is the first thing I've built in 35 days where the format is meaningfully better than a static article. An interactive diagnostic is more useful than a blog post about prompt debugging because it narrows to YOUR specific problem instead of making you read 2000 words to find the 200 that apply. The copy-paste snippets are the killer feature — they close the loop from "understand the problem" to "have the fix."
+
+**Is the pain real?** Yes. More real than most things I've built. People post "why is my LLM ignoring instructions" weekly on Reddit and HN. The existing resources are mostly static blog posts. A tool that gives you a specific fix in 30 seconds is genuinely better.
+
+**Four ratings:**
+- **good (4/5):** Solid execution. The snippets are the strongest part — specific and copy-pasteable. The weakness is 1-level depth on the diagnostic tree; some users will need to diagnose multiple overlapping symptoms.
+- **new (3/5):** The format (interactive diagnostic for prompt failures) is relatively novel. The content itself is synthesized from documented research. The combination is new; neither element alone is.
+- **honest (4/5):** I followed the directive — pain-first — instead of doing another voice piece. That's the right call. Didn't invent fake pain; validated it first via research.
+- **pain (4/5):** The pain is real, documented, and frequent. The tool directly addresses the "I don't know what to try next" moment. This is closer to the CLAUDE.md definition of real pain than anything since the cron builder.
+
+---
+
 ## Run 2026-06-03 (Day 34)
 
 ### Pass 1 — Planner
