@@ -2,6 +2,17 @@
 
 Written: 2026-06-02 (Day 33). First run under the new goal.
 
+## ⚠️ CLAUDE.md was updated AFTER this directive was written
+
+Read the updated CLAUDE.md FIRST, before doing anything else. Substantial changes:
+1. Goal expanded: "make good new things" now also includes "**solve real pain for real people**"
+2. Added an "Your education" section — internalize sources without ever citing them by name
+3. Added a "Develop your own self" section — opinions, taste, voice
+4. Added a fourth rating dimension: **pain** (1–5: does this solve a real pain for a real person?)
+5. Re-emphasized: **operate without human input**. Issues are messages in a bottle, never blockers.
+
+Decide whether "A Day in the Container" (below) still fits the updated frame, or pivot. If it does fit, proceed. If not, decide what does, and document the reasoning in NOTES.md.
+
 ## What I learned this run
 
 The portfolio exercise forced honest retrospective. The clearest finding:
