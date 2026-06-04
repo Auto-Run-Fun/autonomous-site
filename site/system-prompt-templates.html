@@ -135,6 +135,20 @@ h1{font-size:1.75rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
 
 .divider{height:1px;background:#1e1e2e;margin:16px -20px 0}
 
+/* Debug link per card */
+.debug-link{
+  display:inline-flex;align-items:center;gap:5px;flex-wrap:wrap;
+  font-size:.75rem;color:#4a6a8a;
+  border:1px solid #1a2a3a;border-radius:4px;
+  padding:5px 11px;margin-top:14px;
+  text-decoration:none;
+  transition:color .15s,border-color .15s;
+  line-height:1.4;
+}
+.debug-link:hover{color:#7eb8f7;border-color:#3a5a7d;text-decoration:none}
+.debug-link .dbg-arrow{color:#7eb8f7}
+.debug-hint{color:#3a5a7a;font-size:.7rem}
+
 /* Empty state */
 .empty{text-align:center;padding:60px 20px;color:#555;font-size:.95rem}
 
@@ -181,7 +195,7 @@ h1{font-size:1.75rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
   <div class="cards" id="cardsContainer">
 
     <!-- 1. Customer Support Agent -->
-    <div class="card" data-cat="support" data-tags="customer support bot helpdesk ticket escalation">
+    <div class="card" data-cat="support" data-tags="customer support bot helpdesk ticket escalation" data-debug-sym="ignores" data-debug-hint="often ignores escalation rules">
       <div class="card-header">
         <div class="card-icon">🎧</div>
         <div class="card-meta">
@@ -226,7 +240,7 @@ Tone: warm, efficient, never robotic. Match the customer's urgency — move fast
     </div>
 
     <!-- 2. Code Reviewer -->
-    <div class="card" data-cat="code" data-tags="code review pull request PR diff bugs security">
+    <div class="card" data-cat="code" data-tags="code review pull request PR diff bugs security" data-debug-sym="format" data-debug-hint="often loses structured output format">
       <div class="card-header">
         <div class="card-icon">🔍</div>
         <div class="card-meta">
@@ -276,7 +290,7 @@ Framework/runtime: [FRAMEWORK, e.g., "Next.js 14", "FastAPI", "Rails 7" — or "
     </div>
 
     <!-- 3. JSON Data Extractor -->
-    <div class="card" data-cat="data" data-tags="extract structured data JSON parsing fields schema">
+    <div class="card" data-cat="data" data-tags="extract structured data JSON parsing fields schema" data-debug-sym="format" data-debug-hint="often returns prose instead of JSON">
       <div class="card-header">
         <div class="card-icon">⚙️</div>
         <div class="card-meta">
@@ -319,7 +333,7 @@ Return only the JSON object. Nothing before or after it.</textarea>
     </div>
 
     <!-- 4. Document Summarizer -->
-    <div class="card" data-cat="data" data-tags="summarize summary document report TLDR key points">
+    <div class="card" data-cat="data" data-tags="summarize summary document report TLDR key points" data-debug-sym="length" data-debug-hint="often too long or not detailed enough">
       <div class="card-header">
         <div class="card-icon">📄</div>
         <div class="card-meta">
@@ -359,7 +373,7 @@ Output: markdown</textarea>
     </div>
 
     <!-- 5. Text Classifier -->
-    <div class="card" data-cat="data" data-tags="classify classification label category intent routing">
+    <div class="card" data-cat="data" data-tags="classify classification label category intent routing" data-debug-sym="inconsistent" data-debug-hint="often gives different results per run">
       <div class="card-header">
         <div class="card-icon">🏷️</div>
         <div class="card-meta">
@@ -403,7 +417,7 @@ Input: "[EXAMPLE TEXT 3]" → [CORRECT CATEGORY]</textarea>
     </div>
 
     <!-- 6. SQL Query Generator -->
-    <div class="card" data-cat="code" data-tags="SQL database query natural language postgres mysql bigquery">
+    <div class="card" data-cat="code" data-tags="SQL database query natural language postgres mysql bigquery" data-debug-sym="ignores" data-debug-hint="often ignores schema constraints">
       <div class="card-header">
         <div class="card-icon">🗄️</div>
         <div class="card-meta">
@@ -453,7 +467,7 @@ Output format:
     </div>
 
     <!-- 7. Coding Assistant -->
-    <div class="card" data-cat="code" data-tags="coding assistant write debug explain code pair programming">
+    <div class="card" data-cat="code" data-tags="coding assistant write debug explain code pair programming" data-debug-sym="ignores" data-debug-hint="often ignores the minimal-change rule">
       <div class="card-header">
         <div class="card-icon">💻</div>
         <div class="card-meta">
@@ -498,7 +512,7 @@ Style preferences: [e.g., "functional over OOP", "verbose over clever", "no exte
     </div>
 
     <!-- 8. Writing Editor -->
-    <div class="card" data-cat="writing" data-tags="writing editor prose clarity concision edit improve">
+    <div class="card" data-cat="writing" data-tags="writing editor prose clarity concision edit improve" data-debug-sym="ignores" data-debug-hint="often ignores the Do-Not-Change list">
       <div class="card-header">
         <div class="card-icon">✏️</div>
         <div class="card-meta">
@@ -543,7 +557,7 @@ Output format:
     </div>
 
     <!-- 9. Research Synthesizer -->
-    <div class="card" data-cat="writing" data-tags="research synthesize sources summarize literature review analysis">
+    <div class="card" data-cat="writing" data-tags="research synthesize sources summarize literature review analysis" data-debug-sym="hallucination" data-debug-hint="often adds facts not in the provided sources">
       <div class="card-header">
         <div class="card-icon">🔬</div>
         <div class="card-meta">
@@ -583,7 +597,7 @@ Rules:
     </div>
 
     <!-- 10. JSON API Responder -->
-    <div class="card" data-cat="data" data-tags="API JSON response structured output programmatic integration endpoint">
+    <div class="card" data-cat="data" data-tags="API JSON response structured output programmatic integration endpoint" data-debug-sym="format" data-debug-hint="often wraps JSON in markdown code fences">
       <div class="card-header">
         <div class="card-icon">📡</div>
         <div class="card-meta">
@@ -632,7 +646,7 @@ Rules:
     </div>
 
     <!-- 11. Onboarding Guide -->
-    <div class="card" data-cat="support" data-tags="onboarding setup guide walkthrough tutorial step by step">
+    <div class="card" data-cat="support" data-tags="onboarding setup guide walkthrough tutorial step by step" data-debug-sym="losetack" data-debug-hint="often loses track of the current step">
       <div class="card-header">
         <div class="card-icon">🚀</div>
         <div class="card-meta">
@@ -677,7 +691,7 @@ Known issues at each step:
     </div>
 
     <!-- 12. Content Moderator -->
-    <div class="card" data-cat="data" data-tags="moderate moderation content flag review abuse spam">
+    <div class="card" data-cat="data" data-tags="moderate moderation content flag review abuse spam" data-debug-sym="inconsistent" data-debug-hint="often makes different decisions for identical content">
       <div class="card-header">
         <div class="card-icon">🛡️</div>
         <div class="card-meta">
@@ -737,8 +751,8 @@ Set confidence below 0.85 on close calls. Never invent a category — use "ambig
   </div>
 
   <div class="footer-links">
-    <p>When your system prompt is written, test it — prompts that look right on paper often fail in surprising ways.</p>
-    <p><a href="prompt-debug.html">→ AI Prompt Debugger</a> — diagnose why a prompt isn't working, with model-specific fixes for Claude, GPT-4, and Gemini</p>
+    <p>System prompts that look right on paper often fail in production. Each template above links directly to the most common failure mode for that type.</p>
+    <p><a href="prompt-debug.html">→ AI Prompt Debugger</a> — pick your model and symptom, get a copy-paste fix in 30 seconds. Works for Claude, GPT-4, and Gemini.</p>
   </div>
 
 </div><!-- /wrap -->
@@ -784,6 +798,21 @@ pills.forEach(pill => {
 searchBox.addEventListener('input', () => {
   searchQuery = searchBox.value.trim().toLowerCase();
   updateVisible();
+});
+
+// Inject "Debug this prompt" links on each card
+document.querySelectorAll('.card[data-debug-sym]').forEach(card => {
+  const sym = card.dataset.debugSym;
+  const hint = card.dataset.debugHint;
+  const body = card.querySelector('.card-body');
+  const divider = body && body.querySelector('.divider');
+  if (!body || !divider) return;
+  const a = document.createElement('a');
+  a.href = 'prompt-debug.html#sym=' + sym;
+  a.className = 'debug-link';
+  a.innerHTML = 'Not working? <span class="dbg-arrow">→</span> Debug this prompt'
+    + (hint ? ' <span class="debug-hint">· ' + hint + '</span>' : '');
+  body.insertBefore(a, divider);
 });
 
 // Copy button

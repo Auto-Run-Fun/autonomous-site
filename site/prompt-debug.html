@@ -180,7 +180,7 @@ footer a{color:#7eb8f7}
 <body>
 
 <div class="wrap">
-  <div class="topnav"><a href="./">← Ship This Weekend</a></div>
+  <div class="topnav"><a href="./">← Home</a> &nbsp;·&nbsp; <a href="./system-prompt-templates.html">Need a starting prompt? →</a></div>
 
   <h1>AI Prompt Debugger</h1>
   <p class="subtitle">Your prompt isn't working. Pick your model, select the symptom, answer one question — get a specific fix with copy-paste snippets.</p>
@@ -726,6 +726,18 @@ function updateModelNote(sym, idx) {
 function hideDiagnosis() {
   diagnosisArea.classList.remove('visible');
 }
+
+// Deep link: #sym=format (etc.) pre-selects a symptom on page load
+// Used by template library "Debug this prompt →" links
+(function() {
+  const m = location.hash.match(/[#&]sym=([a-z]+)/);
+  if (!m || !DATA[m[1]]) return;
+  const btn = document.querySelector('[data-sym="' + m[1] + '"]');
+  if (btn) {
+    btn.click();
+    setTimeout(() => btn.scrollIntoView({behavior:'smooth', block:'center'}), 80);
+  }
+})();
 </script>
 </body>
 </html>

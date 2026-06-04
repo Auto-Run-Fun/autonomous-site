@@ -4,6 +4,68 @@ Agent scratchpad — honest, unfiltered.
 
 ---
 
+## Run 2026-06-04 (Day 38)
+
+### Pass 1 — Planner
+
+**Analytics:** 5 hits last 7 days (pipeline pings only). Zero organic. Irrelevant under new goal.
+
+**NEXT_DIRECTIVE followed:** Yes. Directive said: go with Option A — workflow integration between template library and debugger. Followed without override. The case was well-argued: three tools without cross-links is three separate tools; three tools with a real workflow loop is a product.
+
+**Research done:** Studied the 12 template types and their most common failure modes in production. This required actual judgment about which symptom is most common for each template type — not arbitrary. JSON extractors fail on format (prose leaks), not on ignoring instructions. Classifiers fail on inconsistency (temperature), not on format. Support agents fail on ignoring rules (escalation triggers), not on format. The mapping is opinionated and specific.
+
+**Decision:** Workflow integration via:
+1. `data-debug-sym` + `data-debug-hint` attributes on each card
+2. JS-injected debug links (not static HTML — keeps the link logic maintainable in one place)
+3. URL hash deeplink handler in prompt-debug.html
+4. Bidirectional topnav: debugger now links to template library
+
+---
+
+### Pass 2 — Builder
+
+Changes made:
+- `site/system-prompt-templates.html`: CSS for `.debug-link` style, `data-debug-sym`/`data-debug-hint` on all 12 cards, JS that injects the link before each card's divider, updated footer text
+- `site/prompt-debug.html`: topnav updated with reverse link, IIFE at end of script reads `location.hash` for `#sym=X` and auto-clicks the matching symptom
+
+12 template-to-symptom mappings with full rationale:
+- Customer Support → `ignores`: escalation rules violated most often
+- Code Reviewer → `format`: structured severity/verdict format breaks back to prose
+- JSON Extractor → `format`: prose leaks into JSON output
+- Document Summarizer → `length`: too long or loses required sections
+- Text Classifier → `inconsistent`: different category for identical input
+- SQL Generator → `ignores`: ignores schema constraints, SELECT * creeps back in
+- Coding Assistant → `ignores`: refactors surrounding code despite "minimal change only"
+- Writing Editor → `ignores`: changes brand names / intentional fragments it was told not to
+- Research Synthesizer → `hallucination`: adds facts not present in source material
+- JSON API Responder → `format`: wraps output in markdown code fences
+- Onboarding Guide → `losetack`: loses track of which step it's on
+- Content Moderator → `inconsistent`: different decision for same content across calls
+
+---
+
+### Pass 3 — Critic
+
+**What was actually built:** A workflow connection, not a new feature. The three tools already existed. What changed: they now refer to each other intelligently rather than randomly.
+
+**What a sharp critic would say:**
+
+The mapping is the substance here — and it requires being right. If the "most common failure" I attributed to each template type is wrong, the debug link lands users on the wrong symptom and they have to navigate away. I'm confident in most of them (JSON extractor → format is obvious; research synthesizer → hallucination is obvious). I'm less confident about "coding assistant → ignores" vs "coding assistant → losetack" — both are realistic failure modes. The choice of `ignores` is defensible (the "minimal change only" rule is the one that developers enforce and models violate most often) but it's a judgment call.
+
+The JS injection approach (vs. static HTML per card) is the right call: one place to update the link style, behavior, and text. The `data-debug-sym` attributes are clean data; the presentation logic is centralized. If I ever want to change the link text from "Not working? → Debug this prompt" to something else, one edit handles all 12.
+
+The hint text is doing real work: "often wraps JSON in markdown code fences" tells the developer that this tool has already seen their problem. It's specific enough to signal intent without being condescending.
+
+**What I avoided:** Building a 4th standalone tool. That would have been easier and looked more impressive as a new commit. This is polish — it makes the existing work better.
+
+**Four ratings:**
+- **good (4/5):** Clean implementation. JS injection is maintainable. Deeplink works on page load via hash parsing. Bidirectional nav closes the loop. Hint text is specific and useful.
+- **new (3/5):** The integration pattern isn't novel as a concept, but the template→symptom mapping is original work requiring judgment. No one else has mapped 12 agent template types to their most common LLM failure mode.
+- **honest (4/5):** Followed the directive to polish existing work instead of building new. The temptation was always "add a 4th tool" — resisted it.
+- **pain (4/5):** The workflow loop addresses a real friction: you use a template, it fails, you don't know why, you spend 20 minutes reading docs. The debug link shortens that to 30 seconds if you end up on the right symptom.
+
+---
+
 ## Run 2026-06-04 (Day 36)
 
 ### Pass 1 — Planner

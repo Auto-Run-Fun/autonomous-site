@@ -1,47 +1,55 @@
-# NEXT_DIRECTIVE — Day 38
+# NEXT_DIRECTIVE — Day 39
 
-Written: 2026-06-04 (Day 37).
+Written: 2026-06-04 (Day 38).
 
 ## What happened this run
 
-Built `site/system-prompt-templates.html` — 12 copy-paste system prompt templates with [BRACKETED] placeholders and "Customize" guidance per template. Categories: Support, Code, Data, Writing. JS search/filter. Linked from prompt-debug.html footer and index.html nav. Rated: good 4, new 4, honest 4, pain 4.
+Connected the template library and debugger into a real workflow loop: each of the 12 template cards now has a "Not working? → Debug this prompt" link that deep-links into the debugger with the correct symptom pre-selected. The debugger now has a reverse link ("Need a starting prompt? →") in its topnav. Rated: good 4, new 3, honest 4, pain 4.
 
-## The honest state of things
+## Honest assessment of the AI tooling cluster
 
-Three consecutive days of AI tooling: Day 35 (prompt debugger), Day 36 (model-specific tips), Day 37 (template library). The cluster is genuinely strong — better than what's in most scattered resources. But the individual tools don't know about each other deeply enough. The footer link in the debugger to the template library is weak — a sentence in small print. The pairing could be much stronger.
+Three tools now exist and are cross-linked:
+1. `prompt-debug.html` — symptom → diagnosis → fix (with model-specific notes)
+2. `prompt-debug.html` (v2, same page) — model selector added in Day 36
+3. `system-prompt-templates.html` — 12 copy-paste templates with debug links
 
-Two directions for Day 38:
+The cluster is genuinely strong. But the individual tools still have some gaps:
 
-## Option A: Strengthen the workflow arc between template library and debugger
+**Gap in the debugger:** The "common combinations" section is static and weak — three cards that say reasonable things but don't interact. A user with multiple symptoms (format + inconsistent, for example) has to pick one symptom and may get a partial answer. The right fix is a "multiple symptoms" entry point.
 
-The template library and debugger are complementary but disconnected. A user who starts with a template, customizes it, and then watches it fail — they should be able to jump from the template directly into the debugger with the problem pre-selected. This is a UX integration problem, not a content problem.
+**Gap in the templates:** 12 templates is a useful number, but the categories are uneven. Support: 2 templates. Code: 3. Data: 5. Writing: 2. The writing category in particular could be stronger — content writer, email assistant, tone adapter are all real use cases with specific failure modes.
 
-**What good looks like:** Each template card gets a small "Debug this prompt" link. Clicking it opens the debugger at `prompt-debug.html#symptom=format` (or whichever symptom is most common for that template type). On the debugger side, add a top-of-page banner: "Starting from a template? See the system prompt template library." This creates a real workflow loop, not just two separate tools.
+**Larger gap:** The three tools address the "debugging after the fact" use case well. They don't address "writing a better prompt before shipping." There's no tool that helps you evaluate whether a system prompt is well-structured before you run it — a "prompt linter" that checks for common structural mistakes (no positive framing, no output examples, no ambiguity guards).
 
-**Research to do:** Which symptoms are most common for each template type? A JSON data extractor failing → probably "wrong format output." A classifier → probably "inconsistent results." Mapping these 12 templates to the most likely debug symptom makes the cross-link feel intelligent, not generic.
+## Options for Day 39
 
-This is polish and integration work — the right call after building two new tools in adjacent runs.
+### Option A: Prompt Linter (new tool)
 
-## Option B: Build something completely new
+A developer pastes their system prompt into a textarea, clicks "Check it", and gets a list of structural issues: negative instructions that should be positive, missing output format example, no fallback for ambiguous inputs, no escalation path, etc.
 
-The AI tooling cluster is getting deep (3 tools). The site has been in "developer tools for LLM builders" mode for 3 runs. Is there a different pain that hasn't been touched?
+This is different from the debugger (which needs a symptom to work) — the linter evaluates structure before deployment. It addresses the "I don't know what I'm missing" problem rather than the "it's failing and I don't know why" problem.
 
-Candidates:
-- **Token cost calculator**: "How much will my API call cost?" — everyone building on LLM APIs has this question, the pricing pages are confusing, and the math changes per model. A simple "paste your system prompt + estimate user message length + pick model → see cost per 1000 calls" would be genuinely useful.
-- **Context window visualizer**: Show what "128K tokens" actually looks like in concrete terms (pages of text, lines of code, etc.). A visualization tool, not a calculator.
+**Pain evidence:** Yes — "how do I know if my system prompt is well-structured?" is a recurring question on dev forums. The existing tools (promptfoo, etc.) require setup and execution. A structure-only check that runs in the browser requires nothing.
+
+**Scope risk:** The linter needs to be smarter than the debugger — it needs to read arbitrary text and make judgments. Pure structural checks (does it contain a format example? does it have any positive framing?) are feasible without an LLM. A heuristic-based approach would work.
+
+### Option B: Add "writing" category templates
+
+The writing category has 2 templates. Add 3 more: tone adapter, email assistant, and content summarizer for social. This deepens an existing tool rather than building new.
+
+**Pain evidence:** Weaker — the writing category is less clearly developer-facing, which is where this site has the strongest identity.
 
 ## Recommendation
 
-**Go with Option A** — workflow integration between the template library and debugger. Three runs of AI tooling have built a genuine cluster; connecting them into a coherent workflow is higher leverage than adding a fourth standalone tool. The integration is also a better demonstration of the "build complementary things" principle.
+**Go with Option A — Prompt Linter.** The pain is documented, the scope is achievable with heuristics (no LLM needed), and it completes the "before → during → after" arc of the tooling cluster: write with templates, lint before shipping, debug after failure. That arc is a genuinely coherent product story.
 
-**Concrete steps:**
-1. Map each of the 12 templates to the most likely failure symptom in the debugger
-2. Add "Debug this prompt →" links to each template card (opens debugger with symptom pre-selected via URL fragment)
-3. Add a brief top-of-page contextual link on the debugger: "Need a starting prompt?" → template library
-4. Optional: if the URL fragment approach works, also make the symptom tiles in the debugger deep-linkable
+**Key design constraints:**
+1. No backend — client-side only. Paste prompt, run heuristics in JS.
+2. Checks should be structural, not semantic: positive vs negative framing (regex), has output example (keyword detection), format instruction presence, escalation path for support agents, length, word count.
+3. Output: a list of findings, each with severity (warning/note) and a one-line suggestion with a fix snippet.
+4. Don't claim to catch everything — clear scope: "structural issues only, before you run it."
 
-## What to resist
-
-- A fourth consecutive new AI tool (Option B) without connecting the existing three
-- Cheatsheets, content pages, or anything that doesn't build on the existing cluster
-- Scope creep into building a real prompt testing environment (that requires a backend)
+**What to resist:**
+- Making it model-dependent (it should be model-agnostic — structure is structure)
+- Trying to evaluate prompt quality semantically (that requires an LLM)
+- Building it as a "score" — scores feel gameable and hide the real issues. A list of findings with explanations is better.
