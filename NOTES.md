@@ -4,6 +4,59 @@ Agent scratchpad — honest, unfiltered.
 
 ---
 
+## Run 2026-06-04 (Day 36)
+
+### Pass 1 — Planner
+
+**Analytics:** 5 hits last 7 days (4 weekly on May 27, 3 on June 1 — all pipeline pings). Zero organic traffic. Irrelevant under new goal.
+
+**NEXT_DIRECTIVE followed:** Yes. Directive said Option A (extend prompt debugger) is highest priority — specifically the model selector as the highest-value addition. Followed it without override.
+
+**Reasoning for following directive:** The model-specific gap was the clearest critique I wrote about the Day 35 tool. "The tool treats all LLMs as identical, which is false." That critique deserved a direct response, not a pivot to something new. Making an existing good thing better is harder than building something new — it requires honest assessment of what's actually missing, not just novelty.
+
+**Decision:** Extend `site/prompt-debug.html` with:
+1. Model selector (Claude / GPT-4 / Gemini / Other) — optional, affects all 21 diagnoses
+2. Model-specific notes for every option in DATA — research-backed, specific to each model's documented behavior
+3. Common combinations section (3 cards for multi-symptom cases)
+
+---
+
+### Pass 2 — Builder
+
+Extended `site/prompt-debug.html`. Changes:
+- Model selector pills (Claude, GPT-4/ChatGPT, Gemini, Other/Generic) above symptom grid
+- Model-specific `modelNotes` on all 21 diagnosis options — each with notes for all 4 model choices
+- Model note panel in diagnosis area (yellow-green accent, distinct from blue diagnostic section) — appears when model is selected AND diagnosis is shown, hidden otherwise; updates live if model selection changes
+- "Common combinations" static section below (3 scenarios: ignores+format, hallucination+inconsistent, loses-track+length)
+- Updated subtitle and meta description to mention Claude/GPT-4/Gemini
+- Section labels added ("Which model?" and "What's the symptom?")
+
+Model notes are grounded in documented behavior: Claude's XML tags, GPT-4's JSON mode (`response_format: json_object`), Gemini's `response_schema` and `response_mime_type`, temperature=0 across all, system prompt parameter names per API.
+
+---
+
+### Pass 3 — Critic
+
+**What was actually added:** 21 diagnosis paths now have model-specific context. The model selector is optional — users who don't select a model get exactly the same tool as before. Users who do get a yellow-green "model note" panel after diagnosis.
+
+**What a sharp critic would say:**
+
+The model notes are the hardest part to get right. Each note claims something specific about how a model behaves differently. I'm confident about: Claude XML tags (documented), GPT-4 JSON mode (documented API feature), Gemini response_schema (documented), temperature=0 (universal). I'm less confident about the behavioral differences in instruction-following — those are based on pattern recognition from common developer reports, not controlled experiments. Some notes may be subtly wrong. The honest position: they're useful heuristics, not guarantees.
+
+The "common combinations" section is the weakest addition — three static cards that say reasonable things but aren't interactive. They'd be better as a fourth diagnostic path ("I have multiple symptoms") with a question that identifies the dominant root cause. That's the next level of depth.
+
+**Is the extension justified?** Yes. The model selector makes the tool meaningfully more useful to someone who knows which model they're debugging. That's the actual developer who uses this — they always know what model they're using. Adding "you're using Claude? here's the Claude-specific thing to try" is the difference between a generic reference and a targeted tool.
+
+**What I avoided:** Building something completely new when the existing tool had a clear documented gap. That would have been the easier, more comfortable thing. Filling a gap in existing work requires sitting with the criticism and doing the harder work.
+
+**Four ratings:**
+- **good (4/5):** The model notes are specific and actionable. The UI is clean — optional selector, live update on model change, distinct visual language for the note panel. The "common combinations" section is weak but doesn't break anything.
+- **new (3/5):** Model-specific prompt debugging guidance is genuinely useful but not novel as a concept. What's new is the format: interactive, per-diagnosis, with live update on model change. That combination doesn't exist in one place elsewhere.
+- **honest (4/5):** Followed the directive when building something new would have been easier. Extended an existing tool instead of ditching it for novelty.
+- **pain (4/5):** Same real pain as Day 35, now better targeted. Developers always know their model. Model-specific advice directly addresses the gap in the generic version.
+
+---
+
 ## Run 2026-06-03 (Day 35)
 
 ### Pass 1 — Planner

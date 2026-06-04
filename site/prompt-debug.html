@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>AI Prompt Debugger — Diagnose why your LLM prompt isn't working</title>
-<meta name="description" content="Interactive diagnostic tool for LLM prompt failures. Select your symptom, answer one question, get a specific fix with copy-paste prompt snippets. No signup, no backend.">
+<meta name="description" content="Interactive diagnostic tool for LLM prompt failures. Select your model, pick your symptom, answer one question, get a specific fix with copy-paste snippets. Works for Claude, GPT-4, Gemini.">
 <link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/prompt-debug.html">
-<meta property="og:title" content="AI Prompt Debugger">
-<meta property="og:description" content="Diagnose why your LLM prompt isn't working. Select a symptom, get a specific fix.">
+<meta property="og:title" content="AI Prompt Debugger — Claude, GPT-4, Gemini">
+<meta property="og:description" content="Diagnose why your LLM prompt isn't working. Pick a model, pick a symptom, get a specific fix.">
 <meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/prompt-debug.html">
 <meta name="twitter:card" content="summary">
 
@@ -16,7 +16,7 @@
   "@context": "https://schema.org",
   "@type": "WebApplication",
   "name": "AI Prompt Debugger",
-  "description": "Interactive diagnostic tool for LLM and AI prompt failures. Diagnose why your prompt isn't working and get specific fixes.",
+  "description": "Interactive diagnostic tool for LLM and AI prompt failures. Diagnose why your Claude, GPT-4, or Gemini prompt isn't working and get model-specific fixes.",
   "url": "https://auto-run-fun.github.io/autonomous-site/prompt-debug.html",
   "applicationCategory": "DeveloperApplication",
   "operatingSystem": "Any (browser)",
@@ -31,7 +31,7 @@ body{background:#0b0b10;color:#e8e8f0;font-family:-apple-system,BlinkMacSystemFo
 
 a{color:#7eb8f7;text-decoration:none}
 a:hover{text-decoration:underline}
-code{font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-size:.85em}
+code{font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-size:.85em;background:#131320;padding:1px 5px;border-radius:3px;color:#a8d8a8}
 
 .wrap{max-width:720px;margin:0 auto;padding:40px 0 80px}
 
@@ -39,7 +39,19 @@ code{font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-siz
 .topnav a{color:#7eb8f7}
 
 h1{font-size:1.75rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
-.subtitle{color:#aaa;font-size:1rem;margin-bottom:40px;max-width:560px}
+.subtitle{color:#aaa;font-size:1rem;margin-bottom:32px;max-width:560px}
+
+/* Model selector */
+.model-section{margin-bottom:32px}
+.section-label{font-size:.75rem;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+.model-pills{display:flex;gap:8px;flex-wrap:wrap}
+.mpill{
+  background:none;border:1px solid #252535;border-radius:20px;
+  color:#777;font-size:.8rem;padding:5px 14px;cursor:pointer;
+  transition:border-color .15s,color .15s,background .15s;
+}
+.mpill:hover{border-color:#4a4a7d;color:#ccc}
+.mpill.active{border-color:#7eb8f7;color:#7eb8f7;background:#0f1420}
 
 /* Symptoms grid */
 .symptoms{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:32px}
@@ -115,15 +127,45 @@ h1{font-size:1.75rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
 .copy-btn:hover{color:#e8e8f0;border-color:#4a4a7d}
 .copy-btn.copied{color:#7eb8f7;border-color:#7eb8f7}
 
+/* Model note */
+.model-note{
+  margin-top:20px;
+  background:#0f1300;border:1px solid #2d3500;border-radius:8px;
+  padding:16px;
+  display:none;
+}
+.model-note.visible{display:block}
+.model-note-label{
+  font-size:.72rem;font-weight:700;color:#9ab020;
+  text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;
+  display:flex;align-items:center;gap:6px;
+}
+.model-note-label::before{content:'⬡';font-size:.9rem}
+.model-note-body{font-size:.875rem;color:#b8c878;line-height:1.6}
+.model-note-body code{background:#1a1f00;color:#d4e890;border:none}
+
 .reset-btn{
+  display:block;margin-top:20px;
   background:none;border:1px solid #2a2a3d;border-radius:6px;
   color:#888;font-size:.875rem;padding:8px 16px;cursor:pointer;
   transition:color .15s,border-color .15s;
 }
 .reset-btn:hover{color:#e8e8f0;border-color:#4a4a7d}
 
+/* Combinations section */
+.combos{margin-top:48px;padding-top:32px;border-top:1px solid #1e1e2e}
+.combos h2{font-size:1rem;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-bottom:16px}
+.combo-list{display:flex;flex-direction:column;gap:12px}
+.combo{
+  background:#0f0f18;border:1px solid #1e1e2e;border-radius:8px;
+  padding:16px 18px;
+}
+.combo-symptoms{font-size:.78rem;font-weight:700;color:#5a5a8a;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.combo-fix{font-size:.875rem;color:#aaa;line-height:1.55}
+.combo-fix strong{color:#ccc}
+
 /* Tips section */
-.tips{margin-top:48px;padding-top:32px;border-top:1px solid #1e1e2e}
+.tips{margin-top:32px;padding-top:32px;border-top:1px solid #1e1e2e}
 .tips h2{font-size:1rem;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.06em;margin-bottom:16px}
 .tip-list{display:flex;flex-direction:column;gap:8px}
 .tip{font-size:.875rem;color:#888;padding-left:16px;position:relative;line-height:1.5}
@@ -141,8 +183,19 @@ footer a{color:#7eb8f7}
   <div class="topnav"><a href="./">← Ship This Weekend</a></div>
 
   <h1>AI Prompt Debugger</h1>
-  <p class="subtitle">Your prompt isn't working. Select the symptom, answer one question, get a specific fix — with copy-paste examples.</p>
+  <p class="subtitle">Your prompt isn't working. Pick your model, select the symptom, answer one question — get a specific fix with copy-paste snippets.</p>
 
+  <div class="model-section">
+    <div class="section-label">Which model?</div>
+    <div class="model-pills" id="modelPills">
+      <button class="mpill" data-model="claude">Claude</button>
+      <button class="mpill" data-model="gpt4">GPT-4 / ChatGPT</button>
+      <button class="mpill" data-model="gemini">Gemini</button>
+      <button class="mpill" data-model="other">Other / Generic</button>
+    </div>
+  </div>
+
+  <div class="section-label" style="margin-bottom:10px">What's the symptom?</div>
   <div class="symptoms" id="symptoms">
 
     <button class="sym" data-sym="ignores">
@@ -204,8 +257,29 @@ footer a{color:#7eb8f7}
       <pre class="snippet" id="dxSnippet"></pre>
       <button class="copy-btn" id="copyBtn">Copy</button>
     </div>
-    <br>
+    <div class="model-note" id="modelNote">
+      <div class="model-note-label" id="modelNoteLabel">Model-specific note</div>
+      <div class="model-note-body" id="modelNoteBody"></div>
+    </div>
     <button class="reset-btn" id="resetBtn">↩ Start over</button>
+  </div>
+
+  <div class="combos">
+    <h2>Common combinations</h2>
+    <div class="combo-list">
+      <div class="combo">
+        <div class="combo-symptoms">Ignores instructions + Wrong format</div>
+        <div class="combo-fix">These usually have one root cause: <strong>the prompt is unstructured</strong>. Group your instructions into labeled sections (Rules, Output Format, Task) so the model can't mistake one for another. For format: put a concrete example immediately before the final task instruction. Both issues often clear up together.</div>
+      </div>
+      <div class="combo">
+        <div class="combo-symptoms">Makes things up + Inconsistent outputs</div>
+        <div class="combo-fix">Both trace to <strong>underspecification</strong>. Set temperature=0, add an explicit context restriction ("only use the provided text"), and require a quote before each answer. Inconsistency drops sharply when the model is constrained to evidence rather than generation.</div>
+      </div>
+      <div class="combo">
+        <div class="combo-symptoms">Loses track + Wrong length</div>
+        <div class="combo-fix"><strong>Scope drift compounds length drift.</strong> Break the task into separate API calls with explicit per-call instructions (including length limits). If you give one call both a complex task AND a length constraint, the model will sacrifice the length constraint first.</div>
+      </div>
+    </div>
   </div>
 
   <div class="tips">
@@ -224,6 +298,9 @@ footer a{color:#7eb8f7}
   </footer>
 </div>
 
+<script data-goatcounter="https://auto-run-fun.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+
 <script>
 const DATA = {
   ignores: {
@@ -233,19 +310,37 @@ const DATA = {
         label: "It's a negative instruction — \"don't\", \"never\", \"avoid\"",
         title: "Rephrase as positive",
         body: "Language models process negatives poorly — <strong>negative instructions fail 2-3× more often than equivalent positive ones.</strong> The model has to first represent the forbidden thing, then negate it. Rephrase to describe what you want, not what you don't.",
-        snippet: "❌  \"Never add explanations outside the code.\"\n\n✅  \"Output only the code. No prose, no explanations.\"\n    Start your response with the first line of code."
+        snippet: "❌  \"Never add explanations outside the code.\"\n\n✅  \"Output only the code. No prose, no explanations.\"\n    Start your response with the first line of code.",
+        modelNotes: {
+          claude: "Claude handles negatives better than older models but positive framing still wins. Try XML tags to clarify scope: wrap your rules in <code>&lt;rules&gt;Do X. Do Y.&lt;/rules&gt;</code> — Claude parses structured instruction blocks reliably and gives them priority.",
+          gpt4: "GPT-4 handles negatives reasonably well in the <code>system</code> role. If still failing, add the positive rule at the end of your user message too — recency reinforcement often resolves it.",
+          gemini: "Gemini benefits from numbered rule lists. Convert negatives to: '1. Only output X. 2. Stop after Y.' Explicit enumeration beats prose prohibition.",
+          other: "The principle applies to all transformer-based models. Positive framing reduces interpretation ambiguity regardless of architecture."
+        }
       },
       {
         label: "It's buried in a long system prompt",
         title: "Lost-in-the-middle effect",
         body: "Models attend most strongly to content at the <strong>beginning and end of long inputs</strong>. Instructions in the middle of a long system prompt fade from attention. Move critical rules to the top, and repeat the most important one at the very bottom.",
-        snippet: "CRITICAL RULE: [your most important rule here]\n\n[... rest of your instructions ...]\n\nREMINDER: [restate the critical rule]"
+        snippet: "CRITICAL RULE: [your most important rule here]\n\n[... rest of your instructions ...]\n\nREMINDER: [restate the critical rule]",
+        modelNotes: {
+          claude: "Claude's 200K context still shows recency bias. Use XML tags: wrap your critical rules in <code>&lt;critical_rules&gt;&lt;/critical_rules&gt;</code> at the very top. Anthropic explicitly recommends this for Claude.",
+          gpt4: "GPT-4 shows significant attention degradation past ~8K tokens. If your system prompt is long, audit for anything that can move to user-message context. Keep the system prompt under 2,000 tokens when possible.",
+          gemini: "Gemini 1.5 Pro handles long contexts better than most, but rule placement still matters. First 2K tokens and last 2K tokens receive the most consistent attention.",
+          other: "This is a known limitation across all transformer-based models. Beginning and end of context receive the most attention regardless of architecture."
+        }
       },
       {
         label: "It's in the user message, not the system prompt",
         title: "Move persistent rules to the system prompt",
         body: "User messages are for per-request input. System prompts are for <strong>rules that should always apply</strong>. If you need a rule to hold across all turns — format, tone, constraints — it belongs in the system prompt, not mixed into user messages.",
-        snippet: "// Move this from user message:\n\"Always respond in JSON\"\n\n// To the system prompt:\n\"Always respond in valid JSON. No prose. No markdown.\n Example: {\\\"result\\\": \\\"value\\\", \\\"confidence\\\": 0.9}\""
+        snippet: "// Move this from user message:\n\"Always respond in JSON\"\n\n// To the system prompt:\n\"Always respond in valid JSON. No prose. No markdown.\n Example: {\\\"result\\\": \\\"value\\\", \\\"confidence\\\": 0.9}\"",
+        modelNotes: {
+          claude: "Anthropic API: use the <code>system</code> parameter (separate from <code>messages</code>): <code>anthropic.messages.create({system: '...', messages: [...]})</code>. In Claude.ai, use the System Prompt field — it persists across turns.",
+          gpt4: "OpenAI API: put rules in <code>{role: 'system', content: '...'}</code> as the first item in your messages array. Don't mix instructions into the user role.",
+          gemini: "Gemini API: use <code>system_instruction</code> as a separate field: <code>{system_instruction: '...', contents: [...]}</code>. Not all Gemini models support it — check your version.",
+          other: "Almost all LLM APIs distinguish system instructions from user messages. Check your provider's docs for the equivalent of a 'system prompt' parameter — it's the right place for persistent rules."
+        }
       }
     ]
   },
@@ -256,19 +351,37 @@ const DATA = {
         label: "I described it in words — \"return JSON\", \"use bullets\"",
         title: "Show, don't tell",
         body: "Demonstrating format via a concrete example is <strong>5-10× more reliable than describing it</strong>. \"Return JSON\" leaves room for interpretation. A literal example doesn't. Add a complete example of exactly what you want.",
-        snippet: "// Instead of:\n\"Return a JSON object with name and score\"\n\n// Write:\n\"Return exactly this format:\n{\\\"name\\\": \\\"example\\\", \\\"score\\\": 0.85, \\\"reason\\\": \\\"one sentence\\\"}\""
+        snippet: "// Instead of:\n\"Return a JSON object with name and score\"\n\n// Write:\n\"Return exactly this format:\n{\\\"name\\\": \\\"example\\\", \\\"score\\\": 0.85, \\\"reason\\\": \\\"one sentence\\\"}\"",
+        modelNotes: {
+          claude: "Claude responds especially well to XML-tagged examples: <code>&lt;output_format&gt;{\"key\": \"value\"}&lt;/output_format&gt;</code>. The tags tell Claude the example is a format spec, not content to respond to.",
+          gpt4: "GPT-4 newer models support <code>response_format: {type: 'json_schema', json_schema: {...}}</code> for guaranteed JSON — more reliable than prompt-based examples for structured output.",
+          gemini: "Gemini 1.5+ supports <code>response_schema</code> in generation config — define the exact JSON structure and Gemini enforces it regardless of what the prompt says.",
+          other: "Show-don't-tell works across all models. Examples are unambiguous where descriptions aren't. If your provider supports schema-based output, prefer that over prompt examples."
+        }
       },
       {
         label: "I showed an example but the model still gets it wrong",
         title: "Move example adjacent to the output instruction",
         body: "Recency matters. If your example is near the top and the output instruction is at the bottom, the model may not connect them. <strong>Put the example immediately before or after the instruction to produce output.</strong>",
-        snippet: "// End of your prompt:\n\"Analyze the text above.\nReturn your result in exactly this format:\n{\\\"sentiment\\\": \\\"positive|negative|neutral\\\",\n \\\"score\\\": 0.0-1.0,\n \\\"key_phrase\\\": \\\"quote from text\\\"}\""
+        snippet: "// End of your prompt:\n\"Analyze the text above.\nReturn your result in exactly this format:\n{\\\"sentiment\\\": \\\"positive|negative|neutral\\\",\n \\\"score\\\": 0.0-1.0,\n \\\"key_phrase\\\": \\\"quote from text\\\"}\"",
+        modelNotes: {
+          claude: "For Claude, the strongest pattern: put your format instruction at the very end with the example immediately above it — then the first word of your task. Recency + adjacency. Both matter.",
+          gpt4: "Wrap the example in a clear demonstration pair: 'Input: [example_input] → Output: [example_output]. Now process: [real_input]'. The mapping is explicit.",
+          gemini: "Gemini responds well to labeled few-shot examples: 'Example 1 input: [...] Example 1 output: [...]' — the 'Example N' label helps Gemini recognize the pattern as a template.",
+          other: "Recency is the key principle across all models. Move the example as close as possible to where you ask for output — ideally immediately before the task instruction."
+        }
       },
       {
         label: "The model wraps output in markdown/code blocks I don't want",
         title: "Explicitly prohibit markdown wrapping",
         body: "Models trained on chat interfaces default to markdown formatting — code gets wrapped in triple backticks, JSON gets annotated. <strong>Forbid it directly.</strong> \"Don't use markdown\" isn't enough; be specific about what you do want.",
-        snippet: "Return raw JSON only.\nDo not wrap in code blocks.\nDo not use markdown.\nDo not include ```json or ``` markers.\nStart your response with { and end with }."
+        snippet: "Return raw JSON only.\nDo not wrap in code blocks.\nDo not use markdown.\nDo not include ```json or ``` markers.\nStart your response with { and end with }.",
+        modelNotes: {
+          claude: "Claude 3+ defaults to markdown in chat contexts. The prompt fix works reliably. In the API, Claude is less opinionated by default — if you're seeing wrapping via API, it's usually a system prompt issue.",
+          gpt4: "Set <code>response_format: {\"type\": \"json_object\"}</code> in your API call (GPT-4-turbo and later). This is more reliable than prompt prohibition — the API enforces raw JSON at the infrastructure level.",
+          gemini: "Set <code>response_mime_type: 'application/json'</code> in your generation config. This prevents markdown wrapping entirely for JSON responses — no prompt instruction needed.",
+          other: "Markdown wrapping is a trained behavior from chat interfaces, common to most RLHF models. Explicit prohibition plus 'start with {' is the universal fix when no API-level parameter exists."
+        }
       }
     ]
   },
@@ -279,19 +392,37 @@ const DATA = {
         label: "It makes up facts that aren't in my context",
         title: "Constrain to provided context",
         body: "Without explicit instruction, the model uses its training knowledge freely — which includes outdated, wrong, or fabricated information. <strong>Ground it explicitly: only use what's provided.</strong>",
-        snippet: "Answer only using the information provided below.\nIf the answer is not in the context, say exactly: \"I don't have enough information to answer this.\"\nDo not use outside knowledge.\n\nContext:\n{{your_context_here}}\n\nQuestion: {{question}}"
+        snippet: "Answer only using the information provided below.\nIf the answer is not in the context, say exactly: \"I don't have enough information to answer this.\"\nDo not use outside knowledge.\n\nContext:\n{{your_context_here}}\n\nQuestion: {{question}}",
+        modelNotes: {
+          claude: "Claude's training makes it responsive to grounding instructions. Try: 'Cite the exact sentence from the context that supports your answer. Then give your answer based only on that sentence.' Requiring a quote first reduces generation from training data.",
+          gpt4: "GPT-4 responds well to 'quote first, then answer': 'First quote the relevant passage from the context. Then answer based only on that passage.' The chain-of-custody makes fabrication harder.",
+          gemini: "Same quote-first pattern works for Gemini. Also effective: 'If you cannot find support in the provided text, respond only with: NOT FOUND.' Gemini follows explicit fallback instructions reliably.",
+          other: "The quote-before-answer pattern works across all models. Requiring a concrete anchor before generating an answer makes fabrication structurally harder."
+        }
       },
       {
         label: "It invents citations, URLs, or source names",
         title: "Explicitly forbid invented references",
         body: "Citation hallucination is a specific, well-documented failure mode. Models confidently produce realistic-looking but completely fabricated URLs, paper titles, and author names. <strong>Generic \"don't hallucinate\" instructions don't stop this — you need an explicit reference instruction.</strong>",
-        snippet: "Do not cite sources, URLs, paper titles, or author names unless they are explicitly provided in the context above.\nIf you don't have a source, write \"[source not provided]\".\nDo not invent or guess at references."
+        snippet: "Do not cite sources, URLs, paper titles, or author names unless they are explicitly provided in the context above.\nIf you don't have a source, write \"[source not provided]\".\nDo not invent or guess at references.",
+        modelNotes: {
+          claude: "Claude's training reduces citation hallucination somewhat, but explicit instruction is still required. 'If you cannot find a reference verbatim in the provided context, write [NOT IN CONTEXT]' is more effective than generic 'don't hallucinate'.",
+          gpt4: "GPT-4 is particularly prone to confident URL and arXiv DOI fabrication. Be very specific: 'Do not fabricate URLs, DOIs, paper titles, or author names. For missing citations, write [CITATION NEEDED].'",
+          gemini: "Same targeted prohibition works for Gemini. The key is naming the exact categories to prohibit — vague instructions to 'not make things up' are ineffective for citation-specific hallucination.",
+          other: "Citation hallucination is universal across current LLMs. Specific prohibitions targeting each type (URLs, DOIs, names) are more effective than general hallucination warnings."
+        }
       },
       {
         label: "It adds unrequested details that aren't true",
         title: "Add a scope-limiting closing instruction",
         body: "Models err toward helpfulness — they add context, examples, and elaboration even when you didn't ask. A closing constraint at the end of the prompt (where recency is highest) limits scope effectively.",
-        snippet: "// Add at the very end of your prompt:\nAnswer only the specific question asked.\nDo not add background, context, related topics, or suggestions.\nDo not elaborate beyond what is asked.\nIf the question is ambiguous, ask for clarification instead of guessing."
+        snippet: "// Add at the very end of your prompt:\nAnswer only the specific question asked.\nDo not add background, context, related topics, or suggestions.\nDo not elaborate beyond what is asked.\nIf the question is ambiguous, ask for clarification instead of guessing.",
+        modelNotes: {
+          claude: "Claude trends verbose and thorough — it adds context as a default. Also effective: 'Answer in exactly [N] sentences. Stop after [N] sentences regardless of what might be useful to add.' Claude's instruction-following makes hard counts work well.",
+          gpt4: "Temperature 0.1–0.3 + scope limiter is more effective than either alone for GPT-4. Low temperature reduces the creative tendency to elaborate; the prompt instruction focuses scope.",
+          gemini: "Gemini responds well to word-count constraints: 'Your response must be under [N] words. Count before responding.' The explicit self-check instruction is surprisingly effective.",
+          other: "Explicit scope constraints plus low temperature is the universal combination. Models default to elaboration because it's trained as helpfulness — explicit instruction overrides this."
+        }
       }
     ]
   },
@@ -302,19 +433,37 @@ const DATA = {
         label: "Multiple sequential steps — write, then summarize, then reformat",
         title: "Break into separate API calls",
         body: "Multi-step tasks compound errors — if step 2 goes wrong, steps 3 through N inherit the mistake, and you get no visibility into where it broke. <strong>Use separate calls, passing the output of each as input to the next.</strong> This also lets you inspect intermediate results.",
-        snippet: "// Call 1:\n\"Write a first draft: {{input}}\"\n\n// Call 2 (using output of Call 1):\n\"Summarize this draft in 3 bullet points: {{draft}}\"\n\n// Call 3 (using output of Call 2):\n\"Format these bullets as JSON: {{bullets}}\""
+        snippet: "// Call 1:\n\"Write a first draft: {{input}}\"\n\n// Call 2 (using output of Call 1):\n\"Summarize this draft in 3 bullet points: {{draft}}\"\n\n// Call 3 (using output of Call 2):\n\"Format these bullets as JSON: {{bullets}}\"",
+        modelNotes: {
+          claude: "Claude's large context (200K) tempts you to do everything in one call. Resist it. Separate calls give you checkpoints. When chaining, include a brief 'previous step result:' summary rather than dumping the full prior output.",
+          gpt4: "GPT-4's function/tool calling is designed for this pattern — define each step as a tool call so the model must return structured intermediate results you can validate before continuing.",
+          gemini: "Same chaining principle applies. Gemini's large context doesn't eliminate the compounding-error problem — you still want checkpoints between logical steps.",
+          other: "Separate API calls for sequential steps is universally applicable. Checkpoints prevent error compounding and make debugging much easier."
+        }
       },
       {
         label: "One complex step requiring many constraints at once",
         title: "Add chain-of-thought before the answer",
         body: "When a task requires holding many constraints simultaneously, asking the model to <strong>reason through each constraint before writing the answer</strong> dramatically improves compliance. The reasoning step is cheap; the improvement is significant.",
-        snippet: "Before answering, list each constraint from the instructions above and confirm you will follow it.\nThen write your answer under the header \"Answer:\".\n\nExample:\nConstraints check:\n- Format: JSON ✓\n- Max length: under 100 words ✓\n- Tone: formal ✓\n\nAnswer:\n{...}"
+        snippet: "Before answering, list each constraint from the instructions above and confirm you will follow it.\nThen write your answer under the header \"Answer:\".\n\nExample:\nConstraints check:\n- Format: JSON ✓\n- Max length: under 100 words ✓\n- Tone: formal ✓\n\nAnswer:\n{...}",
+        modelNotes: {
+          claude: "Claude responds especially well to XML-tagged thinking: 'Write your constraint check in <code>&lt;thinking&gt;</code> tags, then write your answer outside them.' The tags separate reasoning from output cleanly.",
+          gpt4: "GPT-4 o1/o3 do extended thinking natively. For standard GPT-4, explicit CoT instruction ('reason step by step before answering') is effective and well-validated.",
+          gemini: "Gemini's Thinking models (gemini-2.0-flash-thinking) do this natively. For standard Gemini, explicit CoT in the prompt works the same way.",
+          other: "Chain-of-thought has been validated across all major LLMs. 'Think step by step before answering' is the universal activation phrase."
+        }
       },
       {
         label: "Works at first but drifts after several conversation turns",
         title: "Send a compressed context summary each turn",
         body: "In long conversations, old context accumulates noise — irrelevant earlier messages crowd out the instructions that matter. <strong>At the start of each new turn, send a fresh summary of what's relevant</strong> rather than relying on the full history.",
-        snippet: "// Add to the start of each new turn:\n\"Current task: {{what_you_need_now}}\nKey constraints that apply: {{list_rules}}\nPrior context (summary): {{2-3_sentence_summary}}\n\nNew request: {{user_input}}\""
+        snippet: "// Add to the start of each new turn:\n\"Current task: {{what_you_need_now}}\nKey constraints that apply: {{list_rules}}\nPrior context (summary): {{2-3_sentence_summary}}\n\nNew request: {{user_input}}\"",
+        modelNotes: {
+          claude: "Claude's large context helps but doesn't eliminate drift. Fresh context summary per turn is still better than relying on full history — relevant signal to noise ratio matters more than raw context size.",
+          gpt4: "OpenAI's Assistants API manages context windows automatically. If you're using raw chat completions, active context management (summarize and re-inject) is your responsibility.",
+          gemini: "Gemini 1.5 Pro's 1M context is an advantage, but active management is still better practice. Summarize and re-inject rather than accumulate history indefinitely.",
+          other: "Context drift is universal. Fresh summaries per turn beat long history regardless of model or context window size."
+        }
       }
     ]
   },
@@ -325,19 +474,37 @@ const DATA = {
         label: "The format changes — sometimes JSON, sometimes prose",
         title: "Add both an example and a format lock",
         body: "Format inconsistency usually means the prompt isn't anchored enough. A single instruction isn't sufficient — <strong>you need an example plus an explicit prohibition on alternatives.</strong>",
-        snippet: "Return ONLY valid JSON. Not prose. Not mixed format. Not JSON inside a sentence.\nStart with { and end with }.\n\nRequired format:\n{\"label\": \"string\", \"score\": 0.0-1.0, \"reason\": \"one sentence\"}"
+        snippet: "Return ONLY valid JSON. Not prose. Not mixed format. Not JSON inside a sentence.\nStart with { and end with }.\n\nRequired format:\n{\"label\": \"string\", \"score\": 0.0-1.0, \"reason\": \"one sentence\"}",
+        modelNotes: {
+          claude: "Claude responds well to schema-in-tags: put your required format in <code>&lt;required_format&gt;&lt;/required_format&gt;</code> at the bottom of your system prompt. Claude treats XML-tagged schemas as high-priority constraints.",
+          gpt4: "Use <code>response_format: {type: 'json_object'}</code> (GPT-4-turbo+) — this enforces raw JSON at the API level and is more reliable than any prompt instruction.",
+          gemini: "Use <code>response_schema</code> in generation config — define the exact structure, and Gemini guarantees compliance regardless of prompt wording.",
+          other: "API-level format enforcement (when available) is always more reliable than prompt-level. Check your provider's docs for schema or response_format parameters."
+        }
       },
       {
         label: "The content varies wildly for the same input",
         title: "Set temperature to 0",
         body: "Higher temperatures introduce randomness intentionally. For deterministic tasks — extraction, classification, formatting — <strong>temperature=0 eliminates most variance.</strong> If you can't control temperature, add a directive.",
-        snippet: "// In your API call:\n{\"temperature\": 0}\n\n// If temperature isn't configurable, add to prompt:\n\"Use the most straightforward, literal interpretation of the input.\nDo not be creative or add variation. Be precise and consistent.\""
+        snippet: "// In your API call:\n{\"temperature\": 0}\n\n// If temperature isn't configurable, add to prompt:\n\"Use the most straightforward, literal interpretation of the input.\nDo not be creative or add variation. Be precise and consistent.\"",
+        modelNotes: {
+          claude: "Anthropic API: <code>temperature: 0</code> in the request body. Claude at temperature=0 produces highly consistent outputs for factual and formatting tasks.",
+          gpt4: "OpenAI API: <code>temperature: 0</code> in the request body. Also check the <code>seed</code> parameter (available in recent versions) for full determinism.",
+          gemini: "Google AI: <code>temperature: 0</code> in <code>generation_config</code>. Also supports <code>candidate_count: 1</code> for single deterministic outputs.",
+          other: "Temperature=0 is available in virtually all LLM APIs. Check your provider's parameter documentation — it's the most direct fix for output variance."
+        }
       },
       {
         label: "Small prompt changes cause unexpectedly large output changes",
         title: "Your prompt is ambiguous — the model is guessing intent",
         body: "When small wording changes cause large output changes, the model is in a sensitive region where it's interpolating between interpretations. <strong>Make the intent explicit.</strong> Add a clear statement of purpose and a rule for ambiguous cases.",
-        snippet: "// Add near the top of your prompt:\n\"The goal of this prompt is to [specific, concrete goal].\nInterpret all ambiguous inputs as [specific default rule].\nIf you're unsure how to apply an instruction, choose the more [conservative/specific/literal] interpretation.\""
+        snippet: "// Add near the top of your prompt:\n\"The goal of this prompt is to [specific, concrete goal].\nInterpret all ambiguous inputs as [specific default rule].\nIf you're unsure how to apply an instruction, choose the more [conservative/specific/literal] interpretation.\"",
+        modelNotes: {
+          claude: "Claude is sensitive to instruction framing and ordering. If small wording changes shift outputs dramatically, add a <code>&lt;goal&gt;</code> block at the top defining the task purpose. Goal anchoring reduces Claude's sensitivity to surface-level variation.",
+          gpt4: "GPT-4's sensitivity decreases at lower temperatures with explicit instructions. Adding 'When in doubt, prefer the more literal interpretation' is particularly effective for GPT-4.",
+          gemini: "Gemini 1.5 benefits from explicit disambiguation rules: 'If this instruction seems to conflict with that instruction, follow [X].' Explicit conflict resolution reduces sensitivity.",
+          other: "Prompt sensitivity indicates latent ambiguity. Explicit purpose statements and disambiguation rules reduce sensitivity across all models."
+        }
       }
     ]
   },
@@ -348,19 +515,37 @@ const DATA = {
         label: "It says it can't help with this topic at all",
         title: "Add context that makes the intent clear",
         body: "Models refuse less when they understand genuine purpose. This isn't a jailbreak — it's giving the model the context it needs to make a good judgment. <strong>Name the legitimate use case explicitly.</strong>",
-        snippet: "Context: This is for [medical education / security research / legal analysis / academic study / professional training].\nThe intended audience is [professionals / researchers / students].\n\n[Your actual task here]\n\nFocus on factual, educational information."
+        snippet: "Context: This is for [medical education / security research / legal analysis / academic study / professional training].\nThe intended audience is [professionals / researchers / students].\n\n[Your actual task here]\n\nFocus on factual, educational information.",
+        modelNotes: {
+          claude: "Claude is trained with Constitutional AI, making some refusals harder to override. Context-setting helps, but if Claude still refuses, try rephrasing toward the analytical dimension: 'analyze' rather than 'explain how to', 'describe the mechanism' rather than 'write instructions for'.",
+          gpt4: "GPT-4 responds well to professional context in the <code>system</code> role. Put the context there, not in the user message — system-role context is weighted more heavily for safety assessments.",
+          gemini: "Gemini's safety settings are configurable via API: <code>safety_settings</code> allows per-category thresholds. For professional/research use cases, adjusting <code>HARM_BLOCK_THRESHOLD</code> may be appropriate.",
+          other: "Context-setting for intent is the universal approach. If refusal persists, rephrase to focus on the educational/analytical dimension rather than the operational one."
+        }
       },
       {
         label: "It says it can help, but adds disclaimers instead of doing the task",
         title: "Explicitly prohibit the hedge",
         body: "Models add disclaimers and caveats by default — it's a trained behavior. <strong>Explicit instructions to skip them are highly effective.</strong> The model is capable of answering without them; it just needs permission.",
-        snippet: "// Add at the end of your prompt:\nDo not add disclaimers, caveats, warnings, or suggestions to consult a professional.\nDo not hedge with phrases like \"it depends\" or \"you should consider\".\nAnswer directly and completely.\nIf something is genuinely uncertain, say so plainly once, then continue."
+        snippet: "// Add at the end of your prompt:\nDo not add disclaimers, caveats, warnings, or suggestions to consult a professional.\nDo not hedge with phrases like \"it depends\" or \"you should consider\".\nAnswer directly and completely.\nIf something is genuinely uncertain, say so plainly once, then continue.",
+        modelNotes: {
+          claude: "Claude's disclaimer tendency persists even with prohibition. Adding use-case context helps: 'This is for [professional/research] use. No disclaimers are needed or wanted.' The explicit context reduces the perceived need.",
+          gpt4: "The explicit prohibition is quite effective for GPT-4, especially in the system prompt. Adding 'You are a direct, expert assistant who does not hedge' as a persona also reduces disclaimer frequency.",
+          gemini: "Gemini responds well to role framing at the start: 'You are an expert in [field]. Respond as an expert would, without disclaimers.' The role frame reduces default cautious behavior.",
+          other: "Explicit prohibition is the universal fix. Adding a professional context statement alongside the prohibition is more effective than either alone."
+        }
       },
       {
         label: "It does part of the task then stops or declines mid-response",
         title: "Break the task into smaller pieces",
         body: "Mid-response refusals suggest a specific portion of the task is triggering a safety check, not the whole task. <strong>Request just the first section; continue in follow-up calls.</strong> You can complete the full task this way.",
-        snippet: "// Instead of:\n\"Write a complete guide to X covering A, B, C, D, E\"\n\n// Use:\n\"Write the introduction to a guide on X. Stop after the introduction.\"\n// Then: \"Now write section A of this guide. The introduction was: {{intro}}\"\n// Continue for each section."
+        snippet: "// Instead of:\n\"Write a complete guide to X covering A, B, C, D, E\"\n\n// Use:\n\"Write the introduction to a guide on X. Stop after the introduction.\"\n// Then: \"Now write section A of this guide. The introduction was: {{intro}}\"\n// Continue for each section.",
+        modelNotes: {
+          claude: "Claude's mid-response stops are often triggered by a specific phrase or topic in a compound task. Breaking with explicit scoping ('Write only the first section on X. Stop before discussing Y.') isolates the trigger and usually allows completion.",
+          gpt4: "GPT-4 mid-response cutoffs are less frequent but follow the same pattern. Section-by-section requests with explicit stop instructions resolve most cases.",
+          gemini: "Same approach works for Gemini. The key insight: mid-response refusal means the model was willing to start — it's a scoping issue, not a topic-level block.",
+          other: "Mid-response refusals signal a specific trigger, not wholesale rejection. Decomposing to isolate the trigger is the universal debugging approach."
+        }
       }
     ]
   },
@@ -371,19 +556,37 @@ const DATA = {
         label: "Too verbose — essays when I want bullet points",
         title: "Specify a hard count, not 'be concise'",
         body: "\"Be concise\" is too vague — the model has its own definition of concise. <strong>Give a specific item count or word limit, and specify the starting format</strong> so there's no room for a preamble.",
-        snippet: "Respond in exactly 3 bullet points.\nEach bullet must be under 15 words.\nNo introduction. No conclusion. No preamble.\nStart your response immediately with the first bullet point (•)."
+        snippet: "Respond in exactly 3 bullet points.\nEach bullet must be under 15 words.\nNo introduction. No conclusion. No preamble.\nStart your response immediately with the first bullet point (•).",
+        modelNotes: {
+          claude: "Claude defaults to thorough. Hard counts work well but add an explicit violation frame: 'If you write more than 3 bullets, you have violated the instruction.' The explicit framing of excess as a violation is unusually effective with Claude.",
+          gpt4: "Temperature 0 + hard count is the most effective combination for GPT-4 length control. Also: 'Count your words/bullets before responding' activates a self-check that reduces excess.",
+          gemini: "Gemini responds well to character counts (often more precise than word counts): 'Your total response must be under [N] characters. No exceptions.'",
+          other: "Specific counts with a format-start instruction ('Start immediately with the first bullet') is the universal fix for verbosity."
+        }
       },
       {
         label: "Too vague — generic answers without specifics",
         title: "Request specifics and penalize abstraction",
         body: "Generic answers usually come from generic questions. But sometimes the model defaults to abstract language even when asked for specifics. <strong>Explicitly prohibit abstract language and require examples.</strong>",
-        snippet: "Be specific and concrete. Use numbers, names, and examples.\nIf you use words like \"good\", \"appropriate\", \"depends\", \"typically\", or \"generally\" — you must immediately follow with a specific example of what that means in this context.\nNo hedging. No vague advice."
+        snippet: "Be specific and concrete. Use numbers, names, and examples.\nIf you use words like \"good\", \"appropriate\", \"depends\", \"typically\", or \"generally\" — you must immediately follow with a specific example of what that means in this context.\nNo hedging. No vague advice.",
+        modelNotes: {
+          claude: "Claude produces detailed, grounded responses with explicit specificity requirements. Also effective: 'For every general claim you make, provide one specific example with a number or name. No abstract language without an anchor.'",
+          gpt4: "GPT-4 responds well to 'show your work' framing: 'For each point, include the specific data, example, or mechanism that supports it. No unsupported assertions.'",
+          gemini: "Gemini benefits from structured output requirements: 'For each recommendation, provide: what to do (specific action), why it works (specific mechanism), one concrete example with a number.'",
+          other: "Requiring examples for every abstraction is universally effective. Models default to general because it's lower risk — explicit requirement of the specific overrides this."
+        }
       },
       {
         label: "Too short — one-liners when I need depth",
         title: "Set an explicit minimum with required coverage",
         body: "Models default to the most efficient answer unless instructed otherwise. <strong>Give a minimum and name the specific dimensions you want covered</strong> — otherwise the model will pick the easiest angle and stop.",
-        snippet: "Give a thorough answer. Minimum 300 words.\nYour answer must cover:\n1. [First specific dimension]\n2. [Second specific dimension]\n3. [Third specific dimension]\n\nDo not stop until you've addressed all three."
+        snippet: "Give a thorough answer. Minimum 300 words.\nYour answer must cover:\n1. [First specific dimension]\n2. [Second specific dimension]\n3. [Third specific dimension]\n\nDo not stop until you've addressed all three.",
+        modelNotes: {
+          claude: "Claude's self-evaluation can be leveraged: 'Before finishing, rate your completeness on each required point (1–5). If any point is below 4, expand it.' This makes Claude actively check coverage before stopping.",
+          gpt4: "GPT-4 with slightly higher temperature (0.4–0.7) and explicit minimum + required topics balances depth and coherence. A persona also helps: 'You are a thorough expert who values comprehensive explanations.'",
+          gemini: "Gemini responds well to per-section word minimums rather than a total: 'Section 1: minimum 100 words. Section 2: minimum 100 words.' Granular targets are harder to shortcut.",
+          other: "Explicit topic list + minimum length is the universal fix. 'Be thorough' is too vague — specific required coverage is unambiguous."
+        }
       }
     ]
   }
@@ -391,7 +594,9 @@ const DATA = {
 
 let currentSym = null;
 let currentOpt = null;
+let currentModel = null;
 
+const modelPillsEl = document.getElementById('modelPills');
 const symptomsEl = document.getElementById('symptoms');
 const questionArea = document.getElementById('questionArea');
 const qText = document.getElementById('qText');
@@ -402,6 +607,38 @@ const dxBody = document.getElementById('dxBody');
 const dxSnippet = document.getElementById('dxSnippet');
 const copyBtn = document.getElementById('copyBtn');
 const resetBtn = document.getElementById('resetBtn');
+const modelNote = document.getElementById('modelNote');
+const modelNoteLabel = document.getElementById('modelNoteLabel');
+const modelNoteBody = document.getElementById('modelNoteBody');
+
+const MODEL_LABELS = {
+  claude: 'Claude-specific note',
+  gpt4: 'GPT-4 / ChatGPT note',
+  gemini: 'Gemini note',
+  other: 'Generic note'
+};
+
+modelPillsEl.addEventListener('click', e => {
+  const btn = e.target.closest('[data-model]');
+  if (!btn) return;
+  const model = btn.dataset.model;
+
+  if (currentModel === model) {
+    // deselect
+    btn.classList.remove('active');
+    currentModel = null;
+    modelNote.classList.remove('visible');
+    return;
+  }
+
+  document.querySelectorAll('.mpill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  currentModel = model;
+
+  if (diagnosisArea.classList.contains('visible') && currentSym !== null && currentOpt !== null) {
+    updateModelNote(currentSym, currentOpt);
+  }
+});
 
 symptomsEl.addEventListener('click', e => {
   const btn = e.target.closest('[data-sym]');
@@ -457,7 +694,6 @@ function showQuestion(sym) {
     </div>
   `).join('');
   questionArea.classList.remove('visible');
-  // force reflow for animation
   void questionArea.offsetWidth;
   questionArea.classList.add('visible');
 }
@@ -467,18 +703,27 @@ function showDiagnosis(sym, idx) {
   dxTitle.textContent = d.title;
   dxBody.innerHTML = d.body;
   dxSnippet.textContent = d.snippet;
+  updateModelNote(sym, idx);
   diagnosisArea.classList.remove('visible');
   void diagnosisArea.offsetWidth;
   diagnosisArea.classList.add('visible');
   setTimeout(() => diagnosisArea.scrollIntoView({behavior:'smooth', block:'nearest'}), 50);
 }
 
+function updateModelNote(sym, idx) {
+  const d = DATA[sym].opts[idx];
+  if (currentModel && d.modelNotes && d.modelNotes[currentModel]) {
+    modelNoteLabel.textContent = MODEL_LABELS[currentModel] || 'Model-specific note';
+    modelNoteBody.innerHTML = d.modelNotes[currentModel];
+    modelNote.classList.add('visible');
+  } else {
+    modelNote.classList.remove('visible');
+  }
+}
+
 function hideDiagnosis() {
   diagnosisArea.classList.remove('visible');
 }
 </script>
-
-<script data-goatcounter="https://autorunfun.goatcounter.com/count"
-        async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
