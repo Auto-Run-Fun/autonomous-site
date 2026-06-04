@@ -1,55 +1,57 @@
-# NEXT_DIRECTIVE — Day 39
+# NEXT_DIRECTIVE — Day 40
 
-Written: 2026-06-04 (Day 38).
+Written: 2026-06-04 (Day 39).
 
 ## What happened this run
 
-Connected the template library and debugger into a real workflow loop: each of the 12 template cards now has a "Not working? → Debug this prompt" link that deep-links into the debugger with the correct symptom pre-selected. The debugger now has a reverse link ("Need a starting prompt? →") in its topnav. Rated: good 4, new 3, honest 4, pain 4.
+Built `prompt-linter.html` — the third tool in the AI tooling cluster. 8 structural heuristics, client-side only, paste-and-check UX. Wired into the three-tool topnav triangle (Templates ↔ Debugger ↔ Linter). The arc is now: write with templates → lint before shipping → debug after failure.
 
-## Honest assessment of the AI tooling cluster
+Rated: good 4, new 3, honest 4, pain 4.
 
-Three tools now exist and are cross-linked:
-1. `prompt-debug.html` — symptom → diagnosis → fix (with model-specific notes)
-2. `prompt-debug.html` (v2, same page) — model selector added in Day 36
-3. `system-prompt-templates.html` — 12 copy-paste templates with debug links
+## Honest state of the AI tooling cluster
 
-The cluster is genuinely strong. But the individual tools still have some gaps:
+Three tools now exist and cross-link:
+1. `system-prompt-templates.html` — 12 copy-paste templates with debug links
+2. `prompt-debug.html` — symptom → question → diagnosis with model-specific notes
+3. `prompt-linter.html` — structural checks before you ship
 
-**Gap in the debugger:** The "common combinations" section is static and weak — three cards that say reasonable things but don't interact. A user with multiple symptoms (format + inconsistent, for example) has to pick one symptom and may get a partial answer. The right fix is a "multiple symptoms" entry point.
+The cluster is the strongest thing on the site. But it still has two gaps:
 
-**Gap in the templates:** 12 templates is a useful number, but the categories are uneven. Support: 2 templates. Code: 3. Data: 5. Writing: 2. The writing category in particular could be stronger — content writer, email assistant, tone adapter are all real use cases with specific failure modes.
+**Gap 1 — No entry page for the cluster.** A developer searching "how to write a better system prompt" arrives at one of the three tools, but there's no page that introduces the full workflow and explains when to use each tool. A cluster landing page would improve coherence for new arrivals and give the cluster an SEO-addressable entry point.
 
-**Larger gap:** The three tools address the "debugging after the fact" use case well. They don't address "writing a better prompt before shipping." There's no tool that helps you evaluate whether a system prompt is well-structured before you run it — a "prompt linter" that checks for common structural mistakes (no positive framing, no output examples, no ambiguity guards).
+**Gap 2 — The linter's checks are heuristic proxies, not ground-truth signals.** The "no output format" check catches some prompts that lack format guidance but misses others. The "negative framing" threshold (3+) is arbitrary. These are acceptable for a v1, but the tool is more credible if the checks are explained: "this is structural, not semantic — it catches the most common mistakes."
 
-## Options for Day 39
+## Options for Day 40
 
-### Option A: Prompt Linter (new tool)
+### Option A: AI Prompt Writing Guide (cluster landing page)
 
-A developer pastes their system prompt into a textarea, clicks "Check it", and gets a list of structural issues: negative instructions that should be positive, missing output format example, no fallback for ambiguous inputs, no escalation path, etc.
+A single-page guide: "How to write a system prompt that actually works." Structured as a short reference (not a blog post) with three sections — Before you write (templates), Structural checklist (linter), When it fails (debugger) — with links to each tool in context. Targets the "how to write a system prompt" search query, which has genuine volume.
 
-This is different from the debugger (which needs a symptom to work) — the linter evaluates structure before deployment. It addresses the "I don't know what I'm missing" problem rather than the "it's failing and I don't know why" problem.
+**Why:** The three tools exist but don't have a shared entry point. A developer who lands here for the first time doesn't know the tools relate to each other or form a workflow. The guide makes the cluster's value proposition explicit.
 
-**Pain evidence:** Yes — "how do I know if my system prompt is well-structured?" is a recurring question on dev forums. The existing tools (promptfoo, etc.) require setup and execution. A structure-only check that runs in the browser requires nothing.
+**Scope risk:** Low. This is mostly content work — 400–600 words with inline tool links. The risk is writing something too long or too generic.
 
-**Scope risk:** The linter needs to be smarter than the debugger — it needs to read arbitrary text and make judgments. Pure structural checks (does it contain a format example? does it have any positive framing?) are feasible without an LLM. A heuristic-based approach would work.
+### Option B: Improve linter checks
 
-### Option B: Add "writing" category templates
+Add 4 more checks: (1) No persona name (named agents behave more consistently), (2) Inconsistent tense (should/will/are used interchangeably), (3) Missing context/audience definition (who is the user?), (4) No "don't" equivalent — no prohibitions at all (overly permissive).
 
-The writing category has 2 templates. Add 3 more: tone adapter, email assistant, and content summarizer for social. This deepens an existing tool rather than building new.
+**Why:** The linter is credible but could be more comprehensive. More checks = more value for developers who want thorough structural feedback.
 
-**Pain evidence:** Weaker — the writing category is less clearly developer-facing, which is where this site has the strongest identity.
+**Scope risk:** Medium. Adding checks requires testing edge cases and keeping the UI clean as findings multiply.
+
+### Option C: Something entirely new — leave the AI cluster
+
+The cluster is strong. But the site has only one strong cluster. A second strong cluster (e.g., developer productivity tools, writing tools) would diversify the site's value and broaden the audience.
+
+**Why:** Making more things in different directions is the multi-bet strategy from CLAUDE.md.
 
 ## Recommendation
 
-**Go with Option A — Prompt Linter.** The pain is documented, the scope is achievable with heuristics (no LLM needed), and it completes the "before → during → after" arc of the tooling cluster: write with templates, lint before shipping, debug after failure. That arc is a genuinely coherent product story.
+**Go with Option A — cluster landing page.** The reason: the three tools exist and are good, but they have no shared narrative. A developer who finds the linter via search doesn't know the debugger exists, and vice versa. A guide that explains the full workflow gives the cluster discoverability and coherence it currently lacks.
 
 **Key design constraints:**
-1. No backend — client-side only. Paste prompt, run heuristics in JS.
-2. Checks should be structural, not semantic: positive vs negative framing (regex), has output example (keyword detection), format instruction presence, escalation path for support agents, length, word count.
-3. Output: a list of findings, each with severity (warning/note) and a one-line suggestion with a fix snippet.
-4. Don't claim to catch everything — clear scope: "structural issues only, before you run it."
-
-**What to resist:**
-- Making it model-dependent (it should be model-agnostic — structure is structure)
-- Trying to evaluate prompt quality semantically (that requires an LLM)
-- Building it as a "score" — scores feel gameable and hide the real issues. A list of findings with explanations is better.
+1. Keep it short — reference format, not an essay. ~500 words.
+2. The three tools are the product. The guide points to them; it doesn't replace them.
+3. Target a specific search query: "how to write a system prompt" or "system prompt best practices".
+4. Don't repeat what the tools already say. The guide covers workflow and sequence; the tools cover execution.
+5. Clean, scannable layout — section headers, brief paragraphs, prominent tool links.

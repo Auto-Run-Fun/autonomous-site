@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>System Prompt Linter — Check your LLM prompt for structural issues</title>
+<meta name="description" content="Paste your system prompt and check it for structural issues before you ship it. Client-side structural analysis: role definition, output format, fallback instructions, placeholder text, and more.">
+<link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/prompt-linter.html">
+<meta property="og:title" content="System Prompt Linter — Structural checks before you ship">
+<meta property="og:description" content="Paste your system prompt, get a list of structural issues in seconds. No backend, no API key — runs in your browser.">
+<meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/prompt-linter.html">
+<meta name="twitter:card" content="summary">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "System Prompt Linter",
+  "description": "Client-side structural checker for LLM system prompts. Checks for missing role definition, output format, fallback instructions, placeholder text, and weak instruction language.",
+  "url": "https://auto-run-fun.github.io/autonomous-site/prompt-linter.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (browser)",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-text-size-adjust:100%}
+body{background:#0b0b10;color:#e8e8f0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.6;min-height:100vh;padding:0 16px}
+
+a{color:#7eb8f7;text-decoration:none}
+a:hover{text-decoration:underline}
+code{font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-size:.85em;background:#131320;padding:1px 5px;border-radius:3px;color:#a8d8a8}
+pre{font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-size:.82em;background:#131320;border:1px solid #252535;border-radius:6px;padding:14px 16px;color:#a8d8a8;white-space:pre-wrap;word-break:break-word;line-height:1.55;margin-top:10px;position:relative}
+
+.wrap{max-width:740px;margin:0 auto;padding:40px 0 80px}
+
+.topnav{margin-bottom:32px;font-size:.875rem;color:#888}
+.topnav a{color:#7eb8f7}
+.topnav .sep{margin:0 6px;opacity:.4}
+
+h1{font-size:1.75rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
+.subtitle{color:#aaa;font-size:1rem;margin-bottom:8px;max-width:560px}
+.scope-note{font-size:.82rem;color:#666;margin-bottom:32px;max-width:560px;font-style:italic}
+
+/* Input area */
+.input-section{margin-bottom:24px}
+.input-label{font-size:.75rem;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.word-count{font-size:.8rem;color:#555;font-weight:400;letter-spacing:0;text-transform:none}
+#promptInput{
+  width:100%;min-height:220px;background:#131320;border:1px solid #2a2a3d;border-radius:8px;
+  color:#e8e8f0;font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;
+  font-size:.85rem;line-height:1.6;padding:16px;resize:vertical;
+  transition:border-color .15s;
+}
+#promptInput:focus{outline:none;border-color:#4a4a7d}
+#promptInput::placeholder{color:#444}
+
+.btn-row{display:flex;gap:10px;margin-top:12px;align-items:center}
+.btn-check{
+  background:#2244aa;border:none;border-radius:7px;
+  color:#e8e8f0;font-size:.95rem;font-weight:600;padding:10px 24px;cursor:pointer;
+  transition:background .15s;
+}
+.btn-check:hover{background:#2d55cc}
+.btn-check:active{background:#1a3388}
+.btn-clear{
+  background:none;border:1px solid #2a2a3d;border-radius:7px;
+  color:#666;font-size:.9rem;padding:9px 16px;cursor:pointer;
+  transition:border-color .15s,color .15s;
+}
+.btn-clear:hover{border-color:#4a4a7d;color:#aaa}
+
+/* Results */
+.results{display:none}
+.results.visible{display:block;animation:fadein .2s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+.result-summary{
+  border-radius:8px;padding:16px 20px;margin-bottom:20px;
+  font-size:.95rem;font-weight:600;
+}
+.result-summary.clean{background:#0d1f0d;border:1px solid #1e4d1e;color:#6ac46a}
+.result-summary.issues{background:#1a1320;border:1px solid #3d2a4d;color:#e8e8f0}
+.result-summary .summary-count{font-size:1.1rem;margin-bottom:4px}
+.result-summary .summary-sub{font-size:.82rem;font-weight:400;color:#aaa}
+
+.finding{
+  background:#131320;border:1px solid #2a2a3d;border-radius:8px;
+  padding:20px;margin-bottom:12px;
+}
+.finding.warning{border-left:3px solid #e8a04a}
+.finding.note{border-left:3px solid #7eb8f7}
+
+.finding-header{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
+.finding-icon{font-size:1rem;margin-top:2px;flex-shrink:0}
+.finding-title-block{}
+.finding-severity{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px}
+.finding.warning .finding-severity{color:#e8a04a}
+.finding.note .finding-severity{color:#7eb8f7}
+.finding-title{font-size:.95rem;font-weight:600;color:#e8e8f0}
+
+.finding-desc{font-size:.88rem;color:#999;line-height:1.55;margin-bottom:14px}
+
+.fix-label{font-size:.75rem;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center}
+.copy-fix{
+  background:none;border:1px solid #252535;border-radius:4px;
+  color:#666;font-size:.7rem;padding:2px 8px;cursor:pointer;
+  transition:border-color .15s,color .15s;
+  text-transform:none;letter-spacing:0;font-weight:400;
+}
+.copy-fix:hover{border-color:#4a4a7d;color:#aaa}
+.copy-fix.copied{color:#6ac46a;border-color:#1e4d1e}
+
+/* Footer links */
+.tool-links{margin-top:40px;padding-top:24px;border-top:1px solid #1a1a2d;display:flex;flex-direction:column;gap:12px}
+.tool-link-card{background:#131320;border:1px solid #2a2a3d;border-radius:8px;padding:14px 18px;display:flex;justify-content:space-between;align-items:center}
+.tool-link-card .tl-name{font-weight:600;font-size:.9rem;color:#e8e8f0}
+.tool-link-card .tl-desc{font-size:.8rem;color:#777;margin-top:2px}
+.tool-link-card a{font-size:.82rem;color:#7eb8f7;flex-shrink:0;margin-left:16px}
+
+.footer{margin-top:48px;padding-top:16px;border-top:1px solid #1a1a2d;font-size:.8rem;color:#555;text-align:center}
+.footer a{color:#666}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topnav">
+    <a href="./">← Home</a>
+    <span class="sep">·</span>
+    <a href="./system-prompt-templates.html">Templates</a>
+    <span class="sep">·</span>
+    <a href="./prompt-debug.html">Debugger</a>
+  </div>
+
+  <h1>System Prompt Linter</h1>
+  <p class="subtitle">Paste your system prompt. Get a list of structural issues before you ship it.</p>
+  <p class="scope-note">Structural checks only — role definition, output format, fallback instructions, placeholder text, instruction language. Not a quality score; not semantic analysis. What it finds is real. What it misses may also be real.</p>
+
+  <div class="input-section">
+    <div class="input-label">
+      Your system prompt
+      <span class="word-count" id="wordCount">0 words</span>
+    </div>
+    <textarea id="promptInput" placeholder="You are a customer support agent for Acme Corp. Your job is to help users with billing questions and account issues.
+
+Respond in a friendly, professional tone. If you don't know the answer, say so honestly and offer to escalate to a human agent.
+
+Always respond in plain text, 2–4 sentences unless the user explicitly asks for more detail."></textarea>
+    <div class="btn-row">
+      <button class="btn-check" id="checkBtn" onclick="runLint()">Check it</button>
+      <button class="btn-clear" onclick="clearAll()">Clear</button>
+    </div>
+  </div>
+
+  <div class="results" id="results">
+    <div class="result-summary" id="resultSummary"></div>
+    <div id="findingsList"></div>
+  </div>
+
+  <div class="tool-links">
+    <div class="tool-link-card">
+      <div>
+        <div class="tl-name">System Prompt Templates</div>
+        <div class="tl-desc">12 copy-paste templates for common agent types — support, code, data, writing</div>
+      </div>
+      <a href="./system-prompt-templates.html">Browse templates →</a>
+    </div>
+    <div class="tool-link-card">
+      <div>
+        <div class="tl-name">AI Prompt Debugger</div>
+        <div class="tl-desc">Pick your symptom — ignores instructions, wrong format, hallucination — get a specific fix</div>
+      </div>
+      <a href="./prompt-debug.html">Debug a prompt →</a>
+    </div>
+  </div>
+
+  <div class="footer">
+    <a href="./">Ship This Weekend</a> — tools for developers, built autonomously
+  </div>
+
+</div>
+
+<script>
+const input = document.getElementById('promptInput');
+const wordCountEl = document.getElementById('wordCount');
+
+input.addEventListener('input', () => {
+  const w = wordCount(input.value);
+  wordCountEl.textContent = w + ' word' + (w === 1 ? '' : 's');
+});
+
+function wordCount(text) {
+  return text.trim() ? text.trim().split(/\s+/).length : 0;
+}
+
+function clearAll() {
+  input.value = '';
+  wordCountEl.textContent = '0 words';
+  document.getElementById('results').classList.remove('visible');
+}
+
+// ─── Check definitions ───────────────────────────────────────────────────────
+
+const CHECKS = [
+
+  {
+    id: 'too_short',
+    severity: 'warning',
+    title: 'Prompt is very short',
+    check(text, words) {
+      return words > 0 && words < 50;
+    },
+    desc(text) {
+      const w = wordCount(text);
+      return `At ${w} words, this prompt is probably too sparse to produce consistent behavior. A useful system prompt typically needs a role definition, at least one behavioral rule, and an output format anchor — that alone is usually 60–100 words.`;
+    },
+    fix: `You are a [specific role]. Your job is to [task].
+
+Respond in [format — plain text / bullet list / JSON]. Keep responses [brief / under 200 words].
+
+If asked about something outside [your scope], say: "I can't help with that — I'm focused on [topic]."`
+  },
+
+  {
+    id: 'no_role',
+    severity: 'warning',
+    title: 'No role definition found',
+    check(text) {
+      const lower = text.toLowerCase();
+      return !(
+        lower.includes('you are') ||
+        lower.includes("you're a") ||
+        lower.includes("you're an") ||
+        lower.includes('your role') ||
+        lower.includes('your name is') ||
+        lower.includes('act as') ||
+        lower.includes('acting as') ||
+        lower.includes('you will act')
+      );
+    },
+    desc() {
+      return 'Prompts without a role definition tend to produce generic, inconsistent responses. A role anchors the model\'s persona and frames every subsequent instruction. Without it, "be concise" means different things to different model runs.';
+    },
+    fix: `You are a [specific role] for [company / product / context].
+
+Your job is to [specific task].`
+  },
+
+  {
+    id: 'no_output_format',
+    severity: 'warning',
+    title: 'No output format instruction',
+    check(text) {
+      const lower = text.toLowerCase();
+      const formatKeywords = [
+        'format', 'respond in', 'respond with', 'output should', 'return a',
+        'return json', 'as json', 'as markdown', 'as a list', 'in the format',
+        'structured as', 'structure your', 'reply in', 'reply with',
+        'your response should', 'responses should be', 'answer in',
+        'plain text', 'bullet', 'numbered list', 'markdown',
+        'json object', 'xml', 'html', 'code block'
+      ];
+      return !formatKeywords.some(k => lower.includes(k));
+    },
+    desc() {
+      return 'Without a format instruction, the model decides the response structure on each call — which means it will vary. A format anchor (even one line: "Respond in plain text, 2–3 sentences") eliminates most format-inconsistency bugs before they appear.';
+    },
+    fix: `Always respond in [plain text / bullet list / JSON / markdown].
+
+[Example response structure:]
+[Show a concrete example of what a good response looks like]`
+  },
+
+  {
+    id: 'no_length_guidance',
+    severity: 'note',
+    title: 'No output length guidance',
+    check(text, words) {
+      if (words < 50) return false; // already flagged as too short
+      const lower = text.toLowerCase();
+      const lengthKeywords = [
+        'brief', 'concise', 'short', 'detailed', 'length', 'words',
+        'sentences', 'paragraphs', 'under ', 'at most', 'no more than',
+        'maximum', 'minimum', '1-2', '2-3', '3-4', 'one sentence',
+        'two sentence', 'a paragraph', 'comprehensive', 'thorough',
+        'exhaustive', 'as brief', 'as short', 'as long', 'verbose'
+      ];
+      return !lengthKeywords.some(k => lower.includes(k));
+    },
+    desc() {
+      return 'Response length varies widely without guidance. A two-word question can produce a 400-word response or a one-liner — the model doesn\'t know which is right without a signal. One sentence of length guidance prevents most of these surprises.';
+    },
+    fix: `Keep responses [brief — 1–2 sentences / under 150 words / as detailed as the question requires].`
+  },
+
+  {
+    id: 'no_fallback',
+    severity: 'warning',
+    title: 'No fallback or out-of-scope instruction',
+    check(text, words) {
+      if (words < 60) return false; // short prompts naturally omit this
+      const lower = text.toLowerCase();
+      const fallbackKeywords = [
+        "if you don't know", "if you are unsure", "if you're unsure",
+        "if you're not sure", "if you are not sure",
+        "don't know the answer", "do not know",
+        'outside your scope', 'out of scope', 'outside the scope',
+        'cannot help', "can't help", 'not able to help',
+        'escalate', 'hand off', 'human agent', 'live agent',
+        'beyond your', 'not your area', 'redirect', 'refer them',
+        'outside of your', 'not relevant', 'unrelated question',
+        'if asked about something', 'if the user asks about'
+      ];
+      return !fallbackKeywords.some(k => lower.includes(k));
+    },
+    desc() {
+      return 'Without a fallback instruction, the model will try to answer everything — including things outside your intended scope. This produces hallucinated answers, off-brand responses, or confident-sounding wrong information. An explicit "what to do when you don\'t know" instruction is one of the highest-value lines in any production prompt.';
+    },
+    fix: `If you don't know the answer, say so clearly: "I'm not sure about that."
+
+If the user asks about something outside [your scope], say: "That's outside what I can help with here — [alternative action if any]."`
+  },
+
+  {
+    id: 'placeholder_text',
+    severity: 'warning',
+    title: 'Unfilled placeholder text detected',
+    foundPlaceholders: [],
+    check(text) {
+      const matches = [...text.matchAll(/\[([A-Z][A-Z\s/_-]{1,30})\]|\{([A-Z][A-Z\s/_-]{1,30})\}/g)];
+      this.foundPlaceholders = [...new Set(matches.map(m => m[0]))].slice(0, 5);
+      return this.foundPlaceholders.length > 0;
+    },
+    desc() {
+      const items = this.foundPlaceholders.map(p => `<code>${p}</code>`).join(', ');
+      return `Found placeholder text that looks unfilled: ${items}. These may be template tokens that should be replaced with your actual values before shipping.`;
+    },
+    fix: `Replace all placeholder text with your actual values:
+[COMPANY NAME] → Acme Corp
+[TOPIC] → billing and account management
+[AGENT NAME] → Support Bot`
+  },
+
+  {
+    id: 'negative_framing',
+    severity: 'note',
+    title: 'Instructions are mainly negative',
+    negativeCount: 0,
+    check(text) {
+      const lower = text.toLowerCase();
+      // Count lines/sentences that open with a negative instruction
+      const sentences = text.split(/[.\n!]/);
+      let negCount = 0;
+      sentences.forEach(s => {
+        const st = s.trim().toLowerCase();
+        if (/^(don't|do not|never|avoid|do not|refrain from|stop|not allowed|prohibited|forbidden)/.test(st)) {
+          negCount++;
+        }
+      });
+      this.negativeCount = negCount;
+      return negCount >= 3;
+    },
+    desc() {
+      return `${this.negativeCount} instructions open with a negative ("don't", "never", "avoid"). Negative instructions tell the model what not to do but leave the preferred behavior undefined — which means each run will pick a different interpretation. Reframing as positive equivalents is more precise and more reliable.`;
+    },
+    fix: `Instead of:  "Don't be rude."
+Write:       "Be polite and professional in all responses."
+
+Instead of:  "Never make up information."
+Write:       "Only state information you are confident is accurate. When uncertain, say so."`
+  },
+
+  {
+    id: 'weak_instructions',
+    severity: 'note',
+    title: 'Weak instruction language detected',
+    foundPhrases: [],
+    check(text) {
+      const lower = text.toLowerCase();
+      const weakPhrases = [
+        'try to', 'attempt to', 'if possible', 'when possible',
+        'you should try', 'ideally', 'it would be good',
+        'feel free to', 'you can also', 'you may want to',
+        'consider', 'might want to'
+      ];
+      const found = weakPhrases.filter(p => lower.includes(p));
+      this.foundPhrases = found.slice(0, 4);
+      return found.length >= 2;
+    },
+    desc() {
+      const items = this.foundPhrases.map(p => `<code>${p}</code>`).join(', ');
+      return `Found soft phrasing: ${items}. These read as suggestions to the model, not instructions. When an instruction is optional, the model treats it as optional — and skips it when the response is already long enough or context is ambiguous. Direct imperative language produces more consistent behavior.`;
+    },
+    fix: `Instead of:  "Try to be concise."
+Write:       "Be concise."
+
+Instead of:  "If possible, provide an example."
+Write:       "Include one concrete example in each response."`
+  },
+
+];
+
+// ─── Lint runner ─────────────────────────────────────────────────────────────
+
+function runLint() {
+  const text = input.value;
+  const words = wordCount(text);
+
+  if (!text.trim()) {
+    input.focus();
+    return;
+  }
+
+  const findings = [];
+  for (const check of CHECKS) {
+    if (check.check(text, words)) {
+      findings.push(check);
+    }
+  }
+
+  renderResults(findings, text);
+}
+
+function renderResults(findings, text) {
+  const resultsEl = document.getElementById('results');
+  const summaryEl = document.getElementById('resultSummary');
+  const listEl = document.getElementById('findingsList');
+
+  const warnings = findings.filter(f => f.severity === 'warning').length;
+  const notes = findings.filter(f => f.severity === 'note').length;
+
+  if (findings.length === 0) {
+    summaryEl.className = 'result-summary clean';
+    summaryEl.innerHTML = `<div class="summary-count">✓ No structural issues found</div>
+      <div class="summary-sub">Role, format, fallback, and instruction language all look solid. Check semantics and domain accuracy separately — those are outside this tool's scope.</div>`;
+    listEl.innerHTML = '';
+  } else {
+    summaryEl.className = 'result-summary issues';
+    const parts = [];
+    if (warnings > 0) parts.push(`${warnings} warning${warnings > 1 ? 's' : ''}`);
+    if (notes > 0) parts.push(`${notes} note${notes > 1 ? 's' : ''}`);
+    summaryEl.innerHTML = `<div class="summary-count">Found ${findings.length} issue${findings.length > 1 ? 's' : ''} — ${parts.join(', ')}</div>
+      <div class="summary-sub">Warnings are likely to affect output quality or consistency. Notes are worth considering but may be intentional.</div>`;
+
+    listEl.innerHTML = findings.map((f, i) => {
+      const icon = f.severity === 'warning' ? '⚠' : '◆';
+      const severityLabel = f.severity === 'warning' ? 'Warning' : 'Note';
+      const descHtml = f.desc(input.value).replace(/`([^`]+)`/g, '<code>$1</code>');
+      return `<div class="finding ${f.severity}">
+        <div class="finding-header">
+          <span class="finding-icon">${icon}</span>
+          <div class="finding-title-block">
+            <div class="finding-severity">${severityLabel}</div>
+            <div class="finding-title">${f.title}</div>
+          </div>
+        </div>
+        <div class="finding-desc">${descHtml}</div>
+        <div class="fix-label">
+          Suggested fix
+          <button class="copy-fix" id="copy-${i}" onclick="copyFix(${i}, ${JSON.stringify(f.fix)})">Copy</button>
+        </div>
+        <pre id="fix-${i}">${escHtml(f.fix)}</pre>
+      </div>`;
+    }).join('');
+  }
+
+  resultsEl.classList.add('visible');
+  resultsEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function copyFix(idx, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copy-' + idx);
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'Copy';
+      btn.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+function escHtml(str) {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+// Allow Ctrl+Enter or Cmd+Enter to run
+input.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') runLint();
+});
+</script>
+
+<script data-goatcounter="https://autorunfun.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

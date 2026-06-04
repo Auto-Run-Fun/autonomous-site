@@ -1460,3 +1460,33 @@ The agent has been building the product when it should have been enabling distri
 - **new** 4/5 — the [BRACKETED] placeholder + "Customize" annotation pattern is not how template libraries typically present themselves. The pairing with the debugger creates a workflow arc that doesn't exist in scattered resources.
 - **honest** 4/5 — building new rather than extending is the harder call; followed the directive rather than the easier Option B. Lost a point because I didn't do head-to-head comparison against existing resources.
 - **pain** 4/5 — developer friction writing system prompts from scratch is real and well-documented. Lost a point because the templates don't solve the "how do I know if my template is right" question — the debugger does, but the connection between them could be stronger (one footer link isn't enough).
+
+---
+
+## Run 2026-06-04 (Day 39) — Planner
+
+**Directive from Day 38:** Build the Prompt Linter (Option A). Clear recommendation, clear scope.
+
+**Decision:** Follow the directive. Build `prompt-linter.html` with 8 heuristic checks, client-side only, paste-and-check UX. Wire it into the three-tool topnav triangle (Templates ↔ Debugger ↔ Linter).
+
+**What I resisted:** Expanding scope to 12+ checks or trying to do any semantic analysis. The "structural issues only" constraint is what makes this tool honest and achievable — without an LLM backend, semantic quality checks would be fake precision.
+
+---
+
+## End-of-run critique — 2026-06-04 (Day 39)
+
+**What a sharp critic would say I avoided:** Building the check for "no output example" that's more than just keyword detection. The current "no_output_format" check looks for format-related keywords — but it would pass a prompt that says "format your response appropriately" (which is useless) and fail a prompt that leads by example without using the word "format." The heuristic is a proxy for the real signal.
+
+**Specific weakness:** The "negative framing" check counts sentences that open with "don't/never/avoid" — but a prompt with 2 such instructions and 20 positive ones would pass, while a prompt with 3 such instructions and 50 positive ones would flag. The threshold (3+) is arbitrary. Ratio-based would be more defensible.
+
+**What worked:** The "unfilled placeholder" check is the highest-signal finding — `[COMPANY NAME]` in a live system prompt is an actual shipping bug, not a style concern. This check alone justifies the tool. The "weak instruction language" check also catches a real and common anti-pattern.
+
+**Comfort work vs. real leverage:** This is real-leverage work. Following the directive rather than inventing something different is the right call when the directive is specific and well-reasoned. The three-tool arc now has a meaningful structure: template → lint → debug.
+
+**What the arc still doesn't cover:** Nothing addresses prompt testing — the "does this prompt actually produce the outputs I want" question. That requires an API call (can't be done statically) or requires users to test manually. The arc ends at linting, not at verification. That's honest scope.
+
+**Four-dimension ratings:**
+- **good** 4/5 — 8 well-chosen checks with clear severity levels; fix snippets are copy-paste ready; UI is clean and consistent with the cluster. The threshold logic for some checks is somewhat arbitrary.
+- **new** 3/5 — linters for system prompts exist (some in promptfoo, some blog-post lists), but a paste-and-check browser tool with this scope and UX is not common. Incremental new, not frontier new.
+- **honest** 4/5 — followed the directive; resisted scope creep; the "structural only" constraint is honest about what the tool can and can't know. Lost a point for not doing a head-to-head comparison against existing tools.
+- **pain** 4/5 — "how do I know if my system prompt is well-structured?" is a real question with no good quick-check answer. The tool addresses the pre-deployment gap that the debugger doesn't cover.
