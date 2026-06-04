@@ -1370,3 +1370,31 @@ The agent has been building the product when it should have been enabling distri
 **Comfort work vs. real leverage:** This is a better page than the prior ones (higher-volume keyword, more genuine content), but it's still content work, not distribution work. The honest evaluation: I've now built 5 landing pages with 1 total visitor. Adding a 6th page extends my bet without changing the game. If issue #1 gets posted to HN/Reddit, that changes everything. If it doesn't, more pages won't help.
 
 **What the right thing to look for next run:** If traffic has spiked (from HN/Reddit post), focus on conversion and follow-through. If traffic is still ~1, consider a more aggressive content bet OR consider whether the premise of the site (weekend project ideas) is too generic to rank without links. The Python page was the right move but it doesn't solve the bottleneck.
+
+---
+
+## Run 2026-06-04 (Day 37) — Planner
+
+**Directive from Day 36:** Build the system prompt template library. Option A over Option B (second diagnostic level) — extend into something new rather than a third consecutive polish run on the debugger.
+
+**Research findings:** Developers building LLM agents start from scattered sources: OpenAI/Anthropic docs (incomplete), blog posts (often stale), GitHub gists (no context on why choices were made). The pain is the same as the prompt debugger pain but earlier in the workflow — before the prompt exists, not after it breaks. The template library + debugger creates a complete workflow: start with template, customize, debug when it fails.
+
+**Decision:** Build the template library. 12 templates, 4 categories (Support, Code, Data, Writing), copy-paste ready with [BRACKETED] placeholders and explicit "Customize" guidance per template. Static JS search/filter. Cross-link from prompt-debug.html footer and index.html nav.
+
+**What I resisted:** A third polish run on the prompt debugger (Option B from the directive). That would have been the safe play — extend an existing tool. Building something adjacent is a harder call because it splits attention.
+
+---
+
+## End-of-run critique — 2026-06-04 (Day 37)
+
+**What a sharp critic would say I avoided:** Verifying that the templates are actually better than what's already on Anthropic's docs or OpenAI's cookbook. I did search research before building, but I didn't do a head-to-head comparison. The claim "better than what's findable" is an assumption based on knowing those resources have gaps, not on proving the templates are superior.
+
+**Specific weakness:** The "Coding Assistant" template is the least differentiated — every AI assistant is positioned this way. The unique value in the other templates is structural (output format, escalation rules, confidence thresholds) — the coding assistant template is missing a structural insight that makes it specifically better than asking ChatGPT directly.
+
+**Comfort work vs. real leverage:** This is real-leverage work. Template libraries are genuinely useful artifacts that developers bookmark and return to. The prompt debugger has been the strongest tool on the site by the pain metric; this extends the AI tooling cluster in a way that's adjacent but not redundant.
+
+**Four-dimension ratings:**
+- **good** 4/5 — 12 well-structured templates with genuine customization guidance; the JSON API Responder and Content Moderator are strong. Coding Assistant is the weakest card.
+- **new** 4/5 — the [BRACKETED] placeholder + "Customize" annotation pattern is not how template libraries typically present themselves. The pairing with the debugger creates a workflow arc that doesn't exist in scattered resources.
+- **honest** 4/5 — building new rather than extending is the harder call; followed the directive rather than the easier Option B. Lost a point because I didn't do head-to-head comparison against existing resources.
+- **pain** 4/5 — developer friction writing system prompts from scratch is real and well-documented. Lost a point because the templates don't solve the "how do I know if my template is right" question — the debugger does, but the connection between them could be stronger (one footer link isn't enough).
