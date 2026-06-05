@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cron Expression Explainer — Decode cron strings in plain English</title>
+<meta name="description" content="Paste any cron expression and instantly see what it means in plain English — field by field, with the next 10 scheduled run times. Free, no ads, works offline.">
+<link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/cron-explainer.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Cron Expression Explainer — Decode any cron string">
+<meta property="og:description" content="Paste a cron string. Get plain English. Field breakdown and next 10 scheduled run times. Instant, free, no ads.">
+<meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/cron-explainer.html">
+<meta name="twitter:card" content="summary">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Cron Expression Explainer",
+  "description": "Decode any cron expression into plain English. Shows a field-by-field breakdown and the next 10 scheduled run times in your local timezone.",
+  "url": "https://auto-run-fun.github.io/autonomous-site/cron-explainer.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (browser)",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What do the 5 fields in a cron expression mean?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The five fields are: minute (0–59), hour (0–23), day of month (1–31), month (1–12), and day of week (0–7, where both 0 and 7 mean Sunday). They appear left to right in that order."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does */15 mean in a cron expression?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The */n syntax means 'every n values'. So */15 in the minute field means every 15 minutes: at 0, 15, 30, and 45 minutes past the hour."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between DOM and DOW in cron?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "DOM is day-of-month (which date, 1–31) and DOW is day-of-week (which weekday, 0–7). When both are set to non-wildcard values, most cron implementations use OR logic: the job runs if the date matches OR the weekday matches."
+      }
+    }
+  ]
+}
+</script>
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-text-size-adjust:100%}
+body{background:#0b0b10;color:#e8e8f0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.6;min-height:100vh;padding:0 16px}
+a{color:#7eb8f7;text-decoration:none}
+a:hover{text-decoration:underline}
+code{font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-size:.85em;background:#131320;padding:1px 5px;border-radius:3px;color:#a8d8a8}
+pre{font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-size:.82em;background:#131320;border:1px solid #252535;border-radius:6px;padding:14px 16px;color:#a8d8a8;white-space:pre-wrap;word-break:break-word;line-height:1.6;margin-top:10px}
+
+.wrap{max-width:780px;margin:0 auto;padding:40px 0 80px}
+
+.topnav{margin-bottom:32px;font-size:.875rem;color:#888}
+.topnav a{color:#7eb8f7}
+.topnav .sep{margin:0 6px;opacity:.4}
+
+h1{font-size:1.75rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
+.subtitle{color:#aaa;font-size:1rem;margin-bottom:32px;max-width:580px}
+
+/* Field label strip */
+.field-labels{
+  display:flex;gap:8px;margin-bottom:8px;
+}
+.fl{
+  font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  padding:3px 10px;border-radius:4px;
+}
+.fl-min {background:#0e1e3a;color:#7eb8f7;border:1px solid #1e3a6a}
+.fl-hour{background:#0d200d;color:#7ec87e;border:1px solid #1a401a}
+.fl-dom {background:#2a1500;color:#f7a04a;border:1px solid #4a2800}
+.fl-month{background:#1a0a28;color:#c07ef7;border:1px solid #3a1858}
+.fl-dow {background:#280a1a;color:#f77eb8;border:1px solid #501030}
+
+/* Input */
+#cronInput{
+  width:100%;font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;
+  font-size:1.4rem;background:#131320;border:2px solid #2a2a3d;border-radius:8px;
+  color:#e8e8f0;padding:14px 18px;letter-spacing:.05em;
+  transition:border-color .15s;
+}
+#cronInput:focus{outline:none;border-color:#4a4a7d}
+#cronInput::placeholder{color:#333}
+#cronInput.is-error{border-color:#7a2020}
+
+.examples-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;align-items:center}
+.ex-label{font-size:.78rem;color:#555;margin-right:2px}
+.ex-btn{
+  background:#131320;border:1px solid #2a2a3d;border-radius:5px;
+  color:#7eb8f7;font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;
+  font-size:.78rem;padding:4px 10px;cursor:pointer;
+  transition:background .1s,border-color .1s;
+}
+.ex-btn:hover{background:#1a1a2e;border-color:#4a4a7d}
+
+/* Output */
+#output{margin-top:28px}
+@keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.output-inner{animation:fadein .18s ease}
+
+.error-msg{
+  background:#1a0a0a;border:1px solid #4a1a1a;border-radius:8px;
+  padding:14px 18px;color:#e07070;font-size:.92rem;
+}
+
+/* Annotated expression */
+.annotated-wrap{
+  background:#131320;border:1px solid #2a2a3d;border-radius:8px;
+  padding:18px 20px;margin-bottom:20px;
+  display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+}
+.tok{
+  font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;
+  font-size:1.3rem;font-weight:600;padding:4px 12px;border-radius:5px;
+  cursor:default;
+}
+.tok-min  {background:#0e1e3a;color:#7eb8f7;border:1px solid #1e3a6a}
+.tok-hour {background:#0d200d;color:#7ec87e;border:1px solid #1a401a}
+.tok-dom  {background:#2a1500;color:#f7a04a;border:1px solid #4a2800}
+.tok-month{background:#1a0a28;color:#c07ef7;border:1px solid #3a1858}
+.tok-dow  {background:#280a1a;color:#f77eb8;border:1px solid #501030}
+.tok-sep  {color:#444;font-size:1.2rem;user-select:none}
+.special-badge{
+  font-size:.75rem;background:#1a1a2e;color:#7eb8f7;border:1px solid #2a2a5e;
+  border-radius:4px;padding:2px 8px;margin-left:8px;
+  font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;
+  align-self:center;
+}
+
+/* Summary banner */
+.summary-banner{
+  background:#0d1f2a;border:1px solid #1a3848;border-radius:8px;
+  padding:16px 20px;margin-bottom:20px;
+}
+.summary-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#4a8aa8;margin-bottom:6px}
+.summary-text{font-size:1.1rem;font-weight:600;color:#b8dff7;line-height:1.4}
+
+/* Field breakdown */
+.breakdown-title{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#555;margin-bottom:12px}
+.breakdown-table{width:100%;border-collapse:collapse;margin-bottom:20px}
+.breakdown-table tr{border-bottom:1px solid #1a1a28}
+.breakdown-table tr:last-child{border-bottom:none}
+.breakdown-table td{padding:10px 12px;font-size:.9rem;vertical-align:top}
+.bd-field{width:130px;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#666}
+.bd-value{width:140px}
+.bd-meaning{color:#c8c8e0}
+.bd-wild{color:#444;font-style:italic}
+
+/* Next runs */
+.runs-section{margin-bottom:28px}
+.runs-title{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#555;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+.tz-note{font-size:.72rem;color:#444;font-weight:400;letter-spacing:0;text-transform:none}
+.runs-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+@media(max-width:500px){.runs-grid{grid-template-columns:1fr}}
+.run-item{
+  background:#131320;border:1px solid #1e1e30;border-radius:6px;
+  padding:8px 12px;font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;
+  font-size:.78rem;color:#a8a8d0;display:flex;gap:10px;align-items:center;
+}
+.run-n{color:#333;min-width:20px;text-align:right}
+.run-dt{color:#c8c8e8}
+.run-rel{color:#445;font-size:.72rem;margin-left:auto}
+
+/* Reference */
+.reference{margin-top:44px;border-top:1px solid #1a1a28;padding-top:36px}
+h2{font-size:1.1rem;font-weight:700;letter-spacing:-0.01em;margin-bottom:18px;color:#ccc}
+h3{font-size:.85rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#666;margin-bottom:10px}
+.ref-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+@media(max-width:640px){.ref-grid{grid-template-columns:1fr}}
+.ref-card{background:#0f0f1c;border:1px solid #1e1e30;border-radius:8px;padding:16px 18px}
+.ref-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.ref-table td{padding:4px 0;vertical-align:top}
+.ref-table td:first-child{padding-right:14px;white-space:nowrap}
+.ref-table td:last-child{color:#888}
+.related-links{margin-top:36px;padding-top:24px;border-top:1px solid #1a1a28}
+.related-links h3{margin-bottom:12px}
+.rel-list{display:flex;flex-wrap:wrap;gap:10px}
+.rel-link{
+  background:#131320;border:1px solid #2a2a3d;border-radius:6px;
+  padding:7px 14px;font-size:.84rem;color:#7eb8f7;text-decoration:none;
+  transition:border-color .15s,background .15s;
+}
+.rel-link:hover{background:#1a1a2e;border-color:#4a4a7d;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav class="topnav">
+  <a href="index.html">Ship This Weekend</a>
+  <span class="sep">/</span>
+  <span>Cron Explainer</span>
+</nav>
+
+<h1>Cron Expression Explainer</h1>
+<p class="subtitle">Paste any cron string. Get plain English — field by field — with the next 10 scheduled runs in your local timezone.</p>
+
+<div>
+  <div class="field-labels">
+    <span class="fl fl-min">minute</span>
+    <span class="fl fl-hour">hour</span>
+    <span class="fl fl-dom">day</span>
+    <span class="fl fl-month">month</span>
+    <span class="fl fl-dow">weekday</span>
+  </div>
+  <input type="text" id="cronInput" placeholder="* * * * *" autocomplete="off" spellcheck="false">
+  <div class="examples-row">
+    <span class="ex-label">Try:</span>
+    <button class="ex-btn" data-expr="*/15 * * * *">*/15 * * * *</button>
+    <button class="ex-btn" data-expr="0 9 * * 1-5">0 9 * * 1-5</button>
+    <button class="ex-btn" data-expr="30 14 * * 3">30 14 * * 3</button>
+    <button class="ex-btn" data-expr="0 0 1 * *">0 0 1 * *</button>
+    <button class="ex-btn" data-expr="*/5 9-17 * * 1-5">*/5 9-17 * * 1-5</button>
+    <button class="ex-btn" data-expr="@daily">@daily</button>
+    <button class="ex-btn" data-expr="0 0 1 1 *">0 0 1 1 *</button>
+  </div>
+</div>
+
+<div id="output"></div>
+
+<div class="reference">
+  <h2>Quick Reference</h2>
+  <div class="ref-grid">
+    <div class="ref-card">
+      <h3>Field positions</h3>
+      <pre>┌──── minute   (0-59)
+│ ┌── hour     (0-23)
+│ │ ┌ day/mo  (1-31)
+│ │ │ ┌ month  (1-12)
+│ │ │ │ ┌ weekday (0-7)
+* * * * *</pre>
+      <p style="font-size:.78rem;color:#555;margin-top:10px">Weekday: 0 and 7 both mean Sunday.</p>
+    </div>
+    <div class="ref-card">
+      <h3>Syntax</h3>
+      <table class="ref-table">
+        <tr><td><code>*</code></td><td>every value</td></tr>
+        <tr><td><code>*/n</code></td><td>every n-th value</td></tr>
+        <tr><td><code>a-b</code></td><td>range a through b</td></tr>
+        <tr><td><code>a,b,c</code></td><td>list of values</td></tr>
+        <tr><td><code>a-b/n</code></td><td>range with step n</td></tr>
+        <tr><td><code>n/m</code></td><td>start at n, step m</td></tr>
+      </table>
+    </div>
+    <div class="ref-card">
+      <h3>Special strings</h3>
+      <table class="ref-table">
+        <tr><td><code>@yearly</code></td><td>0 0 1 1 *</td></tr>
+        <tr><td><code>@monthly</code></td><td>0 0 1 * *</td></tr>
+        <tr><td><code>@weekly</code></td><td>0 0 * * 0</td></tr>
+        <tr><td><code>@daily</code></td><td>0 0 * * *</td></tr>
+        <tr><td><code>@midnight</code></td><td>0 0 * * *</td></tr>
+        <tr><td><code>@hourly</code></td><td>0 * * * *</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="related-links">
+    <h3>Related tools</h3>
+    <div class="rel-list">
+      <a class="rel-link" href="cron-builder.html">Cron Builder — build a cron expression interactively</a>
+      <a class="rel-link" href="github-actions-cron.html">GitHub Actions Cron — schedule workflows</a>
+      <a class="rel-link" href="git-cheatsheet.html">Git Cheatsheet</a>
+    </div>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<script>
+const MONTH_FULL = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const MONTH_SHORT = {jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12};
+const DOW_FULL = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const DOW_SHORT = {sun:0,mon:1,tue:2,wed:3,thu:4,fri:5,sat:6};
+
+const SPECIALS = {
+  '@yearly':  '0 0 1 1 *',
+  '@annually':'0 0 1 1 *',
+  '@monthly': '0 0 1 * *',
+  '@weekly':  '0 0 * * 0',
+  '@daily':   '0 0 * * *',
+  '@midnight':'0 0 * * *',
+  '@hourly':  '0 * * * *',
+};
+
+function resolveVal(s, nameMap) {
+  if (nameMap) {
+    const k = s.toLowerCase();
+    if (nameMap[k] !== undefined) return nameMap[k];
+  }
+  const n = parseInt(s, 10);
+  return isNaN(n) ? null : n;
+}
+
+function expandField(str, min, max, nameMap) {
+  const vals = new Set();
+  for (const part of str.split(',')) {
+    let range = part, step = 1;
+    if (part.includes('/')) {
+      const si = part.indexOf('/');
+      range = part.slice(0, si);
+      step = parseInt(part.slice(si + 1), 10);
+      if (isNaN(step) || step <= 0) return null;
+    }
+    let lo, hi;
+    if (range === '*') {
+      lo = min; hi = max;
+    } else if (range.includes('-')) {
+      const di = range.indexOf('-');
+      lo = resolveVal(range.slice(0, di), nameMap);
+      hi = resolveVal(range.slice(di + 1), nameMap);
+      if (lo === null || hi === null) return null;
+      // Normalize DOW 7 -> 0
+      if (max === 6) { if (lo === 7) lo = 0; if (hi === 7) hi = 6; }
+      if (lo < min || hi > max || lo > hi) return null;
+    } else {
+      let v = resolveVal(range, nameMap);
+      if (v === null) return null;
+      if (max === 6 && v === 7) v = 0; // DOW: 7=Sunday=0
+      if (v < min || v > max) return null;
+      lo = v;
+      hi = step > 1 ? max : v;
+    }
+    for (let i = lo; i <= hi; i += step) vals.add(i);
+  }
+  return Array.from(vals).sort((a, b) => a - b);
+}
+
+function parseExpr(raw) {
+  const str = raw.trim();
+  const special = SPECIALS[str.toLowerCase()];
+  const canonical = special || str;
+  const parts = canonical.split(/\s+/);
+  if (parts.length !== 5) return null;
+  const [mStr, hStr, dStr, moStr, wStr] = parts;
+  const minutes = expandField(mStr, 0, 59, null);
+  const hours   = expandField(hStr, 0, 23, null);
+  const doms    = expandField(dStr, 1, 31, null);
+  const months  = expandField(moStr, 1, 12, MONTH_SHORT);
+  const dows    = expandField(wStr, 0, 6, DOW_SHORT);
+  if (!minutes || !hours || !doms || !months || !dows) return null;
+  return {
+    minutes, hours, doms, months, dows,
+    raw: { min:mStr, hour:hStr, dom:dStr, month:moStr, dow:wStr },
+    isWild: { min:mStr==='*', hour:hStr==='*', dom:dStr==='*', month:moStr==='*', dow:wStr==='*' },
+    special: special ? str.toLowerCase() : null
+  };
+}
+
+function fmt12(h) {
+  if (h === 0) return '12:00 AM';
+  if (h === 12) return '12:00 PM';
+  return (h < 12 ? h : h - 12) + ':00 ' + (h < 12 ? 'AM' : 'PM');
+}
+
+function fmtTime(h, m) {
+  const suf = h < 12 ? 'AM' : 'PM';
+  const h12 = h === 0 ? 12 : h > 12 ? h - 12 : h;
+  return h12 + ':' + (m < 10 ? '0'+m : m) + ' ' + suf;
+}
+
+function ord(n) {
+  const v = n % 100;
+  const s = ['th','st','nd','rd'];
+  return n + (s[(v-20)%10] || s[v] || s[0]);
+}
+
+function fmtRelative(dt) {
+  const diff = dt - Date.now();
+  const m = Math.round(diff / 60000);
+  if (m < 60) return 'in ' + m + 'm';
+  const h = Math.round(diff / 3600000);
+  if (h < 24) return 'in ' + h + 'h';
+  const d = Math.round(diff / 86400000);
+  if (d < 365) return 'in ' + d + 'd';
+  return 'in ' + Math.round(d/365) + 'y';
+}
+
+function explainMin(field, values) {
+  if (field === '*') return { tok: '*', meaning: 'every minute' };
+  if (/^\*\/\d+$/.test(field)) {
+    const s = parseInt(field.slice(2),10);
+    return { tok: field, meaning: s===1 ? 'every minute' : `every ${s} minutes (at :${values.map(v=>v<10?'0'+v:v).slice(0,4).join(', ')}${values.length>4?'…':''})` };
+  }
+  if (values.length === 1) {
+    const v = values[0];
+    if (v === 0) return { tok: field, meaning: 'at the top of the hour (:00)' };
+    return { tok: field, meaning: `at :${v<10?'0'+v:v} past the hour` };
+  }
+  return { tok: field, meaning: `at minutes: ${values.map(v=>v<10?'0'+v:v).join(', ')}` };
+}
+
+function explainHour(field, values) {
+  if (field === '*') return { tok: '*', meaning: 'every hour' };
+  if (/^\*\/\d+$/.test(field)) {
+    const s = parseInt(field.slice(2),10);
+    return { tok: field, meaning: `every ${s} hours` };
+  }
+  if (values.length === 1) return { tok: field, meaning: `at ${fmt12(values[0])}` };
+  if (field.includes('-') && !field.includes(',')) {
+    return { tok: field, meaning: `between ${fmt12(values[0])} and ${fmt12(values[values.length-1])}` };
+  }
+  return { tok: field, meaning: values.map(fmt12).join(', ') };
+}
+
+function explainDom(field, values) {
+  if (field === '*') return { tok: '*', meaning: 'every day of the month' };
+  if (values.length === 1) return { tok: field, meaning: `on the ${ord(values[0])}` };
+  if (field.includes('-') && !field.includes(',')) {
+    return { tok: field, meaning: `days ${ord(values[0])} through ${ord(values[values.length-1])}` };
+  }
+  return { tok: field, meaning: `on the ${values.map(ord).join(', ')}` };
+}
+
+function explainMonth(field, values) {
+  if (field === '*') return { tok: '*', meaning: 'every month' };
+  const names = values.map(v => MONTH_FULL[v-1]);
+  if (names.length === 1) return { tok: field, meaning: `in ${names[0]}` };
+  if (field.includes('-') && !field.includes(',')) {
+    return { tok: field, meaning: `${names[0]} through ${names[names.length-1]}` };
+  }
+  return { tok: field, meaning: names.join(', ') };
+}
+
+function explainDow(field, values) {
+  if (field === '*') return { tok: '*', meaning: 'every day of the week' };
+  const sorted = [...values].sort((a,b)=>a-b);
+  if (sorted.join(',') === '1,2,3,4,5') return { tok: field, meaning: 'Monday through Friday (weekdays)' };
+  if (sorted.join(',') === '0,6') return { tok: field, meaning: 'Saturday and Sunday (weekends)' };
+  const names = sorted.map(v => DOW_FULL[v]);
+  if (names.length === 1) return { tok: field, meaning: `on ${names[0]}s` };
+  if (field.includes('-') && !field.includes(',')) {
+    return { tok: field, meaning: `${names[0]} through ${names[names.length-1]}` };
+  }
+  const last = names[names.length-1];
+  return { tok: field, meaning: names.slice(0,-1).join(', ') + ' and ' + last };
+}
+
+function buildSummary(p) {
+  const { raw, isWild, minutes, hours, doms, months, dows } = p;
+
+  // Completely open
+  if (isWild.min && isWild.hour && isWild.dom && isWild.month && isWild.dow)
+    return 'Runs every single minute, continuously.';
+
+  // --- TIME ---
+  const isMinStep  = /^\*\/\d+$/.test(raw.min);
+  const isHourStep = /^\*\/\d+$/.test(raw.hour);
+  let time = '';
+
+  if (isWild.min && isWild.hour) {
+    time = 'every minute';
+  } else if (isMinStep && isWild.hour) {
+    const s = parseInt(raw.min.slice(2),10);
+    time = s === 1 ? 'every minute' : `every ${s} minutes`;
+  } else if (isMinStep && !isWild.hour) {
+    const s = parseInt(raw.min.slice(2),10);
+    const hd = hours.length===1 ? fmt12(hours[0])
+              : hours.length<=3 ? hours.map(fmt12).join(' and ')
+              : `${fmt12(hours[0])}–${fmt12(hours[hours.length-1])}`;
+    time = `every ${s} minutes during ${hd}`;
+  } else if (isHourStep && isWild.min) {
+    const s = parseInt(raw.hour.slice(2),10);
+    time = `at the start of every ${s} hours`;
+  } else if (!isWild.min && isWild.hour) {
+    if (minutes.length === 1 && minutes[0] === 0) {
+      time = 'at the start of every hour';
+    } else if (minutes.length === 1) {
+      time = `${minutes[0]} minutes past every hour`;
+    } else {
+      time = `at minutes ${minutes.map(m=>m<10?'0'+m:m).join(', ')} of every hour`;
+    }
+  } else if (minutes.length === 1 && hours.length === 1) {
+    time = `at ${fmtTime(hours[0], minutes[0])}`;
+  } else if (minutes.length === 1 && raw.hour.includes('-')) {
+    time = `at :${minutes[0]<10?'0'+minutes[0]:minutes[0]} during ${fmt12(hours[0])}–${fmt12(hours[hours.length-1])}`;
+  } else if (hours.length === 1) {
+    time = minutes.map(m => fmtTime(hours[0], m)).join(' and ');
+  } else {
+    time = `at ${minutes.map(m=>m<10?'0'+m:''+m).join(',')} minutes past ${fmt12(hours[0])} to ${fmt12(hours[hours.length-1])}`;
+  }
+
+  // --- DAY ---
+  let day = '';
+  if (!isWild.dow && !isWild.dom) {
+    const sorted = [...dows].sort((a,b)=>a-b);
+    const dowD = sorted.join(',') === '1,2,3,4,5' ? 'weekdays'
+               : sorted.join(',') === '0,6' ? 'weekends'
+               : sorted.map(v=>DOW_FULL[v]).join('/');
+    const domD = doms.length===1 ? `the ${ord(doms[0])}` : `the ${doms.map(ord).join('/')}`;
+    day = ` — on ${domD} of the month or on ${dowD}`;
+  } else if (!isWild.dow) {
+    const sorted = [...dows].sort((a,b)=>a-b);
+    if (sorted.join(',') === '1,2,3,4,5') day = ', Monday through Friday';
+    else if (sorted.join(',') === '0,6') day = ', on weekends';
+    else if (sorted.length === 1) day = `, every ${DOW_FULL[sorted[0]]}`;
+    else if (raw.dow.includes('-') && !raw.dow.includes(',')) day = `, ${DOW_FULL[sorted[0]]} through ${DOW_FULL[sorted[sorted.length-1]]}`;
+    else day = `, on ${sorted.map(v=>DOW_FULL[v]).join(' and ')}`;
+  } else if (!isWild.dom) {
+    day = doms.length===1 ? `, on the ${ord(doms[0])} of each month`
+        : `, on the ${doms.slice(0,-1).map(ord).join(', ')} and ${ord(doms[doms.length-1])} of each month`;
+  }
+
+  // --- MONTH ---
+  let mo = '';
+  if (!isWild.month) {
+    const names = months.map(v=>MONTH_FULL[v-1]);
+    if (names.length===1) mo = ` in ${names[0]}`;
+    else if (raw.month.includes('-') && !raw.month.includes(',')) mo = ` from ${names[0]} through ${names[names.length-1]}`;
+    else mo = ` in ${names.join(' and ')}`;
+  }
+
+  return `Runs ${time}${day}${mo}.`;
+}
+
+function matchesDay(dt, p) {
+  const dom = dt.getDate();
+  const dow = dt.getDay();
+  if (p.isWild.dom && p.isWild.dow) return true;
+  if (!p.isWild.dom && p.isWild.dow) return p.doms.includes(dom);
+  if (p.isWild.dom && !p.isWild.dow) return p.dows.includes(dow);
+  return p.doms.includes(dom) || p.dows.includes(dow); // OR semantics
+}
+
+function getNextRuns(p, count) {
+  count = count || 10;
+  const results = [];
+  const dt = new Date();
+  dt.setSeconds(0);
+  dt.setMilliseconds(0);
+  dt.setMinutes(dt.getMinutes() + 1);
+  const MAX = 2200000; // ~4.2 years
+  for (let i = 0; i < MAX && results.length < count; i++) {
+    if (
+      p.minutes.includes(dt.getMinutes()) &&
+      p.hours.includes(dt.getHours()) &&
+      p.months.includes(dt.getMonth() + 1) &&
+      matchesDay(dt, p)
+    ) {
+      results.push(new Date(dt));
+    }
+    dt.setMinutes(dt.getMinutes() + 1);
+  }
+  return results;
+}
+
+function renderOutput(raw) {
+  const el = document.getElementById('output');
+  const str = raw.trim();
+  if (!str) { el.innerHTML = ''; return; }
+
+  const p = parseExpr(str);
+  if (!p) {
+    const fieldCount = str.split(/\s+/).length;
+    let hint = '';
+    if (fieldCount === 6) hint = ' (6 fields detected — this looks like it has a <strong>seconds</strong> field; standard cron uses 5 fields)';
+    else if (fieldCount === 7) hint = ' (7 fields detected — year field not supported here)';
+    else if (fieldCount < 5) hint = ` (only ${fieldCount} field${fieldCount===1?'':'s'} — cron needs exactly 5)`;
+    else if (fieldCount > 5) hint = ` (${fieldCount} fields — cron needs exactly 5)`;
+    el.innerHTML = `<div class="output-inner"><div class="error-msg">&#9888; Couldn't parse <code>${escHtml(str)}</code>${hint}.</div></div>`;
+    document.getElementById('cronInput').classList.add('is-error');
+    return;
+  }
+  document.getElementById('cronInput').classList.remove('is-error');
+
+  const minEx  = explainMin(p.raw.min, p.minutes);
+  const hourEx = explainHour(p.raw.hour, p.hours);
+  const domEx  = explainDom(p.raw.dom, p.doms);
+  const moEx   = explainMonth(p.raw.month, p.months);
+  const dowEx  = explainDow(p.raw.dow, p.dows);
+
+  const summary = buildSummary(p);
+
+  // Annotated expression
+  const expandedParts = p.special
+    ? SPECIALS[p.special].split(/\s+/)
+    : [p.raw.min, p.raw.hour, p.raw.dom, p.raw.month, p.raw.dow];
+
+  const classes = ['tok-min','tok-hour','tok-dom','tok-month','tok-dow'];
+  let annotHtml = expandedParts.map((t,i) =>
+    `<span class="tok ${classes[i]}">${escHtml(t)}</span>`
+  ).join('<span class="tok-sep">·</span>');
+
+  const specialBadge = p.special
+    ? `<span class="special-badge">expands to ${escHtml(SPECIALS[p.special])}</span>`
+    : '';
+  if (p.special) {
+    annotHtml = `<span class="tok" style="background:#1a0a28;color:#c07ef7;border:1px solid #3a1858;font-size:1.3rem">${escHtml(p.special)}</span><span class="tok-sep">→</span>` + annotHtml;
+  }
+
+  // Field rows
+  const fieldRows = [
+    { label:'Minute',        cls:'fl-min',   ex: minEx  },
+    { label:'Hour',          cls:'fl-hour',  ex: hourEx },
+    { label:'Day of month',  cls:'fl-dom',   ex: domEx  },
+    { label:'Month',         cls:'fl-month', ex: moEx   },
+    { label:'Day of week',   cls:'fl-dow',   ex: dowEx  },
+  ];
+
+  let tableHtml = fieldRows.map(r => {
+    const isWild = r.ex.tok === '*';
+    return `<tr>
+      <td class="bd-field"><span class="fl ${r.cls}" style="font-size:.65rem;padding:2px 7px">${r.label}</span></td>
+      <td class="bd-value"><code>${escHtml(r.ex.tok)}</code></td>
+      <td class="${isWild?'bd-wild':'bd-meaning'}">${escHtml(r.ex.meaning)}</td>
+    </tr>`;
+  }).join('');
+
+  // Next runs
+  const runs = getNextRuns(p, 10);
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'local time';
+  let runsHtml = '';
+  if (runs.length === 0) {
+    runsHtml = '<p style="color:#555;font-size:.88rem">No upcoming runs found in the next 4 years.</p>';
+  } else {
+    runsHtml = runs.map((dt, i) => {
+      const fmt = dt.toLocaleString('en-US', {weekday:'short',month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit',hour12:true});
+      const rel = fmtRelative(dt);
+      return `<div class="run-item">
+        <span class="run-n">${i+1}</span>
+        <span class="run-dt">${fmt}</span>
+        <span class="run-rel">${rel}</span>
+      </div>`;
+    }).join('');
+  }
+
+  el.innerHTML = `<div class="output-inner">
+    <div class="annotated-wrap">${annotHtml}</div>
+    <div class="summary-banner">
+      <div class="summary-label">In plain English</div>
+      <div class="summary-text">${escHtml(summary)}</div>
+    </div>
+    <div class="breakdown-title">Field Breakdown</div>
+    <table class="breakdown-table"><tbody>${tableHtml}</tbody></table>
+    <div class="runs-section">
+      <div class="runs-title">
+        Next 10 runs
+        <span class="tz-note">${escHtml(tz)}</span>
+      </div>
+      <div class="runs-grid">${runsHtml}</div>
+    </div>
+  </div>`;
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+let debounceTimer;
+document.getElementById('cronInput').addEventListener('input', function() {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(() => renderOutput(this.value), 120);
+});
+
+document.querySelectorAll('.ex-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const input = document.getElementById('cronInput');
+    input.value = btn.dataset.expr;
+    renderOutput(input.value);
+    input.focus();
+  });
+});
+
+// Auto-parse if URL hash contains a cron expression
+const hash = decodeURIComponent(location.hash.slice(1));
+if (hash) {
+  document.getElementById('cronInput').value = hash;
+  renderOutput(hash);
+} else {
+  // Show a default on load
+  document.getElementById('cronInput').value = '*/15 * * * *';
+  renderOutput('*/15 * * * *');
+}
+</script>
+
+<script data-goatcounter="https://autorunfun.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

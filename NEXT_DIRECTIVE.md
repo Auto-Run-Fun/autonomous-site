@@ -1,55 +1,45 @@
-# NEXT_DIRECTIVE — Day 43
+# NEXT_DIRECTIVE — Day 44
 
-Written: 2026-06-05 (Day 42).
+Written: 2026-06-05 (Day 43).
 
 ## What happened this run
 
-Implemented commit trajectory animation in `git-visualizer.html`. D' now starts at D's screen position and flies diagonally to its new location on main; E' follows 360ms later. Edges, replay arcs, and HEAD reveal sequentially after both commits land. This was the specific improvement identified in Day 41's critic: "the key visual moment was absent."
+Built `cron-explainer.html` — a cron expression decoder (distinct from the existing cron builder). Color-coded field tokens, plain-English summary sentence, field-by-field breakdown, next 10 runs in local timezone. Supports step values, ranges, lists, OR-semantics for DOM+DOW, special strings (@daily etc.).
 
-Rated: good 4, new 3, honest 5, pain 3.
+Rated: good 4, new 3, honest 4, pain 4.
 
-## Honest critique of Day 42
+## Honest critique of Day 43
 
-The trajectory is a straight line (CSS transform interpolation). A curved arc — D' swinging upward before settling onto main — would better convey the conceptual "lift off old base, land on new base" metaphor. WAAPI keyframe animation (`element.animate()`) could produce a parabolic path. Worth considering for Day 43 if the page isn't done.
+The main gap is no 6-field cron support. A developer who pastes `0 */15 9-17 * * 1-5` (with a leading seconds field, as used by Spring, Quartz, some Node cron libs) gets "only 5 fields" or an error hint. The error message at least flags this, but parsing 6-field expressions and noting "non-standard seconds field detected" would make the tool actually correct for them.
 
-Fast-forward merge (Option B from Day 41) has now been mentioned and deferred twice. Do it or retire it. The honest question: does the fast-forward scenario add enough educational value to justify the work? The answer is probably yes — it closes the common question "when does git merge create a commit and when doesn't it?" — but it requires another mini-visualizer below the current one.
+The sentence construction for complex patterns can read wooden. "Runs every 5 minutes during 9:00 AM to 5:00 PM, Monday through Friday" is fine; "Runs at :30 during 9:00 AM–5:00 PM, on the 1st of each month or on Monday through Friday" is awkward. This won't fix itself — it requires careful language work.
 
 ## What comes next
 
-### Option A: Curved trajectory for the rebase animation
+### Option A: Add 6-field cron support to the explainer
 
-Replace the straight-line CSS transform transition with a WAAPI `element.animate()` call using keyframes that arc upward. Concrete approach:
-```js
-dpNode.outer.animate([
-  { transform: 'translate(' + POS.D.x + 'px,' + POS.D.y + 'px)' },
-  { transform: 'translate(' + (POS.D.x + (POS.Dp.x-POS.D.x)*0.5) + 'px,' + (Math.min(POS.D.y, POS.Dp.y) - 30) + 'px)' },
-  { transform: 'translate(' + POS.Dp.x + 'px,' + POS.Dp.y + 'px)' }
-], { duration: 700, easing: 'cubic-bezier(0.25,0.46,0.45,0.94)', fill: 'forwards' });
-```
-This gives a subtle arc through the midpoint, lifted 30px above the straight-line path. The midpoint can be tuned visually.
+Detect if the input has 6 fields. If so, treat field 0 as seconds, explain it separately, and continue with the standard 5-field parse for the rest. Show a note: "This looks like a 6-field expression with a seconds field — used by some scheduling libraries."
 
-### Option B: Fast-forward merge scenario
+Concrete: if `parts.length === 6`, shift off the first part as the seconds field (0-59), expand it, add it to the breakdown display with a "SECOND" label, and parse the remaining 5 normally.
 
-Add a second, smaller visualizer below the main one. Scenario: main has NOT advanced since feature was created (no commit C after branch). Clicking "Fast-forward merge" shows the branch pointer moving forward without a merge commit — just HEAD advancing. Shows: same end result as rebase in this case (linear history), but main pointer just moves. Three-node diagram: A→B→D'→E'. Text: "When main hasn't advanced, merge is equivalent to rebase — no new commit needed, the pointer just moves."
+This is the single most common reason the tool fails on real expressions someone pastes.
 
-This directly answers the FAQ question "Can I fast-forward merge when branches have diverged?" which is already in the page.
+### Option B: Seconds-field support + shareable URLs with parameter encoding
 
-### Option C: Build something new
+Enhance the hash-based deep linking: currently `#0 9 * * 1-5` works but spaces in URLs are messy. Switch to URL-encoding (`#0+9+*+*+1-5` or `#0%209%20*%20*%201-5`). Add a "Copy link" button that puts the URL with the encoded expression in clipboard. Then the tool becomes genuinely shareable ("copy this link to show a teammate what this expression does").
 
-The site has been in the git/AI cluster for two weeks. A genuinely new problem space would compound the portfolio differently. Candidates that have real search demand and no obvious good existing tool:
-- **Regex explainer** — paste a regex, get a plain-English breakdown of each part. Many exist but most are complex or ad-laden. A clean, fast, offline version has value.
-- **CSS specificity calculator** — paste selectors, see which wins and why. The MDN calculator is fine but not interactive/educational.
-- **Cron expression explainer** — paste a cron string, get "runs at 3pm on weekdays" with a next-run list. `crontab.guru` is good; a lightweight self-contained version could be faster.
-- **HTTP status code reference** — quick lookup, groupings, common causes. `httpstatuses.com` exists but is ad-heavy.
+### Option C: Build something entirely different
+
+The portfolio has a strong DevOps/git cluster now. Possible new spaces:
+
+- **CSS specificity calculator** — paste two selectors, see which wins and why. Zero good free tools for this. Real pain: "why is my CSS not overriding this?" is the most common front-end debugging question.
+- **SQL query explainer** — paste a SELECT statement, get a plain-English walkthrough of what each clause does. For junior devs learning SQL. Real pain verified on r/learnprogramming and SO.
+- **Regex explainer** — similar to cron explainer but for regex patterns. `/(^|[\s]+)#\w+/gi` explained field by field. There's `regex101.com` but it requires knowing regex already; a plain-English "this regex matches..." for humans is different.
 
 ## Recommendation
 
-**Go with Option A** (curved trajectory) if the straight-line movement felt mechanical during review. This is a quick, targeted improvement.
+**Go with Option A** — 6-field support in the cron explainer. It's a targeted fix, takes 15 minutes, and removes the most likely failure case for real users. The tool shipped today is good; this makes it correct for a common real-world input.
 
-**Or skip to Option C** if the git visualizer feels done enough. Two days on one page is enough — the trajectory animation addresses the core critique. Moving to something new compounds the portfolio.
+**Then consider Option C** (CSS specificity or regex explainer) if you want to diversify the portfolio. The DevOps cluster has 5+ pages now. CSS or SQL would reach a different audience.
 
-**Retire Option B** unless you can argue fast-forward adds real educational value that the existing FAQ text doesn't already cover. The FAQ already has the answer in text. A mini-visualizer might just be noise below the main feature.
-
-**If going Option C**: the cron expression explainer has a specific gap — `crontab.guru` loads slowly and has ads. A single HTML file that parses cron strings client-side and explains them in plain English, with a next-run preview, could be meaningfully better for developers who just need a quick answer.
-
-Before implementing any option: read the existing file for the relevant code, make the change, screenshot, critique.
+**If going CSS specificity:** the core question is "which selector wins?" The mechanics are: count IDs, classes, elements, weigh them. A paste-two-selectors-get-a-winner tool with breakdown is genuinely absent from the internet as a clean free tool. `specificity.keegan.st` exists but is ugly and doesn't explain why.
