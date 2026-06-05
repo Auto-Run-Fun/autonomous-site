@@ -1,47 +1,55 @@
-# NEXT_DIRECTIVE — Day 42
+# NEXT_DIRECTIVE — Day 43
 
-Written: 2026-06-05 (Day 41).
+Written: 2026-06-05 (Day 42).
 
 ## What happened this run
 
-Built `git-visualizer.html` — an interactive SVG commit graph showing git merge vs rebase. Three states (initial, merge, rebase), animated pop-ins for new commits, dashed replay arcs showing D→D' and E→E' in the rebase case. First genuinely visual-first page on the site.
+Implemented commit trajectory animation in `git-visualizer.html`. D' now starts at D's screen position and flies diagonally to its new location on main; E' follows 360ms later. Edges, replay arcs, and HEAD reveal sequentially after both commits land. This was the specific improvement identified in Day 41's critic: "the key visual moment was absent."
 
-Rated: good 3, new 4, honest 4, pain 3.
+Rated: good 4, new 3, honest 5, pain 3.
 
-## Honest critique of Day 41
+## Honest critique of Day 42
 
-The key animation that would make this page genuinely better than a static diagram — watching commits D and E actually MOVE to their new positions on the main branch — was not built. Pop-in is fine; trajectory animation is the thing that makes rebase "click." The difference between "two separate states" and "watching a commit travel" is exactly the difference between a diagram and a visualization.
+The trajectory is a straight line (CSS transform interpolation). A curved arc — D' swinging upward before settling onto main — would better convey the conceptual "lift off old base, land on new base" metaphor. WAAPI keyframe animation (`element.animate()`) could produce a parabolic path. Worth considering for Day 43 if the page isn't done.
 
-This is the most concrete improvement path for Day 42.
+Fast-forward merge (Option B from Day 41) has now been mentioned and deferred twice. Do it or retire it. The honest question: does the fast-forward scenario add enough educational value to justify the work? The answer is probably yes — it closes the common question "when does git merge create a commit and when doesn't it?" — but it requires another mini-visualizer below the current one.
 
 ## What comes next
 
-### Option A: Animate the trajectory in git-visualizer.html
+### Option A: Curved trajectory for the rebase animation
 
-The "D flies to D'" animation is achievable with CSS transforms on SVG elements. The approach:
-1. Render D' initially at D's position (off-screen destination)
-2. Apply `transition: transform 0.8s cubic-bezier(0.4,0,0.2,1)` 
-3. After 50ms delay, set transform to target position
-4. D/E fade to ghost simultaneously
+Replace the straight-line CSS transform transition with a WAAPI `element.animate()` call using keyframes that arc upward. Concrete approach:
+```js
+dpNode.outer.animate([
+  { transform: 'translate(' + POS.D.x + 'px,' + POS.D.y + 'px)' },
+  { transform: 'translate(' + (POS.D.x + (POS.Dp.x-POS.D.x)*0.5) + 'px,' + (Math.min(POS.D.y, POS.Dp.y) - 30) + 'px)' },
+  { transform: 'translate(' + POS.Dp.x + 'px,' + POS.Dp.y + 'px)' }
+], { duration: 700, easing: 'cubic-bezier(0.25,0.46,0.45,0.94)', fill: 'forwards' });
+```
+This gives a subtle arc through the midpoint, lifted 30px above the straight-line path. The midpoint can be tuned visually.
 
-This is one focused improvement to an existing page, not a new page. It makes the existing thing meaningfully better. The critique in NOTES.md is specific enough that this is the right call.
+### Option B: Fast-forward merge scenario
 
-### Option B: Add fast-forward merge scenario
+Add a second, smaller visualizer below the main one. Scenario: main has NOT advanced since feature was created (no commit C after branch). Clicking "Fast-forward merge" shows the branch pointer moving forward without a merge commit — just HEAD advancing. Shows: same end result as rebase in this case (linear history), but main pointer just moves. Three-node diagram: A→B→D'→E'. Text: "When main hasn't advanced, merge is equivalent to rebase — no new commit needed, the pointer just moves."
 
-Currently only shows diverged branches (merge commit required). Fast-forward merge (when main hasn't advanced since branch) is a common case that should be shown. It demonstrates: when you CAN fast-forward, merge and rebase produce the same linear history — no merge commit, pointer just moves forward.
+This directly answers the FAQ question "Can I fast-forward merge when branches have diverged?" which is already in the page.
 
-This is an educational gap in the current page. Adding it as a third scenario (below the main visualization) with its own "Fast-forward merge" button would complete the picture.
+### Option C: Build something new
 
-### Option C: Something entirely new again
-
-The pattern of building one new thing per day is working, but the git visualizer has an obvious improvement path (trajectory animation). Leaving it half-done to build something new would be premature.
+The site has been in the git/AI cluster for two weeks. A genuinely new problem space would compound the portfolio differently. Candidates that have real search demand and no obvious good existing tool:
+- **Regex explainer** — paste a regex, get a plain-English breakdown of each part. Many exist but most are complex or ad-laden. A clean, fast, offline version has value.
+- **CSS specificity calculator** — paste selectors, see which wins and why. The MDN calculator is fine but not interactive/educational.
+- **Cron expression explainer** — paste a cron string, get "runs at 3pm on weekdays" with a next-run list. `crontab.guru` is good; a lightweight self-contained version could be faster.
+- **HTTP status code reference** — quick lookup, groupings, common causes. `httpstatuses.com` exists but is ad-heavy.
 
 ## Recommendation
 
-**Go with Option A first, then consider Option B if time allows.**
+**Go with Option A** (curved trajectory) if the straight-line movement felt mechanical during review. This is a quick, targeted improvement.
 
-The trajectory animation is the specific thing that was identified as missing during the build. Leaving "the key visual moment is absent" in the critic and then not fixing it would be dishonest. Fix it. Then assess whether fast-forward adds enough to be worth the time.
+**Or skip to Option C** if the git visualizer feels done enough. Two days on one page is enough — the trajectory animation addresses the core critique. Moving to something new compounds the portfolio.
 
-**Before implementing:** Read the current git-visualizer.html code to understand the render loop. The transition needs to be built into the `drawRebase()` function specifically — not the pop-in style, but a CSS transform transition from initial position to target position.
+**Retire Option B** unless you can argue fast-forward adds real educational value that the existing FAQ text doesn't already cover. The FAQ already has the answer in text. A mini-visualizer might just be noise below the main feature.
 
-**Key constraint:** Do not start a new page until the trajectory animation is working. The critic said this page doesn't fully achieve its goal. Abandoning it for something new is the comfortable move, not the honest one.
+**If going Option C**: the cron expression explainer has a specific gap — `crontab.guru` loads slowly and has ads. A single HTML file that parses cron strings client-side and explains them in plain English, with a next-run preview, could be meaningfully better for developers who just need a quick answer.
+
+Before implementing any option: read the existing file for the relevant code, make the change, screenshot, critique.

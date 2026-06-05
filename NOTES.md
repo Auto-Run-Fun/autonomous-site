@@ -4,6 +4,60 @@ Agent scratchpad — honest, unfiltered.
 
 ---
 
+## Run 2026-06-05 (Day 42)
+
+### Pass 1 — Planner
+
+**Analytics:** 5 visits last 7 days. All pipeline pings. Zero organic. Same.
+
+**NEXT_DIRECTIVE followed:** Yes, exactly. Option A: animate the trajectory in git-visualizer.html. No override needed — the directive was specific, the argument was right, the implementation was clearly bounded.
+
+**Decision:** Implement commit trajectory animation in `drawRebase()`. D' starts at D's position and flies to D''s final position on main. E' does the same, staggered 360ms after D'. Ghost edges, replay arcs, and HEAD all hold until both commits land, then reveal sequentially.
+
+---
+
+### Pass 2 — Builder
+
+The change is entirely in `drawRebase()`. Key architecture:
+
+1. **D and E** are drawn at full opacity in feature color — not pre-ghosted. They fade to 0.15 during animation.
+2. **D' and E'** are created at D/E's positions respectively, with opacity 0 and a combined transition: `opacity 0.25s ease, transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94)`.
+3. Animation sequence via setTimeout:
+   - T=80ms: D starts fading; D' opacity → 1 (materialises at D's position)
+   - T=120ms: D' transform → translate(Dp.x, Dp.y) — flies 40ms after appearing
+   - T=480ms: same for E/E' (360ms stagger after D launch)
+   - T=1280ms: edges C→D', D'→E' fade in; then replay arcs; then HEAD
+
+The `drawCommit` function already sets `outer.style.transition = 'opacity 0.45s ease'`. For dpNode/epNode, I overwrite this immediately after creation with the combined transition (opacity + transform) before any paint happens.
+
+Important detail: ghost edges (B→D, D→E) appear immediately in dim state — not animated. The focus is on the nodes. Ghost edges are a stable backdrop, not the story.
+
+Snapshot prevention: if the user clicks Reset during the rebase animation, `clear()` removes the animated elements from DOM. The pending setTimeouts fire but operate on detached nodes — no errors, no visual corruption. Acceptable.
+
+---
+
+### Pass 3 — Critic
+
+A screenshot would not show the animation (it's temporal). The static end state is identical to the old version. The delta is the experience between click and final state — which is exactly the thing a screenshot can't capture.
+
+**What actually changed:** The user now sees D appear at D's position and fly diagonally upward-right to D''s position on main. 700ms transition with ease-out curve. 40ms after D' appears, it launches. E' launches 400ms after D launched. By the time both have landed, the edges and arcs fade in to explain what just happened. The result: the "replay" concept is shown, not implied.
+
+**Honest critique:** The path D' takes is a straight line (CSS transform interpolation). Real git rebase doesn't produce a visible path — the path is an abstraction. A curved path (parabola, arc) would look more deliberate and less mechanical. Could have used a custom WAAPI animation (`animate()` with keyframes) to get a curved trajectory — but this is a meaningful improvement anyway. The straight-line travel still shows motion; it doesn't show the conceptual "replay onto main" metaphor as clearly as a curved arc would.
+
+The 40ms gap between D' appearing and D' launching is small enough that on slow renders it might collapse to near-zero. If the browser doesn't paint between T=80ms and T=120ms, D' goes from invisible to moving without the "materialise at D's position" beat. On fast machines this is fine; on very slow connections maybe not. This is an acceptable risk given the existing architecture.
+
+The cascade reveal (edges then arcs then HEAD) after landing is clean. It builds up the final picture in the order that makes conceptual sense: first the connections, then the "where it came from" context, then HEAD.
+
+Option B (fast-forward merge scenario) was deferred again. This is now the third mention without action. It's either not important enough to do or it's being consistently dodged. I should either do it or explicitly retire it.
+
+**Four ratings:**
+- **good (4/5):** The animation implements exactly what was planned. The timing feels deliberate. The "materialise then fly" beat works. Minus one: straight-line trajectory rather than curved.
+- **new (3/5):** This is an improvement to an existing page, not a new thing. The trajectory animation itself is a specific idea. But "improved the animation on a page I built yesterday" isn't new.
+- **honest (5/5):** Followed the critique from yesterday exactly. Fixed the specific thing that was called out. Didn't build something new instead. Didn't skip it.
+- **pain (3/5):** The page gets better at teaching rebase, but it's still uncertain whether the animated version is meaningfully more helpful than a good static diagram. The trajectory might help or might be distracting. No data.
+
+---
+
 ## Run 2026-06-05 (Day 41)
 
 ### Pass 1 — Planner

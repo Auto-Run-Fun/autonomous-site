@@ -674,48 +674,102 @@ h1 {
     clear(layerNodes);
     clear(layerHeads);
 
-    // Original edges (ghost)
+    // Static main-chain edges
     layerEdges.appendChild(drawLine(POS.A.x, POS.A.y, POS.B.x, POS.B.y, '#44465a'));
     layerEdges.appendChild(drawLine(POS.B.x, POS.B.y, POS.C.x, POS.C.y, '#44465a'));
+
+    // Ghost branch edges (dim from the start)
     layerEdges.appendChild(drawBranchLine(POS.B.x, POS.B.y, POS.D.x, POS.D.y, '#333', '4,4', 'arr-ghost'));
     layerEdges.appendChild(drawLine(POS.D.x, POS.D.y, POS.E.x, POS.E.y, '#333', '4,4', 'arr-ghost'));
 
-    // Rebase replay arcs (dashed, showing where commits went)
+    // Replay arcs — hidden; revealed after commits land
     var arc1 = drawReplayArc(POS.D.x, POS.D.y, POS.Dp.x, POS.Dp.y);
-    arc1.style.animation = 'fadeIn 0.5s 0.15s ease both';
+    arc1.style.opacity = '0';
     layerEdges.appendChild(arc1);
     var arc2 = drawReplayArc(POS.E.x, POS.E.y, POS.Ep.x, POS.Ep.y);
-    arc2.style.animation = 'fadeIn 0.5s 0.25s ease both';
+    arc2.style.opacity = '0';
     layerEdges.appendChild(arc2);
 
-    // New rebase edges
+    // New rebase edges — hidden; revealed after commits land
     var cToDp = drawLine(POS.C.x, POS.C.y, POS.Dp.x, POS.Dp.y, '#f59e0b', null, 'arr-rebase');
-    cToDp.style.animation = 'fadeIn 0.4s ease both';
+    cToDp.style.opacity = '0';
     layerEdges.appendChild(cToDp);
     var dpToEp = drawLine(POS.Dp.x, POS.Dp.y, POS.Ep.x, POS.Ep.y, '#f59e0b', null, 'arr-rebase');
-    dpToEp.style.animation = 'fadeIn 0.4s 0.1s ease both';
+    dpToEp.style.opacity = '0';
     layerEdges.appendChild(dpToEp);
 
-    // Original nodes
+    // Static commits
     layerNodes.appendChild(drawCommit('A', POS.A.x, POS.A.y, 'A', COL.main).outer);
     layerNodes.appendChild(drawCommit('B', POS.B.x, POS.B.y, 'B', COL.main).outer);
     layerNodes.appendChild(drawCommit('C', POS.C.x, POS.C.y, 'C', COL.main).outer);
 
-    // Ghost nodes (faded originals)
-    layerNodes.appendChild(drawCommit('D', POS.D.x, POS.D.y, 'D', COL.ghost, 0.25).outer);
-    layerNodes.appendChild(drawCommit('E', POS.E.x, POS.E.y, 'E', COL.ghost, 0.25).outer);
+    // D and E: start at full opacity (feature color), fade to ghost during animation
+    var dNode = drawCommit('D', POS.D.x, POS.D.y, 'D', COL.feature, 1.0);
+    layerNodes.appendChild(dNode.outer);
+    var eNode = drawCommit('E', POS.E.x, POS.E.y, 'E', COL.feature, 1.0);
+    layerNodes.appendChild(eNode.outer);
 
-    // Rebased nodes — pop in from center
-    var dpPair = drawCommit('Dp', POS.Dp.x, POS.Dp.y, "D'", COL.rebase);
-    layerNodes.appendChild(dpPair.outer);
-    setTimeout(function() { popIn(dpPair.inner); }, 100);
+    // D': starts at D's position, invisible — will fly to D' position
+    var dpNode = drawCommit('Dp', POS.D.x, POS.D.y, "D'", COL.rebase, 0);
+    dpNode.outer.style.transition = 'opacity 0.25s ease, transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94)';
+    layerNodes.appendChild(dpNode.outer);
 
-    var epPair = drawCommit('Ep', POS.Ep.x, POS.Ep.y, "E'", COL.rebase);
-    layerNodes.appendChild(epPair.outer);
-    setTimeout(function() { popIn(epPair.inner); }, 220);
+    // E': starts at E's position, invisible — will fly to E' position
+    var epNode = drawCommit('Ep', POS.E.x, POS.E.y, "E'", COL.rebase, 0);
+    epNode.outer.style.transition = 'opacity 0.25s ease, transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94)';
+    layerNodes.appendChild(epNode.outer);
 
-    // HEAD label
-    layerHeads.appendChild(drawHead(POS.Ep.x, POS.Ep.y, 'HEAD·feature', '#f59e0b'));
+    // ── Animation sequence ─────────────────────────────────────────────────
+
+    // T=80ms: D begins fading; D' materialises at D's position
+    setTimeout(function() {
+      dNode.outer.style.transition = 'opacity 0.5s ease';
+      dNode.outer.style.opacity = '0.15';
+      dpNode.outer.style.opacity = '1';
+    }, 80);
+
+    // T=120ms: D' launches toward its new position on main
+    setTimeout(function() {
+      dpNode.outer.style.transform = 'translate(' + POS.Dp.x + 'px,' + POS.Dp.y + 'px)';
+    }, 120);
+
+    // T=480ms: E begins fading; E' materialises at E's position
+    setTimeout(function() {
+      eNode.outer.style.transition = 'opacity 0.5s ease';
+      eNode.outer.style.opacity = '0.15';
+      epNode.outer.style.opacity = '1';
+    }, 480);
+
+    // T=520ms: E' launches toward its new position on main
+    setTimeout(function() {
+      epNode.outer.style.transform = 'translate(' + POS.Ep.x + 'px,' + POS.Ep.y + 'px)';
+    }, 520);
+
+    // T=1280ms: edges, replay arcs, and HEAD reveal after both commits have landed
+    setTimeout(function() {
+      cToDp.style.transition = 'opacity 0.3s ease';
+      cToDp.style.opacity = '1';
+
+      setTimeout(function() {
+        dpToEp.style.transition = 'opacity 0.3s ease';
+        dpToEp.style.opacity = '1';
+      }, 120);
+
+      setTimeout(function() {
+        arc1.style.transition = 'opacity 0.35s ease';
+        arc1.style.opacity = '0.6';
+        arc2.style.transition = 'opacity 0.35s 0.12s ease';
+        arc2.style.opacity = '0.6';
+      }, 260);
+
+      var headEl = drawHead(POS.Ep.x, POS.Ep.y, 'HEAD·feature', '#f59e0b');
+      headEl.style.opacity = '0';
+      layerHeads.appendChild(headEl);
+      setTimeout(function() {
+        headEl.style.transition = 'opacity 0.3s ease';
+        headEl.style.opacity = '1';
+      }, 380);
+    }, 1280);
   }
 
   // Public API

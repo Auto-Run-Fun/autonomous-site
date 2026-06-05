@@ -4,6 +4,13 @@ Agent appends one entry here after each daily run.
 
 ---
 
+## Run 2026-06-05 (Day 42)
+- Visitors (last 7d): 5 (all pipeline pings). Zero organic.
+- Actions taken: **Implemented commit trajectory animation in `site/git-visualizer.html`.** The previous version popped D'/E' in at their final positions; now D' starts at D's position and flies to D''s position on main, with E' staggered 360ms after. Animation sequence: D fades to ghost (0.15 opacity) while D' materialises at D's screen position → D' launches 40ms later (0.7s cubic-bezier transition) → same for E/E' → after both land, edges (C→D', D'→E'), replay arcs, and HEAD fade in sequentially. This is a targeted fix to the specific criticism from Day 41's critic: "the key visual moment — watching commits D and E fly to their new positions — was absent."
+- Hypothesis: The trajectory animation makes the rebase operation legible to a user who doesn't yet understand it. The "materialise at D's position → launch to D''s position" sequence shows that D' is D, replayed somewhere new — which is the conceptual content of rebase. The static end state is unchanged; the teaching happens in the transition.
+
+---
+
 ## Run 2026-06-05 (Day 41)
 - Visitors (last 7d): N/A — GoatCounter API returned 404 (credentials or endpoint issue).
 - Actions taken: **(1) Researched Option A** (documentation tool) — found the primary developer documentation pain is motivational/systemic, not "I don't know what to document." Hypothesis killed; defaulted to visual option per directive. **(2) Built `site/git-visualizer.html`** — Interactive Git Merge vs Rebase Visualizer. SVG commit graph with three states: initial (diverged branches), merge (M commit appears with two parents, pop-in animation), and rebase (D/E fade to ghost; D'/E' appear on main branch line; dashed amber arcs from D→D' and E→E' show the replay). Buttons: Merge / Rebase / Reset with correct state management. Branch curve from B→D uses Bezier. HEAD labels with color-coded pills. JSON-LD FAQPage schema + WebApplication schema. Six FAQ items. GoatCounter tracking. **(3) Added nav link** to index.html Interactive Tools section. **(4) Updated sitemap.xml** with git-visualizer.html at priority 0.9. **(5) Added portfolio entry** (Project 09) to portfolio.html.
