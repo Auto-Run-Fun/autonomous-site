@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Git Merge vs Rebase — Interactive Visualizer | Ship This Weekend</title>
+<meta name="description" content="See exactly what happens to your commits when you merge vs rebase. Click a button and watch the commit graph transform. No setup, runs in your browser.">
+<link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/git-visualizer.html">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Git Merge vs Rebase — Interactive Visualizer">
+<meta property="og:description" content="Click merge or rebase and watch what actually happens to your commits. Interactive commit graph animation.">
+<meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/git-visualizer.html">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Git Merge vs Rebase Visualizer",
+  "description": "Interactive commit graph visualization showing exactly what happens when you run git merge vs git rebase.",
+  "url": "https://auto-run-fun.github.io/autonomous-site/git-visualizer.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (browser)",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Why do rebased commits get new SHA hashes?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A commit's SHA is computed from its content AND its parent commit's SHA. When you rebase, D's new parent is C instead of B — so D's SHA must change even though the content is identical. This is why rebasing 'rewrites history.'"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is a merge commit in git?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A merge commit has two parents — the tip of main and the tip of the feature branch. It represents the point where two histories were joined. git log --graph shows the branch lines visually. Merge commits are the permanent record that parallel work happened."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "When should I use git merge vs git rebase?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Use merge when integrating public or shared branches (main, develop) — it is non-destructive and preserves history. Use rebase to clean up your local feature branch before a pull request — it produces linear history that is easier to review. The golden rule: rebase local branches you have not shared; merge everything else."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I fast-forward merge when branches have diverged?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. A fast-forward merge only works when no new commits exist on the base branch since the branch was created. If main has advanced since you branched off, you must either create a merge commit or rebase first and then fast-forward with --ff-only."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does git pull --rebase do?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Instead of merging remote's new commits into your local branch (creating a merge commit), it rebases your local commits on top of the remote's commits. This keeps history linear and avoids unnecessary merge commits when multiple developers are on the same branch."
+      }
+    }
+  ]
+}
+</script>
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0f0f13;
+  --surface: #16161d;
+  --surface2: #1c1c26;
+  --border: #2a2a3a;
+  --text: #e0e0e8;
+  --muted: #888898;
+  --blue: #4f9cf9;
+  --purple: #a855f7;
+  --green: #22c55e;
+  --amber: #f59e0b;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* NAV */
+.topnav {
+  display: flex; gap: 16px; align-items: center;
+  padding: 12px 24px; border-bottom: 1px solid var(--border);
+  font-size: 13px; flex-wrap: wrap;
+}
+.topnav .home { font-weight: 700; color: var(--text); margin-right: auto; }
+.topnav .home:hover { text-decoration: none; color: #fff; }
+.topnav a { color: var(--muted); }
+.topnav a:hover { color: var(--text); text-decoration: none; }
+
+/* LAYOUT */
+.container { max-width: 820px; margin: 0 auto; padding: 40px 24px 80px; }
+
+/* HERO */
+h1 {
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  font-weight: 800; line-height: 1.1;
+  margin-bottom: 12px; letter-spacing: -0.5px;
+}
+.hero-sub { color: var(--muted); font-size: 1.1rem; max-width: 540px; margin-bottom: 36px; }
+
+/* VIZ BOX */
+.viz-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px 24px 24px;
+  margin-bottom: 36px;
+}
+
+/* LEGEND */
+.legend {
+  display: flex; gap: 18px; flex-wrap: wrap;
+  margin-bottom: 20px; font-size: 13px;
+}
+.legend-item { display: flex; align-items: center; gap: 7px; }
+.legend-dot {
+  width: 13px; height: 13px; border-radius: 50%;
+  border: 2.5px solid; flex-shrink: 0;
+}
+.dot-main    { background: #0d2240; border-color: var(--blue); }
+.dot-feature { background: #200d40; border-color: var(--purple); }
+.dot-merge   { background: #0a1e0f; border-color: var(--green); }
+.dot-rebase  { background: #1e1200; border-color: var(--amber); }
+.legend-item span { color: var(--muted); }
+
+/* STATE BADGE */
+.state-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-family: monospace; font-weight: 700;
+  padding: 4px 12px; border-radius: 6px; margin-bottom: 18px;
+  letter-spacing: 0.3px; border: 1px solid;
+}
+.state-initial { background: #1a1a24; color: #888; border-color: #333; }
+.state-merge   { background: #0a1e0f; color: var(--green); border-color: #1a5030; }
+.state-rebase  { background: #1e1200; color: var(--amber); border-color: #503a00; }
+
+/* SVG WRAP */
+.svg-wrap { width: 100%; overflow-x: auto; margin-bottom: 22px; }
+#gitGraph {
+  display: block; width: 100%; max-width: 680px;
+  height: auto; min-height: 180px;
+}
+
+/* CONTROLS */
+.controls {
+  display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px;
+}
+.btn {
+  padding: 9px 18px; border: none; border-radius: 8px;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+  font-family: inherit;
+}
+.btn:hover { opacity: 0.85; }
+.btn:active { transform: scale(0.97); }
+.btn:disabled { opacity: 0.35; cursor: default; pointer-events: none; }
+.btn-merge  { background: var(--green); color: #071209; }
+.btn-rebase { background: var(--amber); color: #120900; }
+.btn-reset  { background: #272733; color: var(--text); border: 1px solid var(--border); }
+
+/* EXPLANATION */
+.explanation {
+  background: #12121a;
+  border-left: 3px solid var(--border);
+  border-radius: 0 8px 8px 0;
+  padding: 13px 16px;
+  font-size: 14px; color: #c0c0cc; line-height: 1.65;
+  transition: border-color 0.4s ease;
+  min-height: 58px;
+}
+.explanation.expl-merge  { border-color: #22c55e55; }
+.explanation.expl-rebase { border-color: #f59e0b55; }
+.explanation strong { color: var(--text); }
+.explanation code {
+  background: #1e1e2e; padding: 1px 6px;
+  border-radius: 4px; font-family: monospace; font-size: 13px; color: #a0c8f0;
+}
+
+/* SECTION */
+.section { margin-bottom: 40px; }
+.section h2 {
+  font-size: 1.25rem; font-weight: 700; margin-bottom: 16px; color: var(--text);
+}
+
+/* INSIGHT BOX */
+.insight {
+  background: #0d1625; border: 1px solid #1a2e4a;
+  border-radius: 10px; padding: 20px; margin-bottom: 24px;
+}
+.insight .label {
+  font-size: 11px; font-weight: 700; color: var(--blue);
+  text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 8px;
+}
+.insight p { font-size: 14px; color: #b0c0d0; line-height: 1.65; }
+.insight strong { color: var(--text); }
+
+/* COMPARISON GRID */
+.compare-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+}
+@media (max-width: 520px) { .compare-grid { grid-template-columns: 1fr; } }
+
+.compare-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; padding: 16px;
+}
+.compare-card h3 {
+  font-size: 13px; font-weight: 700; margin-bottom: 12px;
+  font-family: monospace; letter-spacing: -0.2px;
+}
+.card-merge h3  { color: var(--green); }
+.card-rebase h3 { color: var(--amber); }
+.compare-card ul { list-style: none; }
+.compare-card li {
+  padding: 5px 0 5px 18px; position: relative;
+  font-size: 14px; color: #b0b0c0;
+}
+.compare-card li::before { content: '→'; position: absolute; left: 0; color: #555; }
+
+/* WARNING */
+.warn {
+  background: #160e00; border: 1px solid #3a2500;
+  border-radius: 8px; padding: 14px 16px;
+  font-size: 14px; color: #c8a000; margin-top: 14px;
+  line-height: 1.6;
+}
+
+/* FAQ */
+.faq { }
+.faq details {
+  border: 1px solid var(--border); border-radius: 8px;
+  margin-bottom: 8px; overflow: hidden;
+}
+.faq summary {
+  padding: 14px 16px; cursor: pointer; font-weight: 600;
+  font-size: 14px; list-style: none;
+  display: flex; justify-content: space-between; align-items: center;
+  user-select: none;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+  content: '+'; font-size: 20px; color: var(--muted);
+  transition: transform 0.2s; flex-shrink: 0;
+}
+.faq details[open] summary::after { transform: rotate(45deg); }
+.faq .ans {
+  padding: 0 16px 14px;
+  font-size: 14px; color: #b0b0c0; line-height: 1.65;
+}
+.faq code {
+  background: #1e1e2e; padding: 1px 6px;
+  border-radius: 4px; font-family: monospace;
+  font-size: 13px; color: #a0c8f0;
+}
+
+/* SVG element transitions */
+.commit-g {
+  transition: opacity 0.45s ease;
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <a href="index.html" class="home">Ship This Weekend</a>
+  <a href="git-cheatsheet.html">Git cheatsheet</a>
+  <a href="system-prompt-guide.html">AI prompt guide</a>
+</nav>
+
+<div class="container">
+
+  <h1>Git Merge vs Rebase</h1>
+  <p class="hero-sub">Pick an operation. Watch what actually happens to your commits.</p>
+
+  <div class="viz-box">
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot dot-main"></div><span>main</span></div>
+      <div class="legend-item"><div class="legend-dot dot-feature"></div><span>feature</span></div>
+      <div class="legend-item"><div class="legend-dot dot-merge"></div><span>merge commit</span></div>
+      <div class="legend-item"><div class="legend-dot dot-rebase"></div><span>rebased commit</span></div>
+    </div>
+
+    <div id="stateBadge" class="state-badge state-initial">Initial state</div>
+
+    <div class="svg-wrap">
+      <svg id="gitGraph" viewBox="0 0 680 260" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arr"        markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3z" fill="#555"/></marker>
+          <marker id="arr-merge"  markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3z" fill="#22c55e"/></marker>
+          <marker id="arr-rebase" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3z" fill="#f59e0b"/></marker>
+          <marker id="arr-ghost"  markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3z" fill="#444"/></marker>
+        </defs>
+
+        <!-- Static branch labels -->
+        <text id="labelMain" x="16" y="112" fill="#4f9cf9" font-family="monospace" font-size="13" font-weight="700">main</text>
+        <text id="labelFeature" x="16" y="202" fill="#a855f7" font-family="monospace" font-size="13" font-weight="700">feature</text>
+
+        <!-- Layers (drawn in order: edges below nodes) -->
+        <g id="layerEdges"></g>
+        <g id="layerNodes"></g>
+        <g id="layerHeads"></g>
+      </svg>
+    </div>
+
+    <div class="controls">
+      <button class="btn btn-merge"  id="btnMerge"  onclick="viz.merge()">Merge feature → main</button>
+      <button class="btn btn-rebase" id="btnRebase" onclick="viz.rebase()">Rebase feature onto main</button>
+      <button class="btn btn-reset"  id="btnReset"  onclick="viz.reset()">Reset</button>
+    </div>
+
+    <div id="explanation" class="explanation">
+      <strong>Starting state:</strong> main is at commit C. feature has commits D and E, both branched from B. main has advanced (added C) since the branch was created — they have diverged.
+    </div>
+  </div>
+
+  <!-- Key insight -->
+  <div class="section">
+    <div class="insight">
+      <div class="label">The key difference</div>
+      <p>Both operations put feature's changes into main. The difference is <strong>history</strong>. Merge preserves the branching point — you can always see feature diverged from B. Rebase rewrites history — commits D and E get new SHAs as D' and E', as if they were always based on C. Neither is wrong; they serve different purposes.</p>
+    </div>
+
+    <div class="compare-grid">
+      <div class="compare-card card-merge">
+        <h3>git merge feature</h3>
+        <ul>
+          <li>Creates a new merge commit</li>
+          <li>Preserves full branch history</li>
+          <li>Non-destructive — never rewrites</li>
+          <li>Safe for public/shared branches</li>
+          <li>History shows parallel work</li>
+        </ul>
+      </div>
+      <div class="compare-card card-rebase">
+        <h3>git rebase main</h3>
+        <ul>
+          <li>Replays commits on new base</li>
+          <li>Linear history — no fork point</li>
+          <li>Feature commits get new SHAs</li>
+          <li>Cleaner for local feature branches</li>
+          <li>Never rebase shared branches</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="warn">
+      <strong>Golden rule:</strong> Never rebase commits you've already pushed to a shared branch. When you rebase, commits get new SHAs — anyone who pulled the old commits will have divergent history and a painful merge ahead.
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="section">
+    <h2>Common questions</h2>
+    <div class="faq">
+      <details>
+        <summary>Why do rebased commits get new SHA hashes?</summary>
+        <div class="ans">A commit's SHA is computed from its content AND its parent's SHA. When you rebase, D's new parent is C instead of B — so D's SHA must change even though the code diff is identical. This is the precise meaning of "rewrites history": same work, new identity.</div>
+      </details>
+      <details>
+        <summary>What exactly is a merge commit?</summary>
+        <div class="ans">A merge commit has two parents — in this example, C and E. It's the point where two lines of history were joined. <code>git log --graph</code> shows both lines converging into M. The merge commit is permanent evidence that parallel work happened and was combined.</div>
+      </details>
+      <details>
+        <summary>Can I fast-forward merge when branches have diverged?</summary>
+        <div class="ans">No. Fast-forward only works when no new commits exist on the base since the branch was created. Here, main added C after the branch was created — so a fast-forward is impossible. You must either create a merge commit, or rebase first and then merge with <code>--ff-only</code>.</div>
+      </details>
+      <details>
+        <summary>What does git pull --rebase do?</summary>
+        <div class="ans">Instead of merging the remote's new commits into your local branch (creating a merge commit), it rebases your local commits on top of the remote's. History stays linear. Useful on branches with active collaboration where merge commits would clutter the log.</div>
+      </details>
+      <details>
+        <summary>When should I use merge vs rebase?</summary>
+        <div class="ans">Use <strong>merge</strong> for integrating public/shared branches — it's non-destructive. Use <strong>rebase</strong> to clean up a local feature branch before a PR — linear history is easier to review. The simplest rule: rebase branches you haven't pushed; merge everything else.</div>
+      </details>
+      <details>
+        <summary>What is interactive rebase (git rebase -i)?</summary>
+        <div class="ans"><code>git rebase -i HEAD~N</code> opens an editor where you can squash commits (combine multiple into one), reword commit messages, drop commits, or reorder them. Standard practice before opening a PR: squash your six "WIP" commits into two clean, logical units that tell the story of the change.</div>
+      </details>
+    </div>
+  </div>
+
+</div>
+
+<script data-goatcounter="https://auto-run-fun.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+
+<script>
+(function() {
+  'use strict';
+
+  var NS = 'http://www.w3.org/2000/svg';
+  var R = 22; // commit circle radius
+
+  // Commit positions
+  var POS = {
+    A:  { x: 80,  y: 110 },
+    B:  { x: 200, y: 110 },
+    C:  { x: 320, y: 110 },
+    D:  { x: 275, y: 200 },
+    E:  { x: 395, y: 200 },
+    M:  { x: 510, y: 110 },
+    Dp: { x: 440, y: 110 },
+    Ep: { x: 560, y: 110 }
+  };
+
+  // Color definitions
+  var COL = {
+    main:    { stroke: '#4f9cf9', fill: '#0d2040' },
+    feature: { stroke: '#a855f7', fill: '#200d40' },
+    merge:   { stroke: '#22c55e', fill: '#0a1e0f' },
+    rebase:  { stroke: '#f59e0b', fill: '#1e1200' },
+    ghost:   { stroke: '#444',    fill: '#181820' }
+  };
+
+  var layerEdges = document.getElementById('layerEdges');
+  var layerNodes = document.getElementById('layerNodes');
+  var layerHeads = document.getElementById('layerHeads');
+
+  function el(tag, attrs) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+
+  function clear(layer) {
+    while (layer.firstChild) layer.removeChild(layer.firstChild);
+  }
+
+  // Shorten line endpoints so they stop at circle edge
+  function trimLine(x1, y1, x2, y2, r1, r2) {
+    var dx = x2 - x1, dy = y2 - y1;
+    var d = Math.sqrt(dx * dx + dy * dy);
+    if (d === 0) return { x1: x1, y1: y1, x2: x2, y2: y2 };
+    var ux = dx / d, uy = dy / d;
+    return {
+      x1: x1 + ux * (r1 + 2),
+      y1: y1 + uy * (r1 + 2),
+      x2: x2 - ux * (r2 + 6),
+      y2: y2 - uy * (r2 + 6)
+    };
+  }
+
+  function drawLine(x1, y1, x2, y2, stroke, dash, marker) {
+    var t = trimLine(x1, y1, x2, y2, R, R);
+    var attrs = {
+      x1: t.x1, y1: t.y1, x2: t.x2, y2: t.y2,
+      stroke: stroke, 'stroke-width': '2.2',
+      'marker-end': 'url(#' + (marker || 'arr') + ')'
+    };
+    if (dash) attrs['stroke-dasharray'] = dash;
+    return el('line', attrs);
+  }
+
+  // Curved branch line: horizontal exit from source, curve down to target
+  function drawBranchLine(x1, y1, x2, y2, stroke, dash, marker) {
+    var t1 = trimLine(x1, y1, x2, y2, R, R);
+    // Control: horizontal from source, then straight down
+    var cpx = x1 + (x2 - x1) * 0.4;
+    var cpy = y1;
+    var d = 'M ' + t1.x1 + ' ' + t1.y1 +
+            ' C ' + cpx + ' ' + cpy + ' ' + cpx + ' ' + t1.y2 + ' ' + t1.x2 + ' ' + t1.y2;
+    var attrs = {
+      d: d, stroke: stroke, 'stroke-width': '2.2',
+      fill: 'none', 'marker-end': 'url(#' + (marker || 'arr') + ')'
+    };
+    if (dash) attrs['stroke-dasharray'] = dash;
+    return el('path', attrs);
+  }
+
+  // Merge converge: comes from below-right up to merge commit
+  function drawMergeLine(x1, y1, x2, y2, stroke) {
+    var t = trimLine(x1, y1, x2, y2, R, R);
+    var cpx = x2 - (x2 - x1) * 0.4;
+    var cpy = y2;
+    var d = 'M ' + t.x1 + ' ' + t.y1 +
+            ' C ' + cpx + ' ' + t.y1 + ' ' + cpx + ' ' + cpy + ' ' + t.x2 + ' ' + t.y2;
+    return el('path', {
+      d: d, stroke: stroke, 'stroke-width': '2.2',
+      fill: 'none', 'marker-end': 'url(#arr-merge)'
+    });
+  }
+
+  // Replay arc: dashed arrow from ghost position to new position
+  function drawReplayArc(x1, y1, x2, y2) {
+    var t = trimLine(x1, y1, x2, y2, R, R);
+    var mx = (x1 + x2) / 2;
+    var my = (y1 + y2) / 2 - 35; // arc up
+    var d = 'M ' + t.x1 + ' ' + t.y1 + ' Q ' + mx + ' ' + my + ' ' + t.x2 + ' ' + t.y2;
+    return el('path', {
+      d: d, stroke: '#f59e0b', 'stroke-width': '1.5',
+      'stroke-dasharray': '5,4', fill: 'none', opacity: '0.6',
+      'marker-end': 'url(#arr-rebase)'
+    });
+  }
+
+  // Returns { outer, inner } — outer handles position, inner handles animation
+  function drawCommit(id, x, y, label, col, opacity) {
+    var outer = el('g', { id: 'c-' + id });
+    outer.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+    outer.style.opacity = (opacity !== undefined ? opacity : 1);
+    outer.style.transition = 'opacity 0.45s ease';
+
+    var inner = el('g', {});
+    var circle = el('circle', {
+      r: R, fill: col.fill, stroke: col.stroke, 'stroke-width': '2.5'
+    });
+    var txt = el('text', {
+      'text-anchor': 'middle', 'dominant-baseline': 'middle',
+      fill: '#e8e8f0', 'font-family': 'monospace',
+      'font-size': '13', 'font-weight': '700'
+    });
+    txt.textContent = label;
+    inner.appendChild(circle);
+    inner.appendChild(txt);
+    outer.appendChild(inner);
+    return { outer: outer, inner: inner };
+  }
+
+  // Small HEAD label + pointer above a commit
+  function drawHead(x, y, text, color) {
+    var g = el('g', {});
+    var by = y - R - 4;
+    var ty = y - R - 20;
+
+    // Background pill
+    var tw = text.length * 6.5 + 10;
+    g.appendChild(el('rect', {
+      x: x - tw/2, y: ty - 9,
+      width: tw, height: 14, rx: 3,
+      fill: color + '22', stroke: color + '44'
+    }));
+    // Label text
+    var t = el('text', {
+      x: x, y: ty,
+      'text-anchor': 'middle', 'dominant-baseline': 'middle',
+      fill: color, 'font-family': 'monospace',
+      'font-size': '10', 'font-weight': '700'
+    });
+    t.textContent = text;
+    g.appendChild(t);
+
+    // Pointer line
+    g.appendChild(el('line', {
+      x1: x, y1: ty + 5, x2: x, y2: by,
+      stroke: color, 'stroke-width': '1.5'
+    }));
+    return g;
+  }
+
+  // Pop-in animation on the inner group (outer group holds the translate)
+  function popIn(innerEl) {
+    innerEl.style.animation = 'none';
+    void innerEl.offsetWidth;
+    innerEl.style.animation = 'popIn 0.35s cubic-bezier(0.34,1.56,0.64,1) forwards';
+  }
+
+  // Inject keyframes
+  var style = document.createElement('style');
+  style.textContent = '@keyframes popIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}' +
+                      '@keyframes fadeIn{from{opacity:0}to{opacity:1}}';
+  document.head.appendChild(style);
+
+  // ─── State machine ────────────────────────────────────────────────────────
+  var state = 'initial';
+
+  function setExplanation(html, cls) {
+    var el = document.getElementById('explanation');
+    el.innerHTML = html;
+    el.className = 'explanation' + (cls ? ' expl-' + cls : '');
+  }
+
+  function setBadge(text, cls) {
+    var b = document.getElementById('stateBadge');
+    b.textContent = text;
+    b.className = 'state-badge state-' + cls;
+  }
+
+  function setButtons(mergeOff, rebaseOff) {
+    document.getElementById('btnMerge').disabled  = mergeOff;
+    document.getElementById('btnRebase').disabled = rebaseOff;
+  }
+
+  function drawInitial() {
+    clear(layerEdges);
+    clear(layerNodes);
+    clear(layerHeads);
+
+    // Edges
+    layerEdges.appendChild(drawLine(POS.A.x, POS.A.y, POS.B.x, POS.B.y, '#44465a'));
+    layerEdges.appendChild(drawLine(POS.B.x, POS.B.y, POS.C.x, POS.C.y, '#44465a'));
+    layerEdges.appendChild(drawBranchLine(POS.B.x, POS.B.y, POS.D.x, POS.D.y, '#44465a'));
+    layerEdges.appendChild(drawLine(POS.D.x, POS.D.y, POS.E.x, POS.E.y, '#44465a'));
+
+    // Nodes
+    layerNodes.appendChild(drawCommit('A', POS.A.x, POS.A.y, 'A', COL.main).outer);
+    layerNodes.appendChild(drawCommit('B', POS.B.x, POS.B.y, 'B', COL.main).outer);
+    layerNodes.appendChild(drawCommit('C', POS.C.x, POS.C.y, 'C', COL.main).outer);
+    layerNodes.appendChild(drawCommit('D', POS.D.x, POS.D.y, 'D', COL.feature).outer);
+    layerNodes.appendChild(drawCommit('E', POS.E.x, POS.E.y, 'E', COL.feature).outer);
+
+    // HEAD labels
+    layerHeads.appendChild(drawHead(POS.C.x, POS.C.y, 'HEAD·main', '#4f9cf9'));
+    layerHeads.appendChild(drawHead(POS.E.x, POS.E.y, 'HEAD·feature', '#a855f7'));
+  }
+
+  function drawMerge() {
+    clear(layerEdges);
+    clear(layerNodes);
+    clear(layerHeads);
+
+    // All original edges
+    layerEdges.appendChild(drawLine(POS.A.x, POS.A.y, POS.B.x, POS.B.y, '#44465a'));
+    layerEdges.appendChild(drawLine(POS.B.x, POS.B.y, POS.C.x, POS.C.y, '#44465a'));
+    layerEdges.appendChild(drawBranchLine(POS.B.x, POS.B.y, POS.D.x, POS.D.y, '#44465a'));
+    layerEdges.appendChild(drawLine(POS.D.x, POS.D.y, POS.E.x, POS.E.y, '#44465a'));
+
+    // Merge edges (new)
+    var cToM = drawLine(POS.C.x, POS.C.y, POS.M.x, POS.M.y, '#22c55e', null, 'arr-merge');
+    cToM.style.animation = 'fadeIn 0.4s ease forwards';
+    layerEdges.appendChild(cToM);
+
+    var eToM = drawMergeLine(POS.E.x, POS.E.y, POS.M.x, POS.M.y, '#22c55e');
+    eToM.style.animation = 'fadeIn 0.5s 0.1s ease forwards';
+    eToM.style.opacity = '0';
+    // After animation, set opacity to 1
+    setTimeout(function() { eToM.style.opacity = ''; eToM.style.animation = ''; }, 650);
+    eToM.style.animation = 'fadeIn 0.5s 0.1s ease both';
+    layerEdges.appendChild(eToM);
+
+    // All original nodes
+    layerNodes.appendChild(drawCommit('A', POS.A.x, POS.A.y, 'A', COL.main).outer);
+    layerNodes.appendChild(drawCommit('B', POS.B.x, POS.B.y, 'B', COL.main).outer);
+    layerNodes.appendChild(drawCommit('C', POS.C.x, POS.C.y, 'C', COL.main).outer);
+    layerNodes.appendChild(drawCommit('D', POS.D.x, POS.D.y, 'D', COL.feature).outer);
+    layerNodes.appendChild(drawCommit('E', POS.E.x, POS.E.y, 'E', COL.feature).outer);
+
+    // Merge commit M — pops in from center
+    var mPair = drawCommit('M', POS.M.x, POS.M.y, 'M', COL.merge);
+    layerNodes.appendChild(mPair.outer);
+    setTimeout(function() { popIn(mPair.inner); }, 50);
+
+    // HEAD labels
+    layerHeads.appendChild(drawHead(POS.M.x, POS.M.y, 'HEAD·main', '#22c55e'));
+    layerHeads.appendChild(drawHead(POS.E.x, POS.E.y, 'HEAD·feature', '#a855f7'));
+  }
+
+  function drawRebase() {
+    clear(layerEdges);
+    clear(layerNodes);
+    clear(layerHeads);
+
+    // Original edges (ghost)
+    layerEdges.appendChild(drawLine(POS.A.x, POS.A.y, POS.B.x, POS.B.y, '#44465a'));
+    layerEdges.appendChild(drawLine(POS.B.x, POS.B.y, POS.C.x, POS.C.y, '#44465a'));
+    layerEdges.appendChild(drawBranchLine(POS.B.x, POS.B.y, POS.D.x, POS.D.y, '#333', '4,4', 'arr-ghost'));
+    layerEdges.appendChild(drawLine(POS.D.x, POS.D.y, POS.E.x, POS.E.y, '#333', '4,4', 'arr-ghost'));
+
+    // Rebase replay arcs (dashed, showing where commits went)
+    var arc1 = drawReplayArc(POS.D.x, POS.D.y, POS.Dp.x, POS.Dp.y);
+    arc1.style.animation = 'fadeIn 0.5s 0.15s ease both';
+    layerEdges.appendChild(arc1);
+    var arc2 = drawReplayArc(POS.E.x, POS.E.y, POS.Ep.x, POS.Ep.y);
+    arc2.style.animation = 'fadeIn 0.5s 0.25s ease both';
+    layerEdges.appendChild(arc2);
+
+    // New rebase edges
+    var cToDp = drawLine(POS.C.x, POS.C.y, POS.Dp.x, POS.Dp.y, '#f59e0b', null, 'arr-rebase');
+    cToDp.style.animation = 'fadeIn 0.4s ease both';
+    layerEdges.appendChild(cToDp);
+    var dpToEp = drawLine(POS.Dp.x, POS.Dp.y, POS.Ep.x, POS.Ep.y, '#f59e0b', null, 'arr-rebase');
+    dpToEp.style.animation = 'fadeIn 0.4s 0.1s ease both';
+    layerEdges.appendChild(dpToEp);
+
+    // Original nodes
+    layerNodes.appendChild(drawCommit('A', POS.A.x, POS.A.y, 'A', COL.main).outer);
+    layerNodes.appendChild(drawCommit('B', POS.B.x, POS.B.y, 'B', COL.main).outer);
+    layerNodes.appendChild(drawCommit('C', POS.C.x, POS.C.y, 'C', COL.main).outer);
+
+    // Ghost nodes (faded originals)
+    layerNodes.appendChild(drawCommit('D', POS.D.x, POS.D.y, 'D', COL.ghost, 0.25).outer);
+    layerNodes.appendChild(drawCommit('E', POS.E.x, POS.E.y, 'E', COL.ghost, 0.25).outer);
+
+    // Rebased nodes — pop in from center
+    var dpPair = drawCommit('Dp', POS.Dp.x, POS.Dp.y, "D'", COL.rebase);
+    layerNodes.appendChild(dpPair.outer);
+    setTimeout(function() { popIn(dpPair.inner); }, 100);
+
+    var epPair = drawCommit('Ep', POS.Ep.x, POS.Ep.y, "E'", COL.rebase);
+    layerNodes.appendChild(epPair.outer);
+    setTimeout(function() { popIn(epPair.inner); }, 220);
+
+    // HEAD label
+    layerHeads.appendChild(drawHead(POS.Ep.x, POS.Ep.y, 'HEAD·feature', '#f59e0b'));
+  }
+
+  // Public API
+  window.viz = {
+    merge: function() {
+      if (state !== 'initial') return;
+      state = 'merge';
+      drawMerge();
+      setBadge('After: git merge feature', 'merge');
+      setExplanation(
+        '<strong>Merge commit M created.</strong> M has two parents: C and E. ' +
+        'The full history is preserved — you can see feature branched from B and work happened in parallel. ' +
+        '<code>git log --graph</code> shows the fork and convergence. ' +
+        'D and E keep their original SHAs unchanged.',
+        'merge'
+      );
+      setButtons(true, false);
+    },
+
+    rebase: function() {
+      if (state !== 'initial') return;
+      state = 'rebase';
+      drawRebase();
+      setBadge('After: git rebase main', 'rebase');
+      setExplanation(
+        "<strong>D and E replayed as D' and E'.</strong> D's new parent is C instead of B — so it gets a new SHA. " +
+        "Same for E'. History is now linear: A→B→C→D'→E'. " +
+        "The original D and E (ghosted below) no longer exist in this branch's history. " +
+        "The dashed arcs show where each commit was replayed from.",
+        'rebase'
+      );
+      setButtons(false, true);
+    },
+
+    reset: function() {
+      state = 'initial';
+      drawInitial();
+      setBadge('Initial state', 'initial');
+      setExplanation(
+        '<strong>Starting state:</strong> main is at commit C. feature has commits D and E, ' +
+        'branched from B. main has advanced (added C) since the branch was created — they have diverged.'
+      );
+      setButtons(false, false);
+    }
+  };
+
+  // Initial render
+  viz.reset();
+
+})();
+</script>
+
+</body>
+</html>
