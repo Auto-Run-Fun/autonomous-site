@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How to Write a System Prompt That Works — A Practical Guide</title>
+<meta name="description" content="A short reference guide to writing LLM system prompts that actually work. Covers the four structural components, common mistakes, and when to use templates, the linter, and the debugger.">
+<link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/system-prompt-guide.html">
+<meta property="og:title" content="How to Write a System Prompt That Actually Works">
+<meta property="og:description" content="The structural guide to LLM system prompts. Role, format, constraints, fallback — plus tools to lint before you ship and debug after it breaks.">
+<meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/system-prompt-guide.html">
+<meta name="twitter:card" content="summary">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to Write a System Prompt That Actually Works",
+  "description": "A practical guide to writing LLM system prompts with the four structural components that prevent the most common failures.",
+  "url": "https://auto-run-fun.github.io/autonomous-site/system-prompt-guide.html",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "name": "Define a specific role",
+      "text": "Open with one sentence stating what the model is and what it is not. Vague role definitions produce inconsistent behavior — the model fills in the gaps with its defaults."
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Specify output format",
+      "text": "Tell the model exactly how to structure its response: JSON schema, markdown headings, plain prose. Without format guidance, models choose their own structure and it shifts between calls."
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Write constraints, not permissions",
+      "text": "List what the model must not do rather than everything it may do. Constraints are easier to reason about and harder to work around."
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Add a fallback instruction",
+      "text": "Tell the model what to do when the user's request is out of scope, ambiguous, or unsafe. Without a fallback, models hallucinate solutions or refuse in unpredictable ways."
+    }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is a system prompt?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A system prompt is the instruction set you pass to an LLM before the user's first message. It defines the model's role, behavior, output format, constraints, and fallback handling. Unlike the user message, the system prompt is usually invisible to the user and persists across the conversation."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why do system prompts fail?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Most system prompt failures are structural, not semantic. The four most common gaps: no explicit role definition, no output format specification, no constraints on out-of-scope requests, and no fallback instruction for ambiguous inputs. The model fills in each gap with its defaults, which are inconsistent."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What should a system prompt always include?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Four components: (1) a specific role statement — what the model is and is not; (2) an output format specification — JSON schema, heading structure, or prose style; (3) constraints — what the model must not do; (4) a fallback — what the model does when the user request is out of scope or ambiguous."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How long should a system prompt be?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Long enough to specify all four structural components; short enough that a developer can read it in under two minutes. Most production prompts are 150–600 words. Longer prompts tend to have contradictions and dead weight that reduce consistency."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between a system prompt and a user message?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The system prompt is fixed developer-controlled instruction that shapes every response. The user message is dynamic input the model responds to. Instructions in the system prompt override conflicting instructions in the user message in most models."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Should I use negative instructions (don't do X) in a system prompt?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, sparingly. Negative instructions (don't, never, avoid) are useful for hard constraints — things the model must never do regardless of context. Too many negative instructions signal that the positive role definition was insufficient. If you have more than three or four, rewrite the role definition."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I debug a system prompt that isn't working?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Start with the structural checks: is the role specific? Is the output format explicit? Is there a fallback? If the structure is sound, the problem is usually one of three things: the constraint is too vague, the output format description conflicts with an example, or the fallback instruction is missing. The AI Prompt Debugger (linked below) walks through the most common symptoms and diagnoses with model-specific fixes."
+      }
+    }
+  ]
+}
+</script>
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-text-size-adjust:100%}
+body{background:#0b0b10;color:#e8e8f0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.6;min-height:100vh;padding:0 16px}
+a{color:#7eb8f7;text-decoration:none}
+a:hover{text-decoration:underline}
+code{font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-size:.85em;background:#131320;padding:1px 5px;border-radius:3px;color:#a8d8a8}
+
+.wrap{max-width:680px;margin:0 auto;padding:40px 0 80px}
+
+.topnav{margin-bottom:32px;font-size:.875rem;color:#888}
+.topnav a{color:#7eb8f7}
+.topnav .sep{margin:0 6px;opacity:.4}
+
+h1{font-size:1.75rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:10px;line-height:1.25}
+.subtitle{color:#aaa;font-size:1rem;margin-bottom:36px;max-width:580px}
+
+/* Section headers */
+h2{font-size:1.1rem;font-weight:700;color:#e8e8f0;margin-bottom:10px;margin-top:40px}
+h2:first-of-type{margin-top:0}
+p{color:#c8c8d8;margin-bottom:14px;max-width:620px}
+p:last-child{margin-bottom:0}
+
+/* Divider */
+hr{border:none;border-top:1px solid #1e1e2e;margin:36px 0}
+
+/* The four components table */
+.components{display:grid;gap:10px;margin-bottom:24px}
+.comp{background:#131320;border:1px solid #2a2a3d;border-radius:8px;padding:14px 16px;display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start}
+.comp-num{font-size:.7rem;font-weight:700;color:#7eb8f7;background:#0f1830;border:1px solid #1e3060;border-radius:4px;padding:3px 7px;letter-spacing:.05em;white-space:nowrap;margin-top:2px}
+.comp-body{}
+.comp-name{font-weight:600;font-size:.95rem;color:#e8e8f0;margin-bottom:3px}
+.comp-desc{font-size:.88rem;color:#999;line-height:1.5}
+.comp-fail{font-size:.8rem;color:#c07878;margin-top:5px;font-style:italic}
+
+/* Tool cards */
+.tool-cards{display:grid;gap:14px;margin-top:14px}
+.tool-card{background:#131320;border:1px solid #2a2a3d;border-radius:10px;padding:18px 20px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;transition:border-color .15s}
+.tool-card:hover{border-color:#3a3a5d;text-decoration:none}
+.tc-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#666;margin-bottom:4px}
+.tc-name{font-size:1rem;font-weight:600;color:#7eb8f7;margin-bottom:4px}
+.tc-desc{font-size:.85rem;color:#999;line-height:1.45}
+.tc-when{font-size:.78rem;color:#666;margin-top:6px;font-style:italic}
+.tc-arrow{font-size:1.3rem;color:#3a3a5d}
+
+/* Mistakes list */
+.mistakes{display:grid;gap:8px;margin-top:14px}
+.mistake{background:#131320;border:1px solid #2a2a3d;border-left:3px solid #6644aa;border-radius:0 8px 8px 0;padding:12px 16px;font-size:.88rem;color:#b8b8cc;line-height:1.5}
+.mistake strong{color:#d8c0f0;font-weight:600}
+
+/* FAQ section */
+.faq-list{margin-top:14px}
+.faq-item{border-bottom:1px solid #1a1a28;padding:16px 0}
+.faq-item:last-child{border-bottom:none}
+.faq-q{font-size:.95rem;font-weight:600;color:#ddd;margin-bottom:8px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:8px;user-select:none}
+.faq-q::after{content:"↓";font-size:.8rem;color:#555;flex-shrink:0;transition:transform .2s}
+.faq-item.open .faq-q::after{transform:rotate(180deg)}
+.faq-a{font-size:.875rem;color:#999;line-height:1.6;display:none;max-width:600px}
+.faq-item.open .faq-a{display:block}
+
+/* Sequence diagram */
+.sequence{display:flex;align-items:center;gap:8px;margin:14px 0 24px;flex-wrap:wrap}
+.seq-step{background:#131320;border:1px solid #2a2a3d;border-radius:7px;padding:8px 14px;font-size:.82rem;color:#ccc;white-space:nowrap}
+.seq-step a{color:#ccc}
+.seq-step a:hover{color:#7eb8f7}
+.seq-arrow{color:#444;font-size:.9rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topnav">
+    <a href="./">← Home</a>
+    <span class="sep">·</span>
+    <a href="./system-prompt-templates.html">Templates</a>
+    <span class="sep">·</span>
+    <a href="./prompt-linter.html">Linter</a>
+    <span class="sep">·</span>
+    <a href="./prompt-debug.html">Debugger</a>
+  </div>
+
+  <h1>How to write a system prompt that actually works</h1>
+  <p class="subtitle">Most prompt failures are structural — missing role, missing format spec, no fallback. Fix the structure first. The content follows.</p>
+
+  <h2>The four components</h2>
+  <p>Every working system prompt has the same four parts. Missing any one of them forces the model to fill the gap with its defaults, which are inconsistent across calls and across models.</p>
+
+  <div class="components">
+    <div class="comp">
+      <span class="comp-num">01</span>
+      <div class="comp-body">
+        <div class="comp-name">Role definition</div>
+        <div class="comp-desc">One sentence: what the model <em>is</em> and what it is <em>not</em>. Be specific about the domain, the user, and the task. Generic roles ("You are a helpful assistant") produce generic behavior.</div>
+        <div class="comp-fail">Without this: the model role-plays its training defaults, which shift unpredictably.</div>
+      </div>
+    </div>
+    <div class="comp">
+      <span class="comp-num">02</span>
+      <div class="comp-body">
+        <div class="comp-name">Output format</div>
+        <div class="comp-desc">Specify exactly how the response should be structured. If you need JSON, write the schema. If you need markdown headings, name them. If you need prose, say so and give a length target.</div>
+        <div class="comp-fail">Without this: the model chooses its own structure, which drifts between calls and breaks downstream parsing.</div>
+      </div>
+    </div>
+    <div class="comp">
+      <span class="comp-num">03</span>
+      <div class="comp-body">
+        <div class="comp-name">Constraints</div>
+        <div class="comp-desc">Hard limits on what the model must not do. Keep this list short — three or four items at most. More than that usually means the role definition was insufficient.</div>
+        <div class="comp-fail">Without this: edge-case inputs produce unpredictable behavior. The model improvises.</div>
+      </div>
+    </div>
+    <div class="comp">
+      <span class="comp-num">04</span>
+      <div class="comp-body">
+        <div class="comp-name">Fallback instruction</div>
+        <div class="comp-desc">What the model does when the user's request is out of scope, ambiguous, or unsafe. "If you cannot answer, say X" is enough. Without it, the model either refuses in a variety of ways or hallucinates an answer.</div>
+        <div class="comp-fail">Without this: out-of-scope inputs produce inconsistent refusals or confident hallucinations.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <h2>The workflow — three steps</h2>
+  <p>There's a natural sequence for building a system prompt that works in production. Each step catches a different class of problem.</p>
+
+  <div class="sequence">
+    <div class="seq-step">1. <a href="./system-prompt-templates.html">Start from a template</a></div>
+    <span class="seq-arrow">→</span>
+    <div class="seq-step">2. <a href="./prompt-linter.html">Lint before you ship</a></div>
+    <span class="seq-arrow">→</span>
+    <div class="seq-step">3. <a href="./prompt-debug.html">Debug after it breaks</a></div>
+  </div>
+
+  <div class="tool-cards">
+    <a class="tool-card" href="./system-prompt-templates.html">
+      <div>
+        <div class="tc-label">Step 1</div>
+        <div class="tc-name">System Prompt Templates →</div>
+        <div class="tc-desc">12 production-ready templates for the most common agent types: customer support, code reviewer, JSON extractor, SQL generator, and more. Each has the four structural components already filled in.</div>
+        <div class="tc-when">Use when: starting from scratch or looking for a reference structure.</div>
+      </div>
+      <div class="tc-arrow">→</div>
+    </a>
+    <a class="tool-card" href="./prompt-linter.html">
+      <div>
+        <div class="tc-label">Step 2</div>
+        <div class="tc-name">System Prompt Linter →</div>
+        <div class="tc-desc">Paste your prompt and check it for structural issues before deployment. Catches missing role definition, missing output format, unfilled placeholders, weak instruction language, and more.</div>
+        <div class="tc-when">Use when: you've written a prompt and want to check it before shipping.</div>
+      </div>
+      <div class="tc-arrow">→</div>
+    </a>
+    <a class="tool-card" href="./prompt-debug.html">
+      <div>
+        <div class="tc-label">Step 3</div>
+        <div class="tc-name">AI Prompt Debugger →</div>
+        <div class="tc-desc">Pick your model (Claude, GPT-4, Gemini), select your symptom, answer one question, get a specific fix with copy-paste snippets. Covers 21 failure patterns with model-specific diagnosis.</div>
+        <div class="tc-when">Use when: your prompt is deployed but producing wrong results.</div>
+      </div>
+      <div class="tc-arrow">→</div>
+    </a>
+  </div>
+
+  <hr>
+
+  <h2>Common structural mistakes</h2>
+  <p>These account for the majority of system prompt failures in production. The linter catches most of them automatically.</p>
+
+  <div class="mistakes">
+    <div class="mistake"><strong>Vague role:</strong> "You are a helpful AI assistant." The model has no scope, no user, no domain. Every response is a guess about what "helpful" means in this context.</div>
+    <div class="mistake"><strong>No output format:</strong> The model produces markdown in one call, plain text in another, and a numbered list in a third. Downstream parsing breaks intermittently and the bug is hard to reproduce.</div>
+    <div class="mistake"><strong>Conflicting instructions:</strong> "Be concise" followed by "explain your reasoning in detail." The model resolves conflicts in unpredictable ways — sometimes prioritizing the first instruction, sometimes the last, sometimes ignoring both.</div>
+    <div class="mistake"><strong>Overly permissive constraints:</strong> "Try not to make things up." A soft instruction doesn't override a strong user request. Hard constraints require language like "never" or "you must not" — not "try" or "aim to."</div>
+    <div class="mistake"><strong>No fallback:</strong> The prompt handles the happy path but not ambiguous or out-of-scope inputs. When a user asks something unexpected, the model either refuses unhelpfully or invents an answer.</div>
+    <div class="mistake"><strong>Unfilled placeholders:</strong> <code>[COMPANY_NAME]</code> or <code>[YOUR POLICY HERE]</code> left in the live prompt. The model treats these literally or ignores them — both cause incorrect behavior.</div>
+  </div>
+
+  <hr>
+
+  <h2>Frequently asked questions</h2>
+
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-q">What is a system prompt?</div>
+      <div class="faq-a">A system prompt is the instruction set you pass to an LLM before the user's first message. It defines the model's role, behavior, output format, constraints, and fallback handling. Unlike the user message, the system prompt is usually invisible to the user and persists across the conversation.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Why do system prompts fail?</div>
+      <div class="faq-a">Most system prompt failures are structural, not semantic. The four most common gaps: no explicit role definition, no output format specification, no constraints on out-of-scope requests, and no fallback instruction for ambiguous inputs. The model fills in each gap with its defaults, which are inconsistent.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">What should a system prompt always include?</div>
+      <div class="faq-a">Four components: (1) a specific role statement — what the model is and is not; (2) an output format specification — JSON schema, heading structure, or prose style; (3) constraints — what the model must not do; (4) a fallback — what the model does when the user request is out of scope or ambiguous.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">How long should a system prompt be?</div>
+      <div class="faq-a">Long enough to specify all four structural components; short enough that a developer can read it in under two minutes. Most production prompts are 150–600 words. Longer prompts tend to accumulate contradictions and dead weight that reduce consistency.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Should I use negative instructions (don't do X) in a system prompt?</div>
+      <div class="faq-a">Yes, sparingly. Negative instructions are useful for hard constraints — things the model must never do regardless of context. Too many negative instructions signal that the positive role definition was insufficient. If you have more than three or four, rewrite the role definition instead of adding more negatives.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">How do I debug a system prompt that isn't working?</div>
+      <div class="faq-a">Start with the structural checks: is the role specific? Is the output format explicit? Is there a fallback? If the structure is sound, the problem is usually one of three things: the constraint is too vague, the output format description conflicts with an example, or the fallback instruction is missing. The <a href="./prompt-debug.html">AI Prompt Debugger</a> walks through the most common symptoms with model-specific fixes.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Does the system prompt get overridden by the user message?</div>
+      <div class="faq-a">System prompt instructions have higher precedence than user message instructions in most models. However, very insistent user messages can shift model behavior — which is why constraints in the system prompt need to use strong language ("you must not," "never") rather than soft language ("try not to," "avoid").</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+document.querySelectorAll('.faq-q').forEach(q => {
+  q.addEventListener('click', () => {
+    const item = q.closest('.faq-item');
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+    if (!wasOpen) item.classList.add('open');
+  });
+});
+</script>
+
+<script data-goatcounter="https://auto-run-fun.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
