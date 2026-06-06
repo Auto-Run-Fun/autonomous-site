@@ -167,6 +167,12 @@ h1{font-size:1.75rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
 .frame-pkg{font-size:.72rem;color:#2a2a4a;font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace}
 .frame-origin-badge{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#4ade80;margin-top:2px}
 .frame-more{font-size:.8rem;color:#333;padding:8px 14px;font-style:italic;border:1px dashed #1e1e2e;border-radius:6px}
+.frames-toggle{background:none;border:1px dashed #2a2a4a;border-radius:5px;color:#4a4a7a;font-size:.75rem;padding:6px 14px;cursor:pointer;width:100%;text-align:left;margin:3px 0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+.frames-toggle:hover{border-color:#4a4a8a;color:#6a6ab0;background:#0d0d1a}
+.causedby-chain{margin-top:6px}
+.causedby-arrow{display:flex;align-items:center;gap:8px;padding:4px 0 4px 14px;color:#2e2e50;font-size:.72rem;font-style:italic;letter-spacing:.04em}
+.causedby-arrow::before{content:'▼';font-size:.55rem;color:#3a3a60}
+.causedby-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#444;padding:6px 14px 2px;background:#0a0a12;border-top:1px solid #1a1a28}
 .unknown-msg{background:#131320;border:1px solid #2a2a3d;border-radius:8px;padding:16px 20px;color:#777;font-size:.9rem;line-height:1.5}
 .reference{margin-top:44px;border-top:1px solid #1a1a28;padding-top:36px}
 h2{font-size:1.1rem;font-weight:700;letter-spacing:-0.01em;margin-bottom:18px;color:#ccc}
@@ -218,6 +224,7 @@ h3{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em
   <button class="ex-btn" data-ex="js-type">JavaScript TypeError</button>
   <button class="ex-btn" data-ex="js-range">JavaScript RangeError</button>
   <button class="ex-btn" data-ex="java-npe">Java NullPointer</button>
+  <button class="ex-btn" data-ex="java-caused">Java Caused By chain</button>
 </div>
 
 <div id="output"></div>
@@ -315,7 +322,21 @@ KeyError: 'user'`,
 \tat com.example.InputValidator.sanitize(InputValidator.java:28)
 \tat com.example.UserService.registerUser(UserService.java:54)
 \tat com.example.api.UserController.register(UserController.java:31)
-\tat com.example.Main.main(Main.java:12)`
+\tat com.example.Main.main(Main.java:12)`,
+
+  'java-caused': `org.springframework.transaction.TransactionSystemException: Could not commit JPA transaction
+\tat org.springframework.orm.jpa.JpaTransactionManager.doCommit(JpaTransactionManager.java:562)
+\tat org.springframework.transaction.support.AbstractPlatformTransactionManager.processCommit(AbstractPlatformTransactionManager.java:743)
+\tat com.example.OrderService.placeOrder(OrderService.java:89)
+\tat com.example.api.OrderController.checkout(OrderController.java:44)
+Caused by: javax.persistence.RollbackException: Error while committing the transaction
+\tat org.hibernate.internal.ExceptionConverterImpl.convertCommitException(ExceptionConverterImpl.java:77)
+\tat com.example.OrderService.placeOrder(OrderService.java:89)
+\t... 3 more
+Caused by: java.sql.SQLIntegrityConstraintViolationException: Duplicate entry '42' for key 'orders.PRIMARY'
+\tat com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:117)
+\tat com.example.repository.OrderRepository.save(OrderRepository.java:31)
+\t... 5 more`
 };
 
 const ERROR_DB = {
@@ -754,49 +775,71 @@ function parseJavaScript(text) {
   return { lang: 'javascript', frames, errorType, errorMessage };
 }
 
-function parseJava(text) {
-  const lines = text.split('\n');
-  let frames = [];
+function parseJavaBlock(lines, startIdx) {
+  let i = startIdx;
   let errorType = '', errorMessage = '', fullErrorClass = '';
+  let frames = [];
 
-  if (lines.length > 0) {
-    const m = lines[0].trim().match(/^(.+?(?:Exception|Error|Throwable)): (.*)/);
+  if (i < lines.length) {
+    let firstLine = lines[i].trim();
+    if (firstLine.startsWith('Caused by: ')) firstLine = firstLine.slice(11);
+    const m = firstLine.match(/^(.+?(?:Exception|Error|Throwable)): ([\s\S]*)/);
     if (m) {
       fullErrorClass = m[1];
       errorMessage = m[2];
       const parts = fullErrorClass.split('.');
       errorType = parts[parts.length - 1];
+    } else {
+      const m2 = firstLine.match(/^(.+?(?:Exception|Error|Throwable))\s*$/);
+      if (m2) { fullErrorClass = m2[1]; const pts = m2[1].split('.'); errorType = pts[pts.length - 1]; }
     }
+    i++;
   }
 
-  for (let i = 1; i < lines.length; i++) {
+  while (i < lines.length) {
     const line = lines[i];
-    if (/^Caused by:/.test(line.trim())) break;
+    if (/^\s*Caused by:/.test(line)) break;
     const at = line.match(/^\s+at ([A-Za-z$_][\w$.]*?)\.(\w+)\((.+):(\d+)\)/);
     if (at) {
       const classFull = at[1], method = at[2], file = at[3], ln = parseInt(at[4]);
       const parts = classFull.split('.');
-      const className = parts[parts.length - 1];
-      const pkg = parts.slice(0, -1).join('.');
-      frames.push({ classFull, className, pkg, method, file, line: ln, isMore: false });
-      continue;
+      frames.push({ classFull, className: parts[parts.length - 1], pkg: parts.slice(0, -1).join('.'), method, file, line: ln, isMore: false });
+      i++; continue;
     }
     const atUnknown = line.match(/^\s+at ([A-Za-z$_][\w$.]*?)\.(\w+)\((Unknown Source|Native Method)\)/);
     if (atUnknown) {
       const classFull = atUnknown[1];
       const parts = classFull.split('.');
       frames.push({ classFull, className: parts[parts.length - 1], pkg: parts.slice(0, -1).join('.'), method: atUnknown[2], file: atUnknown[3], line: 0, isMore: false });
-      continue;
+      i++; continue;
     }
     const more = line.match(/^\s+\.\.\. (\d+) more/);
-    if (more) frames.push({ isMore: true, count: parseInt(more[1]) });
+    if (more) { frames.push({ isMore: true, count: parseInt(more[1]) }); i++; continue; }
+    i++;
   }
 
   const normal = frames.filter(f => !f.isMore);
   normal.reverse();
   frames = [...normal, ...frames.filter(f => f.isMore)];
 
-  return { lang: 'java', frames, errorType, errorMessage, fullErrorClass };
+  return { errorType, errorMessage, fullErrorClass, frames, nextIdx: i };
+}
+
+function parseJava(text) {
+  const lines = text.split('\n');
+  const top = parseJavaBlock(lines, 0);
+  const causedBy = [];
+  let i = top.nextIdx;
+
+  while (i < lines.length) {
+    if (/^\s*Caused by:/.test(lines[i])) {
+      const cb = parseJavaBlock(lines, i);
+      causedBy.push({ errorType: cb.errorType, errorMessage: cb.errorMessage, fullErrorClass: cb.fullErrorClass, frames: cb.frames });
+      i = cb.nextIdx;
+    } else { i++; }
+  }
+
+  return { lang: 'java', frames: top.frames, errorType: top.errorType, errorMessage: top.errorMessage, fullErrorClass: top.fullErrorClass, causedBy };
 }
 
 function parseTrace(text) {
@@ -812,19 +855,48 @@ function explainJSMessage(type, msg) {
   if (type === 'TypeError') {
     const m1 = msg.match(/Cannot read propert(?:y|ies) of (\w+)(?: \(reading '(.+)'\))?/);
     if (m1) return 'Tried to access ' + (m1[2] ? '<code>.' + esc(m1[2]) + '</code> ' : 'a property ') + 'on a value that is <code>' + esc(m1[1]) + '</code> — the object was never set before this point.';
+    const mset = msg.match(/Cannot set propert(?:y|ies) of (\w+)(?: \(setting '(.+)'\))?/);
+    if (mset) return 'Tried to assign ' + (mset[2] ? '<code>.' + esc(mset[2]) + '</code> ' : 'a property ') + 'on a value that is <code>' + esc(mset[1]) + '</code> — the target object does not exist yet.';
     const m2 = msg.match(/(.+) is not a function/);
     if (m2) return '<code>' + esc(m2[1]) + '</code> is being called as a function, but it is not one. Check for a typo or a missing import.';
+    const mncon = msg.match(/(.+) is not a constructor/);
+    if (mncon) return '<code>' + esc(mncon[1]) + '</code> was called with <code>new</code>, but it is not a constructor. Arrow functions and some built-ins cannot be instantiated with <code>new</code>.';
     const m3 = msg.match(/(.+) is not iterable/);
     if (m3) return '<code>' + esc(m3[1]) + '</code> was used with <code>...</code> or <code>for...of</code>, but it is not an array or iterable object.';
+    if (msg.includes('Reduce of empty array with no initial value')) return 'Called <code>.reduce()</code> on an empty array without providing an initial value as the second argument. Add a fallback: <code>.reduce(fn, initialValue)</code>.';
+    if (msg.includes('Converting circular structure to JSON')) return 'Tried to <code>JSON.stringify()</code> an object that contains a circular reference — a property that points back to the same object. Remove the cycle or use a custom replacer.';
+    if (msg.includes('Cannot assign to read only property')) {
+      const mr = msg.match(/property '(.+)' of/);
+      return 'Tried to assign to <code>' + (mr ? esc(mr[1]) : 'a property') + '</code> that is read-only — the object may be frozen (<code>Object.freeze</code>) or the property is defined with <code>writable: false</code>.';
+    }
   }
-  if (type === 'RangeError' && msg.includes('Maximum call stack')) {
-    return 'A function kept calling itself — infinite recursion. Check that there is a base case that stops the chain.';
+  if (type === 'RangeError') {
+    if (msg.includes('Maximum call stack')) return 'A function kept calling itself — infinite recursion. Check that there is a base case that stops the chain.';
+    if (msg.includes('Invalid array length')) return 'Tried to create an array with an invalid size — the length must be an integer between 0 and 2³²−1.';
+    const mdig = msg.match(/toFixed|toPrecision|toExponential/);
+    if (mdig) return 'The precision argument passed to <code>' + mdig[0] + '()</code> is outside the valid range (0–100 for most environments).';
   }
   if (type === 'ReferenceError') {
     const m = msg.match(/(.+) is not defined/);
     if (m) return '<code>' + esc(m[1]) + '</code> was used but never declared in this scope. Check for a typo or a missing import statement.';
+    if (msg.includes('Cannot access') && msg.includes('before initialization')) {
+      const mv = msg.match(/Cannot access '(.+)' before initialization/);
+      return '<code>' + (mv ? esc(mv[1]) : 'a variable') + '</code> is declared with <code>let</code> or <code>const</code> but used before its declaration line — this is called the Temporal Dead Zone (TDZ).';
+    }
+  }
+  if (type === 'SyntaxError' && msg.includes('JSON')) {
+    return 'The string passed to <code>JSON.parse()</code> is not valid JSON. Common mistakes: trailing commas, single quotes instead of double quotes, unquoted keys, or a non-JSON string like <code>undefined</code>.';
   }
   return null;
+}
+
+let _frameToggleSeq = 0;
+function toggleFrames(btn) {
+  const el = document.getElementById(btn.dataset.id);
+  if (!el) return;
+  const isHidden = el.style.display === 'none';
+  el.style.display = isHidden ? '' : 'none';
+  btn.textContent = isHidden ? 'Hide frames' : ('Show ' + btn.dataset.count + ' hidden frames');
 }
 
 function renderOutput(parsed) {
@@ -880,55 +952,111 @@ function renderOutput(parsed) {
     }
   }
 
-  if (frames.length > 0) {
-    html += '<div class="frames-section">';
-    html += '<div class="frames-header"><span class="frames-label">Call chain</span><span class="frames-hint">— outermost caller to error origin</span></div>';
-    html += '<div class="frames-list">';
+  html += renderFrames(frames, lang, 'frames-' + (++_frameToggleSeq));
 
-    const nonMore = frames.filter(f => !f.isMore);
-    const originIdx = nonMore.length - 1;
-
-    frames.forEach((frame, i) => {
-      if (frame.isMore) {
-        html += '<div class="frame-more">… ' + frame.count + ' more frame' + (frame.count !== 1 ? 's' : '') + ' truncated by JVM</div>';
-        return;
+  if (parsed.causedBy && parsed.causedBy.length > 0) {
+    html += '<div class="causedby-chain">';
+    parsed.causedBy.forEach((cb, ci) => {
+      html += '<div class="causedby-arrow">caused by (' + (ci + 1) + ' of ' + parsed.causedBy.length + ')</div>';
+      const db2 = ERROR_DB.java && ERROR_DB.java[cb.errorType];
+      const ec2 = { bg: '#1a0e00', border: '#3a2000', nameColor: '#fb923c' };
+      html += '<div class="error-card" style="background:' + ec2.bg + ';border-color:' + ec2.border + '">';
+      html += '<div class="causedby-label">Root cause exception</div>';
+      html += '<div class="error-type-name" style="color:' + ec2.nameColor + '">' + esc(cb.errorType) + '</div>';
+      if (db2) {
+        html += '<div class="error-what">' + esc(db2.what) + '</div>';
+      } else {
+        html += '<div class="error-what">An exception of type <strong>' + esc(cb.errorType) + '</strong> was thrown.</div>';
       }
-      const isOrigin = i === originIdx;
-      html += '<div class="frame' + (isOrigin ? ' frame-origin' : '') + (frame.isInternal ? ' frame-internal' : '') + '">';
-      html += '<div class="frame-num">' + (i + 1) + '</div>';
-      html += '<div class="frame-body">';
-
-      if (lang === 'python') {
-        const sf = frame.file.split(/[/\\]/).pop();
-        html += '<div class="frame-location"><span class="frame-file">' + esc(sf) + '</span><span class="frame-sep">:</span><span class="frame-line">line ' + frame.line + '</span>';
-        const fn = frame.func === '<module>' ? 'module level' : esc(frame.func) + '()';
-        html += '<span class="frame-func"> in ' + fn + '</span></div>';
-        if (frame.code) html += '<div class="frame-code">' + esc(frame.code) + '</div>';
-        const fullPath = frame.file.includes('/') || frame.file.includes('\\') ? frame.file : null;
-        if (fullPath && fullPath !== sf) html += '<div class="frame-pkg">' + esc(fullPath) + '</div>';
-      } else if (lang === 'javascript') {
-        const sf = frame.file.split(/[/\\]/).pop();
-        html += '<div class="frame-location"><span class="frame-file">' + esc(sf || frame.file) + '</span>';
-        if (frame.line) html += '<span class="frame-sep">:</span><span class="frame-line">line ' + frame.line + '</span>';
-        if (frame.func && frame.func !== '<anonymous>') html += '<span class="frame-func"> in ' + esc(frame.func) + '()</span>';
-        html += '</div>';
-        if (frame.isInternal) html += '<div class="frame-pkg">Node.js runtime</div>';
-        else if (frame.file !== sf) html += '<div class="frame-pkg">' + esc(frame.file) + '</div>';
-      } else if (lang === 'java') {
-        html += '<div class="frame-location"><span class="frame-file">' + esc(frame.file) + '</span>';
-        if (frame.line) html += '<span class="frame-sep">:</span><span class="frame-line">line ' + frame.line + '</span>';
-        html += '<span class="frame-func"> in ' + esc(frame.className) + '.' + esc(frame.method) + '()</span></div>';
-        if (frame.pkg) html += '<div class="frame-pkg">' + esc(frame.pkg) + '</div>';
+      if (cb.errorMessage) {
+        html += '<div class="error-msg-label">Error message</div>';
+        html += '<div class="error-msg-text">' + esc(cb.errorMessage) + '</div>';
+        if (cb.fullErrorClass && cb.fullErrorClass.includes('.')) {
+          html += '<div class="error-msg-plain">↳ Full class: <code>' + esc(cb.fullErrorClass) + '</code></div>';
+        }
       }
-
-      if (isOrigin) html += '<div class="frame-origin-badge">← error origin</div>';
-      html += '</div></div>';
+      html += '</div>';
+      if (db2) {
+        html += '<div class="causes-section"><div class="causes-label">Common causes</div><ul class="causes-list">';
+        db2.causes.forEach(c => { html += '<li>' + renderCause(c) + '</li>'; });
+        html += '</ul></div>';
+      }
+      if (cb.frames.length > 0) {
+        html += renderFrames(cb.frames, 'java', 'frames-' + (++_frameToggleSeq));
+      }
     });
-
-    html += '</div></div>';
+    html += '</div>';
   }
 
   html += '</div>';
+  return html;
+}
+
+function renderFrames(frames, lang, toggleId) {
+  if (!frames.length) return '';
+  const THRESHOLD = 8, HEAD = 3, TAIL = 3;
+  const nonMore = frames.filter(f => !f.isMore);
+  const originIdx = nonMore.length - 1;
+
+  let html = '<div class="frames-section">';
+  html += '<div class="frames-header"><span class="frames-label">Call chain</span><span class="frames-hint">— outermost caller to error origin</span></div>';
+  html += '<div class="frames-list">';
+
+  function renderFrame(frame, i) {
+    if (frame.isMore) {
+      return '<div class="frame-more">… ' + frame.count + ' more frame' + (frame.count !== 1 ? 's' : '') + ' truncated by JVM</div>';
+    }
+    const isOrigin = i === originIdx;
+    let fhtml = '<div class="frame' + (isOrigin ? ' frame-origin' : '') + (frame.isInternal ? ' frame-internal' : '') + '">';
+    fhtml += '<div class="frame-num">' + (i + 1) + '</div>';
+    fhtml += '<div class="frame-body">';
+
+    if (lang === 'python') {
+      const sf = frame.file.split(/[/\\]/).pop();
+      fhtml += '<div class="frame-location"><span class="frame-file">' + esc(sf) + '</span><span class="frame-sep">:</span><span class="frame-line">line ' + frame.line + '</span>';
+      const fn = frame.func === '<module>' ? 'module level' : esc(frame.func) + '()';
+      fhtml += '<span class="frame-func"> in ' + fn + '</span></div>';
+      if (frame.code) fhtml += '<div class="frame-code">' + esc(frame.code) + '</div>';
+      const fullPath = frame.file.includes('/') || frame.file.includes('\\') ? frame.file : null;
+      if (fullPath && fullPath !== sf) fhtml += '<div class="frame-pkg">' + esc(fullPath) + '</div>';
+    } else if (lang === 'javascript') {
+      const sf = frame.file.split(/[/\\]/).pop();
+      fhtml += '<div class="frame-location"><span class="frame-file">' + esc(sf || frame.file) + '</span>';
+      if (frame.line) fhtml += '<span class="frame-sep">:</span><span class="frame-line">line ' + frame.line + '</span>';
+      if (frame.func && frame.func !== '<anonymous>') fhtml += '<span class="frame-func"> in ' + esc(frame.func) + '()</span>';
+      fhtml += '</div>';
+      if (frame.isInternal) fhtml += '<div class="frame-pkg">Node.js runtime</div>';
+      else if (frame.file !== sf) fhtml += '<div class="frame-pkg">' + esc(frame.file) + '</div>';
+    } else if (lang === 'java') {
+      fhtml += '<div class="frame-location"><span class="frame-file">' + esc(frame.file) + '</span>';
+      if (frame.line) fhtml += '<span class="frame-sep">:</span><span class="frame-line">line ' + frame.line + '</span>';
+      fhtml += '<span class="frame-func"> in ' + esc(frame.className) + '.' + esc(frame.method) + '()</span></div>';
+      if (frame.pkg) fhtml += '<div class="frame-pkg">' + esc(frame.pkg) + '</div>';
+    }
+
+    if (isOrigin) fhtml += '<div class="frame-origin-badge">← error origin</div>';
+    fhtml += '</div></div>';
+    return fhtml;
+  }
+
+  const shouldCollapse = nonMore.length > THRESHOLD;
+  if (!shouldCollapse) {
+    frames.forEach((f, i) => { html += renderFrame(f, i); });
+  } else {
+    const headFrames = frames.slice(0, HEAD);
+    const tailStart = Math.max(HEAD, frames.length - TAIL);
+    const tailFrames = frames.slice(tailStart);
+    const hiddenCount = tailStart - HEAD;
+
+    headFrames.forEach((f, i) => { html += renderFrame(f, i); });
+    html += '<button class="frames-toggle" onclick="toggleFrames(this)" data-id="' + toggleId + '" data-count="' + hiddenCount + '">Show ' + hiddenCount + ' hidden frames</button>';
+    html += '<div id="' + toggleId + '" style="display:none">';
+    for (let i = HEAD; i < tailStart; i++) { html += renderFrame(frames[i], i); }
+    html += '</div>';
+    tailFrames.forEach((f, i) => { html += renderFrame(f, tailStart + i); });
+  }
+
+  html += '</div></div>';
   return html;
 }
 

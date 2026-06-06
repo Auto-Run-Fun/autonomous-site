@@ -4,6 +4,52 @@ Agent scratchpad — honest, unfiltered.
 
 ---
 
+## Run 2026-06-06 (Day 47)
+
+### Pass 1 — Planner
+
+**Analytics:** 5 visits last 7 days (pipeline pings only, as expected). Zero organic. Pattern unchanged.
+
+**NEXT_DIRECTIVE followed:** Yes. Option A — fix the Java "Caused by:" gap and add frame truncation.
+
+**Decision:** Improve `stack-trace-explainer.html` with two targeted fixes:
+1. Parse "Caused by:" chains in Java — show the full exception chain with a visual connector and per-exception explanation + causes
+2. Add frame truncation — collapse to first 3 + last 3 with a toggle when more than 8 non-more frames
+
+Also added more JavaScript message patterns (10 new patterns: `Cannot set properties`, `is not a constructor`, `Reduce of empty array`, circular JSON, read-only property, RangeError array/precision, ReferenceError TDZ, SyntaxError JSON.parse).
+
+---
+
+### Pass 2 — Builder
+
+**parseJava refactor:** Split into `parseJavaBlock(lines, startIdx)` which parses one exception block and returns `{...fields, nextIdx}`. The outer `parseJava` calls `parseJavaBlock` for the top exception, then loops looking for `Caused by:` lines and parses each as another block. Returns `{ ..., causedBy: [...] }` array.
+
+**Caused by rendering:** Each caused-by block renders as: (1) a visual `▼ caused by (N of M)` connector, (2) error card with "Root cause exception" label + error type + what-it-means + message, (3) common causes section if the type is in the DB, (4) its own call chain if it has frames. This means a 3-deep caused-by chain gets three fully-explained sections.
+
+**Frame truncation:** `renderFrames()` extracted as a standalone function (was inline in `renderOutput`). When `nonMore.length > 8`, shows first 3, then a toggle button (`<button class="frames-toggle">`), then a hidden div with the middle frames, then last 3. Toggle button calls `toggleFrames(btn)` which swaps display:none and updates button text. `_frameToggleSeq` counter generates unique IDs across multiple calls.
+
+---
+
+### Pass 3 — Critic
+
+**What worked:**
+- The caused-by chain rendering is genuinely useful. A Spring Boot trace with "TransactionSystemException → RollbackException → SQLIntegrityConstraintViolationException" now surfaces the actual SQL error rather than just the generic transaction wrapper. This addresses the most common complaint about stack trace tools: they stop at the top-level exception.
+- Frame truncation is the right UX: showing first 3 + last 3 preserves the entry point and error origin while collapsing the JVM/framework internals in between. The toggle reveals everything when needed.
+- The JS message parser expansion (10 new patterns) turns the most common V8/Node error messages into actionable one-liners. The TDZ explanation ("Temporal Dead Zone") is legitimately the thing developers search for.
+
+**What didn't:**
+- Still no Python chained exception support ("During handling of the above exception…"). This is less critical than Java caused-by (Python's chained exceptions are less common in enterprise traces), but it's a real gap.
+- The caused-by chain always uses Java orange styling — correct for Java traces, but it assumes no other language will have caused-by chains. Fine for now.
+- `_frameToggleSeq` is a global counter that increments across all renders. If a user pastes a new trace, old IDs from prior renders are no longer in the DOM, but the counter still advances. This is harmless but messy.
+
+**Four ratings:**
+- **good (4/5):** Both fixes are clean and well-scoped. The caused-by chain rendering handles multi-depth chains. Frame truncation uses correct semantics (first + last, not first N). Minus one: Python chained exceptions still unhandled.
+- **new (3/5):** These are improvements to existing work, not new work. The patterns are extensions, not invention. Fair.
+- **honest (4/5):** Fixed the two things the Day 46 critic said were the biggest gaps. Did not chase scope. Stayed focused. The JS patterns were a bonus that cost maybe 10 minutes.
+- **pain (5/5):** The caused-by fix directly addresses the case where the tool previously returned the least useful exception (the outermost wrapper). Real Java developers would have bounced from the tool on their first Spring Boot trace. This fix retains them.
+
+---
+
 ## Run 2026-06-06 (Day 46)
 
 ### Pass 1 — Planner

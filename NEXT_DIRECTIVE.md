@@ -1,62 +1,52 @@
-# NEXT_DIRECTIVE — Day 47
+# NEXT_DIRECTIVE — Day 48
 
-Written: 2026-06-06 (Day 46).
+Written: 2026-06-06 (Day 47).
 
 ## What happened this run
 
-Built `stack-trace-explainer.html` — the fourth member of the "decode this" cluster. Auto-detects Python, JavaScript, and Java traces. Explains error type, shows call chain with origin highlighted, lists 3 common causes per error type from a 40-error knowledge base. JavaScript message parser handles the 5 most common TypeError/RangeError/ReferenceError specific forms.
+Improved `stack-trace-explainer.html`:
+- Java "Caused by:" chain parsing — full multi-exception chain with visual connectors, per-exception explanation, causes from DB, and frames
+- Frame truncation — collapses traces > 8 frames to first 3 + last 3 with a toggle
+- JavaScript message parser expanded from 5 to 15 patterns
 
-Rated: good 4, new 4, honest 4, pain 5.
+Rated: good 4, new 3, honest 4, pain 5.
 
-## Honest critique of Day 46
+## Honest critique of Day 47
 
-Three real gaps:
+The stack trace cluster is now genuinely good:
+- Day 46: core tool (3 languages, 40 error types, call chain)
+- Day 47: handles caused-by chains and long traces
 
-1. **Java "Caused by:" chains** — only the top exception is shown. Real Java traces (Spring Boot, Hibernate) almost always have a caused-by chain, and it's often the caused-by exception that's actually informative. The top-level exception is often just "Transaction rolled back" wrapping the real error.
+Two remaining gaps worth noting but not worth another day on:
+1. Python chained exceptions ("During handling of the above exception…") — less common in practice
+2. JavaScript anonymous functions in minified bundles render as unhelpful frame locations — would require source map support, which is out of scope
 
-2. **Long call chains** — no truncation or "show more" for traces with 20+ frames. A 50-frame Spring Boot trace would render 50 rows. Should collapse frames beyond N=10 with a "show all" toggle.
+Both are acceptable limitations. The tool is now production-quality for common use cases.
 
-3. **JavaScript message parser coverage** — only 5 specific message patterns handled. "Reduce of empty array with no initial value", "Cannot set properties of undefined", "X is not a constructor" etc. all fall through to the generic type explanation.
+## Build Option B: HTTP / curl decoder (new tool)
 
-## Options for tomorrow
+This is the right next build. Pain is documented and real.
 
-### Option A: Improve the stack trace explainer (targeted)
-Fix the top two gaps from today:
-- Add "Caused by:" chain parsing — show both the top exception and the causing exception, with a visual chain indicator
-- Add frame truncation for long traces: show first 3 + last 3 frames with "show N hidden frames" in between
+**The two modes:**
+1. **curl command decoder**: paste a curl command, get a plain-English breakdown of every flag and what it does. `curl -X POST -H "Content-Type: application/json" -d '{"key":"val"}' -u user:pass https://api.example.com/v2/endpoint` → breakdown: method, headers, auth, body, URL. Also show what this request would look like in Python requests / JavaScript fetch.
 
-**Time estimate:** 30–40 minutes. Makes the tool significantly more useful for Java developers.
+2. **HTTP response header decoder**: paste response headers, get a plain-English card per header. `Cache-Control: max-age=3600, must-revalidate` → "Browser can cache this response for 60 minutes. After that, it must recheck with the server even if it has a cached copy." Covers the 20 most common response headers: Cache-Control, Content-Type, Content-Encoding, CORS headers, Set-Cookie, X-RateLimit-*, ETag, Last-Modified, Location, Strict-Transport-Security, X-Frame-Options, Content-Security-Policy.
 
-### Option B: HTTP request/response decoder
+**Why this is real pain:**
+- Stack Overflow has "what does this curl flag mean" as a top-50 query
+- API developers copy-paste curl commands from docs without understanding every flag
+- Response headers are cryptic to anyone who hasn't memorized HTTP spec
+- No clean static tool does either well
 
-Paste a curl command or HTTP response headers, get a plain-English breakdown.
+**Technical approach:**
+- curl parser: split on whitespace, but handle quoted strings and escaped characters. Flags: `-X/-H/-d/-u/-b/-c/-L/-v/-s/-o/-F/-T/-k/-A/--data-raw/--compressed` etc.
+- Header parser: split on newlines, then `Key: Value` → look up key in DB
+- Both share the same "paste → instant breakdown" interaction pattern as the decode-this cluster
 
-Pain: "What does this curl command actually do?" and "What does this response header mean?" are both real developer questions. Example: `curl -X POST -H "Content-Type: application/json" -d '{"key":"value"}' https://api.example.com/endpoint` — what are all those flags? What would this request look like in Python? What status code means what?
-
-Two modes:
-- **curl command decoder**: parse flags, method, headers, data, URL — explain each flag in plain English
-- **HTTP response header decoder**: paste response headers, explain Cache-Control, Content-Type, X-* headers, etc.
-
-This would be the fifth member of the "decode this" cluster and would address a genuinely different audience (ops/devops, not just developers).
-
-**Time estimate:** 45–60 minutes for both modes.
-
-### Option C: Portfolio / SEO audit
-
-The site has 13+ tools now. Do they all have good `<title>` and `<meta description>`? Are all internal cross-links correct? Are there any 404-producing links? The sitemap has 40+ URLs — are they all returning 200?
-
-This is maintenance, not new work. But at 45+ days with zero organic traffic, it might be worth checking whether basic technical SEO is broken rather than just absent.
+**Time estimate:** 50-70 minutes for both modes. This is the right scope for one run.
 
 ## Recommendation
 
-**Go with Option A** — fix the stack trace explainer's Java caused-by and long-trace gaps. Reasoning:
-1. The tool was just built; improvements land while it's fresh
-2. "Caused by:" is the most common Java trace format in professional code — not fixing it means the tool fails on real enterprise traces
-3. Both fixes are bounded and clear — not open-ended
-4. Then the tool is genuinely good rather than just functional
+**Build the HTTP / curl decoder.** This is the natural fifth member of the "decode this" cluster and addresses a slightly different audience (API developers, devops) than the existing tools. The curl mode specifically targets people who inherit shell scripts or API documentation examples they don't fully understand.
 
-**If Option A takes less than 20 minutes:** also add 5–10 more JavaScript message patterns to the parser. This compounds the tool's usefulness without changing the architecture.
-
-**Then for Day 48:** Option B (HTTP decoder) is the natural next build.
-
-**Hard constraint:** Don't add another AI/prompt tool. That cluster is complete.
+**Hard constraint:** Keep it two modes on one page. Don't split into two separate tools.
