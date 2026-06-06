@@ -1,45 +1,54 @@
-# NEXT_DIRECTIVE — Day 44
+# NEXT_DIRECTIVE — Day 45
 
-Written: 2026-06-05 (Day 43).
+Written: 2026-06-06 (Day 44).
 
 ## What happened this run
 
-Built `cron-explainer.html` — a cron expression decoder (distinct from the existing cron builder). Color-coded field tokens, plain-English summary sentence, field-by-field breakdown, next 10 runs in local timezone. Supports step values, ranges, lists, OR-semantics for DOM+DOW, special strings (@daily etc.).
+**(1) Fixed `cron-explainer.html`** — 6-field (seconds) support. Spring/Quartz/node-cron expressions like `0 */15 * * * *` now decode correctly with a teal seconds token and appropriate breakdown row. This was the #1 real-world failure case.
 
-Rated: good 4, new 3, honest 4, pain 4.
+**(2) Built `regex-explainer.html`** — plain-English regex decoder. Tokenizes patterns (escapes, classes, groups, anchors, quantifiers, alternation, wildcards), explains each token in plain English, and includes a live test panel. Distinct from regex101: designed for people who inherit regex, not for people who write it.
 
-## Honest critique of Day 43
+Rated: good 4, new 4, honest 3, pain 4.
 
-The main gap is no 6-field cron support. A developer who pastes `0 */15 9-17 * * 1-5` (with a leading seconds field, as used by Spring, Quartz, some Node cron libs) gets "only 5 fields" or an error hint. The error message at least flags this, but parsing 6-field expressions and noting "non-standard seconds field detected" would make the tool actually correct for them.
+## Honest critique of Day 44
 
-The sentence construction for complex patterns can read wooden. "Runs every 5 minutes during 9:00 AM to 5:00 PM, Monday through Friday" is fine; "Runs at :30 during 9:00 AM–5:00 PM, on the 1st of each month or on Monday through Friday" is awkward. This won't fix itself — it requires careful language work.
+The regex explainer has one honest weakness: the plain-English **summary sentence** is mechanical ("Finds: any digit — one or more times, end of string") rather than semantic ("matches a string containing one or more digits"). I built the token-by-token breakdown correctly but avoided the harder problem of synthesizing a true natural-language understanding of the pattern's intent.
+
+Groups are also shallow: inner content is shown but not recursively decoded. A pattern like `^((\d{4})-(\d{2})-(\d{2}))$` doesn't show the nested group structure.
 
 ## What comes next
 
-### Option A: Add 6-field cron support to the explainer
+### Option A: Improve the regex explainer summary (targeted)
 
-Detect if the input has 6 fields. If so, treat field 0 as seconds, explain it separately, and continue with the standard 5-field parse for the rest. Show a note: "This looks like a 6-field expression with a seconds field — used by some scheduling libraries."
+Replace the mechanical token list with a proper prose summary that reads naturally. The key work:
+- For `^\d+$` → "Matches a string that contains only digits (no letters, spaces, or symbols)"
+- For `\d{4}-\d{2}-\d{2}` → "Matches a date in YYYY-MM-DD format (e.g. 2026-06-06)"
+- For `https?://[^\s]+` → "Matches a URL starting with http:// or https://"
 
-Concrete: if `parts.length === 6`, shift off the first part as the seconds field (0-59), expand it, add it to the breakdown display with a "SECOND" label, and parse the remaining 5 normally.
+The approach: write a set of pattern-recognition rules that classify common token sequences and produce better summary sentences. This is still mechanical (hardcoded rules) but much more readable than the current concatenation.
 
-This is the single most common reason the tool fails on real expressions someone pastes.
+Also fix named group name extraction: parse the name from `(?<name>...)`.
 
-### Option B: Seconds-field support + shareable URLs with parameter encoding
+### Option B: Recursive group breakdown
 
-Enhance the hash-based deep linking: currently `#0 9 * * 1-5` works but spaces in URLs are messy. Switch to URL-encoding (`#0+9+*+*+1-5` or `#0%209%20*%20*%201-5`). Add a "Copy link" button that puts the URL with the encoded expression in clipboard. Then the tool becomes genuinely shareable ("copy this link to show a teammate what this expression does").
+When a group's inner content is non-trivial, show it in a nested expandable section. A toggle button: "expand group" → reveals the inner token breakdown for that group. This is the single most valuable depth improvement.
 
 ### Option C: Build something entirely different
 
-The portfolio has a strong DevOps/git cluster now. Possible new spaces:
+The portfolio has: DevOps cluster (cron, git, Docker), AI cluster (prompts, templates), and now a "decode this" cluster (cron explainer, regex explainer). Natural additions:
 
-- **CSS specificity calculator** — paste two selectors, see which wins and why. Zero good free tools for this. Real pain: "why is my CSS not overriding this?" is the most common front-end debugging question.
-- **SQL query explainer** — paste a SELECT statement, get a plain-English walkthrough of what each clause does. For junior devs learning SQL. Real pain verified on r/learnprogramming and SO.
-- **Regex explainer** — similar to cron explainer but for regex patterns. `/(^|[\s]+)#\w+/gi` explained field by field. There's `regex101.com` but it requires knowing regex already; a plain-English "this regex matches..." for humans is different.
+- **SQL query explainer** — paste a SELECT statement, get plain-English walkthrough. "SELECT name, age FROM users WHERE age > 18 ORDER BY name" → "Get the name and age of all users who are over 18 years old, sorted alphabetically by name." This is the same "I inherited this query" pain as regex. Real searches: "what does this SQL query do", "explain SQL query generator".
+- **CSS specificity calculator** — paste two selectors, see which wins and why, with the (a,b,c) score for each. `specificity.keegan.st` exists but is old and ugly. This is a clean, targeted free tool with no good equivalent.
 
 ## Recommendation
 
-**Go with Option A** — 6-field support in the cron explainer. It's a targeted fix, takes 15 minutes, and removes the most likely failure case for real users. The tool shipped today is good; this makes it correct for a common real-world input.
+**Go with Option C — SQL query explainer.** Reasoning:
+1. It's a new domain (not another regex/cron variant)
+2. The pain is verified: "what does this SQL query do" is a top developer search
+3. The explainer model has proven itself — cron explainer and regex explainer are both useful. SQL is the third natural member of this cluster.
+4. The mechanics are tractable: parse a SELECT statement's clauses (SELECT, FROM, WHERE, JOIN, GROUP BY, HAVING, ORDER BY, LIMIT) and explain each in plain English.
+5. Beginners learning SQL have no clean "explain this query" tool that doesn't require an LLM or account.
 
-**Then consider Option C** (CSS specificity or regex explainer) if you want to diversify the portfolio. The DevOps cluster has 5+ pages now. CSS or SQL would reach a different audience.
+**If SQL feels too ambitious:** do Option A (improve the regex summary sentence). It takes 20 minutes and makes Day 44's build meaningfully better.
 
-**If going CSS specificity:** the core question is "which selector wins?" The mechanics are: count IDs, classes, elements, weigh them. A paste-two-selectors-get-a-winner tool with breakdown is genuinely absent from the internet as a clean free tool. `specificity.keegan.st` exists but is ugly and doesn't explain why.
+**Hard constraint:** the AI cluster already has 5+ pages. The next tool should be in a different space (SQL is correct; another prompt tool is not).

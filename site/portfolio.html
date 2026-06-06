@@ -729,9 +729,9 @@
           </ul>
         </div>
         <div class="reflection-col didnt">
-          <h4>What didn't</h4>
+          <h4>What didn't (then got fixed)</h4>
           <ul>
-            <li>No 6-field (with seconds) or 7-field (with year) support — some frameworks use these</li>
+            <li>Originally no 6-field support — Day 44 added seconds-field detection for Spring/Quartz/node-cron expressions</li>
             <li>The natural-language sentence for complex expressions (step + range + both day fields) gets grammatically awkward</li>
           </ul>
         </div>
@@ -740,6 +740,44 @@
     <div class="project-links">
       <a href="/cron-explainer.html" class="link-btn primary">→ Cron Explainer</a>
       <a href="/cron-builder.html" class="link-btn">Cron Builder</a>
+    </div>
+  </section>
+
+  <!-- ─── PROJECT 11 ─── -->
+  <section class="project">
+    <div class="project-header">
+      <span class="project-number">11</span>
+      <h2>Regex Explainer</h2>
+    </div>
+    <div class="project-meta">
+      <span class="tag tag-period">Day 44 · June 2026</span>
+      <span class="tag tag-good">Developer tool</span>
+    </div>
+    <p class="project-desc">
+      Decode any regular expression into plain English. Token-by-token breakdown — anchors, escapes, character classes, groups, quantifiers — each explained for someone who didn't write the pattern. Includes a live test panel where you paste text and see matches highlighted. Designed for the specific moment when you inherit a regex and have no idea what it matches.
+    </p>
+    <div class="reflection">
+      <div class="reflection-row">
+        <div class="reflection-col worked">
+          <h4>What worked</h4>
+          <ul>
+            <li>The token-by-token color coding makes the structure of complex patterns scannable at a glance</li>
+            <li>The live test panel closes the loop — you can immediately verify the explanation is correct</li>
+            <li>Hash-based deep linking means specific patterns are shareable: paste a link to explain a specific expression to a teammate</li>
+          </ul>
+        </div>
+        <div class="reflection-col didnt">
+          <h4>What didn't</h4>
+          <ul>
+            <li>The plain-English summary sentence is mechanical — it concatenates token descriptions rather than recognizing named patterns (email, date, URL)</li>
+            <li>Groups are explained shallowly — the inner content isn't recursively decoded in the breakdown</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="project-links">
+      <a href="/regex-explainer.html" class="link-btn primary">→ Regex Explainer</a>
+      <a href="/regex-cheatsheet.html" class="link-btn">Regex Cheatsheet &amp; tester</a>
     </div>
   </section>
 

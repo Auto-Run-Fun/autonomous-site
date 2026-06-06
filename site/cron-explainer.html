@@ -84,6 +84,7 @@ h1{font-size:1.75rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
   font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;
   padding:3px 10px;border-radius:4px;
 }
+.fl-sec {background:#001e1e;color:#4ecdc4;border:1px solid #005555}
 .fl-min {background:#0e1e3a;color:#7eb8f7;border:1px solid #1e3a6a}
 .fl-hour{background:#0d200d;color:#7ec87e;border:1px solid #1a401a}
 .fl-dom {background:#2a1500;color:#f7a04a;border:1px solid #4a2800}
@@ -132,6 +133,7 @@ h1{font-size:1.75rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
   font-size:1.3rem;font-weight:600;padding:4px 12px;border-radius:5px;
   cursor:default;
 }
+.tok-sec  {background:#001e1e;color:#4ecdc4;border:1px solid #005555}
 .tok-min  {background:#0e1e3a;color:#7eb8f7;border:1px solid #1e3a6a}
 .tok-hour {background:#0d200d;color:#7ec87e;border:1px solid #1a401a}
 .tok-dom  {background:#2a1500;color:#f7a04a;border:1px solid #4a2800}
@@ -231,6 +233,7 @@ h3{font-size:.85rem;font-weight:700;text-transform:uppercase;letter-spacing:.08e
     <button class="ex-btn" data-expr="*/5 9-17 * * 1-5">*/5 9-17 * * 1-5</button>
     <button class="ex-btn" data-expr="@daily">@daily</button>
     <button class="ex-btn" data-expr="0 0 1 1 *">0 0 1 1 *</button>
+    <button class="ex-btn" data-expr="0 */15 * * * *">0 */15 * * * * (6-field)</button>
   </div>
 </div>
 
@@ -248,6 +251,7 @@ h3{font-size:.85rem;font-weight:700;text-transform:uppercase;letter-spacing:.08e
 │ │ │ │ ┌ weekday (0-7)
 * * * * *</pre>
       <p style="font-size:.78rem;color:#555;margin-top:10px">Weekday: 0 and 7 both mean Sunday.</p>
+      <p style="font-size:.78rem;color:#4ecdc4;margin-top:8px">Some schedulers (Spring, Quartz, node-cron) prefix a <strong>seconds</strong> field: <code>S M H D Mo W</code></p>
     </div>
     <div class="ref-card">
       <h3>Syntax</h3>
@@ -349,8 +353,21 @@ function parseExpr(raw) {
   const special = SPECIALS[str.toLowerCase()];
   const canonical = special || str;
   const parts = canonical.split(/\s+/);
-  if (parts.length !== 5) return null;
-  const [mStr, hStr, dStr, moStr, wStr] = parts;
+
+  let hasSecs = false, secsField = '0', secsVals = [0];
+  let fiveParts = parts;
+
+  if (parts.length === 6) {
+    hasSecs = true;
+    secsField = parts[0];
+    secsVals = expandField(secsField, 0, 59, null);
+    if (!secsVals) return null;
+    fiveParts = parts.slice(1);
+  } else if (parts.length !== 5) {
+    return null;
+  }
+
+  const [mStr, hStr, dStr, moStr, wStr] = fiveParts;
   const minutes = expandField(mStr, 0, 59, null);
   const hours   = expandField(hStr, 0, 23, null);
   const doms    = expandField(dStr, 1, 31, null);
@@ -361,7 +378,8 @@ function parseExpr(raw) {
     minutes, hours, doms, months, dows,
     raw: { min:mStr, hour:hStr, dom:dStr, month:moStr, dow:wStr },
     isWild: { min:mStr==='*', hour:hStr==='*', dom:dStr==='*', month:moStr==='*', dow:wStr==='*' },
-    special: special ? str.toLowerCase() : null
+    special: special ? str.toLowerCase() : null,
+    hasSecs, secsField, secsVals
   };
 }
 
@@ -392,6 +410,19 @@ function fmtRelative(dt) {
   const d = Math.round(diff / 86400000);
   if (d < 365) return 'in ' + d + 'd';
   return 'in ' + Math.round(d/365) + 'y';
+}
+
+function explainSecs(field, values) {
+  if (field === '*') return { tok: '*', meaning: 'every second' };
+  if (/^\*\/\d+$/.test(field)) {
+    const s = parseInt(field.slice(2),10);
+    return { tok: field, meaning: `every ${s} seconds` };
+  }
+  if (values.length === 1) {
+    if (values[0] === 0) return { tok: field, meaning: 'at second :00' };
+    return { tok: field, meaning: `at second :${values[0]<10?'0'+values[0]:values[0]}` };
+  }
+  return { tok: field, meaning: `at seconds: ${values.map(v=>v<10?'0'+v:v).join(', ')}` };
 }
 
 function explainMin(field, values) {
@@ -571,16 +602,17 @@ function renderOutput(raw) {
   if (!p) {
     const fieldCount = str.split(/\s+/).length;
     let hint = '';
-    if (fieldCount === 6) hint = ' (6 fields detected — this looks like it has a <strong>seconds</strong> field; standard cron uses 5 fields)';
+    if (fieldCount === 6) hint = ' (6 fields detected — check the seconds field: valid values are 0-59, <code>*</code>, or <code>*/n</code>)';
     else if (fieldCount === 7) hint = ' (7 fields detected — year field not supported here)';
     else if (fieldCount < 5) hint = ` (only ${fieldCount} field${fieldCount===1?'':'s'} — cron needs exactly 5)`;
-    else if (fieldCount > 5) hint = ` (${fieldCount} fields — cron needs exactly 5)`;
+    else if (fieldCount > 6) hint = ` (${fieldCount} fields — cron needs exactly 5 or 6)`;
     el.innerHTML = `<div class="output-inner"><div class="error-msg">&#9888; Couldn't parse <code>${escHtml(str)}</code>${hint}.</div></div>`;
     document.getElementById('cronInput').classList.add('is-error');
     return;
   }
   document.getElementById('cronInput').classList.remove('is-error');
 
+  const secsEx  = p.hasSecs ? explainSecs(p.secsField, p.secsVals) : null;
   const minEx  = explainMin(p.raw.min, p.minutes);
   const hourEx = explainHour(p.raw.hour, p.hours);
   const domEx  = explainDom(p.raw.dom, p.doms);
@@ -599,15 +631,22 @@ function renderOutput(raw) {
     `<span class="tok ${classes[i]}">${escHtml(t)}</span>`
   ).join('<span class="tok-sep">·</span>');
 
-  const specialBadge = p.special
-    ? `<span class="special-badge">expands to ${escHtml(SPECIALS[p.special])}</span>`
-    : '';
+  if (p.hasSecs) {
+    annotHtml = `<span class="tok tok-sec">${escHtml(p.secsField)}</span><span class="tok-sep">·</span>` + annotHtml;
+  }
+
   if (p.special) {
     annotHtml = `<span class="tok" style="background:#1a0a28;color:#c07ef7;border:1px solid #3a1858;font-size:1.3rem">${escHtml(p.special)}</span><span class="tok-sep">→</span>` + annotHtml;
   }
 
+  // 6-field notice badge
+  const sixFieldNote = p.hasSecs
+    ? `<div style="margin-bottom:12px;font-size:.8rem;background:#001a1a;border:1px solid #005555;border-radius:6px;padding:8px 14px;color:#4ecdc4">&#9432; 6-field expression — seconds field detected. Used by Spring/Quartz, node-cron, and some CI systems.</div>`
+    : '';
+
   // Field rows
   const fieldRows = [
+    ...(p.hasSecs ? [{ label:'Second', cls:'fl-sec', ex: secsEx }] : []),
     { label:'Minute',        cls:'fl-min',   ex: minEx  },
     { label:'Hour',          cls:'fl-hour',  ex: hourEx },
     { label:'Day of month',  cls:'fl-dom',   ex: domEx  },
@@ -643,6 +682,7 @@ function renderOutput(raw) {
   }
 
   el.innerHTML = `<div class="output-inner">
+    ${sixFieldNote}
     <div class="annotated-wrap">${annotHtml}</div>
     <div class="summary-banner">
       <div class="summary-label">In plain English</div>

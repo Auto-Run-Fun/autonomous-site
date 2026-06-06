@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Regex Explainer — Decode any regular expression in plain English</title>
+<meta name="description" content="Paste any regular expression and get a plain-English breakdown of what each part means. No regex knowledge required. Free, instant, works offline.">
+<link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/regex-explainer.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Regex Explainer — Decode any regex in plain English">
+<meta property="og:description" content="Paste a regex. Get plain English. Token-by-token breakdown of what each part matches. No regex knowledge required.">
+<meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/regex-explainer.html">
+<meta name="twitter:card" content="summary">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Regex Explainer",
+  "description": "Decode any regular expression into plain English. Token-by-token breakdown of what each part matches.",
+  "url": "https://auto-run-fun.github.io/autonomous-site/regex-explainer.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (browser)",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What does \\d mean in regex?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "\\d matches any single digit character from 0 to 9. It is equivalent to the character class [0-9]."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does \\w mean in regex?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "\\w matches any word character: letters (a-z and A-Z), digits (0-9), and the underscore character (_). It is equivalent to [a-zA-Z0-9_]."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does the + quantifier mean in regex?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The + quantifier means 'one or more times'. The preceding element must appear at least once. For example, \\d+ matches one or more digits."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between .* and .+?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Both match any character, but .* matches zero or more characters (can match an empty string), while .+ requires at least one character."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does ^ mean in regex?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The ^ anchor asserts that the match must start at the beginning of the string. In multiline mode it matches the start of each line. Inside a character class like [^abc] it means 'anything except'."
+      }
+    }
+  ]
+}
+</script>
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-text-size-adjust:100%}
+body{background:#0b0b10;color:#e8e8f0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.6;min-height:100vh;padding:0 16px}
+a{color:#7eb8f7;text-decoration:none}
+a:hover{text-decoration:underline}
+code{font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-size:.85em;background:#131320;padding:1px 5px;border-radius:3px;color:#a8d8a8}
+pre{font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-size:.82em;background:#131320;border:1px solid #252535;border-radius:6px;padding:14px 16px;color:#a8d8a8;white-space:pre-wrap;word-break:break-word;line-height:1.6;margin-top:10px}
+
+.wrap{max-width:820px;margin:0 auto;padding:40px 0 80px}
+
+.topnav{margin-bottom:32px;font-size:.875rem;color:#888}
+.topnav a{color:#7eb8f7}
+.topnav .sep{margin:0 6px;opacity:.4}
+
+h1{font-size:1.75rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
+.subtitle{color:#aaa;font-size:1rem;margin-bottom:32px;max-width:600px}
+
+/* Type legend */
+.legend{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.lg{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:2px 9px;border-radius:4px}
+.lg-anchor  {background:#1a1200;color:#f7c04a;border:1px solid #3a2a00}
+.lg-escape  {background:#0e1e3a;color:#7eb8f7;border:1px solid #1e3a6a}
+.lg-class   {background:#0d200d;color:#7ec87e;border:1px solid #1a401a}
+.lg-group   {background:#2a1500;color:#f7a04a;border:1px solid #4a2800}
+.lg-dot     {background:#001e2a;color:#4ecdc4;border:1px solid #004a60}
+.lg-pipe    {background:#280a1a;color:#f77eb8;border:1px solid #501030}
+.lg-literal {background:#131320;color:#c8c8e8;border:1px solid #2a2a40}
+
+/* Input area */
+.input-wrap{
+  display:flex;align-items:center;
+  background:#131320;border:2px solid #2a2a3d;border-radius:8px;
+  padding:0 4px;transition:border-color .15s;
+  font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;
+}
+.input-wrap:focus-within{border-color:#4a4a7d}
+.input-wrap.is-error{border-color:#7a2020}
+.delimiter{color:#555;font-size:1.4rem;padding:0 8px;user-select:none;flex-shrink:0}
+#patternInput{
+  flex:1;background:transparent;border:none;outline:none;
+  font-family:inherit;font-size:1.3rem;color:#e8e8f0;padding:14px 0;
+  letter-spacing:.04em;min-width:0;
+}
+#patternInput::placeholder{color:#2a2a50}
+#flagsInput{
+  background:transparent;border:none;outline:none;
+  font-family:inherit;font-size:1.1rem;color:#a8a8d0;
+  padding:14px 8px 14px 4px;width:60px;letter-spacing:.04em;
+}
+#flagsInput::placeholder{color:#2a2a40}
+
+.examples-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;align-items:center}
+.ex-label{font-size:.78rem;color:#555;margin-right:2px}
+.ex-btn{
+  background:#131320;border:1px solid #2a2a3d;border-radius:5px;
+  color:#7eb8f7;font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;
+  font-size:.78rem;padding:4px 10px;cursor:pointer;
+  transition:background .1s,border-color .1s;white-space:nowrap;
+}
+.ex-btn:hover{background:#1a1a2e;border-color:#4a4a7d}
+
+/* Output */
+#output{margin-top:28px}
+@keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.output-inner{animation:fadein .18s ease}
+
+.error-msg{
+  background:#1a0a0a;border:1px solid #4a1a1a;border-radius:8px;
+  padding:14px 18px;color:#e07070;font-size:.92rem;
+}
+
+/* Annotated expression */
+.annotated-wrap{
+  background:#131320;border:1px solid #2a2a3d;border-radius:8px;
+  padding:18px 20px;margin-bottom:20px;
+  display:flex;align-items:flex-start;gap:4px;flex-wrap:wrap;
+  min-height:60px;
+}
+.tok{
+  font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;
+  font-size:1.15rem;font-weight:600;padding:3px 8px;border-radius:4px;
+  cursor:default;position:relative;white-space:pre;
+}
+.tok-anchor  {background:#1a1200;color:#f7c04a;border:1px solid #3a2a00}
+.tok-escape  {background:#0e1e3a;color:#7eb8f7;border:1px solid #1e3a6a}
+.tok-class   {background:#0d200d;color:#7ec87e;border:1px solid #1a401a}
+.tok-group   {background:#2a1500;color:#f7a04a;border:1px solid #4a2800}
+.tok-dot     {background:#001e2a;color:#4ecdc4;border:1px solid #004a60}
+.tok-pipe    {background:#280a1a;color:#f77eb8;border:1px solid #501030}
+.tok-literal {background:#131320;color:#c8c8e8;border:1px solid #2a2a40}
+.tok-quant   {
+  font-size:.65rem;font-weight:700;
+  background:#2a1020;color:#f7a04a;border:1px solid #501030;
+  border-radius:3px;padding:1px 4px;margin-left:2px;
+  vertical-align:super;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+}
+.tok-lazy{color:#aaa}
+
+/* Summary */
+.summary-banner{
+  background:#0d1f2a;border:1px solid #1a3848;border-radius:8px;
+  padding:16px 20px;margin-bottom:20px;
+}
+.summary-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#4a8aa8;margin-bottom:6px}
+.summary-text{font-size:1.05rem;font-weight:600;color:#b8dff7;line-height:1.5}
+
+/* Token breakdown */
+.breakdown-title{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#555;margin-bottom:12px}
+.breakdown-table{width:100%;border-collapse:collapse;margin-bottom:24px}
+.breakdown-table tr{border-bottom:1px solid #1a1a28}
+.breakdown-table tr:last-child{border-bottom:none}
+.breakdown-table td{padding:10px 12px;font-size:.88rem;vertical-align:top}
+.bd-token{width:160px;font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-size:.82rem;word-break:break-all}
+.bd-type{width:90px}
+.bd-meaning{color:#c8c8e0;line-height:1.5}
+.bd-quant{color:#f7a04a;font-size:.8rem;margin-top:3px}
+.type-pill{
+  font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+  padding:2px 7px;border-radius:4px;white-space:nowrap;
+}
+
+/* Test panel */
+.test-panel{
+  background:#0f0f1c;border:1px solid #2a2a3d;border-radius:8px;
+  padding:20px;margin-bottom:28px;
+}
+.test-label{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#555;margin-bottom:10px}
+#testInput{
+  width:100%;background:#131320;border:1px solid #2a2a3d;border-radius:6px;
+  color:#e8e8f0;font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;
+  font-size:.9rem;padding:10px 14px;resize:vertical;min-height:80px;
+  outline:none;transition:border-color .15s;
+}
+#testInput:focus{border-color:#4a4a7d}
+.test-result{margin-top:12px}
+.match-count{font-size:.8rem;color:#7ec87e;margin-bottom:8px}
+.match-count.no-match{color:#888}
+.match-count.err{color:#e07070}
+.highlighted-text{
+  font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;
+  font-size:.88rem;line-height:1.8;background:#131320;border:1px solid #2a2a3d;
+  border-radius:6px;padding:12px 14px;white-space:pre-wrap;word-break:break-word;
+}
+.hl-match{background:#3a2a00;color:#f7c04a;border-radius:2px;padding:0 1px}
+
+/* Reference */
+.reference{margin-top:44px;border-top:1px solid #1a1a28;padding-top:36px}
+h2{font-size:1.1rem;font-weight:700;letter-spacing:-0.01em;margin-bottom:18px;color:#ccc}
+h3{font-size:.85rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#666;margin-bottom:10px}
+.ref-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:28px}
+@media(max-width:640px){.ref-grid{grid-template-columns:1fr}}
+.ref-card{background:#0f0f1c;border:1px solid #1e1e30;border-radius:8px;padding:16px 18px}
+.ref-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.ref-table td{padding:4px 0;vertical-align:top}
+.ref-table td:first-child{padding-right:14px;white-space:nowrap;color:#a8d8a8;font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace}
+.ref-table td:last-child{color:#888}
+.related-links{padding-top:24px;border-top:1px solid #1a1a28}
+.related-links h3{margin-bottom:12px}
+.rel-list{display:flex;flex-wrap:wrap;gap:10px}
+.rel-link{
+  background:#131320;border:1px solid #2a2a3d;border-radius:6px;
+  padding:7px 14px;font-size:.84rem;color:#7eb8f7;text-decoration:none;
+  transition:border-color .15s,background .15s;
+}
+.rel-link:hover{background:#1a1a2e;border-color:#4a4a7d;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav class="topnav">
+  <a href="index.html">Ship This Weekend</a>
+  <span class="sep">/</span>
+  <span>Regex Explainer</span>
+</nav>
+
+<h1>Regex Explainer</h1>
+<p class="subtitle">Paste any regex. Get plain English — token by token — so you can read a pattern you didn't write.</p>
+
+<div class="legend">
+  <span class="lg lg-anchor">Anchors</span>
+  <span class="lg lg-escape">Escapes</span>
+  <span class="lg lg-class">Classes</span>
+  <span class="lg lg-group">Groups</span>
+  <span class="lg lg-dot">Wildcard</span>
+  <span class="lg lg-pipe">Alternation</span>
+  <span class="lg lg-literal">Literal</span>
+</div>
+
+<div class="input-wrap" id="inputWrap">
+  <span class="delimiter">/</span>
+  <input type="text" id="patternInput" placeholder="^\d{4}-\d{2}-\d{2}$" autocomplete="off" spellcheck="false">
+  <span class="delimiter">/</span>
+  <input type="text" id="flagsInput" placeholder="gi" autocomplete="off" spellcheck="false" maxlength="8">
+</div>
+<div class="examples-row">
+  <span class="ex-label">Try:</span>
+  <button class="ex-btn" data-pat="^\d+$" data-fl="">^\d+$</button>
+  <button class="ex-btn" data-pat="\d{4}-\d{2}-\d{2}" data-fl="">date</button>
+  <button class="ex-btn" data-pat="^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}$" data-fl="i">email</button>
+  <button class="ex-btn" data-pat="https?://[^\s]+" data-fl="i">URL</button>
+  <button class="ex-btn" data-pat="#[0-9a-fA-F]{6}" data-fl="">hex color</button>
+  <button class="ex-btn" data-pat="<!--.*?-->" data-fl="s">HTML comment</button>
+  <button class="ex-btn" data-pat="\b[A-Z][a-z]+\b" data-fl="g">Capital word</button>
+</div>
+
+<div id="output"></div>
+
+<div class="reference">
+  <h2>Quick Reference</h2>
+  <div class="ref-grid">
+    <div class="ref-card">
+      <h3>Anchors</h3>
+      <table class="ref-table">
+        <tr><td>^</td><td>start of string</td></tr>
+        <tr><td>$</td><td>end of string</td></tr>
+        <tr><td>\b</td><td>word boundary</td></tr>
+        <tr><td>\B</td><td>non-word boundary</td></tr>
+      </table>
+    </div>
+    <div class="ref-card">
+      <h3>Common escapes</h3>
+      <table class="ref-table">
+        <tr><td>\d</td><td>any digit (0–9)</td></tr>
+        <tr><td>\D</td><td>any non-digit</td></tr>
+        <tr><td>\w</td><td>letter, digit, or _</td></tr>
+        <tr><td>\W</td><td>non-word character</td></tr>
+        <tr><td>\s</td><td>whitespace</td></tr>
+        <tr><td>\S</td><td>non-whitespace</td></tr>
+        <tr><td>\n</td><td>newline</td></tr>
+        <tr><td>\t</td><td>tab</td></tr>
+      </table>
+    </div>
+    <div class="ref-card">
+      <h3>Quantifiers</h3>
+      <table class="ref-table">
+        <tr><td>*</td><td>0 or more times</td></tr>
+        <tr><td>+</td><td>1 or more times</td></tr>
+        <tr><td>?</td><td>0 or 1 time</td></tr>
+        <tr><td>{n}</td><td>exactly n times</td></tr>
+        <tr><td>{n,m}</td><td>n to m times</td></tr>
+        <tr><td>{n,}</td><td>n or more times</td></tr>
+        <tr><td>*?</td><td>lazy (as few as possible)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="related-links">
+    <h3>Related tools</h3>
+    <div class="rel-list">
+      <a class="rel-link" href="regex-cheatsheet.html">Regex Cheatsheet &amp; live tester</a>
+      <a class="rel-link" href="cron-explainer.html">Cron Explainer — decode cron strings</a>
+      <a class="rel-link" href="embed-regex.html">Embed a regex tester in your blog</a>
+    </div>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<script>
+// ─── Token types ──────────────────────────────────────────────────────────────
+const TYPE_CSS = {
+  anchor:  'tok-anchor',
+  escape:  'tok-escape',
+  class:   'tok-class',
+  group:   'tok-group',
+  dot:     'tok-dot',
+  pipe:    'tok-pipe',
+  literal: 'tok-literal',
+};
+
+const TYPE_LABELS = {
+  anchor:  'Anchor',
+  escape:  'Escape',
+  class:   'Class',
+  group:   'Group',
+  dot:     'Wildcard',
+  pipe:    'Alternation',
+  literal: 'Literal',
+};
+
+const TYPE_PILL_CSS = {
+  anchor:  'lg-anchor',
+  escape:  'lg-escape',
+  class:   'lg-class',
+  group:   'lg-group',
+  dot:     'lg-dot',
+  pipe:    'lg-pipe',
+  literal: 'lg-literal',
+};
+
+// ─── Escape explanations ─────────────────────────────────────────────────────
+function explainEscape(ch) {
+  const map = {
+    'd': 'any digit (0–9)',
+    'D': 'any non-digit character',
+    'w': 'any word character (letter, digit, or _)',
+    'W': 'any non-word character',
+    's': 'any whitespace (space, tab, newline)',
+    'S': 'any non-whitespace character',
+    'b': 'word boundary',
+    'B': 'non-word boundary (not at a word edge)',
+    'n': 'newline character',
+    't': 'tab character',
+    'r': 'carriage return',
+    '0': 'null character',
+    'f': 'form feed',
+    'v': 'vertical tab',
+    '.': 'literal period (.)',
+    '*': 'literal asterisk (*)',
+    '+': 'literal plus (+)',
+    '?': 'literal question mark (?)',
+    '^': 'literal caret (^)',
+    '$': 'literal dollar sign ($)',
+    '(': 'literal opening parenthesis ( )',
+    ')': 'literal closing parenthesis ( )',
+    '[': 'literal opening bracket [',
+    ']': 'literal closing bracket ]',
+    '{': 'literal opening brace {',
+    '}': 'literal closing brace }',
+    '\\': 'literal backslash (\\)',
+    '/': 'literal forward slash (/)',
+    '|': 'literal pipe character (|)',
+  };
+  if (map[ch]) return map[ch];
+  if (/[1-9]/.test(ch)) return `back-reference to capture group ${ch}`;
+  if (ch === 'x') return 'character by hex code (e.g. \\x41 = A)';
+  if (ch === 'u') return 'Unicode character by code point (e.g. \\u0041 = A)';
+  return `escaped character: ${ch}`;
+}
+
+// ─── Character class content ──────────────────────────────────────────────────
+function explainClassContent(content, negated) {
+  const parts = [];
+  let i = 0;
+  while (i < content.length) {
+    if (content[i] === '\\' && i + 1 < content.length) {
+      parts.push(explainEscape(content[i + 1]));
+      i += 2;
+    } else if (i + 2 < content.length && content[i + 1] === '-' && content[i + 2] !== ']') {
+      const from = content[i], to = content[i + 2];
+      if (from === 'a' && to === 'z') parts.push('a–z (any lowercase letter)');
+      else if (from === 'A' && to === 'Z') parts.push('A–Z (any uppercase letter)');
+      else if (from === '0' && to === '9') parts.push('0–9 (any digit)');
+      else parts.push(`'${from}' through '${to}'`);
+      i += 3;
+    } else {
+      const ch = content[i];
+      if (ch === ' ') parts.push('a space');
+      else if (ch === '.') parts.push('a period (.)');
+      else if (ch === '_') parts.push('an underscore (_)');
+      else if (ch === '-') parts.push('a hyphen (-)');
+      else parts.push(`'${ch}'`);
+      i++;
+    }
+  }
+  if (parts.length === 0) return negated ? 'any character' : '(empty class)';
+  const joined = parts.length === 1 ? parts[0]
+    : parts.slice(0, -1).join(', ') + ', or ' + parts[parts.length - 1];
+  return negated ? `anything except: ${joined}` : `one of: ${joined}`;
+}
+
+// ─── Quantifier explanation ────────────────────────────────────────────────────
+function explainQuantifier(q) {
+  if (!q) return '';
+  const lazy = q.endsWith('?');
+  const base = lazy ? q.slice(0, -1) : q;
+  const lazyNote = lazy ? ' (lazy — as few as possible)' : '';
+  if (base === '*') return `zero or more times${lazyNote}`;
+  if (base === '+') return `one or more times${lazyNote}`;
+  if (base === '?') return 'zero or one time (optional)';
+  const m = base.match(/^\{(\d+)(?:,(\d*))?\}$/);
+  if (m) {
+    const n = parseInt(m[1], 10);
+    const hi = m[2];
+    if (hi === undefined) return `exactly ${n} time${n === 1 ? '' : 's'}`;
+    if (hi === '') return `${n} or more times${lazyNote}`;
+    return `between ${n} and ${parseInt(hi, 10)} times${lazyNote}`;
+  }
+  return q;
+}
+
+// ─── Tokenizer ────────────────────────────────────────────────────────────────
+function peekQuantifier(pattern, pos) {
+  if (pos >= pattern.length) return null;
+  const ch = pattern[pos];
+  let q = '';
+  if (ch === '*') q = '*';
+  else if (ch === '+') q = '+';
+  else if (ch === '?') q = '?';
+  else if (ch === '{') {
+    let j = pos + 1;
+    while (j < pattern.length && pattern[j] !== '}') j++;
+    if (j < pattern.length) q = pattern.slice(pos, j + 1);
+  }
+  if (!q) return null;
+  const lazy = q && pattern[pos + q.length] === '?';
+  return { q: q + (lazy ? '?' : ''), len: q.length + (lazy ? 1 : 0) };
+}
+
+function tokenize(pattern) {
+  const tokens = [];
+  let i = 0;
+  let groupIndex = 0;
+
+  while (i < pattern.length) {
+    const ch = pattern[i];
+
+    // Escape sequences
+    if (ch === '\\' && i + 1 < pattern.length) {
+      const next = pattern[i + 1];
+      const raw = pattern.slice(i, i + 2);
+      const tok = { type: 'escape', raw, char: next, meaning: explainEscape(next) };
+      i += 2;
+      const qr = peekQuantifier(pattern, i);
+      if (qr) { tok.quant = qr.q; i += qr.len; }
+      tokens.push(tok);
+      continue;
+    }
+
+    // Character class [...]
+    if (ch === '[') {
+      let j = i + 1;
+      let negated = false;
+      if (pattern[j] === '^') { negated = true; j++; }
+      // Handle ] as first char inside class
+      if (j < pattern.length && pattern[j] === ']') j++;
+      while (j < pattern.length && pattern[j] !== ']') {
+        if (pattern[j] === '\\') j++;
+        j++;
+      }
+      const raw = pattern.slice(i, j + 1);
+      const innerStart = i + 1 + (negated ? 1 : 0);
+      const content = pattern.slice(innerStart, j);
+      const meaning = explainClassContent(content, negated);
+      const tok = { type: 'class', raw, negated, content, meaning };
+      i = j + 1;
+      const qr = peekQuantifier(pattern, i);
+      if (qr) { tok.quant = qr.q; i += qr.len; }
+      tokens.push(tok);
+      continue;
+    }
+
+    // Groups (...)
+    if (ch === '(') {
+      let prefix = '';
+      let groupType = 'capture';
+      if (pattern.slice(i, i + 4) === '(?<=') { groupType = 'lookbehind-pos'; prefix = '(?<='; }
+      else if (pattern.slice(i, i + 4) === '(?<!') { groupType = 'lookbehind-neg'; prefix = '(?<!'; }
+      else if (pattern.slice(i, i + 3) === '(?:') { groupType = 'non-capture'; prefix = '(?:'; }
+      else if (pattern.slice(i, i + 3) === '(?=') { groupType = 'lookahead-pos'; prefix = '(?='; }
+      else if (pattern.slice(i, i + 3) === '(?!') { groupType = 'lookahead-neg'; prefix = '(?!'; }
+      else if (pattern.slice(i, i + 3) === '(?<') { groupType = 'named'; prefix = '(?<'; }
+
+      // Find matching )
+      let depth = 0, j = i;
+      while (j < pattern.length) {
+        if (pattern[j] === '\\') { j += 2; continue; }
+        if (pattern[j] === '[') {
+          j++;
+          if (pattern[j] === '^') j++;
+          while (j < pattern.length && pattern[j] !== ']') { if (pattern[j] === '\\') j++; j++; }
+        }
+        if (pattern[j] === '(') depth++;
+        else if (pattern[j] === ')') { depth--; if (depth === 0) break; }
+        j++;
+      }
+      const raw = pattern.slice(i, j + 1);
+      const innerStart = i + (prefix ? prefix.length : 1);
+      const inner = pattern.slice(innerStart, j);
+
+      if (groupType === 'capture') groupIndex++;
+      const captureNum = groupType === 'capture' ? groupIndex : null;
+
+      const groupMeanings = {
+        'capture': `capture group #${captureNum}`,
+        'non-capture': 'group (no capture)',
+        'lookahead-pos': 'must be followed by',
+        'lookahead-neg': 'must NOT be followed by',
+        'lookbehind-pos': 'must be preceded by',
+        'lookbehind-neg': 'must NOT be preceded by',
+        'named': 'named capture group',
+      };
+
+      const tok = { type: 'group', raw, groupType, inner, captureNum, meaning: groupMeanings[groupType] || 'group' };
+      i = j + 1;
+      const qr = peekQuantifier(pattern, i);
+      if (qr) { tok.quant = qr.q; i += qr.len; }
+      tokens.push(tok);
+      continue;
+    }
+
+    // Anchors ^ $ \b handled above; only ^ and $ as standalone
+    if (ch === '^') {
+      tokens.push({ type: 'anchor', raw: '^', meaning: 'start of string' });
+      i++;
+      continue;
+    }
+    if (ch === '$') {
+      tokens.push({ type: 'anchor', raw: '$', meaning: 'end of string' });
+      i++;
+      continue;
+    }
+
+    // Dot
+    if (ch === '.') {
+      const tok = { type: 'dot', raw: '.', meaning: 'any character (except newline)' };
+      i++;
+      const qr = peekQuantifier(pattern, i);
+      if (qr) { tok.quant = qr.q; i += qr.len; }
+      tokens.push(tok);
+      continue;
+    }
+
+    // Alternation
+    if (ch === '|') {
+      tokens.push({ type: 'pipe', raw: '|', meaning: 'OR — match either side' });
+      i++;
+      continue;
+    }
+
+    // Stray quantifier (shouldn't appear, but skip gracefully)
+    if ('*+?{}'.includes(ch)) {
+      // Consume the quantifier token (it has no preceding token)
+      let j = i;
+      if (ch === '{') { while (j < pattern.length && pattern[j] !== '}') j++; }
+      i = j + 1;
+      continue;
+    }
+
+    // Literal character
+    const tok = { type: 'literal', raw: ch, meaning: ch === ' ' ? 'a space character' : `the character '${ch}'` };
+    i++;
+    const qr = peekQuantifier(pattern, i);
+    if (qr) { tok.quant = qr.q; i += qr.len; }
+    tokens.push(tok);
+  }
+
+  return tokens;
+}
+
+// ─── Summary builder ──────────────────────────────────────────────────────────
+function buildSummary(tokens, flags) {
+  if (tokens.length === 0) return 'Empty pattern — matches everything.';
+
+  const firstIsStart = tokens[0].type === 'anchor' && tokens[0].raw === '^';
+  const lastIsEnd = tokens[tokens.length - 1].type === 'anchor' && tokens[tokens.length - 1].raw === '$';
+  const hasPipe = tokens.some(t => t.type === 'pipe');
+
+  const parts = tokens
+    .filter(t => t.type !== 'anchor' || (t.raw !== '^' && t.raw !== '$'))
+    .map(t => {
+      const q = t.quant ? (' ' + explainQuantifier(t.quant)) : '';
+      let base = '';
+      if (t.type === 'escape') base = t.meaning;
+      else if (t.type === 'class') base = t.meaning;
+      else if (t.type === 'dot') base = 'any character';
+      else if (t.type === 'literal') base = t.raw === ' ' ? 'a space' : `'${t.raw}'`;
+      else if (t.type === 'group') base = `(${t.meaning}: ${t.inner.length > 20 ? t.inner.slice(0, 20) + '…' : t.inner})`;
+      else if (t.type === 'pipe') base = 'OR';
+      else base = t.raw;
+      return base + (q && t.type !== 'anchor' ? ' — ' + q : '');
+    })
+    .filter(Boolean);
+
+  const scope = (firstIsStart && lastIsEnd)
+    ? 'Matches a string that is exactly: '
+    : hasPipe
+    ? 'Matches: '
+    : 'Finds: ';
+
+  if (parts.length === 0) {
+    if (firstIsStart && lastIsEnd) return 'Matches only the empty string (^ and $ with nothing between).';
+    return 'An anchor-only pattern.';
+  }
+
+  // Clamp summary length
+  const joined = parts.slice(0, 5).join(', ');
+  const more = parts.length > 5 ? ` (+ ${parts.length - 5} more parts)` : '';
+  return scope + joined + more + '.';
+}
+
+// ─── HTML helpers ─────────────────────────────────────────────────────────────
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function renderToken(tok) {
+  const cls = TYPE_CSS[tok.type] || 'tok-literal';
+  const quantBadge = tok.quant
+    ? `<span class="tok-quant">${escHtml(tok.quant)}</span>`
+    : '';
+  return `<span class="tok ${cls}" title="${escHtml(tok.meaning + (tok.quant ? ' — ' + explainQuantifier(tok.quant) : ''))}">${escHtml(tok.raw)}${quantBadge}</span>`;
+}
+
+function renderBreakdownRow(tok) {
+  const cls = TYPE_CSS[tok.type] || 'tok-literal';
+  const pillCls = TYPE_PILL_CSS[tok.type] || 'lg-literal';
+  const quantLine = tok.quant
+    ? `<div class="bd-quant">repeated: ${escHtml(explainQuantifier(tok.quant))}</div>`
+    : '';
+  let meaning = escHtml(tok.meaning);
+  // For groups with inner pattern, show inner
+  if (tok.type === 'group' && tok.inner) {
+    const innerTokens = tokenize(tok.inner);
+    const innerDesc = innerTokens.length > 0
+      ? innerTokens.slice(0, 3).map(t => escHtml(t.raw)).join(' ') + (innerTokens.length > 3 ? '…' : '')
+      : escHtml(tok.inner);
+    meaning += ` <span style="color:#555">→ contains: <code>${innerDesc}</code></span>`;
+  }
+  return `<tr>
+    <td class="bd-token"><span class="tok ${cls}" style="font-size:.82rem;padding:2px 6px">${escHtml(tok.raw)}</span></td>
+    <td class="bd-type"><span class="type-pill lg ${pillCls}" style="font-size:.62rem;padding:2px 6px">${escHtml(TYPE_LABELS[tok.type] || tok.type)}</span></td>
+    <td class="bd-meaning">${meaning}${quantLine}</td>
+  </tr>`;
+}
+
+// ─── Test panel matching ───────────────────────────────────────────────────────
+function runTest(pattern, flags, sampleText) {
+  const countEl = document.querySelector('.match-count');
+  const bodyEl = document.querySelector('.highlighted-text');
+  if (!countEl || !bodyEl) return;
+  if (!sampleText.trim()) { countEl.textContent = ''; bodyEl.innerHTML = ''; return; }
+
+  let re;
+  try {
+    const safeFlags = (flags || '').replace(/[^gimsuy]/g, '');
+    const gFlags = safeFlags.includes('g') ? safeFlags : safeFlags + 'g';
+    re = new RegExp(pattern, gFlags);
+  } catch(e) {
+    countEl.className = 'match-count err';
+    countEl.textContent = 'Invalid regex: ' + e.message;
+    bodyEl.innerHTML = escHtml(sampleText);
+    return;
+  }
+
+  const matches = [...sampleText.matchAll(re)];
+  if (matches.length === 0) {
+    countEl.className = 'match-count no-match';
+    countEl.textContent = 'No matches found.';
+    bodyEl.innerHTML = escHtml(sampleText);
+    return;
+  }
+
+  countEl.className = 'match-count';
+  countEl.textContent = `${matches.length} match${matches.length === 1 ? '' : 'es'} found`;
+
+  // Build highlighted text
+  let result = '', last = 0;
+  for (const m of matches) {
+    result += escHtml(sampleText.slice(last, m.index));
+    result += `<span class="hl-match">${escHtml(m[0])}</span>`;
+    last = m.index + m[0].length;
+    if (m[0].length === 0) { last++; } // avoid infinite loop on zero-length match
+  }
+  result += escHtml(sampleText.slice(last));
+  bodyEl.innerHTML = result;
+}
+
+// ─── Main render ─────────────────────────────────────────────────────────────
+let currentPattern = '', currentFlags = '';
+
+function renderOutput(pattern, flags) {
+  currentPattern = pattern;
+  currentFlags = flags;
+  const el = document.getElementById('output');
+  const wrap = document.getElementById('inputWrap');
+
+  if (!pattern.trim()) {
+    el.innerHTML = '';
+    wrap.classList.remove('is-error');
+    return;
+  }
+
+  // Validate the regex
+  let validRe = true;
+  try {
+    new RegExp(pattern, (flags || '').replace(/[^gimsuy]/g, ''));
+  } catch(e) {
+    el.innerHTML = `<div class="output-inner"><div class="error-msg">&#9888; Invalid regex: ${escHtml(e.message)}</div></div>`;
+    wrap.classList.add('is-error');
+    return;
+  }
+  wrap.classList.remove('is-error');
+
+  const tokens = tokenize(pattern);
+  const summary = buildSummary(tokens, flags);
+
+  // Annotated expression
+  const annotHtml = tokens.map(renderToken).join('');
+
+  // Flag explanations
+  const flagMap = {g:'global (find all)',i:'case-insensitive',m:'multiline (^ and $ match line boundaries)',s:'dotAll (. matches newlines)',u:'Unicode mode',y:'sticky'};
+  const flagsHtml = flags
+    ? flags.split('').filter(f => flagMap[f]).map(f => `<span class="type-pill lg lg-anchor" style="font-size:.65rem;padding:2px 7px;margin-left:6px">${f}: ${flagMap[f]}</span>`).join('')
+    : '';
+
+  // Breakdown table
+  const tableRows = tokens.map(renderBreakdownRow).join('');
+
+  // Sample text hints
+  const sampleHints = {
+    '^\d+$': '42\nnot42\n100\nfoo',
+    '\d{4}-\d{2}-\d{2}': 'Today is 2026-06-06, yesterday was 2026-06-05',
+    '#[0-9a-fA-F]{6}': 'color: #ff3366 or background-color: #1a1a2e',
+    '<!--.*?-->': '<!-- comment --> <div>not this</div> <!-- also this -->',
+    'https?://[^\s]+': 'Visit https://example.com or http://foo.bar/path?q=1',
+    '\b[A-Z][a-z]+\b': 'Alice and Bob went to New York on Monday',
+    '^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}$': 'user@example.com\nnot-valid@\nalso@valid.org',
+  };
+  const sampleDefault = sampleHints[pattern] || '';
+
+  el.innerHTML = `<div class="output-inner">
+    <div class="annotated-wrap">${annotHtml || '<span style="color:#333">empty pattern</span>'}${flagsHtml ? '<span style="margin-left:8px">'+flagsHtml+'</span>' : ''}</div>
+    <div class="summary-banner">
+      <div class="summary-label">In plain English</div>
+      <div class="summary-text">${escHtml(summary)}</div>
+    </div>
+    <div class="breakdown-title">Token Breakdown</div>
+    <table class="breakdown-table"><tbody>${tableRows}</tbody></table>
+    <div class="test-panel">
+      <div class="test-label">Test it — paste some text below</div>
+      <textarea id="testInput" placeholder="Paste sample text here to see what matches…">${escHtml(sampleDefault)}</textarea>
+      <div class="test-result">
+        <div class="match-count"></div>
+        <div class="highlighted-text"></div>
+      </div>
+    </div>
+  </div>`;
+
+  // Wire up test input
+  const testEl = document.getElementById('testInput');
+  testEl.addEventListener('input', () => runTest(currentPattern, currentFlags, testEl.value));
+  if (sampleDefault) {
+    runTest(pattern, flags, sampleDefault);
+  }
+}
+
+// ─── Input listeners ──────────────────────────────────────────────────────────
+let debounceTimer;
+function handleInput() {
+  clearTimeout(debounceTimer);
+  const pat = document.getElementById('patternInput').value;
+  const fl  = document.getElementById('flagsInput').value;
+  debounceTimer = setTimeout(() => renderOutput(pat, fl), 150);
+}
+
+document.getElementById('patternInput').addEventListener('input', handleInput);
+document.getElementById('flagsInput').addEventListener('input', handleInput);
+
+document.querySelectorAll('.ex-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.getElementById('patternInput').value = btn.dataset.pat;
+    document.getElementById('flagsInput').value = btn.dataset.fl || '';
+    renderOutput(btn.dataset.pat, btn.dataset.fl || '');
+    document.getElementById('patternInput').focus();
+  });
+});
+
+// Hash-based deep linking: #pattern or #pattern/flags
+function loadFromHash() {
+  const h = decodeURIComponent(location.hash.slice(1));
+  if (!h) return false;
+  const slashIdx = h.lastIndexOf('/');
+  let pat = h, fl = '';
+  if (slashIdx > 0 && /^[gimsuy]*$/.test(h.slice(slashIdx + 1))) {
+    pat = h.slice(0, slashIdx);
+    fl = h.slice(slashIdx + 1);
+  }
+  document.getElementById('patternInput').value = pat;
+  document.getElementById('flagsInput').value = fl;
+  renderOutput(pat, fl);
+  return true;
+}
+
+if (!loadFromHash()) {
+  // Default example on load
+  const defaultPat = '\\d{4}-\\d{2}-\\d{2}';
+  document.getElementById('patternInput').value = defaultPat;
+  renderOutput(defaultPat, '');
+}
+</script>
+
+<script data-goatcounter="https://autorunfun.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
