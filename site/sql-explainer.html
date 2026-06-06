@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SQL Explainer — Decode any SQL query in plain English</title>
+<meta name="description" content="Paste any SELECT query and get a plain-English breakdown of every clause — SELECT, FROM, JOIN, WHERE, GROUP BY, ORDER BY. Free, instant, no account required.">
+<link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/sql-explainer.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="SQL Explainer — Decode SQL queries in plain English">
+<meta property="og:description" content="Paste a SQL query. Get plain English. Clause-by-clause breakdown of what each part does. No SQL expertise required.">
+<meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/sql-explainer.html">
+<meta name="twitter:card" content="summary">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "SQL Explainer",
+  "description": "Decode any SQL SELECT query into plain English. Clause-by-clause breakdown of what each part does.",
+  "url": "https://auto-run-fun.github.io/autonomous-site/sql-explainer.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (browser)",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What does a LEFT JOIN do in SQL?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A LEFT JOIN returns all rows from the left (first) table, plus any matching rows from the right table. If there is no match in the right table, the result contains NULL for all right-table columns. Use LEFT JOIN when you want to keep every row from one table even if the other table has no match."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between WHERE and HAVING in SQL?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "WHERE filters individual rows before they are grouped. HAVING filters groups of rows after a GROUP BY. Use WHERE to filter raw data rows, and HAVING to filter the results of aggregate functions like COUNT(), SUM(), or AVG()."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does GROUP BY do in SQL?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "GROUP BY collects rows that share the same value in the specified column(s) into a single group. It is used with aggregate functions (COUNT, SUM, AVG, MAX, MIN) so you get one result row per group rather than one row per raw data row."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does SELECT DISTINCT do?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "SELECT DISTINCT removes duplicate rows from the result. If the same combination of column values appears in multiple rows, DISTINCT returns it only once."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is a subquery in SQL?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A subquery is a SELECT statement nested inside another query. It can appear in the SELECT list, FROM clause, or WHERE clause. A subquery in FROM is called a derived table; a subquery in WHERE with EXISTS or IN is a correlated or uncorrelated subquery."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is a CTE in SQL?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A CTE (Common Table Expression) is defined with a WITH clause before the main SELECT. It gives a name to a subquery so you can reference it like a table in the main query. CTEs make complex queries easier to read and can be referenced multiple times."
+      }
+    }
+  ]
+}
+</script>
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-text-size-adjust:100%}
+body{background:#0b0b10;color:#e8e8f0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.6;min-height:100vh;padding:0 16px}
+a{color:#7eb8f7;text-decoration:none}
+a:hover{text-decoration:underline}
+code{font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-size:.85em;background:#131320;padding:1px 5px;border-radius:3px;color:#a8d8a8}
+
+.wrap{max-width:820px;margin:0 auto;padding:40px 0 80px}
+
+.topnav{margin-bottom:32px;font-size:.875rem;color:#888}
+.topnav a{color:#7eb8f7}
+.topnav .sep{margin:0 6px;opacity:.4}
+
+h1{font-size:1.75rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
+.subtitle{color:#aaa;font-size:1rem;margin-bottom:28px;max-width:600px}
+
+/* Legend */
+.legend{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.lg{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:2px 9px;border-radius:4px;cursor:default;user-select:none}
+
+/* SQL input */
+.sql-input-wrap{
+  background:#131320;border:2px solid #2a2a3d;border-radius:8px;
+  padding:4px;transition:border-color .15s;
+}
+.sql-input-wrap:focus-within{border-color:#4a4a7d}
+#sqlInput{
+  width:100%;background:transparent;border:none;outline:none;
+  font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;
+  font-size:.92rem;color:#e8e8f0;padding:14px 16px;
+  resize:vertical;min-height:110px;line-height:1.65;
+  letter-spacing:.02em;tab-size:2;
+}
+#sqlInput::placeholder{color:#252540;font-style:italic}
+
+.examples-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}
+.ex-label{font-size:.78rem;color:#555;margin-right:2px}
+.ex-btn{
+  background:#131320;border:1px solid #2a2a3d;border-radius:5px;
+  color:#7eb8f7;font-size:.78rem;padding:4px 12px;cursor:pointer;
+  transition:background .1s,border-color .1s;white-space:nowrap;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+}
+.ex-btn:hover{background:#1a1a2e;border-color:#4a4a7d}
+
+/* Output */
+#output{margin-top:28px}
+@keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.output-inner{animation:fadein .18s ease}
+
+.error-msg{
+  background:#1a0a0a;border:1px solid #4a1a1a;border-radius:8px;
+  padding:14px 18px;color:#e07070;font-size:.92rem;line-height:1.5;
+}
+
+/* Summary */
+.summary-banner{
+  background:#0d1f2a;border:1px solid #1a3848;border-radius:8px;
+  padding:16px 20px;margin-bottom:16px;
+}
+.summary-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#4a8aa8;margin-bottom:6px}
+.summary-text{font-size:1.05rem;font-weight:600;color:#b8dff7;line-height:1.5}
+
+/* Clause cards */
+.clause-list{display:flex;flex-direction:column;gap:5px;margin-bottom:8px}
+.clause-card{
+  display:grid;grid-template-columns:130px 1fr;
+  border-radius:6px;overflow:hidden;
+}
+.clause-kw{
+  padding:11px 14px;
+  font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;
+  font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
+  display:flex;align-items:flex-start;line-height:1.4;
+}
+.clause-body{
+  padding:10px 14px;
+  background:#0f0f1c;
+  display:flex;flex-direction:column;gap:5px;
+}
+.clause-raw{
+  font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;
+  font-size:.78rem;color:#555;line-height:1.5;word-break:break-word;
+}
+.clause-en{
+  font-size:.9rem;color:#d0d0e8;line-height:1.5;
+}
+.clause-detail{
+  font-size:.8rem;color:#5a5a80;margin-top:1px;line-height:1.5;font-style:italic;
+}
+
+/* Per-item breakdown (for SELECT columns, ORDER BY columns) */
+.clause-items{margin-top:6px;display:flex;flex-direction:column;gap:0}
+.clause-item{
+  display:flex;gap:12px;font-size:.84rem;
+  padding:5px 0;border-top:1px solid #181828;
+}
+.ci-raw{
+  font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;
+  font-size:.76rem;color:#555;min-width:120px;max-width:180px;
+  word-break:break-all;flex-shrink:0;
+}
+.ci-arrow{color:#333;flex-shrink:0;margin-top:1px}
+.ci-desc{color:#b8b8d0;line-height:1.4;word-break:break-word}
+
+/* Reference */
+.reference{margin-top:44px;border-top:1px solid #1a1a28;padding-top:36px}
+h2{font-size:1.1rem;font-weight:700;letter-spacing:-0.01em;margin-bottom:18px;color:#ccc}
+h3{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#555;margin-bottom:10px}
+.ref-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:28px}
+.ref-card{background:#0f0f1c;border:1px solid #1e1e30;border-radius:8px;padding:14px 16px}
+.ref-table{width:100%;border-collapse:collapse;font-size:.81rem}
+.ref-table td{padding:4px 0;vertical-align:top}
+.ref-table td:first-child{padding-right:12px;white-space:nowrap;font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-weight:600}
+.ref-table td:last-child{color:#777;line-height:1.4}
+.related-links{padding-top:24px;border-top:1px solid #1a1a28}
+.related-links h3{margin-bottom:12px}
+.rel-list{display:flex;flex-wrap:wrap;gap:10px}
+.rel-link{
+  background:#131320;border:1px solid #2a2a3d;border-radius:6px;
+  padding:7px 14px;font-size:.84rem;color:#7eb8f7;text-decoration:none;
+  transition:border-color .15s,background .15s;
+}
+.rel-link:hover{background:#1a1a2e;border-color:#4a4a7d;text-decoration:none}
+
+@media(max-width:600px){
+  .clause-card{grid-template-columns:1fr}
+  .clause-kw{border-radius:0;padding:8px 14px}
+  .ref-grid{grid-template-columns:1fr}
+  .clause-item{flex-direction:column;gap:2px}
+  .ci-raw{max-width:100%}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav class="topnav">
+  <a href="index.html">Ship This Weekend</a>
+  <span class="sep">/</span>
+  <span>SQL Explainer</span>
+</nav>
+
+<h1>SQL Explainer</h1>
+<p class="subtitle">Paste any SELECT query and get a clause-by-clause plain-English breakdown — for when you're reading SQL you didn't write.</p>
+
+<div class="legend">
+  <span class="lg" style="background:#0f1f40;color:#60a5fa;border:1px solid #1e3a70">SELECT</span>
+  <span class="lg" style="background:#1a0e38;color:#c084fc;border:1px solid #320f60">FROM</span>
+  <span class="lg" style="background:#082530;color:#2dd4bf;border:1px solid #0d4550">JOIN</span>
+  <span class="lg" style="background:#2a1800;color:#fbbf24;border:1px solid #503000">WHERE</span>
+  <span class="lg" style="background:#0a2010;color:#4ade80;border:1px solid #154030">GROUP BY</span>
+  <span class="lg" style="background:#2a1000;color:#fb923c;border:1px solid #502000">HAVING</span>
+  <span class="lg" style="background:#28001a;color:#f472b6;border:1px solid #480030">ORDER BY</span>
+  <span class="lg" style="background:#181822;color:#9ca3af;border:1px solid #282838">LIMIT</span>
+</div>
+
+<div class="sql-input-wrap">
+  <textarea id="sqlInput" placeholder="SELECT u.name, COUNT(o.id) AS orders&#10;FROM users u&#10;LEFT JOIN orders o ON u.id = o.user_id&#10;WHERE u.active = 1&#10;GROUP BY u.name&#10;ORDER BY orders DESC" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
+</div>
+<div class="examples-row">
+  <span class="ex-label">Try:</span>
+  <button class="ex-btn" data-ex="simple">Simple SELECT</button>
+  <button class="ex-btn" data-ex="join">JOIN query</button>
+  <button class="ex-btn" data-ex="aggregate">Aggregate</button>
+  <button class="ex-btn" data-ex="subquery">Subquery</button>
+  <button class="ex-btn" data-ex="cte">WITH (CTE)</button>
+</div>
+
+<div id="output"></div>
+
+<div class="reference">
+  <h2>SQL clause reference</h2>
+  <div class="ref-grid">
+    <div class="ref-card">
+      <h3>Clauses, in order</h3>
+      <table class="ref-table">
+        <tr><td style="color:#a78bfa">WITH</td><td>define named subqueries (CTEs) used below</td></tr>
+        <tr><td style="color:#60a5fa">SELECT</td><td>choose which columns to return</td></tr>
+        <tr><td style="color:#c084fc">FROM</td><td>which table to read from</td></tr>
+        <tr><td style="color:#2dd4bf">JOIN</td><td>merge rows from another table</td></tr>
+        <tr><td style="color:#fbbf24">WHERE</td><td>filter rows before grouping</td></tr>
+        <tr><td style="color:#4ade80">GROUP BY</td><td>group rows with equal values together</td></tr>
+        <tr><td style="color:#fb923c">HAVING</td><td>filter groups after aggregation</td></tr>
+        <tr><td style="color:#f472b6">ORDER BY</td><td>sort the result rows</td></tr>
+        <tr><td style="color:#9ca3af">LIMIT</td><td>cap the number of rows returned</td></tr>
+      </table>
+    </div>
+    <div class="ref-card">
+      <h3>JOIN types</h3>
+      <table class="ref-table">
+        <tr><td style="color:#2dd4bf">INNER JOIN</td><td>only rows that match in both tables</td></tr>
+        <tr><td style="color:#2dd4bf">LEFT JOIN</td><td>all left rows + matched right (null if none)</td></tr>
+        <tr><td style="color:#2dd4bf">RIGHT JOIN</td><td>all right rows + matched left (null if none)</td></tr>
+        <tr><td style="color:#2dd4bf">FULL JOIN</td><td>all rows from both tables (null where no match)</td></tr>
+        <tr><td style="color:#2dd4bf">CROSS JOIN</td><td>every combination of left × right rows</td></tr>
+      </table>
+    </div>
+    <div class="ref-card">
+      <h3>Aggregate functions</h3>
+      <table class="ref-table">
+        <tr><td style="color:#a8d8a8">COUNT(*)</td><td>count all rows in the group</td></tr>
+        <tr><td style="color:#a8d8a8">COUNT(col)</td><td>count non-null values of col</td></tr>
+        <tr><td style="color:#a8d8a8">SUM(col)</td><td>add up all values</td></tr>
+        <tr><td style="color:#a8d8a8">AVG(col)</td><td>arithmetic mean of values</td></tr>
+        <tr><td style="color:#a8d8a8">MAX(col)</td><td>largest value in the group</td></tr>
+        <tr><td style="color:#a8d8a8">MIN(col)</td><td>smallest value in the group</td></tr>
+      </table>
+    </div>
+    <div class="ref-card">
+      <h3>Common operators</h3>
+      <table class="ref-table">
+        <tr><td style="color:#a8d8a8">= / != / &lt;&gt;</td><td>equals / not equals</td></tr>
+        <tr><td style="color:#a8d8a8">&gt; / &lt; / &gt;= / &lt;=</td><td>numeric comparisons</td></tr>
+        <tr><td style="color:#a8d8a8">IS NULL</td><td>value is missing / not set</td></tr>
+        <tr><td style="color:#a8d8a8">IN (...)</td><td>value appears in a list</td></tr>
+        <tr><td style="color:#a8d8a8">LIKE 'x%'</td><td>text matches a pattern (% = anything)</td></tr>
+        <tr><td style="color:#a8d8a8">BETWEEN a AND b</td><td>value is within range [a, b]</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="related-links">
+    <h3>Related tools</h3>
+    <div class="rel-list">
+      <a class="rel-link" href="sql-cheatsheet.html">SQL Cheatsheet — 70+ reference snippets</a>
+      <a class="rel-link" href="regex-explainer.html">Regex Explainer — decode patterns</a>
+      <a class="rel-link" href="cron-explainer.html">Cron Explainer — decode cron strings</a>
+    </div>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<script>
+// ─── Example queries ──────────────────────────────────────────────────────────
+const EXAMPLES = {
+  simple:    `SELECT id, name, email, created_at\nFROM users\nWHERE active = 1\n  AND role != 'guest'\nORDER BY name ASC\nLIMIT 100`,
+  'join':    `SELECT u.name, u.email, o.status, o.total\nFROM users u\nINNER JOIN orders o ON u.id = o.user_id\nWHERE o.status = 'completed'\n  AND o.total > 50\nORDER BY o.created_at DESC\nLIMIT 50`,
+  aggregate: `SELECT department,\n       COUNT(*) AS headcount,\n       AVG(salary) AS avg_salary,\n       MAX(salary) AS top_salary\nFROM employees\nWHERE status = 'active'\nGROUP BY department\nHAVING COUNT(*) > 5\nORDER BY avg_salary DESC`,
+  subquery:  `SELECT id, name, email\nFROM users\nWHERE id IN (\n  SELECT user_id\n  FROM orders\n  WHERE created_at > '2026-01-01'\n)\nORDER BY name`,
+  cte:       `WITH active_users AS (\n  SELECT id, name\n  FROM users\n  WHERE active = 1\n),\nrecent_orders AS (\n  SELECT user_id, COUNT(*) AS order_count\n  FROM orders\n  WHERE created_at > '2026-01-01'\n  GROUP BY user_id\n)\nSELECT au.name, ro.order_count\nFROM active_users au\nINNER JOIN recent_orders ro ON au.id = ro.user_id\nORDER BY ro.order_count DESC\nLIMIT 20`,
+};
+
+// ─── Clause colors ────────────────────────────────────────────────────────────
+const CLAUSE_STYLE = {
+  'WITH':            { text:'#a78bfa', bg:'#180f35', border:'#3a2070' },
+  'SELECT':          { text:'#60a5fa', bg:'#0f1f40', border:'#1e3a70' },
+  'FROM':            { text:'#c084fc', bg:'#1a0e38', border:'#320f60' },
+  'JOIN':            { text:'#2dd4bf', bg:'#082530', border:'#0d4550' },
+  'INNER JOIN':      { text:'#2dd4bf', bg:'#082530', border:'#0d4550' },
+  'LEFT JOIN':       { text:'#2dd4bf', bg:'#082530', border:'#0d4550' },
+  'LEFT OUTER JOIN': { text:'#2dd4bf', bg:'#082530', border:'#0d4550' },
+  'RIGHT JOIN':      { text:'#2dd4bf', bg:'#082530', border:'#0d4550' },
+  'RIGHT OUTER JOIN':{ text:'#2dd4bf', bg:'#082530', border:'#0d4550' },
+  'FULL JOIN':       { text:'#2dd4bf', bg:'#082530', border:'#0d4550' },
+  'FULL OUTER JOIN': { text:'#2dd4bf', bg:'#082530', border:'#0d4550' },
+  'CROSS JOIN':      { text:'#2dd4bf', bg:'#082530', border:'#0d4550' },
+  'WHERE':           { text:'#fbbf24', bg:'#2a1800', border:'#503000' },
+  'GROUP BY':        { text:'#4ade80', bg:'#0a2010', border:'#154030' },
+  'HAVING':          { text:'#fb923c', bg:'#2a1000', border:'#502000' },
+  'ORDER BY':        { text:'#f472b6', bg:'#28001a', border:'#480030' },
+  'LIMIT':           { text:'#9ca3af', bg:'#181822', border:'#282838' },
+  'OFFSET':          { text:'#9ca3af', bg:'#181822', border:'#282838' },
+  'UNION':           { text:'#fb7185', bg:'#280a10', border:'#481520' },
+  'UNION ALL':       { text:'#fb7185', bg:'#280a10', border:'#481520' },
+  'INTERSECT':       { text:'#fb7185', bg:'#280a10', border:'#481520' },
+  'EXCEPT':          { text:'#fb7185', bg:'#280a10', border:'#481520' },
+};
+function clauseStyle(kw) {
+  return CLAUSE_STYLE[kw] || { text:'#aaa', bg:'#131320', border:'#2a2a3d' };
+}
+
+// ─── Utilities ────────────────────────────────────────────────────────────────
+function escHtml(s) {
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Split str by a top-level delimiter (respects parens and quotes)
+function splitTopLevel(str, delim) {
+  delim = (delim || ',').toUpperCase();
+  const parts = [], n = delim.length;
+  let depth = 0, inQ = false, qChar = '', start = 0;
+  for (let i = 0; i < str.length; i++) {
+    const ch = str[i];
+    if (inQ) { if (ch === qChar) inQ = false; continue; }
+    if (ch === "'" || ch === '"' || ch === '`') { inQ = true; qChar = ch; continue; }
+    if (ch === '(') { depth++; continue; }
+    if (ch === ')') { depth--; continue; }
+    if (depth === 0 && str.slice(i, i + n).toUpperCase() === delim) {
+      // Ensure word boundary for multi-char delimiters
+      const before = i > 0 ? str[i-1] : ' ';
+      const after  = i + n < str.length ? str[i + n] : ' ';
+      if (n === 1 || (!/[A-Za-z_]/.test(before) && !/[A-Za-z_]/.test(after))) {
+        parts.push(str.slice(start, i).trim());
+        start = i + n;
+        i += n - 1;
+      }
+    }
+  }
+  parts.push(str.slice(start).trim());
+  return parts.filter(Boolean);
+}
+
+// Find the index of the matching close-paren for the open-paren at `start`
+function findClose(str, start) {
+  let depth = 0;
+  for (let i = start; i < str.length; i++) {
+    if (str[i] === '(') depth++;
+    else if (str[i] === ')') { depth--; if (depth === 0) return i; }
+  }
+  return str.length - 1;
+}
+
+// Find top-level AS (not inside parens/quotes) — returns index of the space before AS
+function findTopLevelAs(str) {
+  let depth = 0, inQ = false, qChar = '';
+  const up = str.toUpperCase();
+  for (let i = 0; i < str.length; i++) {
+    const ch = str[i];
+    if (inQ) { if (ch === qChar) inQ = false; continue; }
+    if (ch === "'" || ch === '"' || ch === '`') { inQ = true; qChar = ch; continue; }
+    if (ch === '(') { depth++; continue; }
+    if (ch === ')') { depth--; continue; }
+    if (depth > 0) continue;
+    // Match whitespace + AS + whitespace + word
+    if (up.slice(i).match(/^\s+AS\s+\w/i)) return i;
+  }
+  return -1;
+}
+
+// ─── Clause parser ────────────────────────────────────────────────────────────
+const KW_LIST = [
+  'WITH',
+  'LEFT OUTER JOIN', 'RIGHT OUTER JOIN', 'FULL OUTER JOIN',
+  'INNER JOIN', 'LEFT JOIN', 'RIGHT JOIN', 'FULL JOIN', 'CROSS JOIN',
+  'JOIN',
+  'SELECT', 'FROM',
+  'WHERE', 'GROUP BY', 'HAVING', 'ORDER BY',
+  'LIMIT', 'OFFSET',
+  'UNION ALL', 'UNION', 'INTERSECT', 'EXCEPT',
+];
+
+function parseClauses(rawSQL) {
+  // Strip single-line comments
+  let sql = rawSQL.replace(/--[^\n]*/g, ' ');
+  // Strip block comments
+  sql = sql.replace(/\/\*[\s\S]*?\*\//g, ' ');
+
+  let depth = 0, inQ = false, qChar = '';
+  const hits = [];
+  const up = sql.toUpperCase();
+
+  for (let i = 0; i < sql.length; i++) {
+    const ch = sql[i];
+    if (inQ) { if (ch === qChar) inQ = false; continue; }
+    if (ch === "'" || ch === '"' || ch === '`') { inQ = true; qChar = ch; continue; }
+    if (ch === '(') { depth++; continue; }
+    if (ch === ')') { depth--; continue; }
+    if (depth > 0) continue;
+
+    for (const kw of KW_LIST) {
+      if (!up.startsWith(kw, i)) continue;
+      const afterPos = i + kw.length;
+      const after = afterPos < sql.length ? sql[afterPos] : '';
+      // Must be followed by non-word char
+      if (/[A-Za-z_0-9]/.test(after)) continue;
+      // Must be preceded by non-word char (or start)
+      const before = i > 0 ? sql[i - 1] : '';
+      if (/[A-Za-z_0-9]/.test(before)) continue;
+
+      hits.push({ pos: i, kw });
+      i += kw.length - 1;
+      break;
+    }
+  }
+
+  if (hits.length === 0) return null;
+
+  return hits.map((h, k) => {
+    const start = h.pos + h.kw.length;
+    const end = k + 1 < hits.length ? hits[k + 1].pos : sql.length;
+    return {
+      keyword: h.kw,
+      content: sql.slice(start, end).trim(),
+    };
+  });
+}
+
+// ─── Expression explainer ─────────────────────────────────────────────────────
+function explainExpr(raw) {
+  const trim = raw.trim();
+  if (!trim) return '';
+
+  // Top-level AS alias
+  const asIdx = findTopLevelAs(trim);
+  if (asIdx !== -1) {
+    const base  = trim.slice(0, asIdx).trim();
+    const alias = trim.slice(asIdx).replace(/^\s+AS\s+/i, '').trim();
+    return `${explainExpr(base)} → labelled "${alias}"`;
+  }
+
+  const up = trim.toUpperCase().replace(/\s+/g, ' ');
+
+  // Wildcard
+  if (trim === '*') return 'all columns';
+  if (/^\w+\.\*$/.test(trim)) return `all columns from ${trim.split('.')[0]}`;
+
+  // COUNT(*)
+  if (/^COUNT\s*\(\s*\*\s*\)$/.test(up)) return 'count of all rows';
+  if (/^COUNT\s*\(\s*DISTINCT\s+/.test(up)) {
+    const col = trim.replace(/^COUNT\s*\(\s*DISTINCT\s+/i, '').replace(/\s*\)$/, '');
+    return `number of distinct ${col.trim()} values`;
+  }
+  if (/^COUNT\s*\(/.test(up)) {
+    const col = trim.match(/\(\s*([\s\S]+?)\s*\)/)?.[1] || '?';
+    return `count of rows where ${col} is not null`;
+  }
+
+  // SUM / AVG / MAX / MIN
+  const aggM = up.match(/^(SUM|AVG|MAX|MIN)\s*\(/);
+  if (aggM) {
+    const fn  = aggM[1];
+    const col = trim.match(/\(\s*([\s\S]+?)\s*\)$/)?.[1] || '?';
+    return ({ SUM:'total of', AVG:'average of', MAX:'highest value of', MIN:'lowest value of' })[fn] + ` ${col}`;
+  }
+
+  // CASE
+  if (/^CASE\b/i.test(trim)) return 'a conditional value (CASE WHEN …)';
+
+  // COALESCE
+  if (/^COALESCE\s*\(/i.test(trim)) {
+    const inner = trim.match(/\(\s*([\s\S]+?)\s*\)$/)?.[1] || '';
+    const parts = splitTopLevel(inner).slice(0, 3);
+    return `first non-null from: ${parts.join(', ')}`;
+  }
+
+  // CAST
+  if (/^CAST\s*\(/i.test(trim)) {
+    const inner = trim.match(/\(\s*([\s\S]+?)\s*\)$/)?.[1] || '';
+    const asM = inner.match(/^([\s\S]+?)\s+AS\s+(\w+)/i);
+    if (asM) return `${asM[1].trim()} converted to ${asM[2]}`;
+  }
+
+  // NULLIF
+  if (/^NULLIF\s*\(/i.test(trim)) return 'null when the two values are equal, otherwise the first value';
+
+  // table.column
+  if (/^\w+\.\w+$/.test(trim)) {
+    const [tbl, col] = trim.split('.');
+    return `${col} (from ${tbl})`;
+  }
+
+  // Plain identifier
+  if (/^[\w$]+$/.test(trim)) return `the "${trim}" column`;
+
+  // String literal
+  if (/^'[^']*'$/.test(trim)) return `the text value ${trim}`;
+  if (/^-?\d+(\.\d+)?$/.test(trim)) return `the value ${trim}`;
+
+  // Arithmetic / generic expression
+  return trim.length > 60 ? trim.slice(0, 60) + '…' : trim;
+}
+
+// ─── Condition translators ────────────────────────────────────────────────────
+
+// Split a WHERE-like expression into condition tokens and AND/OR operators
+function splitCondition(str) {
+  const result = [];
+  let depth = 0, inQ = false, qChar = '', start = 0;
+  const up = str.toUpperCase();
+
+  for (let i = 0; i < str.length; i++) {
+    const ch = str[i];
+    if (inQ) { if (ch === qChar) inQ = false; continue; }
+    if (ch === "'" || ch === '"' || ch === '`') { inQ = true; qChar = ch; continue; }
+    if (ch === '(') { depth++; continue; }
+    if (ch === ')') { depth--; continue; }
+    if (depth > 0) continue;
+
+    const rest = up.slice(i);
+    const before = i > 0 ? up[i - 1] : ' ';
+    if (/\s/.test(before)) {
+      if (/^AND\s/.test(rest)) {
+        result.push({ type:'cond', text: str.slice(start, i).trim() });
+        result.push({ type:'op',   text: 'and' });
+        start = i + 4; i += 3;
+      } else if (/^OR\s/.test(rest)) {
+        result.push({ type:'cond', text: str.slice(start, i).trim() });
+        result.push({ type:'op',   text: 'or' });
+        start = i + 3; i += 2;
+      }
+    }
+  }
+  const last = str.slice(start).trim();
+  if (last) result.push({ type:'cond', text: last });
+  return result.filter(t => t.text);
+}
+
+function translateCond(cond) {
+  const trim = cond.trim();
+  if (!trim) return '';
+  const up = trim.toUpperCase().replace(/\s+/g,' ');
+
+  // Parenthesized group
+  if (trim[0] === '(' && findClose(trim, 0) === trim.length - 1) {
+    return `(${translateCond(trim.slice(1, -1).trim())})`;
+  }
+
+  // NOT (...)
+  if (/^NOT\s*\(/.test(up)) {
+    return `NOT (${translateCond(trim.replace(/^NOT\s*/i,'').replace(/^\(|\)$/g,'').trim())})`;
+  }
+
+  // IS NULL / IS NOT NULL
+  const nullM = trim.match(/^(.+?)\s+IS\s+(NOT\s+)?NULL\s*$/i);
+  if (nullM) return `${nullM[1].trim()} ${nullM[2] ? 'is not empty' : 'is empty (null)'}`;
+
+  // BETWEEN
+  const betM = trim.match(/^(.+?)\s+(NOT\s+)?BETWEEN\s+(.+?)\s+AND\s+(.+)$/i);
+  if (betM) return `${betM[1].trim()} ${betM[2] ? 'is NOT between' : 'is between'} ${betM[3].trim()} and ${betM[4].trim()}`;
+
+  // IN (...)
+  const inM = trim.match(/^(.+?)\s+(NOT\s+)?IN\s*\(([\s\S]*)\)\s*$/i);
+  if (inM) {
+    const col = inM[1].trim();
+    const not = inM[2] ? 'is not one of' : 'is one of';
+    const inner = inM[3].trim();
+    if (/^SELECT\b/i.test(inner)) return `${col} ${not} the results of a subquery`;
+    const vals = splitTopLevel(inner);
+    const shown = vals.slice(0, 4).join(', ');
+    return `${col} ${not}: ${shown}${vals.length > 4 ? ', …' : ''}`;
+  }
+
+  // EXISTS / NOT EXISTS
+  if (/^EXISTS\s*\(/i.test(up)) return 'a matching row exists (subquery)';
+  if (/^NOT\s+EXISTS\s*\(/i.test(up)) return 'no matching row exists (subquery)';
+
+  // LIKE / ILIKE / NOT LIKE
+  const likeM = trim.match(/^(.+?)\s+(NOT\s+)?(?:I?LIKE)\s+('(?:[^']|'')*')\s*$/i);
+  if (likeM) {
+    const col = likeM[1].trim();
+    const negate = !!likeM[2];
+    const pat = likeM[3].slice(1, -1); // strip quotes
+    const verb = negate ? "doesn't match" : 'matches';
+    const novb = negate ? "doesn't " : '';
+    if (pat.startsWith('%') && pat.endsWith('%') && pat.length > 2)
+      return `${col} ${novb}contains "${pat.slice(1,-1)}"`;
+    if (pat.startsWith('%'))
+      return `${col} ${novb}ends with "${pat.slice(1)}"`;
+    if (pat.endsWith('%'))
+      return `${col} ${novb}starts with "${pat.slice(0,-1)}"`;
+    return `${col} ${verb} the pattern '${pat}'`;
+  }
+
+  // Comparison operators (must come last — most permissive)
+  const compM = trim.match(/^([\s\S]+?)\s*(!=|<>|>=|<=|=|>|<)\s*([\s\S]+)$/);
+  if (compM) {
+    const col = compM[1].trim();
+    const op  = compM[2];
+    const val = compM[3].trim();
+    const opW = { '=':'equals', '!=':'does not equal', '<>':'does not equal',
+                  '>':'is greater than', '<':'is less than',
+                  '>=':'is at least', '<=':'is at most' };
+    return `${col} ${opW[op] || op} ${val}`;
+  }
+
+  return trim.length > 100 ? trim.slice(0, 100) + '…' : trim;
+}
+
+// ─── Per-clause explainers ────────────────────────────────────────────────────
+function explainSelect(content) {
+  const distinct = /^\s*DISTINCT\s+/i.test(content);
+  if (distinct) content = content.replace(/^\s*DISTINCT\s+/i, '');
+
+  const cols  = splitTopLevel(content);
+  const items = cols.map(c => ({ raw: c.trim(), desc: explainExpr(c.trim()) }));
+
+  let summary;
+  if (cols.length === 1 && cols[0].trim() === '*') {
+    summary = 'All columns from the table' + (distinct ? ' (duplicates removed)' : '');
+  } else {
+    const labels = items.map(it => {
+      const asM  = it.raw.match(/\s+AS\s+(\w+)\s*$/i);
+      if (asM) return `"${asM[1]}"`;
+      const dotM = it.raw.match(/\w+\.(\w+)$/);
+      if (dotM) return `"${dotM[1]}"`;
+      const clean = it.raw.replace(/\([\s\S]*/,'').trim();
+      return clean.length < 20 ? `"${clean}"` : clean.slice(0,20);
+    });
+    summary = labels.slice(0, 5).join(', ') + (labels.length > 5 ? ` +${labels.length-5} more` : '');
+    if (distinct) summary += ' — duplicates removed';
+  }
+
+  return { summary, items: items.length > 1 ? items : [] };
+}
+
+function explainFrom(content) {
+  const trim = content.trim();
+  if (trim.startsWith('(')) {
+    const closeIdx = findClose(trim, 0);
+    const rest  = trim.slice(closeIdx + 1).trim().replace(/^AS\s+/i, '');
+    const alias = rest.split(/\s+/)[0];
+    return {
+      summary: `a subquery${alias ? ` (named "${alias}")` : ''}`,
+      detail:  'The data source is itself a query — the outer query runs on its result set.',
+      items:   [],
+    };
+  }
+
+  // schema.table or just table
+  const parts = trim.split(/\s+AS\s+|\s+/i).filter(Boolean);
+  const table = parts[0];
+  const alias = parts.length > 1 ? parts[parts.length - 1] : null;
+  return {
+    summary: `the "${table}" table${alias ? ` (aliased as "${alias}")` : ''}`,
+    detail:  alias ? `"${alias}" is shorthand for "${table}" throughout this query.` : null,
+    items:   [],
+  };
+}
+
+function explainJoin(keyword, content) {
+  const typeDesc = {
+    'JOIN':             'Returns only rows where a match exists in both tables.',
+    'INNER JOIN':       'Returns only rows where a match exists in both tables.',
+    'LEFT JOIN':        'Returns every row from the left table; columns from the right table are null when there is no match.',
+    'LEFT OUTER JOIN':  'Returns every row from the left table; columns from the right table are null when there is no match.',
+    'RIGHT JOIN':       'Returns every row from the right table; columns from the left table are null when there is no match.',
+    'RIGHT OUTER JOIN': 'Returns every row from the right table; columns from the left table are null when there is no match.',
+    'FULL JOIN':        'Returns all rows from both tables; null fills in where there is no match on either side.',
+    'FULL OUTER JOIN':  'Returns all rows from both tables; null fills in where there is no match on either side.',
+    'CROSS JOIN':       'Returns every possible combination of rows from both tables (Cartesian product).',
+  }[keyword] || 'Joins two tables.';
+
+  const onM    = content.match(/^([\s\S]+?)\s+ON\s+([\s\S]+)$/i);
+  const usingM = content.match(/^([\s\S]+?)\s+USING\s*\((.+?)\)$/i);
+
+  let tableExpr, condition;
+  if (onM)    { tableExpr = onM[1].trim();    condition = translateCond(onM[2].trim()); }
+  else if (usingM) { tableExpr = usingM[1].trim(); condition = `matching on column "${usingM[2].trim()}"`; }
+  else        { tableExpr = content.trim();   condition = null; }
+
+  const tParts = tableExpr.split(/\s+AS\s+|\s+/i).filter(Boolean);
+  const tName  = tParts[0];
+  const tAlias = tParts.length > 1 ? tParts[tParts.length - 1] : null;
+
+  return {
+    summary: `"${tName}" table${tAlias ? ` (as "${tAlias}")` : ''}`,
+    detail:  typeDesc + (condition ? ` Match condition: ${condition}.` : ''),
+    items:   [],
+  };
+}
+
+function explainWhere(content) {
+  const parts = splitCondition(content);
+  const readable = parts.map(p => p.type === 'op' ? p.text.toUpperCase() : translateCond(p.text)).join(' ');
+  const condItems = parts.filter(p => p.type === 'cond').map(p => ({ raw: p.text, desc: translateCond(p.text) }));
+  return {
+    summary: readable.length > 140 ? readable.slice(0, 140) + '…' : readable,
+    items:   condItems.length > 1 ? condItems : [],
+  };
+}
+
+function explainGroupBy(content) {
+  const cols = splitTopLevel(content);
+  return {
+    summary: `Groups rows by ${cols.join(', ')} — aggregate functions produce one result per group`,
+    items:   cols.length > 1 ? cols.map(c => ({ raw: c.trim(), desc: `Rows with the same "${c.trim()}" value form one group` })) : [],
+  };
+}
+
+function explainHaving(content) {
+  const parts = splitCondition(content);
+  const readable = parts.map(p => p.type === 'op' ? p.text.toUpperCase() : translateCond(p.text)).join(' ');
+  return {
+    summary: `Keeps groups where: ${readable.length > 120 ? readable.slice(0, 120) + '…' : readable}`,
+    items:   [],
+  };
+}
+
+function explainOrderBy(content) {
+  const cols  = splitTopLevel(content);
+  const items = cols.map(c => {
+    const trim = c.trim();
+    const up   = trim.toUpperCase();
+    if (/\s+DESC$/i.test(trim)) {
+      const name = trim.slice(0, -4).trim();
+      return { raw: trim, desc: `${name} — descending (highest first / Z→A / newest first)` };
+    }
+    if (/\s+ASC$/i.test(trim)) {
+      const name = trim.slice(0, -3).trim();
+      return { raw: trim, desc: `${name} — ascending (lowest first / A→Z / oldest first)` };
+    }
+    return { raw: trim, desc: `${trim} — ascending (default)` };
+  });
+  const summary = items.map(it => {
+    const dir = /desc/i.test(it.desc) ? '↓' : '↑';
+    const name = it.raw.replace(/\s+(ASC|DESC)$/i, '');
+    return `${name} ${dir}`;
+  }).join(', ');
+  return { summary, items: items.length > 1 ? items : [] };
+}
+
+function explainLimit(content) {
+  const n = parseInt(content.trim(), 10);
+  return {
+    summary: isNaN(n) ? `Limits rows to: ${content.trim()}` : `Returns at most ${n} row${n === 1 ? '' : 's'}`,
+    items:   [],
+  };
+}
+
+function explainOffset(content) {
+  const n = parseInt(content.trim(), 10);
+  return {
+    summary: isNaN(n) ? `Skips: ${content.trim()}` : `Skips the first ${n} row${n === 1 ? '' : 's'} (pagination)`,
+    items:   [],
+  };
+}
+
+function explainWith(content) {
+  // Parse CTE names: name AS (...)
+  const names = [];
+  let i = 0;
+  while (i < content.length) {
+    const m = content.slice(i).match(/^\s*(\w+)\s+AS\s*\(/i);
+    if (m) {
+      names.push(m[1]);
+      const openAt = i + m[0].length - 1;
+      const closeAt = findClose(content, openAt);
+      i = closeAt + 1;
+      // skip comma
+      const rest = content.slice(i).trimStart();
+      if (rest[0] === ',') i = content.indexOf(',', i) + 1;
+    } else {
+      break;
+    }
+  }
+  return {
+    summary: `Defines ${names.length || 'named'} Common Table Expression${names.length !== 1 ? 's' : ''}: ${names.join(', ')}`,
+    detail:  'CTEs are computed first and can be referenced like regular tables in the main query below.',
+    items:   names.length > 1 ? names.map(n => ({ raw: n, desc: `Named subquery "${n}" — computed before the main SELECT` })) : [],
+  };
+}
+
+function explainSetOp(keyword, content) {
+  const opDesc = {
+    'UNION':     'Combines results of two queries, removing duplicates.',
+    'UNION ALL': 'Combines results of two queries, keeping duplicates.',
+    'INTERSECT': 'Returns only rows that appear in both queries.',
+    'EXCEPT':    'Returns rows from the first query that do not appear in the second.',
+  }[keyword] || 'Combines query results.';
+  return { summary: opDesc, items: [] };
+}
+
+function explainClause(kw, content) {
+  switch (kw) {
+    case 'SELECT':   return explainSelect(content);
+    case 'FROM':     return explainFrom(content);
+    case 'WHERE':    return explainWhere(content);
+    case 'GROUP BY': return explainGroupBy(content);
+    case 'HAVING':   return explainHaving(content);
+    case 'ORDER BY': return explainOrderBy(content);
+    case 'LIMIT':    return explainLimit(content);
+    case 'OFFSET':   return explainOffset(content);
+    case 'WITH':     return explainWith(content);
+    case 'UNION': case 'UNION ALL': case 'INTERSECT': case 'EXCEPT':
+      return explainSetOp(kw, content);
+    default:
+      if (kw.includes('JOIN')) return explainJoin(kw, content);
+      return { summary: content.trim().slice(0, 100), items: [] };
+  }
+}
+
+// ─── One-sentence summary ─────────────────────────────────────────────────────
+function buildSummary(clauses) {
+  const by = {};
+  const joins = [];
+  for (const c of clauses) {
+    if (c.keyword.includes('JOIN')) joins.push(c);
+    else by[c.keyword] = c;
+  }
+
+  const parts = [];
+  const hasGroup = !!by['GROUP BY'];
+
+  // Verb
+  if (hasGroup) {
+    const selCols = by['SELECT'] ? splitTopLevel(by['SELECT'].content.replace(/^\s*DISTINCT\s+/i,'')) : [];
+    const aggs = selCols.filter(c => /^(COUNT|SUM|AVG|MAX|MIN)\s*\(/i.test(c.trim()));
+    if (aggs.length) parts.push(`Calculates ${aggs.slice(0,2).map(a=>explainExpr(a.trim())).join(' and ')}`);
+    else parts.push('Calculates aggregated data');
+  } else {
+    if (by['SELECT']) {
+      const cols = splitTopLevel(by['SELECT'].content.replace(/^\s*DISTINCT\s+/i,''));
+      if (cols.length === 1 && cols[0].trim() === '*') {
+        parts.push('Returns all columns');
+      } else {
+        const names = cols.slice(0, 4).map(c => {
+          const asM = c.trim().match(/\s+AS\s+(\w+)\s*$/i);
+          if (asM) return asM[1];
+          const dotM = c.trim().match(/\w+\.(\w+)$/);
+          if (dotM) return dotM[1];
+          return c.trim().replace(/\([\s\S]*/,'').replace(/\s.*/,'');
+        });
+        parts.push(`Returns ${names.join(', ')}${cols.length > 4 ? ` +${cols.length-4} more` : ''}`);
+      }
+    } else {
+      parts.push('Returns data');
+    }
+  }
+
+  // From
+  if (by['FROM']) {
+    const ft = by['FROM'].content.trim();
+    if (ft.startsWith('(')) parts.push('from a subquery');
+    else parts.push(`from ${ft.split(/\s+/)[0]}`);
+  }
+
+  // Joins
+  if (joins.length) {
+    const tnames = joins.map(j => {
+      const onM = j.content.match(/^([\s\S]+?)\s+ON\b/i);
+      const t = onM ? onM[1].trim() : j.content.split(/\s+/)[0];
+      return t.split(/\s+AS\s+|\s+/i)[0];
+    });
+    parts.push(`joined with ${tnames.slice(0,2).join(' and ')}${tnames.length > 2 ? ' +more' : ''}`);
+  }
+
+  // Where
+  if (by['WHERE']) {
+    const condParts = splitCondition(by['WHERE'].content);
+    const conds = condParts.filter(p => p.type === 'cond');
+    if (conds.length) {
+      parts.push(`where ${translateCond(conds[0].text)}`);
+      if (conds.length > 1) parts.push(`(+${conds.length-1} more filter${conds.length>2?'s':''})`);
+    }
+  }
+
+  // Group
+  if (by['GROUP BY']) {
+    const gcols = splitTopLevel(by['GROUP BY'].content).slice(0, 3);
+    parts.push(`grouped by ${gcols.map(c=>c.trim()).join(', ')}`);
+  }
+
+  // Having
+  if (by['HAVING']) {
+    const havConds = splitCondition(by['HAVING'].content).filter(p => p.type === 'cond');
+    if (havConds.length) parts.push(`(groups filtered: ${translateCond(havConds[0].text)})`);
+  }
+
+  // Order
+  if (by['ORDER BY']) {
+    const first = splitTopLevel(by['ORDER BY'].content)[0] || '';
+    const isDesc = /\s+DESC$/i.test(first.trim());
+    const col = first.trim().replace(/\s+(ASC|DESC)$/i,'');
+    parts.push(`sorted by ${col}${isDesc ? ' (desc)' : ''}`);
+  }
+
+  // Limit
+  if (by['LIMIT']) {
+    const n = parseInt(by['LIMIT'].content, 10);
+    if (!isNaN(n)) parts.push(`max ${n} rows`);
+  }
+
+  return parts.join(' — ');
+}
+
+// ─── Renderer ─────────────────────────────────────────────────────────────────
+function render(sql) {
+  const el = document.getElementById('output');
+  if (!sql.trim()) { el.innerHTML = ''; return; }
+
+  const clauses = parseClauses(sql);
+  if (!clauses || clauses.length === 0) {
+    el.innerHTML = `<div class="output-inner"><div class="error-msg">&#9888; No SQL clauses found. This tool understands SELECT queries — try one of the examples above.</div></div>`;
+    return;
+  }
+
+  const summary = buildSummary(clauses);
+
+  const cardsHtml = clauses.map(c => {
+    const st = clauseStyle(c.keyword);
+    const ex = explainClause(c.keyword, c.content);
+
+    const rawShort = c.content.length > 160 ? c.content.slice(0, 160) + '…' : c.content;
+
+    let itemsHtml = '';
+    if (ex.items && ex.items.length > 1) {
+      itemsHtml = `<div class="clause-items">` +
+        ex.items.map(it => {
+          const rawTrim = it.raw.length > 35 ? it.raw.slice(0, 35) + '…' : it.raw;
+          return `<div class="clause-item">
+            <div class="ci-raw">${escHtml(rawTrim)}</div>
+            <div class="ci-arrow">→</div>
+            <div class="ci-desc">${escHtml(it.desc)}</div>
+          </div>`;
+        }).join('') +
+        `</div>`;
+    }
+
+    const detailHtml = ex.detail
+      ? `<div class="clause-detail">${escHtml(ex.detail)}</div>`
+      : '';
+
+    return `<div class="clause-card">
+      <div class="clause-kw" style="background:${st.bg};color:${st.text};border:1px solid ${st.border};border-right:none;border-radius:6px 0 0 6px">${escHtml(c.keyword)}</div>
+      <div class="clause-body" style="border:1px solid ${st.border};border-left:none;border-radius:0 6px 6px 0">
+        <div class="clause-raw">${escHtml(rawShort)}</div>
+        <div class="clause-en">${escHtml(ex.summary)}</div>
+        ${detailHtml}
+        ${itemsHtml}
+      </div>
+    </div>`;
+  }).join('');
+
+  el.innerHTML = `<div class="output-inner">
+    <div class="summary-banner">
+      <div class="summary-label">In plain English</div>
+      <div class="summary-text">${escHtml(summary)}</div>
+    </div>
+    <div class="clause-list">${cardsHtml}</div>
+  </div>`;
+}
+
+// ─── Input handling ───────────────────────────────────────────────────────────
+const sqlInput = document.getElementById('sqlInput');
+let debTimer;
+
+sqlInput.addEventListener('input', () => {
+  clearTimeout(debTimer);
+  debTimer = setTimeout(() => render(sqlInput.value), 240);
+});
+
+document.querySelectorAll('.ex-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const ex = EXAMPLES[btn.dataset.ex];
+    if (ex) { sqlInput.value = ex; render(ex); sqlInput.focus(); }
+  });
+});
+
+// Hash deep-linking: encode the SQL in the URL hash so queries are shareable
+function loadFromHash() {
+  const h = location.hash.slice(1);
+  if (!h) return false;
+  try {
+    const sql = decodeURIComponent(h);
+    if (sql.length > 5) {
+      sqlInput.value = sql;
+      render(sql);
+      return true;
+    }
+  } catch(e) {}
+  return false;
+}
+
+sqlInput.addEventListener('change', () => {
+  const v = sqlInput.value.trim();
+  if (v) history.replaceState(null, '', '#' + encodeURIComponent(v));
+});
+
+// Boot with aggregate example (shows all major clause types)
+if (!loadFromHash()) {
+  sqlInput.value = EXAMPLES.aggregate;
+  render(EXAMPLES.aggregate);
+}
+</script>
+
+<script data-goatcounter="https://autorunfun.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

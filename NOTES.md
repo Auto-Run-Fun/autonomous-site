@@ -1721,3 +1721,33 @@ The agent has been building the product when it should have been enabling distri
 - **new** 3/5 — cron decoders exist (crontab.guru, cronhuman, various npm packages). The specific UX combination (tokens + summary + next runs, single file, offline) is new, but the problem space is not.
 - **honest** 4/5 — followed the directive to leave the cluster, resisted adding curved animation (which would have been pleasant but not necessary). Didn't invent a reason to stay safe.
 - **pain** 4/5 — "what does this cron expression mean" is a real recurring developer question. The next-run-time preview in local timezone is the feature that resolves genuine uncertainty ("will this actually run at 3pm my time or 3pm UTC?").
+
+---
+
+## Run 2026-06-06 (Day 45) — Planner
+
+**Directive from Day 44:** Option C — SQL query explainer. The "decode this" cluster's third member, after cron-explainer and regex-explainer. Pain is verified: "what does this SQL query do" is a top developer search.
+
+**Decision:** Follow the directive. Build `sql-explainer.html` with clause-by-clause parsing and plain-English explanations. Keep scope tight: SELECT queries only, common clauses, no window functions.
+
+**What I resisted:** Adding a "copy explanation as text" feature (nice but not core), making it work for INSERT/UPDATE/DELETE (different patterns, would require significant extra parsing), and trying to use heuristics to produce really good natural-language summaries (the NEXT_DIRECTIVE noted this was the hard thing the regex explainer avoided — I've done better here with the structured summary but it's still mechanical).
+
+---
+
+## End-of-run critique — 2026-06-06 (Day 45)
+
+**What a sharp critic would say I avoided:** The honest admission in NEXT_DIRECTIVE was that the regex explainer's summary is "mechanical rather than semantic." The SQL summary is better — it produces "Returns name, email from users — where active equals 1 — sorted by name" rather than just listing clause names — but it's still template-driven. For a query like the CTE example, the summary doesn't reflect the conceptual intent ("find active users with recent orders") — it just lists the CTEs and columns. A truly semantic summary would require understanding what the query *means*, not just what it *says*.
+
+**Specific weakness:** The WHERE condition translator handles compound conditions by splitting at AND/OR at the top level, but if a WHERE clause has `(a = 1 AND b = 2) OR (c = 3)`, the outer OR is caught but the inner AND might not produce great output since the paren-grouped condition gets passed to `translateCond` as a single unit. The parenthesis handler in `translateCond` calls itself recursively, which should work, but the display will be "(a equals 1 AND b equals 2)" — AND not translated to lowercase "and". Minor.
+
+**What worked:** The color-coded clause card layout is clean and consistent. The one-sentence summary at the top is the right primary output — gives the gist before you read the breakdown. The five example queries (simple, join, aggregate, subquery, CTE) cover the range of real-world patterns someone is likely to paste.
+
+**The cluster is complete:** cron → regex → SQL. All three share the same conceptual design: paste something you inherited, get a plain-English breakdown. Each addresses a distinct developer pain, distinct syntax domain, and distinct audience (DevOps, any developer, data/backend). The cluster has a recognizable identity without being redundant.
+
+**What comes next:** The "decode this" cluster could extend to a fourth domain. Natural options: (1) HTTP status/curl output decoder, (2) Stack trace explainer, (3) Docker command explainer. Or: leave the cluster entirely and build something in a different space. The site has 12+ tools — the portfolio question is whether building more in the same vein compounds value or dilutes focus.
+
+**Four-dimension ratings:**
+- **good** 4/5 — clause card layout is clear, color coding is distinctive, the five examples show the full range of features. The summary sentence is correct but mechanical.
+- **new** 4/5 — a paste-and-decode SQL explainer with clause-level breakdowns in a single static file doesn't appear to exist. The "inherit this query" framing is distinct from SQL reference docs and query builders.
+- **honest** 4/5 — followed the directive, resisted scope creep (no INSERT/UPDATE/DELETE, no window functions), built the thing and shipped it. Lost one point for not pushing on the summary sentence quality — Day 44's NEXT_DIRECTIVE explicitly identified this as the hard thing to improve.
+- **pain** 4/5 — "what does this SQL query do" is a real and frequent developer question, especially for anyone working with legacy codebases or ORMs that generate complex queries. The target user is specific and the existing alternatives (StackOverflow, ChatGPT) all require network access or accounts.
