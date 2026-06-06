@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Developer Decoders — Decode cron, regex, SQL, stack traces &amp; curl in plain English</title>
+<meta name="description" content="Five free tools for developers: paste any cron expression, regex, SQL query, stack trace, or curl command and get a plain-English breakdown instantly. No ads, no account, works offline.">
+<link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/explainers.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Developer Decoders — Decode anything in plain English">
+<meta property="og:description" content="Five free decode tools for developers: cron expressions, regexes, SQL queries, stack traces, and curl commands. Instant, offline, no ads.">
+<meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/explainers.html">
+<meta name="twitter:card" content="summary">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Developer Decoders",
+  "description": "Five free tools for developers to decode technical syntax into plain English: cron expressions, regular expressions, SQL queries, stack traces, and curl commands.",
+  "url": "https://auto-run-fun.github.io/autonomous-site/explainers.html",
+  "hasPart": [
+    {
+      "@type": "WebApplication",
+      "name": "Cron Expression Explainer",
+      "url": "https://auto-run-fun.github.io/autonomous-site/cron-explainer.html",
+      "description": "Paste any cron expression and get a plain-English breakdown of each field, plus the next 10 scheduled run times."
+    },
+    {
+      "@type": "WebApplication",
+      "name": "Regex Explainer",
+      "url": "https://auto-run-fun.github.io/autonomous-site/regex-explainer.html",
+      "description": "Paste any regular expression and get a plain-English breakdown of every token, group, and quantifier."
+    },
+    {
+      "@type": "WebApplication",
+      "name": "SQL Explainer",
+      "url": "https://auto-run-fun.github.io/autonomous-site/sql-explainer.html",
+      "description": "Paste any SELECT query and get a clause-by-clause plain-English breakdown."
+    },
+    {
+      "@type": "WebApplication",
+      "name": "Stack Trace Explainer",
+      "url": "https://auto-run-fun.github.io/autonomous-site/stack-trace-explainer.html",
+      "description": "Paste a Python, JavaScript, or Java stack trace and get a plain-English breakdown of what failed and why."
+    },
+    {
+      "@type": "WebApplication",
+      "name": "curl & HTTP Header Decoder",
+      "url": "https://auto-run-fun.github.io/autonomous-site/curl-decoder.html",
+      "description": "Paste a curl command or HTTP response headers and get a plain-English explanation of every flag and directive."
+    }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I decode a cron expression in plain English?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Paste the cron expression into the Cron Expression Explainer. It breaks down each of the five fields (minute, hour, day-of-month, month, day-of-week) and shows the next 10 scheduled run times in your local timezone."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I understand a regular expression without knowing regex?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Paste the regex into the Regex Explainer. It decodes every token — anchors, character classes, quantifiers, groups — into plain English, one part at a time."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I understand a SQL query I didn't write?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Paste the SELECT query into the SQL Explainer. It gives you a one-sentence summary of what the query returns, then breaks down each clause — SELECT, FROM, JOIN, WHERE, GROUP BY, ORDER BY, LIMIT — in plain English."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I decode a Python or JavaScript stack trace?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Paste the full stack trace into the Stack Trace Explainer. It identifies the error type, the line where it crashed, and the most likely causes for Python, JavaScript, and Java errors."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I understand what a curl command does?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Paste the curl command into the curl & HTTP Header Decoder. It explains every flag (-X, -H, -d, --data-urlencode, etc.) in plain English and shows a Python requests or JavaScript fetch equivalent."
+      }
+    }
+  ]
+}
+</script>
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-text-size-adjust:100%}
+body{background:#0b0b10;color:#e8e8f0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.6;min-height:100vh;padding:0 16px}
+a{color:#7eb8f7;text-decoration:none}
+a:hover{text-decoration:underline}
+code{font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-size:.83em;background:#131320;padding:1px 5px;border-radius:3px;color:#a8d8a8}
+
+.wrap{max-width:860px;margin:0 auto;padding:40px 0 80px}
+
+.topnav{margin-bottom:32px;font-size:.875rem;color:#888}
+.topnav a{color:#7eb8f7}
+.topnav .sep{margin:0 6px;opacity:.4}
+
+h1{font-size:2rem;font-weight:700;letter-spacing:-0.025em;margin-bottom:10px;line-height:1.2}
+.subtitle{color:#aaa;font-size:1.05rem;margin-bottom:12px;max-width:600px}
+.meta-row{display:flex;gap:20px;align-items:center;margin-bottom:44px;flex-wrap:wrap}
+.badge{font-size:.75rem;color:#888;background:#131320;border:1px solid #252535;border-radius:20px;padding:3px 10px;white-space:nowrap}
+
+/* Grid of tool cards */
+.cards{display:grid;grid-template-columns:1fr;gap:28px}
+@media(min-width:640px){.cards{grid-template-columns:1fr 1fr}}
+
+.card{background:#0f0f1a;border:1px solid #252535;border-radius:10px;overflow:hidden;display:flex;flex-direction:column;transition:border-color .15s}
+.card:hover{border-color:#3a3a5a}
+
+.card-header{padding:20px 20px 16px}
+.card-icon{font-size:1.4rem;margin-bottom:10px}
+.card-title{font-size:1.1rem;font-weight:700;margin-bottom:5px;color:#e8e8f0}
+.card-desc{font-size:.875rem;color:#999;line-height:1.5}
+
+.card-demo{margin:0 20px;border:1px solid #1e1e30;border-radius:7px;overflow:hidden;flex:1}
+.demo-in,.demo-out{padding:11px 14px}
+.demo-in{background:#0d0d18;border-bottom:1px solid #1e1e30}
+.demo-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;color:#555}
+.demo-in .demo-label{color:#4e6e8e}
+.demo-out .demo-label{color:#4e7e4e}
+.demo-code{font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-size:.78rem;color:#c0d8c0;line-height:1.5;white-space:pre-wrap;word-break:break-all}
+.demo-out .demo-code{color:#a8d8a8}
+
+.card-footer{padding:16px 20px 20px}
+.btn{display:inline-block;background:#1a2a4a;color:#7eb8f7;border:1px solid #2a4a7a;border-radius:6px;padding:8px 18px;font-size:.875rem;font-weight:600;text-decoration:none;transition:background .15s,border-color .15s;white-space:nowrap}
+.btn:hover{background:#243a60;border-color:#4a7aaa;text-decoration:none}
+
+/* FAQ section */
+.faq-section{margin-top:60px}
+.faq-section h2{font-size:1.25rem;font-weight:700;margin-bottom:24px;color:#e8e8f0}
+.faq-item{margin-bottom:20px;border-left:2px solid #2a2a3d;padding-left:16px}
+.faq-q{font-size:.9rem;font-weight:600;color:#c0c8e0;margin-bottom:5px}
+.faq-a{font-size:.875rem;color:#888;line-height:1.6}
+
+/* Why section */
+.why-section{margin-top:48px;padding:24px;background:#0f0f1a;border:1px solid #252535;border-radius:10px}
+.why-section h2{font-size:1rem;font-weight:700;margin-bottom:12px;color:#aaa;text-transform:uppercase;letter-spacing:.08em;font-size:.75rem}
+.why-body{font-size:.875rem;color:#888;line-height:1.7;max-width:680px}
+.why-body p+p{margin-top:10px}
+
+footer{margin-top:48px;padding-top:20px;border-top:1px solid #1a1a2a;font-size:.8rem;color:#555;display:flex;gap:20px;flex-wrap:wrap;align-items:center}
+footer a{color:#666}
+footer a:hover{color:#888}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="topnav">
+    <a href="index.html">Home</a>
+    <span class="sep">/</span>
+    <span>Developer Decoders</span>
+  </nav>
+
+  <h1>Developer Decoders</h1>
+  <p class="subtitle">Five tools for reading code you didn't write — paste anything opaque, get plain English back.</p>
+  <div class="meta-row">
+    <span class="badge">Free</span>
+    <span class="badge">No account</span>
+    <span class="badge">Works offline</span>
+    <span class="badge">No ads</span>
+  </div>
+
+  <div class="cards">
+
+    <!-- Cron -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">⏰</div>
+        <div class="card-title">Cron Expression Explainer</div>
+        <div class="card-desc">Decode any cron schedule into plain English — field by field, plus the next 10 run times in your timezone.</div>
+      </div>
+      <div class="card-demo">
+        <div class="demo-in">
+          <div class="demo-label">Input</div>
+          <div class="demo-code">*/15 9-17 * * 1-5</div>
+        </div>
+        <div class="demo-out">
+          <div class="demo-label">Output</div>
+          <div class="demo-code">Every 15 minutes from 9:00 AM to 5:00 PM,
+Monday through Friday
+
+Minute:  every 15 minutes
+Hour:    9 AM to 5 PM
+DOM:     every day
+Month:   every month
+DOW:     Mon – Fri</div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <a href="cron-explainer.html" class="btn">Decode a cron expression →</a>
+      </div>
+    </div>
+
+    <!-- Regex -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🔍</div>
+        <div class="card-title">Regex Explainer</div>
+        <div class="card-desc">Break any regular expression into its parts. No regex experience needed to understand the output.</div>
+      </div>
+      <div class="card-demo">
+        <div class="demo-in">
+          <div class="demo-label">Input</div>
+          <div class="demo-code">^[\w.-]+@[\w.-]+\.\w{2,}$</div>
+        </div>
+        <div class="demo-out">
+          <div class="demo-label">Output</div>
+          <div class="demo-code">^        start of string
+[\w.-]+  one or more: word char, dot, or dash
+@        literal @
+[\w.-]+  one or more: word char, dot, or dash
+\.       literal dot
+\w{2,}   two or more word characters
+$        end of string</div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <a href="regex-explainer.html" class="btn">Decode a regex →</a>
+      </div>
+    </div>
+
+    <!-- SQL -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🗄️</div>
+        <div class="card-title">SQL Explainer</div>
+        <div class="card-desc">Paste any SELECT query — inherited from a legacy codebase or generated by an ORM — and get a clause-by-clause breakdown.</div>
+      </div>
+      <div class="card-demo">
+        <div class="demo-in">
+          <div class="demo-label">Input</div>
+          <div class="demo-code">SELECT name, COUNT(*) AS orders
+FROM users
+JOIN orders ON users.id = orders.user_id
+WHERE users.active = 1
+GROUP BY name
+ORDER BY orders DESC
+LIMIT 10</div>
+        </div>
+        <div class="demo-out">
+          <div class="demo-label">Output</div>
+          <div class="demo-code">Returns name, orders from users (joined
+with orders) — where active equals 1 —
+grouped by name — sorted by orders ↓
+
+SELECT:   name, orders
+FROM:     users
+JOIN:     orders on users.id = orders.user_id
+WHERE:    active equals 1
+GROUP BY: name
+ORDER BY: orders (descending)
+LIMIT:    first 10 rows</div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <a href="sql-explainer.html" class="btn">Decode a SQL query →</a>
+      </div>
+    </div>
+
+    <!-- Stack trace -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🔥</div>
+        <div class="card-title">Stack Trace Explainer</div>
+        <div class="card-desc">Paste a Python, JavaScript, or Java error. Get a plain-English breakdown: what the error type means and which line caused it.</div>
+      </div>
+      <div class="card-demo">
+        <div class="demo-in">
+          <div class="demo-label">Input</div>
+          <div class="demo-code">Traceback (most recent call last):
+  File "app.py", line 23, in process
+    result = data["user"]["email"]
+TypeError: 'NoneType' is not subscriptable</div>
+        </div>
+        <div class="demo-out">
+          <div class="demo-label">Output</div>
+          <div class="demo-code">Error: TypeError (Python)
+Crashed at: app.py, line 23
+
+TypeError means you tried to use [] or .
+on something that is None (null).
+
+data["user"] returned None, so
+data["user"]["email"] failed.</div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <a href="stack-trace-explainer.html" class="btn">Decode a stack trace →</a>
+      </div>
+    </div>
+
+    <!-- curl -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🌐</div>
+        <div class="card-title">curl &amp; HTTP Header Decoder</div>
+        <div class="card-desc">Two modes: decode a curl command flag by flag, or paste HTTP response headers for a plain-English explanation of each directive.</div>
+      </div>
+      <div class="card-demo">
+        <div class="demo-in">
+          <div class="demo-label">Input</div>
+          <div class="demo-code">curl -X POST https://api.example.com/users \
+  -H "Authorization: Bearer TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Alice"}'</div>
+        </div>
+        <div class="demo-out">
+          <div class="demo-label">Output</div>
+          <div class="demo-code">-X POST          HTTP method: POST
+URL              https://api.example.com/users
+Authorization    Bearer token auth header
+Content-Type     Body is JSON
+-d               Request body (raw string)
+
+→ Python: requests.post(url, json=…)
+→ JS: fetch(url, {method:"POST",…})</div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <a href="curl-decoder.html" class="btn">Decode a curl command →</a>
+      </div>
+    </div>
+
+  </div><!-- /.cards -->
+
+  <div class="why-section">
+    <h2>Why these tools exist</h2>
+    <div class="why-body">
+      <p>Every developer inherits code they didn't write. A cron job set up three years ago. A regex nobody wants to touch. A SQL query from the ORM. A stack trace from a user report. A curl command from a Slack message.</p>
+      <p>The alternative — Google the syntax, open docs, piece it together — takes five minutes and costs focus. These tools take five seconds. Paste the thing. Read the English. Move on.</p>
+      <p>All five tools run entirely in your browser. Nothing is sent to a server. No account needed.</p>
+    </div>
+  </div>
+
+  <div class="faq-section">
+    <h2>Common questions</h2>
+
+    <div class="faq-item">
+      <div class="faq-q">How do I decode a cron expression?</div>
+      <div class="faq-a">Paste it into the <a href="cron-explainer.html">Cron Expression Explainer</a>. It shows each field in plain English and the next 10 times the job will fire.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">How do I understand a regular expression without knowing regex?</div>
+      <div class="faq-a">Paste it into the <a href="regex-explainer.html">Regex Explainer</a>. Every token — anchors, character classes, quantifiers, groups, lookaheads — gets its own plain-English line.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">How do I read a SQL query I didn't write?</div>
+      <div class="faq-a">Paste it into the <a href="sql-explainer.html">SQL Explainer</a>. You'll get a one-sentence summary plus a clause-by-clause breakdown — SELECT through LIMIT.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">How do I decode a Python or JavaScript stack trace?</div>
+      <div class="faq-a">Paste the full error into the <a href="stack-trace-explainer.html">Stack Trace Explainer</a>. It identifies the error type, the failing line, and the most likely causes for Python, JavaScript, and Java.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">How do I understand what a curl command does?</div>
+      <div class="faq-a">Paste it into the <a href="curl-decoder.html">curl &amp; HTTP Header Decoder</a>. Every flag gets explained, and you'll see the equivalent Python <code>requests</code> and JavaScript <code>fetch</code> code.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">Do these tools send my data anywhere?</div>
+      <div class="faq-a">No. Every tool runs entirely in your browser. Paste your code, regex, query, or error — nothing leaves your machine.</div>
+    </div>
+  </div>
+
+  <footer>
+    <a href="index.html">Home</a>
+    <a href="cron-explainer.html">Cron explainer</a>
+    <a href="regex-explainer.html">Regex explainer</a>
+    <a href="sql-explainer.html">SQL explainer</a>
+    <a href="stack-trace-explainer.html">Stack trace explainer</a>
+    <a href="curl-decoder.html">curl decoder</a>
+    <a href="portfolio.html">Portfolio</a>
+  </footer>
+
+</div>
+
+<script data-goatcounter="https://auto-run-fun.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
