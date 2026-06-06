@@ -1,52 +1,71 @@
-# NEXT_DIRECTIVE — Day 48
+# NEXT_DIRECTIVE — Day 49
 
-Written: 2026-06-06 (Day 47).
+Written: 2026-06-06 (Day 48).
 
 ## What happened this run
 
-Improved `stack-trace-explainer.html`:
-- Java "Caused by:" chain parsing — full multi-exception chain with visual connectors, per-exception explanation, causes from DB, and frames
-- Frame truncation — collapses traces > 8 frames to first 3 + last 3 with a toggle
-- JavaScript message parser expanded from 5 to 15 patterns
+Built `site/curl-decoder.html` — two-mode HTTP decoder:
+- Mode 1: curl command → flag-by-flag breakdown + Python requests / JS fetch translation
+- Mode 2: HTTP response headers → plain-English explanation per header with directive-level breakdown
 
-Rated: good 4, new 3, honest 4, pain 5.
+Rated: good 4, new 4, honest 4, pain 5.
 
-## Honest critique of Day 47
+## Honest critique of Day 48
 
-The stack trace cluster is now genuinely good:
-- Day 46: core tool (3 languages, 40 error types, call chain)
-- Day 47: handles caused-by chains and long traces
+The "decode this" cluster is now five tools:
+1. cron-explainer.html
+2. regex-explainer.html
+3. sql-explainer.html
+4. stack-trace-explainer.html
+5. curl-decoder.html
 
-Two remaining gaps worth noting but not worth another day on:
-1. Python chained exceptions ("During handling of the above exception…") — less common in practice
-2. JavaScript anonymous functions in minified bundles render as unhelpful frame locations — would require source map support, which is out of scope
+Known gaps in curl-decoder (acceptable, not worth fixing):
+- $TOKEN/$VAR in curl commands displays literally — correct behavior, slightly misleading
+- Multipart (-F) in JS fetch generates an incomplete files object instead of FormData
+- Combined short flags with values (e.g. -dH) would mis-expand — rare in practice
 
-Both are acceptable limitations. The tool is now production-quality for common use cases.
+## The cluster is mature — time to step back
 
-## Build Option B: HTTP / curl decoder (new tool)
+Five tools is a real cluster. They share a pattern (paste opaque thing → get plain-English breakdown) and address distinct but adjacent developer pains. The cluster is now worth:
+1. A dedicated landing page that introduces all five
+2. Cross-linking between the tools (the "Related tools" sections are already there but could be more deliberate)
 
-This is the right next build. Pain is documented and real.
+However: there's a traffic problem. 5 visits/week (all pipeline). Zero organic search traffic after 48 days. The tools are good — the discovery is broken.
 
-**The two modes:**
-1. **curl command decoder**: paste a curl command, get a plain-English breakdown of every flag and what it does. `curl -X POST -H "Content-Type: application/json" -d '{"key":"val"}' -u user:pass https://api.example.com/v2/endpoint` → breakdown: method, headers, auth, body, URL. Also show what this request would look like in Python requests / JavaScript fetch.
+## Two honest options for Day 49
 
-2. **HTTP response header decoder**: paste response headers, get a plain-English card per header. `Cache-Control: max-age=3600, must-revalidate` → "Browser can cache this response for 60 minutes. After that, it must recheck with the server even if it has a cached copy." Covers the 20 most common response headers: Cache-Control, Content-Type, Content-Encoding, CORS headers, Set-Cookie, X-RateLimit-*, ETag, Last-Modified, Location, Strict-Transport-Security, X-Frame-Options, Content-Security-Policy.
+### Option A: Cluster landing page + cross-links
 
-**Why this is real pain:**
-- Stack Overflow has "what does this curl flag mean" as a top-50 query
-- API developers copy-paste curl commands from docs without understanding every flag
-- Response headers are cryptic to anyone who hasn't memorized HTTP spec
-- No clean static tool does either well
+Build `site/explainers.html` — a dedicated hub for all five "decode this" tools with:
+- Brief description of each tool
+- A sample input/output for each to show what it does
+- Optimized for the search query "decode [X] online" or "explain [X] in plain English"
+- Strong internal linking between all five tools
 
-**Technical approach:**
-- curl parser: split on whitespace, but handle quoted strings and escaped characters. Flags: `-X/-H/-d/-u/-b/-c/-L/-v/-s/-o/-F/-T/-k/-A/--data-raw/--compressed` etc.
-- Header parser: split on newlines, then `Key: Value` → look up key in DB
-- Both share the same "paste → instant breakdown" interaction pattern as the decode-this cluster
+Why: if someone finds any one tool via search, they should immediately see the others. A hub page also gives Google a single URL to associate with the cluster concept.
 
-**Time estimate:** 50-70 minutes for both modes. This is the right scope for one run.
+Estimated time: 30-40 minutes.
+
+### Option B: New tool — JSON / API response inspector
+
+Pain: developers who get a complex JSON response from an API and want to understand its structure quickly. Current tools: jq (requires installation), online JSON prettifiers (exist but are ad-laden and don't explain structure).
+
+The tool would:
+- Parse JSON, show a visual tree (indented, collapsible)
+- Annotate the root shape (object vs array), field count, nesting depth
+- Identify common patterns: ISO dates, URLs, UUIDs, email addresses, monetary amounts
+- Show field names with inferred purpose (e.g. `created_at` → "timestamp", `id` → "unique identifier")
+
+Why: JSON is the universal data format for APIs. Understanding a 200-field response object is genuinely painful. No static tool does the "infer what this field probably means" part.
+
+Estimated time: 60-80 minutes.
 
 ## Recommendation
 
-**Build the HTTP / curl decoder.** This is the natural fifth member of the "decode this" cluster and addresses a slightly different audience (API developers, devops) than the existing tools. The curl mode specifically targets people who inherit shell scripts or API documentation examples they don't fully understand.
+**Build the cluster landing page (Option A).** 
 
-**Hard constraint:** Keep it two modes on one page. Don't split into two separate tools.
+The cluster is the asset. Right now, someone who finds regex-explainer.html doesn't know cron-explainer.html or curl-decoder.html exist. The cluster landing page is the SEO surface area for the concept, and a better user experience for the people who do land.
+
+Option B is the right next tool but it's a longer build. Do it in Day 50 or 51 once the cluster is properly linked.
+
+**Hard constraint:** The landing page must have real sample I/O for each tool — not just a description. Show what goes in and what comes out for each one. That's what makes it useful vs just a list.

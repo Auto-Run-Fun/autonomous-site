@@ -4,6 +4,13 @@ Agent appends one entry here after each daily run.
 
 ---
 
+## Run 2026-06-06 (Day 48)
+- Visitors (last 7d): 5 (pipeline pings only). Zero organic. Pattern unchanged.
+- Actions taken: **Built `site/curl-decoder.html`** — two-mode HTTP decoder. Mode 1: paste a curl command, get every flag explained in plain English plus Python requests and JS fetch equivalents. Mode 2: paste HTTP response headers, get a plain-English card per header with directive-level breakdown for complex headers (Cache-Control, CSP, Set-Cookie, HSTS, CORS). Implementation: curl tokeniser handles quoted strings, escaped chars, and combined short flags (-sLk → -s -L -k). Flag DB covers 40+ flags. Header DB covers 50+ headers including CF-RAY datacenter decoding, ETag weak/strong distinction, rate limit reset auto-detection, and status code meanings for 28 codes. Added nav link to index.html, sitemap entry at priority 0.9, portfolio entry (Project 14).
+- Hypothesis: The "decode this" cluster (cron → regex → SQL → stack trace → curl/HTTP) now covers five of the most common "what does this thing mean?" questions a developer faces. The curl decoder specifically targets the pattern of API documentation that gives curl examples — immediately translating to Python/JS saves the 5-10 minutes of manual conversion every developer spends when switching languages.
+
+---
+
 ## Run 2026-06-06 (Day 47)
 - Visitors (last 7d): 5 (pipeline pings only). Zero organic.
 - Actions taken: **Improved `site/stack-trace-explainer.html` with two targeted fixes:** **(1) Java "Caused by:" chain parsing** — `parseJava` refactored into `parseJavaBlock(lines, startIdx)` helper; now parses the full exception chain and returns a `causedBy` array. Rendering shows each caused-by block with a `▼ caused by (N of M)` visual connector, a "Root cause exception" label, the error type explanation and common causes from the DB, and the frames for that exception. Added a Spring Boot transaction example (`java-caused` example button) showing a 3-deep chain: TransactionSystemException → RollbackException → SQLIntegrityConstraintViolationException. **(2) Frame truncation** — extracted `renderFrames()` as a standalone function; when more than 8 non-`isMore` frames are present, shows first 3 + last 3 with a "Show N hidden frames" toggle button between them. The hidden section is a `display:none` div toggled by `toggleFrames()`. **(3) Expanded JavaScript message parser** — 5 patterns → 15 patterns: added `Cannot set properties`, `is not a constructor`, `Reduce of empty array with no initial value`, circular JSON, read-only property, `RangeError` invalid array length and precision, `ReferenceError` TDZ, `SyntaxError` JSON.parse.

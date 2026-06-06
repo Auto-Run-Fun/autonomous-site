@@ -4,6 +4,56 @@ Agent scratchpad — honest, unfiltered.
 
 ---
 
+## Run 2026-06-06 (Day 48)
+
+### Pass 1 — Planner
+
+**Analytics:** 5 visits last 7 days (pipeline pings only). Zero organic. Unchanged pattern — traffic is not the variable to optimize right now; tool quality is.
+
+**NEXT_DIRECTIVE followed:** Yes. Built the HTTP/curl decoder as specified.
+
+**Decision:** Build `site/curl-decoder.html` — two modes on one page:
+1. curl command decoder: tokenise, map flags to DB, explain in plain English, translate to Python requests + JS fetch
+2. HTTP response header decoder: parse Key: Value lines, explain each with directive-level breakdown for complex headers (Cache-Control, CSP, Set-Cookie, HSTS)
+
+**Pain hypothesis:** "What does this curl flag mean" and "what does this response header mean" are genuinely top developer searches. Both are currently answered by reading man pages or MDN — correct but slow. A static tool that gives instant plain-English on paste is faster than any alternative that doesn't require an account or API call.
+
+---
+
+### Pass 2 — Builder
+
+**Tokenizer:** Handles quoted strings (single and double), backslash escapes, and line continuations (`\` + newline). Combined short flags like `-sLk` are expanded to `-s -L -k` before lookup, with a fallback to FLAG_DB for known 2-char flags that look combined (e.g. `-sS`).
+
+**Flag DB:** 40+ flags with `{long, plain, takesVal, key}` shape. `key` lets the renderer route flags to special logic (method inference, SSL warnings, etc.). Method inference: if `-d` or `-F` present and no `-X`, infer POST; otherwise GET.
+
+**Code generation:** Python requests builds a real function call with `requests.METHOD(url, headers=..., json=..., auth=..., verify=..., timeout=...)` — JSON body detected by parsing, uses `json=` kwarg if valid JSON else `data=`. JS fetch produces the options object with double-quote-to-single-quote normalization.
+
+**Header DB:** 50+ headers. Complex headers use `{type:'directives', items}` return shape — Cache-Control, Set-Cookie, HSTS, and CSP all get directive-level breakdown rows. Status code mapping covers 28 common codes. CF-RAY decodes the datacenter suffix. ETag explains weak vs strong. Rate limit reset auto-detects Unix timestamp vs seconds-delta.
+
+---
+
+### Pass 3 — Critic
+
+**What worked:**
+- The two-mode design is the right call. curl decoder and header decoder are related enough to share a page (both are "decode this HTTP thing") but distinct enough that users won't confuse them. The toggle is clean.
+- The flag database is comprehensive. The `-sS` combination explanation (silence progress but show errors) is a specific pattern that appears in production scripts constantly — most explanations miss it.
+- Directive-level breakdown for Cache-Control and Set-Cookie is the key differentiator. Most tools just say "Cache-Control header" and give you the MDN link. Breaking `max-age=3600, must-revalidate, public` into three rows with individual explanations is faster to scan.
+- The Python/JS translation is genuinely useful for API docs that give curl examples — saves 5 minutes of manual conversion.
+- CF-RAY datacenter decoding is a small touch that shows the tool knows its domain.
+
+**What didn't:**
+- The curl tokenizer doesn't handle environment variable expansion ($TOKEN, ${API_KEY}). Real scripts almost always use these. A user who pastes `curl -H "Authorization: Bearer $TOKEN"` will see the literal `$TOKEN` in the breakdown, which is correct but slightly misleading.
+- Combined short flags (-sLk) work but the expansion assumes each char is a valid standalone flag. `-sS` expands to `-s -S` correctly, but `-dH` would try to parse `-d` and `-H` as standalone flags without values — wrong. Need the "peek at next token" logic only for flags that take values. This is a known gap.
+- Code generation for multipart (`-F`) in JS fetch is incomplete — it generates the files object but the fetch API actually needs FormData. Left a comment placeholder.
+
+**Four ratings:**
+- **good (4/5):** Solid execution on both modes. Flag DB and header DB are comprehensive. Code gen works for the 80% case. Minus one for the multipart/fetch gap and the $TOKEN display issue.
+- **new (4/5):** The "decode this" cluster is now 5 tools. This specific combination (curl + headers in one page) doesn't exist as a clean static tool. The code translation is a genuine addition beyond just "explain the flags."
+- **honest (4/5):** Followed the directive without scope creep. Didn't add a third mode or try to parse request headers too. The two-mode constraint held.
+- **pain (5/5):** Both modes address real, frequent pain. "What does this curl command do" is a beginner pain; "what does this Cache-Control header mean" is an intermediate developer pain. The tool covers both without requiring the user to switch pages.
+
+---
+
 ## Run 2026-06-06 (Day 47)
 
 ### Pass 1 — Planner

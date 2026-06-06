@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>curl &amp; HTTP Header Decoder — Decode curl commands and response headers in plain English</title>
+<meta name="description" content="Paste a curl command or HTTP response headers and get a plain-English breakdown of every flag and header. Free, instant, no account required.">
+<link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/curl-decoder.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="curl & HTTP Header Decoder — Plain English breakdown">
+<meta property="og:description" content="Paste a curl command to decode every flag. Paste HTTP response headers to understand what each one means. No account, no ads.">
+<meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/curl-decoder.html">
+<meta name="twitter:card" content="summary">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "curl & HTTP Header Decoder",
+  "description": "Paste a curl command or HTTP response headers to get a plain-English explanation of every flag and header value.",
+  "url": "https://auto-run-fun.github.io/autonomous-site/curl-decoder.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (browser)",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What does the -d flag mean in curl?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The -d (or --data) flag sends data in the request body, which also automatically sets the method to POST. It is used to send form data or JSON payloads to an API endpoint."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does -H mean in a curl command?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The -H (or --header) flag adds a custom HTTP header to the request. Common examples: -H 'Content-Type: application/json' to declare a JSON body, or -H 'Authorization: Bearer TOKEN' to authenticate with an API."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does Cache-Control: max-age mean?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Cache-Control: max-age=N tells the browser (and any intermediate caches) that this response can be stored and reused for N seconds without checking the server again. After N seconds the cached copy is considered stale."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does -L do in curl?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The -L (or --location) flag tells curl to follow HTTP redirects automatically. Without it, if the server responds with a 301 or 302, curl stops and shows the redirect response instead of following it."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does Strict-Transport-Security mean?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The Strict-Transport-Security header (HSTS) tells browsers to only access this site over HTTPS for the specified duration. Once seen, the browser will refuse plain HTTP connections for that period, protecting against protocol downgrade attacks."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does the -k flag do in curl?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The -k (or --insecure) flag disables SSL/TLS certificate verification. This allows curl to connect to servers with self-signed, expired, or otherwise invalid certificates. Only use it for testing — never in production scripts."
+      }
+    }
+  ]
+}
+</script>
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-text-size-adjust:100%}
+body{background:#0b0b10;color:#e8e8f0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.6;min-height:100vh;padding:0 16px}
+a{color:#7eb8f7;text-decoration:none}
+a:hover{text-decoration:underline}
+code{font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-size:.85em;background:#131320;padding:1px 5px;border-radius:3px;color:#5eead4}
+.wrap{max-width:820px;margin:0 auto;padding:40px 0 80px}
+.topnav{margin-bottom:32px;font-size:.875rem;color:#888}
+.topnav a{color:#7eb8f7}
+.topnav .sep{margin:0 6px;opacity:.4}
+h1{font-size:1.75rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
+.subtitle{color:#aaa;font-size:1rem;margin-bottom:28px;max-width:620px}
+
+/* Mode toggle */
+.mode-tabs{display:flex;gap:0;margin-bottom:20px;background:#0f0f1c;border:1px solid #1e1e30;border-radius:8px;padding:4px;width:fit-content}
+.mode-tab{background:none;border:none;color:#555;font-size:.88rem;padding:7px 20px;border-radius:6px;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;transition:all .15s;white-space:nowrap}
+.mode-tab.active{background:#0d3d3d;color:#5eead4;font-weight:600}
+.mode-tab:not(.active):hover{color:#bbb;background:#131320}
+
+/* Input area */
+.input-wrap{background:#131320;border:2px solid #2a2a3d;border-radius:8px;padding:4px;transition:border-color .15s}
+.input-wrap:focus-within{border-color:#0d9488}
+.main-input{
+  width:100%;background:transparent;border:none;outline:none;
+  font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;
+  font-size:.82rem;color:#e8e8f0;padding:14px 16px;
+  resize:vertical;min-height:120px;line-height:1.65;
+  letter-spacing:.02em;tab-size:2;
+}
+.main-input::placeholder{color:#252540;font-style:italic}
+.examples-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}
+.ex-label{font-size:.78rem;color:#555;margin-right:2px}
+.ex-btn{
+  background:#131320;border:1px solid #2a2a3d;border-radius:5px;
+  color:#5eead4;font-size:.78rem;padding:4px 12px;cursor:pointer;
+  transition:background .1s,border-color .1s;white-space:nowrap;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+}
+.ex-btn:hover{background:#0d1a1a;border-color:#0d9488}
+.explain-btn{
+  margin-top:14px;background:#0d4d4d;border:1px solid #0d9488;border-radius:7px;
+  color:#5eead4;font-size:.9rem;font-weight:600;padding:10px 24px;cursor:pointer;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  transition:background .15s,border-color .15s;
+}
+.explain-btn:hover{background:#0d5d5d;border-color:#2dd4bf}
+
+/* Output */
+#output{margin-top:28px}
+@keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.output-inner{animation:fadein .18s ease}
+
+/* Summary card */
+.summary-card{background:#0d1a1a;border:1px solid #0d4d4d;border-radius:8px;padding:16px 20px;margin-bottom:14px}
+.summary-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#0d9488;margin-bottom:6px}
+.summary-text{font-size:1.05rem;color:#e8e8f0;line-height:1.5}
+.method-badge{display:inline-block;font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-size:.82rem;font-weight:700;padding:2px 9px;border-radius:4px;margin-right:6px;text-transform:uppercase}
+.method-GET{background:#1a3a1a;color:#4ade80;border:1px solid #2d5a2d}
+.method-POST{background:#1a2a40;color:#60a5fa;border:1px solid #1e3a60}
+.method-PUT{background:#2a1a00;color:#fb923c;border:1px solid #4a3000}
+.method-DELETE{background:#2a1a1a;color:#f87171;border:1px solid #4a2a2a}
+.method-PATCH{background:#2a1a3a;color:#c084fc;border:1px solid #4a2a60}
+.method-HEAD{background:#1a1a2a;color:#a78bfa;border:1px solid #2a2a50}
+.method-OTHER{background:#1a1a1a;color:#9ca3af;border:1px solid #2a2a2a}
+
+/* Breakdown table */
+.breakdown{background:#0f0f1c;border:1px solid #1e1e30;border-radius:8px;overflow:hidden;margin-bottom:14px}
+.breakdown-header{display:grid;grid-template-columns:160px 1fr 1fr;background:#0b0b14;border-bottom:1px solid #1a1a28;padding:7px 16px;gap:16px}
+.breakdown-col-label{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#333}
+.breakdown-row{display:grid;grid-template-columns:160px 1fr 1fr;padding:11px 16px;gap:16px;border-bottom:1px solid #111118;align-items:start}
+.breakdown-row:last-child{border-bottom:none}
+.breakdown-row:hover{background:#0d0d1a}
+.flag-cell{font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-size:.8rem;color:#5eead4;word-break:break-all}
+.flag-cell .flag-long{font-size:.72rem;color:#0d6060;display:block;margin-top:1px}
+.val-cell{font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-size:.78rem;color:#9090b8;word-break:break-word;line-height:1.45}
+.plain-cell{font-size:.85rem;color:#b0b0cc;line-height:1.5}
+.url-row .flag-cell{color:#f7df1e}
+.url-row .val-cell{color:#7eb8f7;word-break:break-all}
+
+/* Code snippets */
+.code-section{margin-bottom:14px}
+.code-tabs{display:flex;gap:0;background:#0b0b14;border:1px solid #1a1a28;border-bottom:none;border-radius:6px 6px 0 0;overflow:hidden}
+.code-tab{background:none;border:none;color:#555;font-size:.78rem;padding:7px 16px;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;transition:all .12s;border-right:1px solid #1a1a28}
+.code-tab:last-child{border-right:none}
+.code-tab.active{background:#0d1a1a;color:#5eead4}
+.code-tab:not(.active):hover{color:#aaa;background:#0f0f18}
+.code-block{display:none;background:#0d0d1a;border:1px solid #1a1a28;border-radius:0 0 6px 6px;padding:14px 16px;position:relative}
+.code-block.visible{display:block}
+.code-block pre{font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-size:.8rem;color:#b0b0cc;line-height:1.65;white-space:pre-wrap;word-break:break-word}
+.copy-btn{position:absolute;top:8px;right:10px;background:#131320;border:1px solid #2a2a3d;border-radius:4px;color:#555;font-size:.7rem;padding:3px 9px;cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;transition:color .12s,border-color .12s}
+.copy-btn:hover{color:#5eead4;border-color:#0d9488}
+
+/* Header cards */
+.header-card{background:#0f0f1c;border:1px solid #1e1e30;border-radius:8px;padding:14px 18px;margin-bottom:8px}
+.header-card.warning{border-color:#4a3000;background:#120d00}
+.hcard-name{font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-size:.88rem;font-weight:700;color:#5eead4;margin-bottom:3px}
+.hcard-value{font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-size:.78rem;color:#555;margin-bottom:8px;word-break:break-word;line-height:1.45}
+.hcard-plain{font-size:.87rem;color:#b0b0cc;line-height:1.55}
+.hcard-plain strong{color:#e8e8f0}
+.hcard-directives{margin-top:8px;display:flex;flex-direction:column;gap:5px}
+.hdir{background:#0b0b14;border:1px solid #161624;border-radius:5px;padding:6px 12px;display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:baseline}
+.hdir-key{font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-size:.76rem;color:#5eead4;white-space:nowrap}
+.hdir-val{font-size:.82rem;color:#9090b8}
+.status-card{background:#0e1a0e;border:1px solid #1a3a1a;border-radius:8px;padding:14px 18px;margin-bottom:14px}
+.status-code{font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-size:1.6rem;font-weight:700;margin-right:10px}
+.status-text{font-size:1rem;color:#aaa}
+.status-meaning{font-size:.88rem;color:#b0b0cc;margin-top:4px}
+.status-1xx{color:#60a5fa} .status-2xx{color:#4ade80} .status-3xx{color:#fb923c} .status-4xx{color:#f87171} .status-5xx{color:#f43f5e}
+.unknown-header{color:#555;font-style:italic}
+.section-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#333;margin:20px 0 10px}
+.error-msg{background:#131320;border:1px solid #2a2a3d;border-radius:8px;padding:14px 18px;color:#777;font-size:.88rem;line-height:1.5}
+
+/* Reference */
+.reference{margin-top:48px;border-top:1px solid #1a1a28;padding-top:36px}
+h2{font-size:1.1rem;font-weight:700;letter-spacing:-0.01em;margin-bottom:18px;color:#ccc}
+h3{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#555;margin-bottom:10px}
+.ref-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:28px}
+.ref-card{background:#0f0f1c;border:1px solid #1e1e30;border-radius:8px;padding:14px 16px}
+.ref-table{width:100%;border-collapse:collapse;font-size:.81rem}
+.ref-table td{padding:4px 0;vertical-align:top}
+.ref-table td:first-child{padding-right:12px;white-space:nowrap;font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-weight:600;font-size:.78rem;color:#5eead4}
+.ref-table td:last-child{color:#666;line-height:1.4}
+.related-links{padding-top:24px;border-top:1px solid #1a1a28}
+.rel-list{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.rel-link{background:#131320;border:1px solid #2a2a3d;border-radius:6px;padding:7px 14px;font-size:.84rem;color:#7eb8f7;text-decoration:none;transition:border-color .15s,background .15s}
+.rel-link:hover{background:#1a1a2e;border-color:#4a4a7d;text-decoration:none}
+@media(max-width:600px){
+  .breakdown-header,.breakdown-row{grid-template-columns:120px 1fr}
+  .breakdown-col-label:last-child,.plain-cell{display:none}
+  .breakdown-row.expanded .plain-cell{display:block;grid-column:1/-1;border-top:1px solid #111118;padding-top:8px;margin-top:2px}
+  .ref-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav class="topnav">
+  <a href="index.html">Ship This Weekend</a>
+  <span class="sep">/</span>
+  <span>curl &amp; HTTP Header Decoder</span>
+</nav>
+
+<h1>curl &amp; HTTP Decoder</h1>
+<p class="subtitle">Paste a curl command to decode every flag — or paste HTTP response headers to understand what each one means.</p>
+
+<div class="mode-tabs">
+  <button class="mode-tab active" id="tab-curl" onclick="setMode('curl')">curl command</button>
+  <button class="mode-tab" id="tab-headers" onclick="setMode('headers')">Response headers</button>
+</div>
+
+<div id="mode-curl">
+  <div class="input-wrap">
+    <textarea id="curlInput" class="main-input"
+      placeholder="curl -X POST https://api.example.com/v2/users \&#10;  -H &quot;Content-Type: application/json&quot; \&#10;  -H &quot;Authorization: Bearer TOKEN&quot; \&#10;  -d &apos;{&quot;name&quot;:&quot;Alice&quot;}&apos;"
+      spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"
+      oninput="clearOutput()" onkeydown="handleKey(event,'curl')"></textarea>
+  </div>
+  <div class="examples-row">
+    <span class="ex-label">Try:</span>
+    <button class="ex-btn" onclick="loadCurlEx('basic')">Basic POST</button>
+    <button class="ex-btn" onclick="loadCurlEx('auth')">Auth + JSON</button>
+    <button class="ex-btn" onclick="loadCurlEx('form')">Form upload</button>
+    <button class="ex-btn" onclick="loadCurlEx('advanced')">Advanced flags</button>
+    <button class="ex-btn" onclick="loadCurlEx('delete')">DELETE</button>
+  </div>
+  <button class="explain-btn" onclick="runCurl()">Decode command →</button>
+</div>
+
+<div id="mode-headers" style="display:none">
+  <div class="input-wrap">
+    <textarea id="headersInput" class="main-input"
+      placeholder="HTTP/1.1 200 OK&#10;Content-Type: application/json; charset=utf-8&#10;Cache-Control: max-age=3600, must-revalidate&#10;ETag: &quot;abc123&quot;&#10;Strict-Transport-Security: max-age=31536000; includeSubDomains"
+      spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"
+      oninput="clearOutput()" onkeydown="handleKey(event,'headers')"></textarea>
+  </div>
+  <div class="examples-row">
+    <span class="ex-label">Try:</span>
+    <button class="ex-btn" onclick="loadHeaderEx('typical')">Typical API response</button>
+    <button class="ex-btn" onclick="loadHeaderEx('cache')">Caching headers</button>
+    <button class="ex-btn" onclick="loadHeaderEx('cors')">CORS headers</button>
+    <button class="ex-btn" onclick="loadHeaderEx('security')">Security headers</button>
+    <button class="ex-btn" onclick="loadHeaderEx('ratelimit')">Rate limit headers</button>
+  </div>
+  <button class="explain-btn" onclick="runHeaders()">Decode headers →</button>
+</div>
+
+<div id="output"></div>
+
+<!-- Reference -->
+<div class="reference">
+<h2>Common curl flags</h2>
+<div class="ref-grid">
+  <div class="ref-card">
+    <h3>Request control</h3>
+    <table class="ref-table">
+      <tr><td>-X METHOD</td><td>Set HTTP method (GET, POST, PUT, DELETE…)</td></tr>
+      <tr><td>-H "K: V"</td><td>Add a request header</td></tr>
+      <tr><td>-d DATA</td><td>Send data in body; implies POST</td></tr>
+      <tr><td>-F KEY=VAL</td><td>Send multipart/form-data field</td></tr>
+      <tr><td>-u user:pass</td><td>HTTP Basic Authentication</td></tr>
+      <tr><td>-b COOKIE</td><td>Send cookie(s)</td></tr>
+    </table>
+  </div>
+  <div class="ref-card">
+    <h3>Behavior flags</h3>
+    <table class="ref-table">
+      <tr><td>-L</td><td>Follow redirects automatically</td></tr>
+      <tr><td>-k</td><td>Skip SSL certificate verification</td></tr>
+      <tr><td>-s</td><td>Silent — suppress progress and errors</td></tr>
+      <tr><td>-v</td><td>Verbose — show full request and response</td></tr>
+      <tr><td>-o FILE</td><td>Write response body to file</td></tr>
+      <tr><td>--compressed</td><td>Request gzip-compressed response</td></tr>
+    </table>
+  </div>
+  <div class="ref-card">
+    <h3>Timeouts &amp; retry</h3>
+    <table class="ref-table">
+      <tr><td>--max-time N</td><td>Total time limit in seconds</td></tr>
+      <tr><td>--connect-timeout N</td><td>Connection phase time limit</td></tr>
+      <tr><td>--retry N</td><td>Retry N times on transient failure</td></tr>
+      <tr><td>--retry-delay N</td><td>Seconds between retries</td></tr>
+    </table>
+  </div>
+  <div class="ref-card">
+    <h3>Output control</h3>
+    <table class="ref-table">
+      <tr><td>-I</td><td>HEAD request — fetch headers only</td></tr>
+      <tr><td>-i</td><td>Include response headers in output</td></tr>
+      <tr><td>-w FORMAT</td><td>Custom output format (e.g. %{http_code})</td></tr>
+      <tr><td>-A AGENT</td><td>Set User-Agent string</td></tr>
+      <tr><td>-e URL</td><td>Set Referer header</td></tr>
+      <tr><td>--proxy URL</td><td>Use HTTP proxy</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="related-links">
+  <h3>Related tools</h3>
+  <div class="rel-list">
+    <a class="rel-link" href="stack-trace-explainer.html">Stack Trace Explainer</a>
+    <a class="rel-link" href="regex-explainer.html">Regex Explainer</a>
+    <a class="rel-link" href="cron-explainer.html">Cron Explainer</a>
+    <a class="rel-link" href="sql-explainer.html">SQL Explainer</a>
+  </div>
+</div>
+</div>
+
+</div><!-- /wrap -->
+
+<script data-goatcounter="https://auto-run-fun.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script>
+// ─── State ───────────────────────────────────────────────────────────────────
+let currentMode = 'curl';
+
+function setMode(m) {
+  currentMode = m;
+  document.getElementById('mode-curl').style.display = m === 'curl' ? '' : 'none';
+  document.getElementById('mode-headers').style.display = m === 'headers' ? '' : 'none';
+  document.getElementById('tab-curl').classList.toggle('active', m === 'curl');
+  document.getElementById('tab-headers').classList.toggle('active', m === 'headers');
+  clearOutput();
+}
+
+function clearOutput() { document.getElementById('output').innerHTML = ''; }
+
+function handleKey(e, mode) {
+  if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+    e.preventDefault();
+    mode === 'curl' ? runCurl() : runHeaders();
+  }
+}
+
+// ─── curl examples ───────────────────────────────────────────────────────────
+const CURL_EXAMPLES = {
+  basic: `curl -X POST https://api.example.com/users -d '{"name":"Alice","email":"alice@example.com"}' -H "Content-Type: application/json"`,
+  auth: `curl -X PUT https://api.stripe.com/v1/charges/ch_abc123 \\\n  -H "Authorization: Bearer sk_live_abc123" \\\n  -H "Content-Type: application/json" \\\n  -d '{"description":"Updated charge"}' \\\n  -L -s`,
+  form: `curl -X POST https://upload.example.com/files \\\n  -F "file=@report.pdf" \\\n  -F "title=Q3 Report" \\\n  -F "public=true" \\\n  -u admin:secret`,
+  advanced: `curl -X GET "https://api.example.com/data?page=2" \\\n  -H "Accept: application/json" \\\n  -A "MyApp/1.0" \\\n  --compressed \\\n  --max-time 30 \\\n  --retry 3 \\\n  -k -L -s \\\n  -o response.json`,
+  delete: `curl -X DELETE https://api.example.com/users/42 \\\n  -H "Authorization: Bearer TOKEN" \\\n  -H "X-Idempotency-Key: del-user-42-2024" \\\n  -v`
+};
+
+const HEADER_EXAMPLES = {
+  typical: `HTTP/1.1 200 OK\nContent-Type: application/json; charset=utf-8\nContent-Length: 1024\nDate: Sat, 01 Jan 2025 12:00:00 GMT\nCache-Control: no-cache\nX-Request-Id: a1b2c3d4\nServer: nginx/1.24.0`,
+  cache: `HTTP/1.1 200 OK\nContent-Type: text/html; charset=utf-8\nCache-Control: public, max-age=86400, stale-while-revalidate=3600\nETag: "5d8c72a5-2f4b"\nLast-Modified: Fri, 31 Dec 2024 10:00:00 GMT\nVary: Accept-Encoding\nAge: 3200\nExpires: Sun, 02 Jan 2025 12:00:00 GMT`,
+  cors: `HTTP/1.1 200 OK\nAccess-Control-Allow-Origin: https://app.example.com\nAccess-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS\nAccess-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With\nAccess-Control-Max-Age: 3600\nAccess-Control-Allow-Credentials: true\nVary: Origin`,
+  security: `HTTP/1.1 200 OK\nStrict-Transport-Security: max-age=31536000; includeSubDomains; preload\nX-Frame-Options: SAMEORIGIN\nX-Content-Type-Options: nosniff\nContent-Security-Policy: default-src 'self'; script-src 'self' cdn.example.com\nReferrer-Policy: strict-origin-when-cross-origin\nPermissions-Policy: camera=(), microphone=(), geolocation=(self)`,
+  ratelimit: `HTTP/1.1 429 Too Many Requests\nContent-Type: application/json\nX-RateLimit-Limit: 1000\nX-RateLimit-Remaining: 0\nX-RateLimit-Reset: 1735736400\nRetry-After: 60\nX-RateLimit-Policy: 1000;w=3600`
+};
+
+function loadCurlEx(k) {
+  document.getElementById('curlInput').value = CURL_EXAMPLES[k] || '';
+  clearOutput();
+}
+function loadHeaderEx(k) {
+  document.getElementById('headersInput').value = HEADER_EXAMPLES[k] || '';
+  clearOutput();
+}
+
+// ─── curl tokeniser ───────────────────────────────────────────────────────────
+function tokenizeCurl(raw) {
+  // Remove line continuations
+  const s = raw.replace(/\\\s*\n\s*/g, ' ').trim();
+  const tokens = [];
+  let i = 0;
+  while (i < s.length) {
+    while (i < s.length && /\s/.test(s[i])) i++;
+    if (i >= s.length) break;
+    let tok = '';
+    if (s[i] === '"' || s[i] === "'") {
+      const q = s[i++];
+      while (i < s.length && s[i] !== q) {
+        if (s[i] === '\\' && i + 1 < s.length) { i++; tok += s[i++]; }
+        else tok += s[i++];
+      }
+      i++; // closing quote
+    } else {
+      while (i < s.length && !/\s/.test(s[i])) {
+        if (s[i] === '\\' && i + 1 < s.length) { i++; tok += s[i++]; }
+        else tok += s[i++];
+      }
+    }
+    if (tok) tokens.push(tok);
+  }
+  return tokens;
+}
+
+// Flag database — maps short/long flags to {long, plain, takesVal}
+const FLAG_DB = {
+  '-X': { long: '--request', plain: 'Set the HTTP method (verb) for the request.', takesVal: true, key: 'method' },
+  '--request': { long: '--request', plain: 'Set the HTTP method (verb) for the request.', takesVal: true, key: 'method' },
+  '-H': { long: '--header', plain: 'Add a custom header to the request. Common uses: set Content-Type, send an Authorization token, or pass API keys.', takesVal: true, key: 'header' },
+  '--header': { long: '--header', plain: 'Add a custom header to the request.', takesVal: true, key: 'header' },
+  '-d': { long: '--data', plain: 'Send this data as the request body. Automatically changes the method to POST if -X is not set. To send raw bytes without modification, use --data-raw.', takesVal: true, key: 'data' },
+  '--data': { long: '--data', plain: 'Send data as the request body. Sets method to POST if not explicitly set with -X.', takesVal: true, key: 'data' },
+  '--data-raw': { long: '--data-raw', plain: 'Send data as the request body without any processing. Unlike -d, @ characters are treated literally (not as file references).', takesVal: true, key: 'data' },
+  '--data-binary': { long: '--data-binary', plain: 'Send data exactly as-is, preserving newlines and binary content. Used when -d would mangle the data.', takesVal: true, key: 'data' },
+  '--data-urlencode': { long: '--data-urlencode', plain: 'Send data URL-encoded in the request body. Automatically percent-encodes special characters.', takesVal: true, key: 'data' },
+  '--json': { long: '--json', plain: 'Send data as JSON: sets Content-Type to application/json and method to POST. Shortcut for -d + -H together.', takesVal: true, key: 'data' },
+  '-u': { long: '--user', plain: 'Authenticate with HTTP Basic Authentication. Encodes user:password as a Base64 Authorization header. Never use in production scripts — the password is visible in process lists.', takesVal: true, key: 'user' },
+  '--user': { long: '--user', plain: 'HTTP Basic Authentication: user:password pair.', takesVal: true, key: 'user' },
+  '--oauth2-bearer': { long: '--oauth2-bearer', plain: 'Add an OAuth 2.0 Bearer token as the Authorization header.', takesVal: true, key: 'auth' },
+  '-F': { long: '--form', plain: 'Add a field to a multipart/form-data request body. Use FILE=@filename to upload a file. This is how HTML form file uploads work.', takesVal: true, key: 'form' },
+  '--form': { long: '--form', plain: 'Add a field to a multipart/form-data upload.', takesVal: true, key: 'form' },
+  '--form-string': { long: '--form-string', plain: 'Like -F but treats the value as a literal string even if it starts with @.', takesVal: true, key: 'form' },
+  '-b': { long: '--cookie', plain: 'Send cookie(s) with the request. Pass name=value pairs, or a file path to a cookie jar.', takesVal: true, key: 'cookie' },
+  '--cookie': { long: '--cookie', plain: 'Send cookies with the request.', takesVal: true, key: 'cookie' },
+  '-c': { long: '--cookie-jar', plain: 'Save any Set-Cookie headers from the response to this file. Use with -b to maintain sessions across requests.', takesVal: true, key: 'cookiejar' },
+  '--cookie-jar': { long: '--cookie-jar', plain: 'Save response cookies to this file for use in future requests.', takesVal: true, key: 'cookiejar' },
+  '-A': { long: '--user-agent', plain: 'Override the User-Agent header. Servers use this to identify the client software. Default is curl/VERSION.', takesVal: true, key: 'useragent' },
+  '--user-agent': { long: '--user-agent', plain: 'Set the User-Agent header sent with the request.', takesVal: true, key: 'useragent' },
+  '-e': { long: '--referer', plain: 'Set the Referer (sic) header — tells the server which page or script initiated this request.', takesVal: true, key: 'referer' },
+  '--referer': { long: '--referer', plain: 'Set the Referer header for the request.', takesVal: true, key: 'referer' },
+  '-o': { long: '--output', plain: 'Write the response body to this file instead of printing to stdout.', takesVal: true, key: 'output' },
+  '--output': { long: '--output', plain: 'Write response body to a file.', takesVal: true, key: 'output' },
+  '-O': { long: '--remote-name', plain: 'Save the response to a file named after the remote file in the URL.', takesVal: false, key: 'remotename' },
+  '--remote-name': { long: '--remote-name', plain: 'Save response to a file named from the URL.', takesVal: false, key: 'remotename' },
+  '-T': { long: '--upload-file', plain: 'Upload this local file to the server using HTTP PUT.', takesVal: true, key: 'upload' },
+  '--upload-file': { long: '--upload-file', plain: 'Upload a file with HTTP PUT.', takesVal: true, key: 'upload' },
+  '-w': { long: '--write-out', plain: 'Print a formatted string after the transfer. Common: -w "%{http_code}" to print just the status code.', takesVal: true, key: 'writeout' },
+  '--write-out': { long: '--write-out', plain: 'Print formatted transfer info. Common: "%{http_code}" to extract the status code.', takesVal: true, key: 'writeout' },
+  '-x': { long: '--proxy', plain: 'Route the request through this HTTP/SOCKS proxy.', takesVal: true, key: 'proxy' },
+  '--proxy': { long: '--proxy', plain: 'Route the request through this proxy server.', takesVal: true, key: 'proxy' },
+  '--max-time': { long: '--max-time', plain: 'Total time limit for the entire request in seconds. curl will abort if not complete within this time.', takesVal: true, key: 'maxtime' },
+  '--connect-timeout': { long: '--connect-timeout', plain: 'Time limit in seconds for the initial TCP connection phase only. The request can still take longer once connected.', takesVal: true, key: 'contimeout' },
+  '--retry': { long: '--retry', plain: 'Retry the request up to N times on transient failures (network errors, 5xx responses).', takesVal: true, key: 'retry' },
+  '--retry-delay': { long: '--retry-delay', plain: 'Wait N seconds between retry attempts.', takesVal: true, key: 'retrydelay' },
+  '--retry-max-time': { long: '--retry-max-time', plain: 'Total time cap for all retries combined.', takesVal: true, key: 'retrymaxtime' },
+  '-L': { long: '--location', plain: 'Follow HTTP redirects (301, 302, 307, 308) automatically. Without this flag, curl stops at the redirect response and shows the Location header.', takesVal: false, key: 'location' },
+  '--location': { long: '--location', plain: 'Follow HTTP redirects automatically.', takesVal: false, key: 'location' },
+  '-k': { long: '--insecure', plain: 'Skip SSL/TLS certificate verification. Allows connections to servers with self-signed or expired certificates. Never use in production — this removes protection against man-in-the-middle attacks.', takesVal: false, key: 'insecure' },
+  '--insecure': { long: '--insecure', plain: 'Disable SSL certificate verification. Use only for testing.', takesVal: false, key: 'insecure' },
+  '-s': { long: '--silent', plain: 'Suppress curl\'s progress bar and error messages. Use with -S (--show-error) to silence progress but still see errors.', takesVal: false, key: 'silent' },
+  '--silent': { long: '--silent', plain: 'Silent mode: suppress progress and error output.', takesVal: false, key: 'silent' },
+  '-S': { long: '--show-error', plain: 'Show errors even when -s (silent) is used. The -sS combination is very common: hide progress output but still report errors.', takesVal: false, key: 'showerror' },
+  '--show-error': { long: '--show-error', plain: 'Show errors when combined with --silent.', takesVal: false, key: 'showerror' },
+  '-v': { long: '--verbose', plain: 'Verbose output: prints the full request (headers + body) and full response. Lines starting with > are request headers, < are response headers. Very useful for debugging.', takesVal: false, key: 'verbose' },
+  '--verbose': { long: '--verbose', plain: 'Show full request and response headers for debugging.', takesVal: false, key: 'verbose' },
+  '-I': { long: '--head', plain: 'Send a HEAD request — fetches only the response headers, not the body. Useful for checking if a resource exists or inspecting cache headers without downloading the full response.', takesVal: false, key: 'head' },
+  '--head': { long: '--head', plain: 'Fetch headers only (HEAD request).', takesVal: false, key: 'head' },
+  '-i': { long: '--include', plain: 'Include the response headers in the output before the body. Useful when piping output and wanting to inspect the status code or headers.', takesVal: false, key: 'include' },
+  '--include': { long: '--include', plain: 'Include response headers in the printed output.', takesVal: false, key: 'include' },
+  '-G': { long: '--get', plain: 'Force the method to GET. When used with -d, appends the data to the URL as query parameters instead of sending a body.', takesVal: false, key: 'getmethod' },
+  '--get': { long: '--get', plain: 'Force GET method; appends -d data as URL query string.', takesVal: false, key: 'getmethod' },
+  '--compressed': { long: '--compressed', plain: 'Request a compressed response (gzip/br) by adding an Accept-Encoding header. curl decompresses the response transparently. Reduces transfer size.', takesVal: false, key: 'compressed' },
+  '-n': { long: '--netrc', plain: 'Read credentials from ~/.netrc file. A safer way to authenticate than putting credentials in the command.', takesVal: false, key: 'netrc' },
+  '--netrc': { long: '--netrc', plain: 'Read authentication credentials from ~/.netrc.', takesVal: false, key: 'netrc' },
+  '--netrc-optional': { long: '--netrc-optional', plain: 'Use ~/.netrc if it exists; continue without credentials if it doesn\'t.', takesVal: false, key: 'netrc' },
+  '-Z': { long: '--parallel', plain: 'Perform multiple transfers in parallel (when multiple URLs are given).', takesVal: false, key: 'parallel' },
+  '--parallel': { long: '--parallel', plain: 'Transfer multiple URLs in parallel.', takesVal: false, key: 'parallel' },
+  '--http1.1': { long: '--http1.1', plain: 'Force HTTP/1.1 protocol. Useful when a server has issues with HTTP/2.', takesVal: false, key: 'http11' },
+  '--http2': { long: '--http2', plain: 'Use HTTP/2 protocol if supported by the server.', takesVal: false, key: 'http2' },
+  '--http3': { long: '--http3', plain: 'Use HTTP/3 (QUIC) protocol if supported.', takesVal: false, key: 'http3' },
+  '--no-keepalive': { long: '--no-keepalive', plain: 'Disable TCP connection reuse. Opens a fresh connection for each request.', takesVal: false, key: 'nokeepalive' },
+  '--resolve': { long: '--resolve', plain: 'Override DNS: force host:port to resolve to the given IP. Useful for testing with a different server without changing /etc/hosts.', takesVal: true, key: 'resolve' },
+  '--cacert': { long: '--cacert', plain: 'Use this file as the CA certificate bundle instead of the system default.', takesVal: true, key: 'cacert' },
+  '--cert': { long: '--cert', plain: 'Use this client certificate for mutual TLS (mTLS) authentication.', takesVal: true, key: 'cert' },
+  '--key': { long: '--key', plain: 'Private key file for client certificate authentication.', takesVal: true, key: 'key' },
+};
+
+function parseCurlCommand(raw) {
+  const tokens = tokenizeCurl(raw);
+  if (!tokens.length) return null;
+
+  const result = {
+    method: null,
+    url: null,
+    headers: [],
+    dataItems: [],
+    formItems: [],
+    flags: [],
+    warnings: []
+  };
+
+  let i = 0;
+  // Skip 'curl' keyword
+  if (tokens[0].toLowerCase() === 'curl') i++;
+  if (i >= tokens.length) return result;
+
+  // Handle combined short flags like -sL, -kLs
+  function expandToken(tok) {
+    if (tok.startsWith('--')) return [tok];
+    if (tok.startsWith('-') && tok.length > 2) {
+      // Check if it's a known 2-char flag first
+      if (FLAG_DB[tok]) return [tok];
+      // Otherwise expand: -sLk → -s -L -k
+      const expanded = [];
+      for (let c of tok.slice(1)) expanded.push('-' + c);
+      return expanded;
+    }
+    return [tok];
+  }
+
+  const expanded = [];
+  for (let t of tokens.slice(i)) {
+    for (let e of expandToken(t)) expanded.push(e);
+  }
+
+  let j = 0;
+  while (j < expanded.length) {
+    const tok = expanded[j];
+    const def = FLAG_DB[tok];
+
+    if (def) {
+      if (def.takesVal) {
+        const val = expanded[j + 1] || '';
+        if (def.key === 'method') result.method = val.toUpperCase();
+        else if (def.key === 'header') result.headers.push(val);
+        else if (def.key === 'data') result.dataItems.push({ flag: tok, val });
+        else if (def.key === 'form') result.formItems.push({ flag: tok, val });
+        else if (def.key === 'insecure') result.warnings.push('SSL verification disabled (-k): only use for local testing.');
+        result.flags.push({ flag: tok, val, def });
+        j += 2;
+      } else {
+        if (def.key === 'insecure') result.warnings.push('SSL verification disabled (-k): only use for local testing.');
+        if (def.key === 'head') result.method = result.method || 'HEAD';
+        if (def.key === 'getmethod') result.method = result.method || 'GET';
+        result.flags.push({ flag: tok, val: null, def });
+        j++;
+      }
+    } else if (!tok.startsWith('-')) {
+      // Positional — likely the URL
+      if (!result.url) result.url = tok;
+      j++;
+    } else {
+      // Unknown flag
+      result.flags.push({ flag: tok, val: null, def: null });
+      j++;
+    }
+  }
+
+  // Infer method
+  if (!result.method) {
+    if (result.dataItems.length || result.formItems.length) result.method = 'POST';
+    else result.method = 'GET';
+  }
+
+  return result;
+}
+
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function methodBadge(m) {
+  const cls = ['GET','POST','PUT','DELETE','PATCH','HEAD'].includes(m) ? 'method-' + m : 'method-OTHER';
+  return `<span class="method-badge ${cls}">${esc(m)}</span>`;
+}
+
+function buildPythonRequests(parsed) {
+  const methodLower = (parsed.method || 'GET').toLowerCase();
+  const method = methodLower === 'delete' ? 'delete' : methodLower === 'put' ? 'put' : methodLower === 'patch' ? 'patch' : methodLower === 'head' ? 'head' : methodLower === 'post' ? 'post' : 'get';
+  const url = parsed.url || 'https://example.com';
+
+  let lines = ['import requests', ''];
+  const kwargs = [];
+
+  // Headers
+  const hdrs = parsed.headers.filter(h => !/^content-type:/i.test(h) || parsed.dataItems.length);
+  if (parsed.headers.length) {
+    lines.push('headers = {');
+    for (const h of parsed.headers) {
+      const ci = h.indexOf(':');
+      if (ci < 0) { lines.push(`    # ${esc(h)}`); continue; }
+      const k = h.slice(0, ci).trim();
+      const v = h.slice(ci + 1).trim();
+      lines.push(`    '${k}': '${v}',`);
+    }
+    lines.push('}');
+    kwargs.push('headers=headers');
+  }
+
+  // Body
+  const dataFlag = parsed.dataItems[0];
+  if (dataFlag) {
+    const raw = dataFlag.val;
+    // Try to detect JSON
+    try {
+      JSON.parse(raw);
+      lines.push(`\npayload = ${raw}`);
+      kwargs.push('json=payload');
+    } catch {
+      lines.push(`\ndata = '${raw.replace(/'/g, "\\'")}'`);
+      kwargs.push('data=data');
+    }
+  }
+  if (parsed.formItems.length) {
+    lines.push('\nfiles = {');
+    for (const f of parsed.formItems) {
+      const eq = f.val.indexOf('=');
+      if (eq < 0) continue;
+      const k = f.val.slice(0, eq);
+      const v = f.val.slice(eq + 1);
+      if (v.startsWith('@')) lines.push(`    '${k}': open('${v.slice(1)}', 'rb'),`);
+      else lines.push(`    '${k}': (None, '${v}'),`);
+    }
+    lines.push('}');
+    kwargs.push('files=files');
+  }
+
+  // Auth
+  const authFlag = parsed.flags.find(f => f.def && f.def.key === 'user');
+  if (authFlag) {
+    const parts = (authFlag.val || '').split(':');
+    kwargs.push(`auth=('${parts[0]}', '${parts[1] || ''}')`);
+  }
+
+  // SSL
+  if (parsed.flags.some(f => f.def && f.def.key === 'insecure')) kwargs.push('verify=False');
+  // Timeout
+  const maxtime = parsed.flags.find(f => f.def && f.def.key === 'maxtime');
+  if (maxtime) kwargs.push(`timeout=${maxtime.val}`);
+
+  const kw = kwargs.length ? ', ' + kwargs.join(', ') : '';
+  lines.push(`\nresponse = requests.${method}('${url}'${kw})`);
+  lines.push('print(response.status_code)');
+  lines.push('print(response.json())');
+
+  return lines.join('\n');
+}
+
+function buildJsFetch(parsed) {
+  const method = (parsed.method || 'GET').toUpperCase();
+  const url = parsed.url || 'https://example.com';
+  const opts = {};
+
+  if (method !== 'GET' && method !== 'HEAD') opts.method = method;
+
+  const hdrs = {};
+  for (const h of parsed.headers) {
+    const ci = h.indexOf(':');
+    if (ci < 0) continue;
+    hdrs[h.slice(0, ci).trim()] = h.slice(ci + 1).trim();
+  }
+  if (Object.keys(hdrs).length) opts.headers = hdrs;
+
+  const dataFlag = parsed.dataItems[0];
+  if (dataFlag) opts.body = dataFlag.val;
+
+  const optsStr = JSON.stringify(opts, null, 2)
+    .replace(/"([^"]+)":/g, '$1:')
+    .replace(/"/g, "'");
+
+  if (Object.keys(opts).length === 0) {
+    return `const response = await fetch('${url}');\nconst data = await response.json();\nconsole.log(data);`;
+  }
+  return `const response = await fetch('${url}', ${optsStr});\nconst data = await response.json();\nconsole.log(data);`;
+}
+
+function runCurl() {
+  const raw = document.getElementById('curlInput').value.trim();
+  if (!raw) { showError('Paste a curl command above.'); return; }
+
+  const parsed = parseCurlCommand(raw);
+  if (!parsed || (!parsed.url && !parsed.flags.length)) {
+    showError('Could not parse the command. Make sure it starts with <code>curl</code> and includes a URL.');
+    return;
+  }
+
+  const out = document.getElementById('output');
+  let html = '<div class="output-inner">';
+
+  // Summary
+  const urlHost = parsed.url ? (() => { try { return new URL(parsed.url).hostname; } catch { return parsed.url; } })() : '(no URL found)';
+  const hasBody = parsed.dataItems.length || parsed.formItems.length;
+  const bodyType = parsed.headers.find(h => /^content-type:/i.test(h))?.replace(/^content-type:\s*/i, '') || (hasBody ? 'application/x-www-form-urlencoded' : null);
+  let summaryText = `${methodBadge(parsed.method)} request to <code>${esc(urlHost)}</code>`;
+  if (bodyType) summaryText += ` with a <code>${esc(bodyType)}</code> body`;
+  if (parsed.headers.some(h => /^authorization:/i.test(h))) summaryText += ', authenticated';
+  if (parsed.flags.some(f => f.def?.key === 'location')) summaryText += ', following redirects';
+  html += `<div class="summary-card"><div class="summary-label">Summary</div><div class="summary-text">${summaryText}</div></div>`;
+
+  // Warnings
+  for (const w of parsed.warnings) {
+    html += `<div class="summary-card" style="border-color:#4a3000;background:#120d00"><div class="summary-label" style="color:#f59e0b">Warning</div><div class="summary-text" style="color:#fbbf24;font-size:.88rem">${esc(w)}</div></div>`;
+  }
+
+  // Breakdown table
+  const rows = parsed.flags.filter(f => !(f.def?.key === 'method' && !f.def.takesVal));
+  const urlRow = parsed.url
+    ? `<div class="breakdown-row url-row"><div class="flag-cell">URL</div><div class="val-cell">${esc(parsed.url)}</div><div class="plain-cell">The target endpoint for this request.</div></div>`
+    : '';
+
+  if (rows.length || parsed.url) {
+    html += `<div class="breakdown">
+      <div class="breakdown-header">
+        <div class="breakdown-col-label">Flag</div>
+        <div class="breakdown-col-label">Value</div>
+        <div class="breakdown-col-label">What it does</div>
+      </div>
+      ${urlRow}`;
+
+    for (const r of rows) {
+      if (!r.def) {
+        html += `<div class="breakdown-row"><div class="flag-cell">${esc(r.flag)}</div><div class="val-cell">${r.val ? esc(r.val) : '—'}</div><div class="plain-cell unknown-header">Unknown flag — check <code>man curl</code></div></div>`;
+        continue;
+      }
+      const longAlias = r.def.long && r.def.long !== r.flag ? `<span class="flag-long">${esc(r.def.long)}</span>` : '';
+      const valDisplay = r.val !== null ? esc(r.val) : '(no value)';
+      html += `<div class="breakdown-row"><div class="flag-cell">${esc(r.flag)}${longAlias}</div><div class="val-cell">${r.val !== null ? valDisplay : '—'}</div><div class="plain-cell">${esc(r.def.plain)}</div></div>`;
+    }
+    html += '</div>';
+  }
+
+  // Code snippets
+  html += `<div class="code-section">
+    <div class="code-tabs">
+      <button class="code-tab active" id="ct-py" onclick="showCodeTab('py')">Python requests</button>
+      <button class="code-tab" id="ct-js" onclick="showCodeTab('js')">JavaScript fetch</button>
+    </div>
+    <div class="code-block visible" id="cb-py"><button class="copy-btn" onclick="copyCode('cb-py')">Copy</button><pre id="pre-py">${esc(buildPythonRequests(parsed))}</pre></div>
+    <div class="code-block" id="cb-js"><button class="copy-btn" onclick="copyCode('cb-js')">Copy</button><pre id="pre-js">${esc(buildJsFetch(parsed))}</pre></div>
+  </div>`;
+
+  html += '</div>';
+  out.innerHTML = html;
+}
+
+function showCodeTab(tab) {
+  ['py','js'].forEach(t => {
+    document.getElementById('ct-' + t)?.classList.toggle('active', t === tab);
+    const cb = document.getElementById('cb-' + t);
+    if (cb) cb.classList.toggle('visible', t === tab);
+  });
+}
+
+function copyCode(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const text = el.querySelector('pre')?.textContent || '';
+  navigator.clipboard?.writeText(text).catch(() => {});
+  const btn = el.querySelector('.copy-btn');
+  if (btn) { btn.textContent = 'Copied!'; setTimeout(() => btn.textContent = 'Copy', 1500); }
+}
+
+// ─── HTTP Header decoder ─────────────────────────────────────────────────────
+
+const STATUS_MEANINGS = {
+  100:'Continue — server received the request headers; client should proceed.',
+  101:'Switching Protocols — server agrees to the protocol change requested (e.g. WebSocket upgrade).',
+  200:'OK — the request succeeded.',
+  201:'Created — the request succeeded and a new resource was created.',
+  204:'No Content — the request succeeded; the response intentionally has no body.',
+  206:'Partial Content — the server is returning part of the resource (range request).',
+  301:'Moved Permanently — the resource has a new permanent URL. Browsers and bots should update their bookmarks.',
+  302:'Found (Temporary Redirect) — the resource is temporarily at a different URL.',
+  304:'Not Modified — the cached version is still valid; the client should use it.',
+  307:'Temporary Redirect — same as 302 but the method must not change.',
+  308:'Permanent Redirect — same as 301 but the method must not change.',
+  400:'Bad Request — the server could not understand the request (malformed syntax, invalid parameters).',
+  401:'Unauthorized — authentication is required. The client should provide credentials.',
+  403:'Forbidden — the server understood the request but refuses to authorize it. Different from 401: credentials won\'t help.',
+  404:'Not Found — the server cannot find the requested resource.',
+  405:'Method Not Allowed — the HTTP method used is not supported for this endpoint.',
+  408:'Request Timeout — the server timed out waiting for the request.',
+  409:'Conflict — the request conflicts with the current state of the server (e.g. duplicate resource).',
+  410:'Gone — the resource has been permanently deleted and will not be available again.',
+  422:'Unprocessable Entity — the request was well-formed but failed semantic validation.',
+  429:'Too Many Requests — you\'ve exceeded the rate limit. Check Retry-After for when to try again.',
+  500:'Internal Server Error — the server encountered an unexpected condition.',
+  502:'Bad Gateway — the server received an invalid response from an upstream server.',
+  503:'Service Unavailable — the server is temporarily overloaded or down for maintenance.',
+  504:'Gateway Timeout — the upstream server did not respond in time.',
+};
+
+const HEADER_DB = {
+  'content-type': (val) => {
+    const [mime, ...params] = val.split(';').map(s => s.trim());
+    const charset = params.find(p => /^charset=/i.test(p))?.replace(/^charset=/i,'');
+    const boundary = params.find(p => /^boundary=/i.test(p));
+    let plain = `The response body is <strong>${esc(mime)}</strong>.`;
+    if (mime === 'application/json') plain += ' Parse it as JSON.';
+    else if (mime === 'text/html') plain += ' The browser will render it as an HTML page.';
+    else if (mime === 'text/plain') plain += ' Plain text — no special formatting.';
+    else if (mime === 'application/octet-stream') plain += ' Generic binary data — often a file download.';
+    else if (mime.startsWith('image/')) plain += ` An image (${mime.split('/')[1]}).`;
+    else if (mime === 'multipart/form-data') plain += ' A multipart body — each part is a separate field or file.';
+    else if (mime === 'application/x-www-form-urlencoded') plain += ' URL-encoded form data (key=value pairs).';
+    if (charset) plain += ` Encoded as <strong>${esc(charset)}</strong>.`;
+    if (boundary) plain += ` Multipart boundary: <code>${esc(boundary.replace(/^boundary=/i,''))}</code>.`;
+    return plain;
+  },
+  'content-length': (val) => {
+    const n = parseInt(val, 10);
+    if (isNaN(n)) return `Body size declared as <strong>${esc(val)}</strong> bytes.`;
+    const fmt = n >= 1048576 ? `${(n/1048576).toFixed(1)} MB` : n >= 1024 ? `${(n/1024).toFixed(1)} KB` : `${n} bytes`;
+    return `The response body is <strong>${fmt}</strong> (${n.toLocaleString()} bytes). If absent, the server uses chunked transfer encoding instead.`;
+  },
+  'content-encoding': (val) => {
+    const enc = { gzip: 'gzip compression', br: 'Brotli compression', deflate: 'deflate compression', identity: 'no encoding', zstd: 'Zstandard compression' };
+    const desc = enc[val.toLowerCase()] || val;
+    return `The body is compressed with <strong>${esc(desc)}</strong>. The client must decompress it before reading. Browsers do this automatically.`;
+  },
+  'content-language': (val) => `The content is in <strong>${esc(val)}</strong>. Useful for accessibility tools and search engines.`,
+  'transfer-encoding': (val) => {
+    if (val.toLowerCase() === 'chunked') return 'The body is sent in chunks rather than all at once. No Content-Length is needed — the end is signalled by a zero-length chunk. Common for streaming responses.';
+    return `Transfer encoding: <strong>${esc(val)}</strong>. The body is encoded using this mechanism for transmission.`;
+  },
+  'cache-control': (val) => {
+    const directives = val.split(',').map(s => s.trim());
+    const explain = {
+      'no-cache': 'The client must revalidate with the server before using any cached copy (even a fresh one).',
+      'no-store': 'The response must not be stored in any cache — not even on disk. Use for sensitive data.',
+      'public': 'Any cache (browser, CDN, proxy) can store this response.',
+      'private': 'Only the end user\'s browser can cache this. CDNs and shared proxies must not.',
+      'must-revalidate': 'Once stale, the cache must revalidate before serving — it may not serve a stale copy under any circumstances.',
+      'proxy-revalidate': 'Like must-revalidate but applies only to shared caches (CDNs, proxies), not browsers.',
+      'immutable': 'The resource will never change while it\'s fresh. The browser can skip revalidation entirely.',
+      'no-transform': 'Intermediaries (CDNs, proxies) must not modify the response body.',
+    };
+    const items = [];
+    for (const d of directives) {
+      const lower = d.toLowerCase();
+      if (explain[lower]) items.push({ key: d, val: explain[lower] });
+      else if (/^max-age=(\d+)$/.test(lower)) {
+        const secs = parseInt(d.replace(/max-age=/i,''), 10);
+        const human = secs >= 86400 ? `${(secs/86400).toFixed(1)} days` : secs >= 3600 ? `${(secs/3600).toFixed(1)} hours` : secs >= 60 ? `${(secs/60)} minutes` : `${secs} seconds`;
+        items.push({ key: d, val: `Cached copies are fresh for <strong>${human}</strong>. After that they\'re stale and must be revalidated.` });
+      } else if (/^s-maxage=(\d+)$/.test(lower)) {
+        const secs = parseInt(d.replace(/s-maxage=/i,''), 10);
+        const human = secs >= 86400 ? `${(secs/86400).toFixed(1)} days` : secs >= 3600 ? `${(secs/3600).toFixed(1)} hours` : `${secs} seconds`;
+        items.push({ key: d, val: `CDNs and shared caches use this instead of max-age: fresh for <strong>${human}</strong>.` });
+      } else if (/^stale-while-revalidate=(\d+)$/.test(lower)) {
+        const secs = parseInt(d.replace(/stale-while-revalidate=/i,''), 10);
+        items.push({ key: d, val: `After going stale, the cache can serve the old copy for up to <strong>${secs} seconds</strong> while fetching a fresh one in the background. Improves perceived performance.` });
+      } else if (/^stale-if-error=(\d+)$/.test(lower)) {
+        const secs = parseInt(d.replace(/stale-if-error=/i,''), 10);
+        items.push({ key: d, val: `If the origin returns an error, serve the stale cache for up to <strong>${secs} seconds</strong>.` });
+      } else {
+        items.push({ key: d, val: null });
+      }
+    }
+    return { type: 'directives', items };
+  },
+  'etag': (val) => {
+    const weak = val.startsWith('W/');
+    const tag = weak ? val.slice(2) : val;
+    let plain = `A cache validator tag for this version of the resource: <code>${esc(tag)}</code>.`;
+    if (weak) plain += ' This is a <strong>weak ETag</strong> — semantically equivalent versions may share it even if byte-for-byte different.';
+    else plain += ' When you request this resource again, send <code>If-None-Match: ${esc(val)}</code> — the server returns 304 (Not Modified) instead of resending the body if it hasn\'t changed.';
+    return plain;
+  },
+  'last-modified': (val) => {
+    let plain = `The resource was last modified on <strong>${esc(val)}</strong>.`;
+    plain += ' Send <code>If-Modified-Since</code> with this value on future requests to get a 304 (Not Modified) if the content hasn\'t changed.';
+    return plain;
+  },
+  'expires': (val) => {
+    return `The response is considered fresh until <strong>${esc(val)}</strong>. After that date, caches must revalidate. Superseded by <code>Cache-Control: max-age</code> when both are present.`;
+  },
+  'age': (val) => {
+    const secs = parseInt(val, 10);
+    const human = isNaN(secs) ? val : secs >= 3600 ? `${(secs/3600).toFixed(1)} hours` : secs >= 60 ? `${Math.floor(secs/60)} minutes and ${secs%60} seconds` : `${secs} seconds`;
+    return `This response was generated <strong>${isNaN(secs) ? esc(val) : esc(human)}</strong> ago. It\'s being served from a cache — the actual server response is that old.`;
+  },
+  'vary': (val) => {
+    const fields = val.split(',').map(s => s.trim());
+    if (val === '*') return 'Vary: * means every request is considered unique — effectively disabling shared caches for this resource.';
+    return `The cached response depends on the client\'s <strong>${fields.map(esc).join(', ')}</strong> header(s). Caches must store a separate version for each distinct combination of these values.`;
+  },
+  'set-cookie': (val) => {
+    const parts = val.split(';').map(s => s.trim());
+    const [nameVal, ...attrs] = parts;
+    const eq = nameVal.indexOf('=');
+    const name = eq >= 0 ? nameVal.slice(0, eq) : nameVal;
+    const value = eq >= 0 ? nameVal.slice(eq + 1) : '';
+    const items = [{ key: `${name}=...`, val: `Sets a cookie named <strong>${esc(name)}</strong>.` }];
+    for (const a of attrs) {
+      const al = a.toLowerCase();
+      if (al === 'httponly') items.push({ key: 'HttpOnly', val: 'JavaScript cannot read this cookie (<code>document.cookie</code> won\'t show it). Prevents XSS from stealing the cookie.' });
+      else if (al === 'secure') items.push({ key: 'Secure', val: 'Cookie is only sent over HTTPS connections, never plain HTTP.' });
+      else if (al.startsWith('samesite=')) {
+        const sv = a.slice(9);
+        const sm = { strict: 'Cookie is never sent in cross-site requests — strongest CSRF protection.', lax: 'Cookie is sent in top-level navigations (link clicks) but not in subresource requests. Balanced protection.', none: 'Cookie is sent in all cross-site requests. Requires Secure flag.' };
+        items.push({ key: a, val: sm[sv.toLowerCase()] || `SameSite policy: ${esc(sv)}.` });
+      } else if (al.startsWith('max-age=')) {
+        const secs = parseInt(a.slice(8), 10);
+        const human = secs <= 0 ? 'deleting the cookie' : secs >= 86400 ? `${Math.round(secs/86400)} days` : secs >= 3600 ? `${Math.round(secs/3600)} hours` : `${secs} seconds`;
+        items.push({ key: a, val: `Cookie expires in <strong>${esc(human)}</strong> from now. Overrides Expires if both are present.` });
+      } else if (al.startsWith('expires=')) {
+        items.push({ key: a, val: `Cookie expires at <strong>${esc(a.slice(8))}</strong>. After this the browser will delete it.` });
+      } else if (al.startsWith('path=')) {
+        items.push({ key: a, val: `Cookie is only sent for requests to paths starting with <code>${esc(a.slice(5))}</code>.` });
+      } else if (al.startsWith('domain=')) {
+        items.push({ key: a, val: `Cookie applies to <strong>${esc(a.slice(7))}</strong> and all its subdomains.` });
+      } else if (al === 'partitioned') {
+        items.push({ key: 'Partitioned', val: 'CHIPS attribute — cookie is stored per-top-level-site. Required for third-party cookies in modern Chrome.' });
+      }
+    }
+    return { type: 'directives', items };
+  },
+  'location': (val) => {
+    return `Redirect target: the client should request <strong><code>${esc(val)}</code></strong> instead. With a 301/302 the browser follows this automatically; with a 201 it points to the newly created resource.`;
+  },
+  'www-authenticate': (val) => {
+    if (/^bearer/i.test(val)) return 'The server requires a <strong>Bearer token</strong> — send <code>Authorization: Bearer &lt;token&gt;</code> in your next request.';
+    if (/^basic/i.test(val)) return 'The server requires <strong>HTTP Basic Authentication</strong> — send <code>Authorization: Basic &lt;base64(user:pass)&gt;</code>.';
+    if (/^digest/i.test(val)) return 'The server requires <strong>HTTP Digest Authentication</strong> — a challenge-response scheme that avoids sending the password in the clear.';
+    return `The server requires authentication. Scheme: <strong>${esc(val.split(' ')[0])}</strong>. Respond with an <code>Authorization</code> header using this scheme.`;
+  },
+  'strict-transport-security': (val) => {
+    const parts = val.split(';').map(s => s.trim());
+    const items = [];
+    for (const p of parts) {
+      const pl = p.toLowerCase();
+      if (/^max-age=(\d+)$/.test(pl)) {
+        const secs = parseInt(p.replace(/max-age=/i,''), 10);
+        const days = Math.round(secs / 86400);
+        items.push({ key: p, val: `Browsers must use HTTPS for this site for the next <strong>${days.toLocaleString()} days</strong>. Plain HTTP is refused during this period.` });
+      } else if (pl === 'includesubdomains') {
+        items.push({ key: p, val: 'The HTTPS-only rule applies to all subdomains too, not just the root domain.' });
+      } else if (pl === 'preload') {
+        items.push({ key: p, val: 'Indicates the site wants to be included in browser HSTS preload lists — making the HTTPS requirement baked into browsers at install time, before the first visit.' });
+      }
+    }
+    return { type: 'directives', items: items.length ? items : [{ key: val, val: 'HSTS header — forces HTTPS connections.' }] };
+  },
+  'x-frame-options': (val) => {
+    const v = val.toUpperCase();
+    if (v === 'DENY') return '<strong>DENY</strong>: this page cannot be loaded in any <code>&lt;iframe&gt;</code>, <code>&lt;frame&gt;</code>, or <code>&lt;object&gt;</code>. Prevents clickjacking attacks.';
+    if (v === 'SAMEORIGIN') return '<strong>SAMEORIGIN</strong>: this page can only be framed by pages on the same origin. Cross-origin iframes are blocked.';
+    if (v.startsWith('ALLOW-FROM')) return `<strong>ALLOW-FROM</strong>: this page can be framed only by <code>${esc(val.slice(11))}</code>. Note: this directive is deprecated and not supported in modern browsers.`;
+    return `Clickjacking protection: <strong>${esc(val)}</strong>. Controls which origins can embed this page in a frame.`;
+  },
+  'x-content-type-options': (val) => {
+    if (val.toLowerCase() === 'nosniff') return '<strong>nosniff</strong>: the browser must not try to guess the content type — it must use the declared Content-Type. Prevents MIME confusion attacks where a browser might execute a file as a script based on its contents.';
+    return `MIME sniffing control: <strong>${esc(val)}</strong>.`;
+  },
+  'content-security-policy': (val) => {
+    const directives = val.split(';').map(s => s.trim()).filter(Boolean);
+    const items = directives.map(d => {
+      const [k, ...rest] = d.split(/\s+/);
+      const sources = rest.join(' ');
+      const explain = {
+        'default-src': `Fallback policy for any resource type not explicitly listed. Sources: <code>${esc(sources)}</code>`,
+        'script-src': `Which sources may load and run JavaScript. Sources: <code>${esc(sources)}</code>`,
+        'style-src': `Which sources may load CSS stylesheets. Sources: <code>${esc(sources)}</code>`,
+        'img-src': `Which sources may load images. Sources: <code>${esc(sources)}</code>`,
+        'font-src': `Which sources may load web fonts. Sources: <code>${esc(sources)}</code>`,
+        'connect-src': `Which URLs JavaScript can connect to (fetch, XHR, WebSocket). Sources: <code>${esc(sources)}</code>`,
+        'frame-src': `Which URLs can be loaded in iframes. Sources: <code>${esc(sources)}</code>`,
+        'child-src': `Which sources can be used for workers and embedded frames. Sources: <code>${esc(sources)}</code>`,
+        'object-src': `Which sources for &lt;object&gt;, &lt;embed&gt;, &lt;applet&gt;. Sources: <code>${esc(sources)}</code>`,
+        'base-uri': `Restricts &lt;base&gt; element URLs. Sources: <code>${esc(sources)}</code>`,
+        'form-action': `Restricts which URLs forms can submit to. Sources: <code>${esc(sources)}</code>`,
+        'upgrade-insecure-requests': 'Automatically upgrades HTTP resource requests to HTTPS.',
+        'block-all-mixed-content': 'Blocks all mixed content (HTTP resources on HTTPS pages).',
+      };
+      return { key: k, val: explain[k.toLowerCase()] || `<code>${esc(d)}</code>` };
+    });
+    return { type: 'directives', items };
+  },
+  'access-control-allow-origin': (val) => {
+    if (val === '*') return 'CORS: any origin may read this response. The request did not include credentials (cookies/auth headers) or the server explicitly allows all origins.';
+    if (val === 'null') return 'CORS: only requests from null origins (file://, sandboxed iframes) are allowed. Rarely the right choice.';
+    return `CORS: only requests from <strong>${esc(val)}</strong> may read this response. Other origins receive a CORS error in the browser.`;
+  },
+  'access-control-allow-methods': (val) => `CORS: the client may use these HTTP methods in cross-origin requests: <strong>${esc(val)}</strong>.`,
+  'access-control-allow-headers': (val) => `CORS: the client may include these headers in cross-origin requests: <strong>${esc(val)}</strong>.`,
+  'access-control-max-age': (val) => {
+    const secs = parseInt(val, 10);
+    return `CORS preflight cache: the browser may cache this CORS permission for <strong>${isNaN(secs) ? esc(val) : secs + ' seconds'}</strong>. During this time it skips the preflight OPTIONS request for matching requests.`;
+  },
+  'access-control-allow-credentials': (val) => {
+    if (val.toLowerCase() === 'true') return 'CORS: the browser may expose this response to JavaScript even when the request includes credentials (cookies, HTTP auth). Requires <code>Access-Control-Allow-Origin</code> to name a specific origin, not *.';
+    return `CORS credentials policy: <strong>${esc(val)}</strong>.`;
+  },
+  'access-control-expose-headers': (val) => `CORS: the browser exposes these response headers to JavaScript beyond the default safe headers: <strong>${esc(val)}</strong>.`,
+  'referrer-policy': (val) => {
+    const policies = {
+      'no-referrer': 'No Referer header is ever sent.',
+      'no-referrer-when-downgrade': 'Full URL sent when navigating to HTTPS → HTTPS; nothing sent when going to HTTP (default in most browsers).',
+      'origin': 'Only the origin (scheme + host + port) is sent, never the full path.',
+      'origin-when-cross-origin': 'Full URL for same-origin requests; only origin for cross-origin requests.',
+      'same-origin': 'Referer is only sent for same-origin navigations. Cross-origin requests get no Referer.',
+      'strict-origin': 'Origin only; never sent when navigating from HTTPS to HTTP.',
+      'strict-origin-when-cross-origin': 'Full URL for same-origin; origin-only for cross-origin HTTPS → HTTPS; nothing for HTTP downgrade.',
+      'unsafe-url': 'Always send the full URL including path and query string. Leaks sensitive URL parameters.',
+    };
+    return policies[val.toLowerCase()] ? `<strong>${esc(val)}</strong>: ${policies[val.toLowerCase()]}` : `Referrer policy: <strong>${esc(val)}</strong>.`;
+  },
+  'permissions-policy': (val) => {
+    return `Controls which browser features this page may use. Directives: <code>${esc(val.slice(0,120))}${val.length > 120 ? '…' : ''}</code>. Common pattern: <code>camera=()</code> means the camera API is disabled.`;
+  },
+  'x-ratelimit-limit': (val) => `Rate limit: this API allows <strong>${esc(val)} requests</strong> in the current window.`,
+  'ratelimit-limit': (val) => `Rate limit: this API allows <strong>${esc(val)} requests</strong> in the current window.`,
+  'x-ratelimit-remaining': (val) => {
+    const n = parseInt(val, 10);
+    if (!isNaN(n) && n === 0) return `Rate limit: <strong>0 requests remaining</strong> in the current window. The next request will be rejected unless you wait for the reset time.`;
+    return `Rate limit: <strong>${esc(val)} requests remaining</strong> in the current window.`;
+  },
+  'ratelimit-remaining': (val) => `Rate limit: <strong>${esc(val)} requests remaining</strong> in the current window.`,
+  'x-ratelimit-reset': (val) => {
+    const n = parseInt(val, 10);
+    if (!isNaN(n) && n > 1e9) {
+      const d = new Date(n * 1000);
+      const local = d.toLocaleTimeString();
+      return `Rate limit resets at <strong>${esc(local)}</strong> (Unix timestamp ${esc(val)}).`;
+    }
+    return `Rate limit resets in <strong>${esc(val)} seconds</strong> (or at timestamp ${esc(val)}).`;
+  },
+  'ratelimit-reset': (val) => {
+    const n = parseInt(val, 10);
+    if (!isNaN(n) && n > 1e9) return `Rate limit resets at Unix timestamp <strong>${esc(val)}</strong>.`;
+    return `Rate limit resets in <strong>${esc(val)} seconds</strong>.`;
+  },
+  'x-ratelimit-policy': (val) => `Rate limit policy: <code>${esc(val)}</code>. Format is typically <code>limit;w=window_seconds</code>.`,
+  'retry-after': (val) => {
+    const n = parseInt(val, 10);
+    if (!isNaN(n)) return `Wait <strong>${esc(val)} seconds</strong> before retrying this request. Sent with 429 (Too Many Requests) or 503 (Service Unavailable).`;
+    return `Retry after: <strong>${esc(val)}</strong>. Sent with 429 or 503 to indicate when the client may try again.`;
+  },
+  'server': (val) => `The web server software is <strong>${esc(val)}</strong>. Many security-conscious servers omit or obscure this to avoid leaking version info to attackers.`,
+  'x-powered-by': (val) => `The application framework or runtime is <strong>${esc(val)}</strong>. Often suppressed in production for security — reveals the tech stack to potential attackers.`,
+  'x-request-id': (val) => `Unique request ID: <code>${esc(val)}</code>. Include this in bug reports or support tickets — it lets the server team find the exact request in their logs.`,
+  'x-correlation-id': (val) => `Correlation ID for distributed tracing: <code>${esc(val)}</code>. Links this HTTP request to related events across multiple services.`,
+  'x-trace-id': (val) => `Trace ID: <code>${esc(val)}</code>. Used to correlate this request in distributed tracing systems.`,
+  'cf-ray': (val) => `Cloudflare Ray ID: <code>${esc(val)}</code>. A unique identifier for this request through Cloudflare's network. Share it with Cloudflare support to diagnose routing or caching issues. The suffix (e.g. <code>-LHR</code>) is the data center that handled the request.`,
+  'cf-cache-status': (val) => {
+    const statuses = { HIT: 'Served from Cloudflare\'s cache — the origin server was not contacted.', MISS: 'Not in Cloudflare\'s cache — origin was contacted and the response was cached for future requests.', DYNAMIC: 'Not cached by Cloudflare (dynamic content or caching not configured).', BYPASS: 'Cloudflare bypassed its cache per configuration rules.', EXPIRED: 'Cached copy existed but was stale — origin was contacted and cache was refreshed.', REVALIDATED: 'Cached copy was stale but the origin confirmed it\'s still valid (304). Cache entry was refreshed.' };
+    return `Cloudflare cache status: <strong>${esc(val)}</strong>. ${statuses[val.toUpperCase()] || ''}`;
+  },
+  'x-cache': (val) => {
+    if (/hit/i.test(val)) return `Cache <strong>hit</strong> (<code>${esc(val)}</code>) — this response was served from a cache without contacting the origin server.`;
+    if (/miss/i.test(val)) return `Cache <strong>miss</strong> (<code>${esc(val)}</code>) — the cache had no stored copy; the origin server was contacted.`;
+    return `Cache status: <code>${esc(val)}</code>.`;
+  },
+  'x-amz-request-id': (val) => `AWS request ID: <code>${esc(val)}</code>. Include in AWS support tickets to identify the exact S3/CloudFront operation.`,
+  'x-amz-id-2': (val) => `AWS extended request ID: used alongside <code>x-amz-request-id</code> for S3 troubleshooting.`,
+  'date': (val) => `The server generated this response at <strong>${esc(val)}</strong>. Useful for checking clock drift and validating cache age calculations.`,
+  'connection': (val) => {
+    if (val.toLowerCase() === 'keep-alive') return '<strong>keep-alive</strong>: the TCP connection will be reused for subsequent requests to this server. Standard in HTTP/1.1 — avoids the overhead of opening a new connection for each request.';
+    if (val.toLowerCase() === 'close') return '<strong>close</strong>: the server will close the TCP connection after this response. The client must open a new connection for the next request.';
+    return `Connection management: <strong>${esc(val)}</strong>.`;
+  },
+  'keep-alive': (val) => `TCP keep-alive parameters: <code>${esc(val)}</code>. Controls how long idle connections are kept open and the maximum number of requests per connection.`,
+  'link': (val) => `Resource hints or pagination links. Common patterns: <code>rel="preload"</code> (preload a resource), <code>rel="canonical"</code> (preferred URL), <code>rel="next"</code>/<code>rel="prev"</code> (pagination).`,
+  'x-xss-protection': (val) => {
+    if (val === '0') return 'XSS auditor disabled. Modern recommendation: set to <code>0</code> and rely on Content-Security-Policy instead — the old XSS auditor could itself be exploited.';
+    return `XSS filter: <strong>${esc(val)}</strong>. This is a legacy header. Modern browsers have removed the XSS auditor — use Content-Security-Policy instead.`;
+  },
+};
+
+function parseHeaders(raw) {
+  const lines = raw.trim().split(/\r?\n/);
+  const result = { statusLine: null, headers: [] };
+
+  for (const line of lines) {
+    if (!line.trim()) continue;
+    // Check for HTTP status line
+    if (/^HTTP\//i.test(line)) {
+      result.statusLine = line.trim();
+      continue;
+    }
+    const ci = line.indexOf(':');
+    if (ci < 0) {
+      // Could be a status line without "HTTP/" (e.g. just "200 OK")
+      if (/^\d{3}/.test(line.trim())) {
+        result.statusLine = 'HTTP/1.1 ' + line.trim();
+      }
+      continue;
+    }
+    const name = line.slice(0, ci).trim();
+    const value = line.slice(ci + 1).trim();
+    if (name) result.headers.push({ name, value });
+  }
+  return result;
+}
+
+function runHeaders() {
+  const raw = document.getElementById('headersInput').value.trim();
+  if (!raw) { showError('Paste HTTP response headers above.'); return; }
+
+  const parsed = parseHeaders(raw);
+  const out = document.getElementById('output');
+  let html = '<div class="output-inner">';
+
+  // Status line
+  if (parsed.statusLine) {
+    const m = parsed.statusLine.match(/HTTP\/[\d.]+\s+(\d+)\s*(.*)/i);
+    if (m) {
+      const code = parseInt(m[1], 10);
+      const reason = m[2] || '';
+      const group = Math.floor(code / 100);
+      const cls = `status-${group}xx`;
+      const meaning = STATUS_MEANINGS[code] || (
+        group === 1 ? 'Informational response.' :
+        group === 2 ? 'Success.' :
+        group === 3 ? 'Redirect.' :
+        group === 4 ? 'Client error.' :
+        group === 5 ? 'Server error.' : ''
+      );
+      html += `<div class="status-card">
+        <div><span class="status-code ${cls}">${code}</span><span class="status-text">${esc(reason)}</span></div>
+        <div class="status-meaning">${meaning}</div>
+      </div>`;
+    }
+  }
+
+  if (parsed.headers.length === 0) {
+    html += '<div class="error-msg">No headers found. Paste raw HTTP response headers — lines in the format <code>Header-Name: value</code>.</div>';
+  } else {
+    for (const { name, value } of parsed.headers) {
+      const lookup = HEADER_DB[name.toLowerCase()];
+      let plain = null;
+      let directives = null;
+
+      if (lookup) {
+        const result = lookup(value);
+        if (result && typeof result === 'object' && result.type === 'directives') {
+          directives = result.items;
+        } else {
+          plain = result;
+        }
+      }
+
+      const isWarning = name.toLowerCase() === 'x-powered-by' || (name.toLowerCase() === 'x-frame-options' && value.toLowerCase().startsWith('allow-from'));
+
+      html += `<div class="header-card${isWarning ? ' warning' : ''}">
+        <div class="hcard-name">${esc(name)}</div>
+        <div class="hcard-value">${esc(value)}</div>`;
+
+      if (directives) {
+        html += '<div class="hcard-directives">';
+        for (const d of directives) {
+          html += `<div class="hdir"><span class="hdir-key">${esc(d.key)}</span><span class="hdir-val">${d.val || '<span class="unknown-header">No explanation available</span>'}</span></div>`;
+        }
+        html += '</div>';
+      } else if (plain) {
+        html += `<div class="hcard-plain">${plain}</div>`;
+      } else {
+        html += `<div class="hcard-plain unknown-header">Header not in database — check the RFC or MDN for <code>${esc(name)}</code>.</div>`;
+      }
+
+      html += '</div>';
+    }
+  }
+
+  html += '</div>';
+  out.innerHTML = html;
+}
+
+function showError(msg) {
+  document.getElementById('output').innerHTML = `<div class="error-msg">${msg}</div>`;
+}
+</script>
+</body>
+</html>
