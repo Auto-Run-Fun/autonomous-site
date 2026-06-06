@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stack Trace Explainer — Decode Python, JavaScript &amp; Java errors in plain English</title>
+<meta name="description" content="Paste a Python, JavaScript, or Java stack trace and get a plain-English breakdown: what the error type means, which line failed, and the most likely causes. Free, instant, no account.">
+<link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/stack-trace-explainer.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Stack Trace Explainer — Understand any error instantly">
+<meta property="og:description" content="Paste a stack trace. Get a plain-English explanation of what failed, where, and why. Works with Python, JavaScript, and Java.">
+<meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/stack-trace-explainer.html">
+<meta name="twitter:card" content="summary">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Stack Trace Explainer",
+  "description": "Decode Python, JavaScript, and Java stack traces into plain English. Identifies the error type, the failing line, and common causes.",
+  "url": "https://auto-run-fun.github.io/autonomous-site/stack-trace-explainer.html",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any (browser)",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is a NullPointerException in Java?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A NullPointerException occurs when your code tries to use a reference that points to null — calling a method on it, accessing a field, or unboxing it. Fix: check if the reference is null before using it, or trace back to where it should have been assigned a real object."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does 'Cannot read properties of undefined' mean in JavaScript?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "This TypeError means you tried to access a property (.name, .length, etc.) on a value that is undefined — the object doesn't exist at that point in the code. Common causes: async data not yet loaded, a function returned undefined, or an API response was shaped differently than expected."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is a Python AttributeError?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "An AttributeError means you tried to access a method or property that doesn't exist on that object. The most common version is \"'NoneType' object has no attribute 'X'\" — the variable you expected to be an object is actually None. Check where it was last assigned."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I read a Python Traceback?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A Python Traceback reads outermost to innermost — the last File/line entry is where the crash happened. Start from the bottom: the error type and message tell you WHAT failed; the last frame tells you WHERE in your code; the frames above show HOW the program got there."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is 'RangeError: Maximum call stack size exceeded' in JavaScript?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "This means a function called itself recursively too many times without stopping. The most common cause is a missing or incorrect base case in a recursive function — check that there is a condition that returns a value without calling the function again."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is a Python KeyError?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A KeyError means you accessed a dictionary key that doesn't exist in that dictionary. Fix: use dict.get(key) to return None instead of crashing, or check 'key in dict' before accessing it. The error message shows the exact key that was missing."
+      }
+    }
+  ]
+}
+</script>
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-text-size-adjust:100%}
+body{background:#0b0b10;color:#e8e8f0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.6;min-height:100vh;padding:0 16px}
+a{color:#7eb8f7;text-decoration:none}
+a:hover{text-decoration:underline}
+code{font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-size:.85em;background:#131320;padding:1px 5px;border-radius:3px;color:#a8d8a8}
+.wrap{max-width:820px;margin:0 auto;padding:40px 0 80px}
+.topnav{margin-bottom:32px;font-size:.875rem;color:#888}
+.topnav a{color:#7eb8f7}
+.topnav .sep{margin:0 6px;opacity:.4}
+h1{font-size:1.75rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
+.subtitle{color:#aaa;font-size:1rem;margin-bottom:28px;max-width:620px}
+.legend{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.lg{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:2px 9px;border-radius:4px;cursor:default;user-select:none}
+.input-wrap{background:#131320;border:2px solid #2a2a3d;border-radius:8px;padding:4px;transition:border-color .15s}
+.input-wrap:focus-within{border-color:#4a4a7d}
+#traceInput{
+  width:100%;background:transparent;border:none;outline:none;
+  font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;
+  font-size:.82rem;color:#e8e8f0;padding:14px 16px;
+  resize:vertical;min-height:160px;line-height:1.65;
+  letter-spacing:.02em;tab-size:2;
+}
+#traceInput::placeholder{color:#252540;font-style:italic}
+.examples-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}
+.ex-label{font-size:.78rem;color:#555;margin-right:2px}
+.ex-btn{
+  background:#131320;border:1px solid #2a2a3d;border-radius:5px;
+  color:#7eb8f7;font-size:.78rem;padding:4px 12px;cursor:pointer;
+  transition:background .1s,border-color .1s;white-space:nowrap;
+  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+}
+.ex-btn:hover{background:#1a1a2e;border-color:#4a4a7d}
+#output{margin-top:28px}
+@keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.output-inner{animation:fadein .18s ease}
+.lang-badge{
+  display:inline-flex;align-items:center;
+  font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  padding:3px 10px;border-radius:5px;margin-bottom:14px;
+}
+.error-card{border-radius:8px;padding:18px 20px;margin-bottom:12px;border:1px solid}
+.error-type-name{
+  font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;
+  font-size:1.3rem;font-weight:700;letter-spacing:-0.01em;margin-bottom:6px;
+}
+.error-what{font-size:.95rem;color:#c8c8e0;line-height:1.55;margin-bottom:12px}
+.error-msg-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#555;margin-bottom:4px}
+.error-msg-text{
+  font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;
+  font-size:.83rem;color:#a8d8a8;line-height:1.5;word-break:break-word;
+  background:#0a0a14;padding:8px 12px;border-radius:5px;
+}
+.error-msg-plain{font-size:.87rem;color:#888;line-height:1.5;margin-top:8px;font-style:italic}
+.causes-section{background:#0f0f1c;border:1px solid #1e1e30;border-radius:8px;padding:14px 18px;margin-bottom:12px}
+.causes-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#555;margin-bottom:10px}
+.causes-list{list-style:none;display:flex;flex-direction:column;gap:7px}
+.causes-list li{font-size:.88rem;color:#b0b0cc;line-height:1.5;padding-left:18px;position:relative}
+.causes-list li::before{content:'→';position:absolute;left:0;color:#3a3a5a}
+.frames-section{margin-bottom:12px}
+.frames-header{display:flex;align-items:baseline;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.frames-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#555}
+.frames-hint{font-size:.7rem;color:#3a3a5a;font-weight:400;text-transform:none;letter-spacing:0;font-style:italic}
+.frames-list{display:flex;flex-direction:column;gap:3px}
+.frame{display:grid;grid-template-columns:32px 1fr;background:#0f0f1c;border:1px solid #1e1e2e;border-radius:6px;overflow:hidden}
+.frame-origin{border-color:#2d3f1f;background:#0e1710}
+.frame-internal{opacity:.45}
+.frame-num{
+  display:flex;align-items:center;justify-content:center;
+  font-size:.68rem;color:#2a2a3a;
+  font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;
+  border-right:1px solid #1a1a28;padding:10px 0;
+}
+.frame-origin .frame-num{color:#4ade80;border-right-color:#2d3f1f}
+.frame-body{padding:10px 14px;display:flex;flex-direction:column;gap:3px}
+.frame-location{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px;font-size:.84rem}
+.frame-file{font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;color:#7eb8f7;font-weight:600}
+.frame-sep{color:#2a2a3a}
+.frame-line{font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;color:#666;font-size:.8rem}
+.frame-func{color:#9090b8;font-size:.82rem}
+.frame-code{font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-size:.79rem;color:#444;padding-left:2px;line-height:1.4;word-break:break-word}
+.frame-pkg{font-size:.72rem;color:#2a2a4a;font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace}
+.frame-origin-badge{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#4ade80;margin-top:2px}
+.frame-more{font-size:.8rem;color:#333;padding:8px 14px;font-style:italic;border:1px dashed #1e1e2e;border-radius:6px}
+.unknown-msg{background:#131320;border:1px solid #2a2a3d;border-radius:8px;padding:16px 20px;color:#777;font-size:.9rem;line-height:1.5}
+.reference{margin-top:44px;border-top:1px solid #1a1a28;padding-top:36px}
+h2{font-size:1.1rem;font-weight:700;letter-spacing:-0.01em;margin-bottom:18px;color:#ccc}
+h3{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#555;margin-bottom:10px}
+.ref-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:28px}
+.ref-card{background:#0f0f1c;border:1px solid #1e1e30;border-radius:8px;padding:14px 16px}
+.ref-table{width:100%;border-collapse:collapse;font-size:.81rem}
+.ref-table td{padding:4px 0;vertical-align:top}
+.ref-table td:first-child{padding-right:12px;white-space:nowrap;font-family:'JetBrains Mono','Fira Code','Cascadia Code',monospace;font-weight:600;font-size:.78rem}
+.ref-table td:last-child{color:#666;line-height:1.4}
+.related-links{padding-top:24px;border-top:1px solid #1a1a28}
+.related-links h3{margin-bottom:12px}
+.rel-list{display:flex;flex-wrap:wrap;gap:10px}
+.rel-link{background:#131320;border:1px solid #2a2a3d;border-radius:6px;padding:7px 14px;font-size:.84rem;color:#7eb8f7;text-decoration:none;transition:border-color .15s,background .15s}
+.rel-link:hover{background:#1a1a2e;border-color:#4a4a7d;text-decoration:none}
+@media(max-width:600px){
+  .frame{grid-template-columns:26px 1fr}
+  .ref-grid{grid-template-columns:1fr}
+  .frame-location{flex-direction:column;gap:1px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav class="topnav">
+  <a href="index.html">Ship This Weekend</a>
+  <span class="sep">/</span>
+  <span>Stack Trace Explainer</span>
+</nav>
+
+<h1>Stack Trace Explainer</h1>
+<p class="subtitle">Paste any error output and get a plain-English breakdown — what the error type means, which line crashed, and what likely caused it. Supports Python, JavaScript, and Java.</p>
+
+<div class="legend">
+  <span class="lg" style="background:#1a2a40;color:#4db6e3;border:1px solid #2a4a70">Python</span>
+  <span class="lg" style="background:#1a1a00;color:#f7df1e;border:1px solid #3a3a00">JavaScript</span>
+  <span class="lg" style="background:#2a1800;color:#f89820;border:1px solid #4a3000">Java</span>
+</div>
+
+<div class="input-wrap">
+  <textarea id="traceInput" placeholder="Traceback (most recent call last):&#10;  File &quot;app.py&quot;, line 12, in main&#10;    result = items[index]&#10;IndexError: list index out of range" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
+</div>
+<div class="examples-row">
+  <span class="ex-label">Try:</span>
+  <button class="ex-btn" data-ex="py-zero">Python ZeroDivision</button>
+  <button class="ex-btn" data-ex="py-attr">Python AttributeError</button>
+  <button class="ex-btn" data-ex="py-key">Python KeyError</button>
+  <button class="ex-btn" data-ex="js-type">JavaScript TypeError</button>
+  <button class="ex-btn" data-ex="js-range">JavaScript RangeError</button>
+  <button class="ex-btn" data-ex="java-npe">Java NullPointer</button>
+</div>
+
+<div id="output"></div>
+
+<div class="reference">
+  <h2>Error type reference</h2>
+  <div class="ref-grid">
+    <div class="ref-card">
+      <h3>Python</h3>
+      <table class="ref-table">
+        <tr><td style="color:#4ade80">AttributeError</td><td>attribute doesn't exist (often NoneType)</td></tr>
+        <tr><td style="color:#4ade80">TypeError</td><td>wrong type — e.g. str + int</td></tr>
+        <tr><td style="color:#4ade80">NameError</td><td>variable not defined in scope</td></tr>
+        <tr><td style="color:#4ade80">KeyError</td><td>dict key missing — use .get()</td></tr>
+        <tr><td style="color:#4ade80">IndexError</td><td>list index out of range (0 to len-1)</td></tr>
+        <tr><td style="color:#4ade80">ValueError</td><td>right type, wrong value — e.g. int("abc")</td></tr>
+        <tr><td style="color:#4ade80">ModuleNotFoundError</td><td>package not installed — pip install it</td></tr>
+        <tr><td style="color:#4ade80">RecursionError</td><td>infinite recursion — missing base case</td></tr>
+        <tr><td style="color:#4ade80">ZeroDivisionError</td><td>divided by zero</td></tr>
+        <tr><td style="color:#4ade80">FileNotFoundError</td><td>file path doesn't exist</td></tr>
+      </table>
+    </div>
+    <div class="ref-card">
+      <h3>JavaScript</h3>
+      <table class="ref-table">
+        <tr><td style="color:#f7df1e">TypeError</td><td>property of undefined/null, or not a function</td></tr>
+        <tr><td style="color:#f7df1e">ReferenceError</td><td>variable used before declared</td></tr>
+        <tr><td style="color:#f7df1e">RangeError</td><td>max call stack (recursion) or bad array size</td></tr>
+        <tr><td style="color:#f7df1e">SyntaxError</td><td>code couldn't be parsed</td></tr>
+      </table>
+      <h3 style="margin-top:16px">Java</h3>
+      <table class="ref-table">
+        <tr><td style="color:#f89820">NullPointerException</td><td>used a null reference</td></tr>
+        <tr><td style="color:#f89820">ArrayIndexOutOfBounds</td><td>array index out of range</td></tr>
+        <tr><td style="color:#f89820">ClassCastException</td><td>invalid type cast</td></tr>
+        <tr><td style="color:#f89820">StackOverflowError</td><td>infinite recursion</td></tr>
+        <tr><td style="color:#f89820">NumberFormatException</td><td>string isn't a valid number</td></tr>
+        <tr><td style="color:#f89820">IllegalArgumentException</td><td>argument fails precondition</td></tr>
+        <tr><td style="color:#f89820">ConcurrentModification</td><td>modified collection while iterating</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="related-links">
+    <h3>Related decode-this tools</h3>
+    <div class="rel-list">
+      <a href="regex-explainer.html" class="rel-link">Regex Explainer</a>
+      <a href="sql-explainer.html" class="rel-link">SQL Explainer</a>
+      <a href="cron-explainer.html" class="rel-link">Cron Explainer</a>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script data-goatcounter="https://auto-run-fun.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script>
+'use strict';
+
+const EXAMPLES = {
+  'py-zero': `Traceback (most recent call last):
+  File "checkout.py", line 34, in process_cart
+    final_price = apply_coupon(total, discount_rate)
+  File "discounts.py", line 12, in apply_coupon
+    return price / (1 - discount_rate)
+ZeroDivisionError: float division by zero`,
+
+  'py-attr': `Traceback (most recent call last):
+  File "server.py", line 58, in handle_request
+    username = session.user.get_display_name()
+  File "models.py", line 23, in get_display_name
+    return self.profile.name.strip()
+AttributeError: 'NoneType' object has no attribute 'name'`,
+
+  'py-key': `Traceback (most recent call last):
+  File "api_client.py", line 41, in parse_response
+    user_id = data['user']['id']
+  File "api_client.py", line 41, in parse_response
+    user_id = data['user']['id']
+KeyError: 'user'`,
+
+  'js-type': `TypeError: Cannot read properties of undefined (reading 'length')
+    at validateInput (forms.js:47:25)
+    at submitForm (forms.js:112:10)
+    at HTMLButtonElement.onclick (index.html:34:5)`,
+
+  'js-range': `RangeError: Maximum call stack size exceeded
+    at flattenTree (utils.js:15:10)
+    at flattenTree (utils.js:18:12)
+    at flattenTree (utils.js:18:12)
+    at flattenTree (utils.js:18:12)
+    at flattenTree (utils.js:18:12)`,
+
+  'java-npe': `java.lang.NullPointerException: Cannot invoke "String.trim()" because "input" is null
+\tat com.example.InputValidator.sanitize(InputValidator.java:28)
+\tat com.example.UserService.registerUser(UserService.java:54)
+\tat com.example.api.UserController.register(UserController.java:31)
+\tat com.example.Main.main(Main.java:12)`
+};
+
+const ERROR_DB = {
+  python: {
+    ZeroDivisionError: {
+      what: 'You tried to divide a number by zero.',
+      causes: [
+        'A variable used as a denominator is 0 — check where it was last set.',
+        'Calculating a percentage or ratio when the total can be 0 (e.g., empty list length).',
+        'Add a guard before dividing: `result = a / b if b != 0 else 0`'
+      ]
+    },
+    AttributeError: {
+      what: "You tried to access a method or property that doesn't exist on this object.",
+      causes: [
+        "'NoneType' object has no attribute…\" means the variable is `None` — check it was assigned a real object before this line.",
+        'Typo in the attribute name — Python attribute names are case-sensitive.',
+        'The variable holds a different type than you expected (e.g., a dict instead of an object).'
+      ]
+    },
+    TypeError: {
+      what: 'An operation received a value of the wrong type.',
+      causes: [
+        'Mixing incompatible types without conversion — e.g., `"total: " + 5` should be `"total: " + str(5)`.',
+        '"object is not callable" — you tried to call a value as a function (typo, or variable shadows the function name).',
+        'Function received the wrong number of arguments — compare the call with the definition.'
+      ]
+    },
+    NameError: {
+      what: "You used a variable name that hasn't been defined in this scope.",
+      causes: [
+        'Typo in the variable name — Python is case-sensitive.',
+        'Variable defined inside an `if` branch or `for` loop that never ran.',
+        'Variable defined inside a function and referenced outside it.'
+      ]
+    },
+    IndexError: {
+      what: "You tried to access a list (or other sequence) at a position that doesn't exist.",
+      causes: [
+        'Off-by-one: valid indices are 0 to `len(list) - 1`, not 1 to `len(list)`.',
+        'The list is shorter than expected — check where it was populated.',
+        'Accessing a fixed index like `items[2]` on a list that may have fewer than 3 elements.'
+      ]
+    },
+    KeyError: {
+      what: "You tried to access a dictionary key that doesn't exist.",
+      causes: [
+        'Use `dict.get(key)` to return `None` instead of crashing, or check `key in dict` first.',
+        'Key name typo — dictionary keys are case-sensitive strings.',
+        'Data from an API or JSON file is missing the expected field — validate the response shape.'
+      ]
+    },
+    ValueError: {
+      what: 'The right type was passed, but the value itself is invalid for the operation.',
+      causes: [
+        '`int()` or `float()` on a non-numeric string — validate before converting.',
+        'Unpacking mismatch: `a, b = [1, 2, 3]` fails because 3 values cannot go into 2 names.',
+        '`datetime.strptime()` on a date string with the wrong format.'
+      ]
+    },
+    ImportError: {
+      what: "Python couldn't load a module you tried to import.",
+      causes: [
+        'Package not installed — run: `pip install <package-name>`',
+        'Wrong virtual environment active — activate the correct one first.',
+        'Circular import: module A imports B which imports A back at load time.'
+      ]
+    },
+    ModuleNotFoundError: {
+      what: "Python couldn't find the module — it's most likely not installed.",
+      causes: [
+        'Run `pip install <package-name>` in the same environment you run the script.',
+        'Wrong virtual environment active — check `which python` or `python -m pip list`.',
+        'Typo in the import name — check the exact package name on PyPI.'
+      ]
+    },
+    FileNotFoundError: {
+      what: "You tried to open a file that doesn't exist at that path.",
+      causes: [
+        'Wrong working directory — the path is relative to where you run the script, not the script location.',
+        'Typo in the file name or path — check with `os.path.exists(path)` first.',
+        'File was deleted or moved before this code ran.'
+      ]
+    },
+    PermissionError: {
+      what: "Your program doesn't have permission to access the file or resource.",
+      causes: [
+        'Trying to write to a read-only file or directory you do not own.',
+        'On Windows: the file is open in another program (e.g., Excel).',
+        'Need elevated permissions — run as administrator or with `sudo`.'
+      ]
+    },
+    RecursionError: {
+      what: 'A function called itself too many times — Python hit the recursion depth limit (default: 1000).',
+      causes: [
+        'Missing or unreachable base case in a recursive function.',
+        'Two functions calling each other in an infinite cycle (mutual recursion).',
+        'Consider converting the recursion to an iterative loop with an explicit stack.'
+      ]
+    },
+    StopIteration: {
+      what: 'An iterator ran out of items, or a generator returned without yielding.',
+      causes: [
+        'Calling `next()` on an exhausted iterator — check whether you are past the end.',
+        'A generator function has an early `return` on a code path that should `yield`.',
+        'In a `for` loop, this is handled automatically; if it surfaces, it indicates misuse of `next()`.'
+      ]
+    },
+    RuntimeError: {
+      what: 'A generic runtime error not covered by a more specific exception type.',
+      causes: [
+        'Read the message — it usually describes the specific problem precisely.',
+        'In async code: "This event loop is already running" — common in Jupyter notebooks.',
+        'In threading: usually a lock or concurrency violation.'
+      ]
+    },
+    OSError: {
+      what: 'An operating system-level error — file I/O, networking, or process management.',
+      causes: [
+        'Check the message — it includes the OS error code (e.g., "No space left on device").',
+        'Common subclasses: `FileNotFoundError`, `PermissionError`, `ConnectionError`, `TimeoutError`.',
+        'Network I/O errors: verify the URL and that the remote server is reachable.'
+      ]
+    },
+    SyntaxError: {
+      what: "Python couldn't parse your code — there's a syntax mistake.",
+      causes: [
+        'Missing colon at the end of a `def`, `class`, `if`, `for`, or `while` line.',
+        'Mismatched parentheses, brackets, or quotes.',
+        'The error usually points to the line after the real mistake — check the preceding line.'
+      ]
+    },
+    IndentationError: {
+      what: 'Your code has inconsistent indentation — Python requires consistent spaces or tabs.',
+      causes: [
+        'Mixing tabs and spaces — use only spaces (4 per indent level is the PEP 8 standard).',
+        'Block body indented at the wrong level.',
+        'Code copy-pasted from a source that uses a different indentation style.'
+      ]
+    },
+    ConnectionError: {
+      what: 'A network connection attempt failed.',
+      causes: [
+        'The server is unreachable — check the URL and network connectivity.',
+        'Firewall or proxy blocking the request.',
+        'Subclasses: `ConnectionRefusedError` (port closed), `ConnectionResetError` (connection dropped mid-transfer).'
+      ]
+    },
+    TimeoutError: {
+      what: 'An operation took longer than the configured time limit.',
+      causes: [
+        'Remote server is slow or down — try again later or increase the timeout value.',
+        'Database query is taking too long — add an index or optimize the query.',
+        'Check network conditions and DNS resolution if it is a remote connection.'
+      ]
+    },
+    KeyboardInterrupt: {
+      what: 'The program was interrupted by the user (Ctrl+C) or a termination signal.',
+      causes: [
+        'You pressed Ctrl+C — this is not a bug.',
+        'A CI system or process runner sent an interrupt signal.',
+        'Long-running loop with no termination condition — check for a missing break or return.'
+      ]
+    },
+    AssertionError: {
+      what: 'An `assert` statement evaluated to False.',
+      causes: [
+        'An assumption in the code turned out to be wrong at runtime.',
+        'The value being tested is `None`, empty, or an unexpected type.',
+        'Python is run with the `-O` flag to skip asserts in production — do not rely on them for validation.'
+      ]
+    }
+  },
+  javascript: {
+    TypeError: {
+      what: 'You performed an operation on a value of the wrong type — most often accessing a property of null or undefined.',
+      causes: [
+        '"Cannot read properties of undefined/null" — the object was never assigned before this access.',
+        '"X is not a function" — you called something that is not callable (typo or wrong import).',
+        '"X is not iterable" — used spread (`...`) or `for...of` on a non-array value.'
+      ]
+    },
+    ReferenceError: {
+      what: 'You used a variable that was never declared in the current scope.',
+      causes: [
+        'Typo in a variable name — JavaScript names are case-sensitive.',
+        'Variable declared with `let` or `const` inside a block, used outside it.',
+        'Missing import — the function or class was not imported before use.'
+      ]
+    },
+    SyntaxError: {
+      what: "The JavaScript engine couldn't parse the code — there's a syntax mistake.",
+      causes: [
+        'Missing bracket, parenthesis, or quote closure.',
+        'Invalid JSON passed to `JSON.parse()` — validate the JSON string first.',
+        'Using a reserved keyword as a variable name.'
+      ]
+    },
+    RangeError: {
+      what: 'A value is outside the range of valid values for an operation.',
+      causes: [
+        '"Maximum call stack size exceeded" — infinite recursion, missing base case.',
+        'Invalid array length (e.g., `new Array(-1)` or `new Array(Infinity)`).',
+        '`toFixed()` or `toPrecision()` called with a number outside the valid range.'
+      ]
+    },
+    URIError: {
+      what: 'A URI-encoding function received a malformed URI string.',
+      causes: [
+        '`decodeURIComponent()` on a string that is not valid URL-encoded.',
+        'String contains a bare `%` not followed by two hex digits.'
+      ]
+    },
+    EvalError: {
+      what: 'An error related to the `eval()` function.',
+      causes: [
+        'Rarely seen in modern JavaScript.',
+        'In strict mode, `eval` cannot introduce new variables into the surrounding scope.',
+        'Avoid `eval()` — it is a security and performance risk.'
+      ]
+    }
+  },
+  java: {
+    NullPointerException: {
+      what: 'You tried to use an object reference that points to null.',
+      causes: [
+        'A method returned null and you chained a method call on it without checking.',
+        'A field or local variable was never initialized before first use.',
+        'Auto-unboxing a null `Integer`, `Long`, or `Boolean` to its primitive type.'
+      ]
+    },
+    ArrayIndexOutOfBoundsException: {
+      what: "You tried to access an array index that doesn't exist.",
+      causes: [
+        'Off-by-one: valid indices are 0 to `array.length - 1`.',
+        'Array has length 0 but code assumes at least one element.',
+        'Loop condition uses `<=` instead of `<` — iterates one step past the last element.'
+      ]
+    },
+    StringIndexOutOfBoundsException: {
+      what: "You tried to access a character position in a String that doesn't exist.",
+      causes: [
+        'Index is negative, or >= `string.length()`.',
+        'Substring end index exceeds the string length.',
+        'Off-by-one in a manual character loop.'
+      ]
+    },
+    ClassCastException: {
+      what: "You tried to cast an object to a type it's not an instance of.",
+      causes: [
+        'Explicit cast (e.g., `(String) obj`) when obj is actually a different type.',
+        'Use `instanceof` to check the type before casting.',
+        'Unchecked generic type — raw types used without proper bounds.'
+      ]
+    },
+    StackOverflowError: {
+      what: 'The call stack ran out of space — too many nested method calls.',
+      causes: [
+        'Infinite recursion — a method calls itself without a proper base case.',
+        'Two methods calling each other in an infinite cycle.',
+        'Very deep recursion on a large data structure — convert to an iterative approach.'
+      ]
+    },
+    OutOfMemoryError: {
+      what: 'The JVM ran out of heap memory.',
+      causes: [
+        'Memory leak — objects held in a collection or cache and never released.',
+        'Processing very large files without streaming.',
+        'Increase heap with `java -Xmx512m ...`, or profile for leaks with VisualVM.'
+      ]
+    },
+    IllegalArgumentException: {
+      what: "A method was called with an argument that fails its precondition check.",
+      causes: [
+        'Passing null where null is not allowed.',
+        'Value out of expected range (negative size, empty required string).',
+        "Check the method's Javadoc for the required preconditions."
+      ]
+    },
+    IllegalStateException: {
+      what: "A method was called at an inappropriate time given the object's current state.",
+      causes: [
+        'Calling a method before required initialization is complete.',
+        'Reusing a one-shot object (like an iterator or builder) after it has been consumed.',
+        'Modifying a collection while iterating over it — use `Iterator.remove()` instead.'
+      ]
+    },
+    NumberFormatException: {
+      what: "A string couldn't be parsed as a number.",
+      causes: [
+        'String contains non-numeric characters (spaces, letters, commas).',
+        'Empty string passed to `Integer.parseInt()` or similar.',
+        'Locale issue: decimal separator is `,` not `.` — use `NumberFormat` for locale-aware parsing.'
+      ]
+    },
+    ArithmeticException: {
+      what: 'An arithmetic operation failed — usually integer division by zero.',
+      causes: [
+        'Integer division or modulo (`%`) with a zero divisor — check before dividing.',
+        'Use `(double) a / b` for floating-point division which returns `Infinity` instead of throwing.',
+        '`BigDecimal.divide()` without a scale — use `divide(divisor, scale, RoundingMode)` instead.'
+      ]
+    },
+    ClassNotFoundException: {
+      what: 'The JVM could not find a class that was referenced at runtime.',
+      causes: [
+        'Missing dependency in the classpath — check your Maven/Gradle dependencies.',
+        'JAR not included in the runtime classpath.',
+        'Class name typo in a configuration file or reflection call.'
+      ]
+    },
+    UnsupportedOperationException: {
+      what: "You called a method that isn't supported by this implementation.",
+      causes: [
+        '`Arrays.asList()` returns a fixed-size list — wrap with `new ArrayList<>(list)` for mutability.',
+        'Using an unmodifiable collection wrapper (`Collections.unmodifiableList(...)`).',
+        'Abstract method not implemented in the concrete subclass.'
+      ]
+    },
+    ConcurrentModificationException: {
+      what: 'A collection was modified while being iterated over.',
+      causes: [
+        'Removing elements from a list inside a `for-each` loop — use `Iterator.remove()` instead.',
+        'Two threads modifying the same collection — use `CopyOnWriteArrayList` or synchronize.',
+        'Stream pipeline that modifies the source collection mid-execution.'
+      ]
+    },
+    IndexOutOfBoundsException: {
+      what: "You tried to access a collection element at an index that doesn't exist.",
+      causes: [
+        'Index is negative or >= `list.size()`.',
+        'Off-by-one: indices go from 0 to `size() - 1`.',
+        'List was modified (shortened) between the size check and the access.'
+      ]
+    }
+  }
+};
+
+function esc(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function renderCause(text) {
+  return text.split(/`([^`]+)`/).map((part, i) =>
+    i % 2 === 0 ? esc(part) : '<code>' + esc(part) + '</code>'
+  ).join('');
+}
+
+function detectLanguage(text) {
+  const t = text.trim();
+  if (/^Traceback \(most recent call last\)/m.test(t)) return 'python';
+  if (/^\s{2,}File ".+", line \d+/m.test(t)) return 'python';
+  if (/^[\t ]+at [a-zA-Z$_][\w$.]*\.[a-zA-Z$_]\w*\([\w]+\.java:\d+\)/m.test(t)) return 'java';
+  if (/^[a-z][\w]*(?:\.[a-z][\w]*)+\.[\w$]+(?:Exception|Error|Throwable):/m.test(t)) return 'java';
+  if (/^\s+at .+\(.+:\d+:\d+\)/m.test(t)) return 'javascript';
+  if (/^\s+at .+:\d+:\d+\s*$/m.test(t)) return 'javascript';
+  if (/^(?:TypeError|ReferenceError|RangeError|SyntaxError|URIError|EvalError): /m.test(t)) return 'javascript';
+  if (/^[A-Za-z][A-Za-z0-9]*(?:Error|Exception|Warning|Interrupt): /m.test(t)) return 'python';
+  return 'unknown';
+}
+
+function parsePython(text) {
+  const lines = text.split('\n');
+  const frames = [];
+  let errorType = '', errorMessage = '';
+  let i = 0;
+
+  if (lines[0] && /^Traceback/.test(lines[0])) i = 1;
+
+  while (i < lines.length) {
+    const line = lines[i];
+    const fileMatch = line.match(/^\s+File "(.+)", line (\d+), in (.+)/);
+    if (fileMatch) {
+      const frame = { file: fileMatch[1], line: parseInt(fileMatch[2]), func: fileMatch[3], code: '' };
+      if (i + 1 < lines.length) {
+        const next = lines[i + 1];
+        if (/^\s{4,}/.test(next) && !/^\s+File "/.test(next)) {
+          frame.code = next.trim();
+          i++;
+        }
+      }
+      frames.push(frame);
+      i++; continue;
+    }
+    if (!line.startsWith(' ') && !line.startsWith('\t') && line.trim()) {
+      const colon = line.indexOf(':');
+      if (colon > 0) {
+        const candidate = line.slice(0, colon);
+        if (/^[A-Z][A-Za-z0-9_.]*$/.test(candidate)) {
+          errorType = candidate;
+          errorMessage = line.slice(colon + 1).trim();
+        }
+      } else if (/^[A-Z][A-Za-z0-9_]*$/.test(line.trim()) && !line.startsWith('Traceback') && !line.startsWith('During')) {
+        errorType = line.trim();
+        errorMessage = '';
+      }
+    }
+    i++;
+  }
+
+  return { lang: 'python', frames, errorType, errorMessage };
+}
+
+function parseJavaScript(text) {
+  const lines = text.split('\n');
+  const frames = [];
+  let errorType = '', errorMessage = '';
+
+  let fi = 0;
+  while (fi < lines.length && !lines[fi].trim()) fi++;
+  if (fi < lines.length) {
+    const first = lines[fi].trim();
+    const m = first.match(/^([A-Za-z][A-Za-z0-9]*(?:Error|Exception)?): ([\s\S]*)/);
+    if (m) { errorType = m[1]; errorMessage = m[2]; }
+  }
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const withFunc = line.match(/^\s+at (.+?) \((.+):(\d+):(\d+)\)/);
+    const noFunc   = line.match(/^\s+at (.+):(\d+):(\d+)\s*$/);
+    if (withFunc) {
+      let func = withFunc[1].replace(/\s+\[as .+\]/, '').trim();
+      const file = withFunc[2];
+      const isInternal = /^node:|^internal\/|\/node_modules\//.test(file);
+      frames.push({ func, file, line: parseInt(withFunc[3]), col: parseInt(withFunc[4]), isInternal });
+    } else if (noFunc) {
+      frames.push({ func: '<anonymous>', file: noFunc[1], line: parseInt(noFunc[2]), col: parseInt(noFunc[3]), isInternal: false });
+    }
+  }
+
+  frames.reverse();
+  return { lang: 'javascript', frames, errorType, errorMessage };
+}
+
+function parseJava(text) {
+  const lines = text.split('\n');
+  let frames = [];
+  let errorType = '', errorMessage = '', fullErrorClass = '';
+
+  if (lines.length > 0) {
+    const m = lines[0].trim().match(/^(.+?(?:Exception|Error|Throwable)): (.*)/);
+    if (m) {
+      fullErrorClass = m[1];
+      errorMessage = m[2];
+      const parts = fullErrorClass.split('.');
+      errorType = parts[parts.length - 1];
+    }
+  }
+
+  for (let i = 1; i < lines.length; i++) {
+    const line = lines[i];
+    if (/^Caused by:/.test(line.trim())) break;
+    const at = line.match(/^\s+at ([A-Za-z$_][\w$.]*?)\.(\w+)\((.+):(\d+)\)/);
+    if (at) {
+      const classFull = at[1], method = at[2], file = at[3], ln = parseInt(at[4]);
+      const parts = classFull.split('.');
+      const className = parts[parts.length - 1];
+      const pkg = parts.slice(0, -1).join('.');
+      frames.push({ classFull, className, pkg, method, file, line: ln, isMore: false });
+      continue;
+    }
+    const atUnknown = line.match(/^\s+at ([A-Za-z$_][\w$.]*?)\.(\w+)\((Unknown Source|Native Method)\)/);
+    if (atUnknown) {
+      const classFull = atUnknown[1];
+      const parts = classFull.split('.');
+      frames.push({ classFull, className: parts[parts.length - 1], pkg: parts.slice(0, -1).join('.'), method: atUnknown[2], file: atUnknown[3], line: 0, isMore: false });
+      continue;
+    }
+    const more = line.match(/^\s+\.\.\. (\d+) more/);
+    if (more) frames.push({ isMore: true, count: parseInt(more[1]) });
+  }
+
+  const normal = frames.filter(f => !f.isMore);
+  normal.reverse();
+  frames = [...normal, ...frames.filter(f => f.isMore)];
+
+  return { lang: 'java', frames, errorType, errorMessage, fullErrorClass };
+}
+
+function parseTrace(text) {
+  if (!text.trim()) return null;
+  const lang = detectLanguage(text);
+  if (lang === 'python') return parsePython(text);
+  if (lang === 'javascript') return parseJavaScript(text);
+  if (lang === 'java') return parseJava(text);
+  return { lang: 'unknown', frames: [], errorType: '', errorMessage: '' };
+}
+
+function explainJSMessage(type, msg) {
+  if (type === 'TypeError') {
+    const m1 = msg.match(/Cannot read propert(?:y|ies) of (\w+)(?: \(reading '(.+)'\))?/);
+    if (m1) return 'Tried to access ' + (m1[2] ? '<code>.' + esc(m1[2]) + '</code> ' : 'a property ') + 'on a value that is <code>' + esc(m1[1]) + '</code> — the object was never set before this point.';
+    const m2 = msg.match(/(.+) is not a function/);
+    if (m2) return '<code>' + esc(m2[1]) + '</code> is being called as a function, but it is not one. Check for a typo or a missing import.';
+    const m3 = msg.match(/(.+) is not iterable/);
+    if (m3) return '<code>' + esc(m3[1]) + '</code> was used with <code>...</code> or <code>for...of</code>, but it is not an array or iterable object.';
+  }
+  if (type === 'RangeError' && msg.includes('Maximum call stack')) {
+    return 'A function kept calling itself — infinite recursion. Check that there is a base case that stops the chain.';
+  }
+  if (type === 'ReferenceError') {
+    const m = msg.match(/(.+) is not defined/);
+    if (m) return '<code>' + esc(m[1]) + '</code> was used but never declared in this scope. Check for a typo or a missing import statement.';
+  }
+  return null;
+}
+
+function renderOutput(parsed) {
+  if (!parsed) return '';
+  const { lang, frames, errorType, errorMessage } = parsed;
+  let html = '<div class="output-inner">';
+
+  const langCfg = {
+    python:     { label: 'Python',     bg: '#1a2a40', color: '#4db6e3', border: '#2a4a70' },
+    javascript: { label: 'JavaScript', bg: '#1a1a00', color: '#f7df1e', border: '#3a3a00' },
+    java:       { label: 'Java',       bg: '#2a1800', color: '#f89820', border: '#4a3000' },
+    unknown:    { label: 'Unknown',    bg: '#1a1a20', color: '#666',    border: '#333' }
+  };
+  const lc = langCfg[lang] || langCfg.unknown;
+  html += '<div class="lang-badge" style="background:' + lc.bg + ';color:' + lc.color + ';border:1px solid ' + lc.border + '">' + lc.label + ' stack trace detected</div>';
+
+  if (!errorType && !frames.length) {
+    html += '<div class="unknown-msg">Could not parse this as a Python, JavaScript, or Java stack trace. Paste the full error output including the error type line at the top or bottom.</div>';
+    html += '</div>'; return html;
+  }
+
+  if (errorType) {
+    const db = ERROR_DB[lang] && ERROR_DB[lang][errorType];
+    const ec = {
+      python:     { bg: '#1a0a20', border: '#3a1a50', nameColor: '#c084fc' },
+      javascript: { bg: '#1a1000', border: '#3a2800', nameColor: '#fbbf24' },
+      java:       { bg: '#1a0e00', border: '#3a2000', nameColor: '#fb923c' },
+      unknown:    { bg: '#111120', border: '#2a2a40', nameColor: '#888' }
+    }[lang] || { bg: '#111120', border: '#2a2a40', nameColor: '#888' };
+
+    html += '<div class="error-card" style="background:' + ec.bg + ';border-color:' + ec.border + '">';
+    html += '<div class="error-type-name" style="color:' + ec.nameColor + '">' + esc(errorType) + '</div>';
+    if (db) {
+      html += '<div class="error-what">' + esc(db.what) + '</div>';
+    } else {
+      html += '<div class="error-what">An error of type <strong>' + esc(errorType) + '</strong> was thrown. Check the message for details.</div>';
+    }
+    if (errorMessage) {
+      html += '<div class="error-msg-label">Error message</div>';
+      html += '<div class="error-msg-text">' + esc(errorMessage) + '</div>';
+      const plain = lang === 'javascript' ? explainJSMessage(errorType, errorMessage) : null;
+      if (plain) html += '<div class="error-msg-plain">↳ ' + plain + '</div>';
+      if (lang === 'java' && parsed.fullErrorClass && parsed.fullErrorClass.includes('.')) {
+        html += '<div class="error-msg-plain">↳ Full class: <code>' + esc(parsed.fullErrorClass) + '</code></div>';
+      }
+    }
+    html += '</div>';
+
+    if (db) {
+      html += '<div class="causes-section"><div class="causes-label">Common causes</div><ul class="causes-list">';
+      db.causes.forEach(c => { html += '<li>' + renderCause(c) + '</li>'; });
+      html += '</ul></div>';
+    }
+  }
+
+  if (frames.length > 0) {
+    html += '<div class="frames-section">';
+    html += '<div class="frames-header"><span class="frames-label">Call chain</span><span class="frames-hint">— outermost caller to error origin</span></div>';
+    html += '<div class="frames-list">';
+
+    const nonMore = frames.filter(f => !f.isMore);
+    const originIdx = nonMore.length - 1;
+
+    frames.forEach((frame, i) => {
+      if (frame.isMore) {
+        html += '<div class="frame-more">… ' + frame.count + ' more frame' + (frame.count !== 1 ? 's' : '') + ' truncated by JVM</div>';
+        return;
+      }
+      const isOrigin = i === originIdx;
+      html += '<div class="frame' + (isOrigin ? ' frame-origin' : '') + (frame.isInternal ? ' frame-internal' : '') + '">';
+      html += '<div class="frame-num">' + (i + 1) + '</div>';
+      html += '<div class="frame-body">';
+
+      if (lang === 'python') {
+        const sf = frame.file.split(/[/\\]/).pop();
+        html += '<div class="frame-location"><span class="frame-file">' + esc(sf) + '</span><span class="frame-sep">:</span><span class="frame-line">line ' + frame.line + '</span>';
+        const fn = frame.func === '<module>' ? 'module level' : esc(frame.func) + '()';
+        html += '<span class="frame-func"> in ' + fn + '</span></div>';
+        if (frame.code) html += '<div class="frame-code">' + esc(frame.code) + '</div>';
+        const fullPath = frame.file.includes('/') || frame.file.includes('\\') ? frame.file : null;
+        if (fullPath && fullPath !== sf) html += '<div class="frame-pkg">' + esc(fullPath) + '</div>';
+      } else if (lang === 'javascript') {
+        const sf = frame.file.split(/[/\\]/).pop();
+        html += '<div class="frame-location"><span class="frame-file">' + esc(sf || frame.file) + '</span>';
+        if (frame.line) html += '<span class="frame-sep">:</span><span class="frame-line">line ' + frame.line + '</span>';
+        if (frame.func && frame.func !== '<anonymous>') html += '<span class="frame-func"> in ' + esc(frame.func) + '()</span>';
+        html += '</div>';
+        if (frame.isInternal) html += '<div class="frame-pkg">Node.js runtime</div>';
+        else if (frame.file !== sf) html += '<div class="frame-pkg">' + esc(frame.file) + '</div>';
+      } else if (lang === 'java') {
+        html += '<div class="frame-location"><span class="frame-file">' + esc(frame.file) + '</span>';
+        if (frame.line) html += '<span class="frame-sep">:</span><span class="frame-line">line ' + frame.line + '</span>';
+        html += '<span class="frame-func"> in ' + esc(frame.className) + '.' + esc(frame.method) + '()</span></div>';
+        if (frame.pkg) html += '<div class="frame-pkg">' + esc(frame.pkg) + '</div>';
+      }
+
+      if (isOrigin) html += '<div class="frame-origin-badge">← error origin</div>';
+      html += '</div></div>';
+    });
+
+    html += '</div></div>';
+  }
+
+  html += '</div>';
+  return html;
+}
+
+const input = document.getElementById('traceInput');
+const outputEl = document.getElementById('output');
+let timer;
+
+function update() {
+  const text = input.value;
+  outputEl.innerHTML = text.trim() ? renderOutput(parseTrace(text)) : '';
+}
+
+input.addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(update, 180); });
+
+document.querySelectorAll('.ex-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const ex = EXAMPLES[btn.dataset.ex];
+    if (ex) { input.value = ex; update(); }
+  });
+});
+</script>
+</body>
+</html>

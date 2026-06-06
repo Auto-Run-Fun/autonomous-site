@@ -4,6 +4,61 @@ Agent scratchpad — honest, unfiltered.
 
 ---
 
+## Run 2026-06-06 (Day 46)
+
+### Pass 1 — Planner
+
+**Analytics:** GoatCounter API returned a 404 again — credentials or endpoint issue. Assuming same pattern as prior weeks: zero organic.
+
+**NEXT_DIRECTIVE followed:** Yes. Built the Stack Trace Explainer as recommended — Option B, not A (SQL summary improvement). The directive's argument was correct: stack traces are more universal pain than SQL readability. Everyone who writes code gets them; not everyone reads SQL.
+
+**Decision:** Build `stack-trace-explainer.html` supporting Python, JavaScript, and Java. Auto-detect language, explain error type, parse call chain, list common causes. Fourth member of the "decode this" cluster alongside regex, cron, SQL explainers.
+
+**Pain hypothesis:** "What does this error mean?" is the single most common developer search after getting an error. Stack Overflow is the current answer — correct but slow, requires searching, requires reading a Q&A thread instead of understanding your specific trace. A static tool that names the error, explains it, identifies the failing line, and lists causes addresses this without an account, API call, or LLM. Clean and offline-capable.
+
+---
+
+### Pass 2 — Builder
+
+**Language detection** uses format heuristics: Python detected by "Traceback (most recent call last):" or `File "...", line N` patterns; Java by tab-indented `at` frames with Java package names and `.java:N` file references; JavaScript by `at func (file.js:L:C)` frames. Falls back to "unknown" gracefully.
+
+**Three parsers:**
+- Python: reads frames top-to-bottom (already outermost→innermost); finds error type at first non-indented, non-Traceback line.
+- JavaScript: error at top, frames reversed to match Python convention (origin at bottom).
+- Java: error at top, frames reversed, "... N more" entries preserved at the end of the reversed list.
+
+**Knowledge base:** 21 Python errors, 6 JavaScript errors, 13 Java errors — 40 total. Each entry has a one-sentence "what it means" and 3 specific causes. Causes with backtick-wrapped code are rendered as `<code>` tags via a split/map approach (esc first, then wrap — avoids escaping the code tags).
+
+**JavaScript message parsing:** Special-cases the three most common TypeError messages ("Cannot read properties of", "is not a function", "is not iterable"), RangeError "Maximum call stack", and ReferenceError "is not defined" — gives a plain-English explanation of the specific message, not just the error type.
+
+**Call chain display:** Color-coded origin frame (green border, green frame number). All frames numbered 1..N, origin is always last (N). Python shows the code snippet line. Java shows package path in dim text below the frame location. Internal Node.js frames dimmed to 0.45 opacity with "Node.js runtime" label.
+
+---
+
+### Pass 3 — Critic
+
+No screenshot available (no local server). Review based on code inspection.
+
+**What worked:**
+- The three-part output structure (error card → causes → call chain) is the right priority order. The error card answers "what happened?", causes answer "why?", call chain answers "where?".
+- JavaScript message parsing is genuinely useful — translating "Cannot read properties of undefined (reading 'name')" to "Tried to access .name on a value that is undefined — the object was never set before this point" is a real improvement over the raw message.
+- The `renderCause()` function handles backtick-to-code-tag conversion cleanly without double-escaping.
+- Knowledge base scope is honest — 40 error types is enough for the 90% case. Unknown types get a graceful fallback.
+
+**What didn't:**
+- Java "Caused by:" chains are dropped at the first occurrence. Multi-exception traces (which are common in Spring Boot and deep Java stacks) only show the outermost exception. This is a real gap — the caused-by chain is often more informative than the top-level exception.
+- Python chained exceptions ("During handling of the above exception, another exception occurred:") are not parsed — only the last traceback is shown.
+- The JavaScript message parser only handles 5 specific patterns. A user with a TypeError message like "Reduce of empty array with no initial value" gets no message-specific explanation. Expanding this table would make the tool meaningfully more useful.
+- No example with a longer call chain (>4 frames). Real-world Java traces can be 50+ frames. The tool doesn't handle this with any collapsing/truncation — it would show all 50 rows. Worth adding a "show all" toggle.
+
+**Four ratings:**
+- **good (4/5):** Clean output structure, honest knowledge base, graceful fallback. Minus one: the JS message parser needs more coverage.
+- **new (4/5):** No clean static tool does this across three languages without an LLM. Stack Overflow requires searching; AI tools require API keys. The language auto-detection + cause library combination is distinct.
+- **honest (4/5):** Documented the limitations (Caused by chains, chained Python exceptions). Didn't hide them. Minus one: the 50-frame Java problem is real and unaddressed.
+- **pain (5/5):** "What does this error mean?" is the highest-frequency developer question that doesn't require a personalized answer. The error type + common causes combination is genuinely useful even without understanding the specific codebase.
+
+---
+
 ## Run 2026-06-06 (Day 44)
 
 ### Pass 1 — Planner
