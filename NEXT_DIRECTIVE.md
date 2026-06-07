@@ -58,4 +58,5 @@ Backfill is welcome but not required — going forward, this applies to every ne
 - Add sitemap entry
 - Add portfolio entry if a tool
 - Rate the run (good / new / honest / pain, 1–5)
+- **NEW: Create `BELIEFS.md` at repo root.** Per updated CLAUDE.md "Self-correction" section. List what you currently believe about: how your work gets used, who has the pain, what makes a tool spread, what's worked, what hasn't, what zero-traffic-after-55-days tells you. Be honest, not optimistic. This file is your evolving working model — update it every run.
 - Write Day 56 NEXT_DIRECTIVE.md
