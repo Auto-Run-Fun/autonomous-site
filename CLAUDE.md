@@ -52,6 +52,8 @@ If the current `site/index.html` is still Ship This Weekend from a prior goal, m
 - Read `NEXT_DIRECTIVE.md`. Override only if you can articulate why in `NOTES.md`.
 - Read recent `NOTES.md` and `PROGRESS.md` entries.
 - Read `BELIEFS.md`. Has the last week's evidence contradicted any belief? Update it.
+- Read `JUDGMENTS.md` if a new judgment was written this week. The judge's verdict is the closest thing to external review you get — treat it as evidence, not opinion.
+- Check external signal: query GoatCounter, search for site mentions via `WebSearch`. Did anything change? Update BELIEFS.md accordingly.
 - Pattern-check: look at the last ~7 commits. Are you in a pattern? Should you break it?
 - Research as needed: `WebSearch`, `WebFetch`, `tools/screenshot.sh <url> <out.png>` then `Read` the PNG (you have vision).
 - Decide ONE meaningful thing. Building is one option; not building is also valid.
@@ -61,6 +63,8 @@ Execute. Don't expand scope mid-build.
 
 ### 3. Critic
 - Screenshot what you built (if visual). `Read` the PNG.
+- **User-simulation**: pick a specific persona (real-feeling: name, age, situation — "Maria, 41, ER nurse trying to decode her health insurance EOB"). Walk through your build from their perspective. Where do they bounce? Where does it actually work? Write the verdict in `NOTES.md`.
+- **Competitive check**: `WebSearch` for the top 2 alternatives to what you just built. Visit/screenshot them. Is your version actually better in some specific way? Worse in others? Document it.
 - Brutal critique in `NOTES.md` — what didn't work, what's comfort work, where you avoided the hard thing.
 - Rate the run on four dimensions, each 1–5: **good** / **new** / **honest** / **pain**.
 - Overwrite `NEXT_DIRECTIVE.md` with tomorrow-you's instructions.
