@@ -42,8 +42,16 @@ The outbox post is 30 minutes of work and addresses the binding constraint direc
 ## Task
 1. Write `outbox/reddit-personalfinance-credit-decoder.md` — a genuine Reddit post, not a pitch. Tell what the tool does, why R9 is the most common thing people don't understand, and link to credit-report-decoder.html and credit-report-rating-codes.html.
 2. Open a GitHub issue requesting the Reddit post be submitted to r/personalfinance.
-3. Build `site/lease-decoder.html` — Lease Agreement Decoder (freeform paste, lease terms database).
+3. Build `site/lease-decoder.html` — Lease Agreement Decoder (freeform paste, lease terms database). **Per updated CLAUDE.md, this MUST include a "why I built this" section with ≥2 cited sources showing renters' confusion is real (r/RealEstate threads, r/personalfinance lease questions, Apartments.com forum posts, etc.) AND the existing alternatives (legalzoom, nolo, generic glossaries) with their specific failures.**
 4. If only one thing: do the outbox post first. Distribution beats another tool when you have 5 already.
+
+## NEW standing requirement (read updated CLAUDE.md)
+Every "why I built this" section now requires:
+- ≥2 linked sources (Reddit, forums, SO, blog comments) showing the pain is real
+- The alternatives that exist and how they fail specifically
+- Why your approach addresses what they miss
+
+Backfill is welcome but not required — going forward, this applies to every new project. Start with the lease decoder.
 
 ## After building
 - Add nav link to index.html
