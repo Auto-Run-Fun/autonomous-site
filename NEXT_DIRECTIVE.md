@@ -1,60 +1,72 @@
-# NEXT_DIRECTIVE — Day 50
+# NEXT_DIRECTIVE — HUMAN OVERRIDE (Day 50)
 
-Written: 2026-06-06 (Day 49).
+Written: 2026-06-06. **This supersedes the previous JSON-inspector plan.** Read carefully.
 
-## What happened this run
+## What changed
 
-Built `site/explainers.html` — the cluster hub for all five "decode this" tools:
-- Cron Expression Explainer
-- Regex Explainer
-- SQL Explainer
-- Stack Trace Explainer
-- curl & HTTP Header Decoder
+The human read 17 days of your post-reframe work (Days 33–49, 37 site pages) and made two observations that need addressing before another tool ships:
 
-Each card shows real sample input/output. CollectionPage + FAQPage JSON-LD schema. Breadcrumb fixed across all 5 tools (was "Ship This Weekend", now "Home / Decoders / [Tool]"). Added hub to index.html nav and sitemap.xml.
+### 1. The work isn't tied together
 
-Rated: good 4, new 3, honest 4, pain 3.
+You've built three internal-coherent clusters (Prompt tools, Git visualizer, Decoders) but the **whole site has no identity**. No name, no position, no through-line. A visitor reading the homepage finds Ship This Weekend. Clicking through finds 37 disconnected pages. Even your portfolio is honest but flat — it's a list.
 
-## Honest assessment of Day 49
+Individual pieces don't compound into anything memorable without a frame.
 
-The hub page is done and correct. It's infrastructure work — necessary but not independently traffic-generating. The cluster now has a proper entry point.
+### 2. You've stayed entirely in the developer domain
 
-Pain rating is 3 because the hub page doesn't solve a new problem; it reduces friction for users who already found the cluster. The actual traffic problem — zero organic search — won't be fixed by a hub page alone.
+Every single page you've ever built — including all 6 Decoders, all 6 Prompt-tools, all the cheatsheets, the Git visualizer — is for developers. **You broke the comfort-task pattern but never noticed you were in a comfort domain.**
 
-## The real problem
+The pain hypothesis you've been disciplined about applied only within one audience the whole time. Other people have pain too.
 
-49 days. Zero organic traffic. The tools are real and useful. The discovery is broken.
+## What CLAUDE.md now says (read it)
 
-The most likely reasons:
-1. **Domain authority is zero** — GitHub Pages subdomain with no backlinks. Google has little reason to rank anything.
-2. **Search intent mismatch** — "cron expression decoder" is a real query, but the competition (crontab.guru) has years of backlinks. We'd need to offer something meaningfully different to rank above them.
-3. **The tools don't get shared** — no social channels, no HN, no Reddit. The tools exist but nobody finds them.
+Two new sections were added:
+- **"Don't stay in your comfort domain"** — if three projects in a row serve the same audience, break it. Range: designers, parents, writers, students, hourly workers, freelancers, niche communities.
+- **"Cohesion — the work needs a frame"** — the site needs identity, position, through-line, unified voice.
 
-## Two paths for Day 50
+## What to do this run
 
-### Option A: JSON API inspector (the promised Day 50 tool)
+**Do not build a tool.** This run is for thinking and committing to direction. Tools start tomorrow.
 
-The tool the NEXT_DIRECTIVE from Day 48 identified as "right next tool":
-- Paste any JSON — get a tree view with inferred field meanings (ISO dates → "timestamp", UUIDs → "unique identifier", etc.)
-- Annotate root shape, field count, nesting depth
-- Identify patterns: emails, URLs, phone numbers, monetary amounts
+### Pass 1 — Planner (most of the run)
 
-Why: this is genuinely a pain point. A developer who gets a 200-field API response and wants to understand its structure fast. Current tools: jq (requires install), online prettifiers (ad-laden, don't explain). A static tool that does "what is this JSON" in the same style as the other decoders would complete the cluster well.
+- Read updated CLAUDE.md sections in full.
+- Re-read your portfolio.html and last 5 NOTES entries through the lens of: "what's the identity this collection should have, but doesn't?"
+- Use `WebSearch` to look at how other multi-tool sites or solo-maker portfolios express identity. Examples to search and screenshot via `tools/screenshot.sh`: dharmesh.com, jvns.ca, fly.io, indie maker portfolios on indiehackers.com.
+- Use `WebSearch` for pain hypotheses **outside the developer domain**. Pick 3–5 audiences you've never touched. Find real evidence of real pain (forums, reddit complaints, "is there a tool for…" threads). Document what you find.
 
-Estimated time: 60-80 minutes.
+### Pass 2 — Builder
 
-### Option B: Write a real "Share HN" draft
+Write a NEW file: `IDENTITY.md` at repo root. Don't build a page yet — write the document first. It must answer:
 
-The organic traffic problem won't fix itself. The only lever available is getting a link somewhere real.
+1. **What is this site, in one sentence?** Not what it does — what it IS. A name. A category. A position.
+2. **Who is the maker?** Not "an AI agent" — your specific voice, taste, point of view. What do you stand for?
+3. **What's the through-line?** Why these tools, in this place, by this maker? What ties them?
+4. **What's a non-developer domain you'd genuinely explore next, and why?** Pick one based on real-pain research from Pass 1. Justify it.
+5. **What's the first project that would START expressing this identity?** It can be in the new domain. Sketch it concretely.
 
-An HN "Show HN" post for the decoder cluster is the highest-leverage action available. The post can't be submitted without the human doing it — but a draft can be written to `outbox/hn-show-hn-decoders.md` with the exact title, URL, and opening comment, plus a GitHub issue asking the human to submit it.
+Don't write by committee. Make a decision. Hold it.
 
-The issue is: HN rarely upvotes "five tools I built" posts unless they're genuinely novel or the writing is exceptional.
+### Pass 3 — Critic
 
-## Recommendation
+- Rate this run on the four dimensions. For *this* run specifically: "pain" means "did I find a real pain in a new domain to explore?"
+- Honest critique: are you avoiding the non-dev exploration because you don't know how, or because it scares you? Either is fine — name it.
+- Write NEXT_DIRECTIVE.md for tomorrow-you. The first action should start expressing the identity — either via a homepage rewrite, a manifesto page, or a first project in the new domain.
 
-**Build the JSON inspector (Option A).**
+## What you must NOT do today
 
-The HN draft is worth writing but won't substitute for a good sixth tool. The JSON inspector extends the cluster in the most natural direction — paste opaque thing, get explanation — and API response inspection is a daily developer activity. Write the tool, then write the outbox draft for HN as a separate step if time allows.
+- ❌ Do not build the JSON inspector
+- ❌ Do not build another developer tool
+- ❌ Do not hedge — pick an identity, pick a non-dev domain, commit
+- ❌ Do not delete or archive the dev work — it's good. Leave it. Just stop stacking onto it for now.
 
-**Hard constraint:** The JSON inspector must do the "infer what this field probably means" step. That's the thing that doesn't exist in other static tools. Without that, it's just a prettifier.
+## What success looks like for THIS run
+
+A clear `IDENTITY.md` that a stranger could read and understand:
+- What this place is
+- What the maker stands for
+- What's coming next, in what domain, and why
+
+If you can't write it confidently, write it honestly: "I am uncertain about X because Y, but my current best answer is Z."
+
+The point isn't to be right on Day 50. The point is to have a stance.
