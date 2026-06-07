@@ -6,8 +6,9 @@ name: Claude Judge (weekly external review)
 
 on:
   schedule:
-    # Saturdays at 09:00 UTC = 2 AM PT (off-hours, after the week is done)
-    - cron: '0 9 * * 6'
+    # 2x per week: Tuesdays + Saturdays at 09:00 UTC = 2 AM PT (off-hours).
+    # Tuesday catches mid-week drift; Saturday catches end-of-week patterns.
+    - cron: '0 9 * * 2,6'
   workflow_dispatch:
 
 permissions:
@@ -59,10 +60,11 @@ jobs:
 
             ## Steps
 
-            ### 1. Survey the week
-            - `git log --since='7 days ago' --oneline` — what was built/changed
-            - Read the most recent ~7 entries of `PROGRESS.md` and `NOTES.md`
-            - Pick the **2 most significant projects** to evaluate this week (a tool, a page, a meta-change)
+            ### 1. Survey the period
+            - `git log --since='4 days ago' --oneline` — what was built/changed since last judgment
+            - Read the most recent ~6 entries of `PROGRESS.md` and `NOTES.md`
+            - Pick the **2 most significant projects** to evaluate this round (a tool, a page, a meta-change)
+            - If you wrote a judgment in the past 4 days (`JUDGMENTS.md`), do NOT re-evaluate the same projects — pick newer ones or pivot to evaluating progress on prior feedback
 
             ### 2. Try each project as a real user
             For each project, do all of:
@@ -81,18 +83,20 @@ jobs:
 
             ### 4. Check for external signal
             - `WebSearch` for `"$SITE_URL"` and for one or two specific tool names
-            - Query GoatCounter for visitor data (last 7 days):
+            - Query GoatCounter for visitor data (last 4 days, the period since the previous judgment):
               ```
               curl -s -H "Authorization: Bearer $GOATCOUNTER_API_KEY" \
-                "https://$GOATCOUNTER_CODE.goatcounter.com/api/v0/stats/total?start=$(date -d '7 days ago' +%Y-%m-%d)&end=$(date +%Y-%m-%d)"
+                "https://$GOATCOUNTER_CODE.goatcounter.com/api/v0/stats/total?start=$(date -d '4 days ago' +%Y-%m-%d)&end=$(date +%Y-%m-%d)"
               ```
             - Has anyone discovered the work? Report honestly.
             - If 0 visitors, say so plainly — don't softpedal.
+            - If GoatCounter HAS shown any non-bot activity since the last judgment, flag it loudly — that's a real data point.
 
-            ### 5. Write JUDGMENTS.md at repo root
-            Structure:
+            ### 5. Append to JUDGMENTS.md at repo root
+            Always APPEND newest at the top — never overwrite history. Each judgment gets a dated section.
+            Structure for this round's entry:
             ```
-            # JUDGMENTS — Week of YYYY-MM-DD
+            # JUDGMENTS — YYYY-MM-DD (Tuesday|Saturday round)
 
             ## Evaluated this week
             - Project A — link
@@ -120,12 +124,12 @@ jobs:
             <Self-skepticism: where your judgment could be off, what you didn't have access to>
             ```
 
-            Append-mode is also fine — keep the history of past judgments visible, just put newest at top.
+            Past judgments stay visible below this entry. Don't overwrite history.
 
             ### 6. Commit and push
             ```
             git add JUDGMENTS.md
-            git commit -m "Judgment week-of YYYY-MM-DD: <one-line bottom-line>"
+            git commit -m "Judgment YYYY-MM-DD: <one-line bottom-line>"
             git push origin main
             ```
 
