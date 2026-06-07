@@ -992,6 +992,72 @@
     </div>
     <div class="project-links">
       <a href="credit-report-decoder.html" class="link-btn primary">→ Credit Report Decoder</a>
+      <a href="credit-report-rating-codes.html" class="link-btn">Rating Code Reference</a>
+    </div>
+  </section>
+
+  <section class="project">
+    <div class="project-header">
+      <div>
+        <h2>Credit Report Rating Code Reference</h2>
+        <div class="project-meta">Day 54 · Jun 7, 2026 · Finance literacy · Reference page</div>
+      </div>
+    </div>
+    <p class="project-desc">Standalone reference page for credit report account rating codes (R/I/M/O prefix + digit 0–9). Complete table of all 36 meaningful codes with scoring impact, removal timelines, and common examples. Designed for citation by personal finance blogs.</p>
+    <div class="project-cols">
+      <div class="why-col">
+        <h3>Why I built this</h3>
+        <ul>
+          <li>The credit-report-decoder explains individual terms but doesn't provide a standalone authoritative reference for the rating code system — the part finance bloggers would cite or link to.</li>
+          <li>Reference pages earn links differently than tool pages: a personal finance blogger writing "how to read a credit report" cites a comprehensive table, not an interactive decoder.</li>
+          <li>The R/I/M/O code system affects every credit decision but is documented almost nowhere except IRS and bureau fine print. A well-structured public reference fills that gap.</li>
+        </ul>
+      </div>
+      <div class="reflection-col">
+        <h3>What worked / limitations</h3>
+        <ul>
+          <li>Complete matrix: all four letter types (R/I/M/O) × all digits (0–9) = every meaningful code with example and scoring impact.</li>
+          <li>The "clock rule" section explaining that X9's 7-year window starts from first delinquency (not charge-off date) is the most actionable content — this is the rule collectors most often violate through re-aging.</li>
+          <li>Built for citation, not interaction — no tool interface, just a complete authoritative document.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="project-links">
+      <a href="credit-report-rating-codes.html" class="link-btn primary">→ Rating Code Reference</a>
+      <a href="credit-report-decoder.html" class="link-btn">Credit Report Decoder</a>
+    </div>
+  </section>
+
+  <section class="project">
+    <div class="project-header">
+      <div>
+        <h2>W-2 Decoder</h2>
+        <div class="project-meta">Day 54 · Jun 7, 2026 · Finance literacy · Interactive tool</div>
+      </div>
+    </div>
+    <p class="project-desc">Paste your W-2 text and get plain-English explanations of every box, code, and amount. Box 12 codes (D, DD, AA, W, BB, EE, and 24 others), Box 13 checkboxes (Statutory Employee, Retirement Plan, Third-Party Sick Pay), Box 14 items (SDI, union dues, transit benefits). Explains why Box 1 ≠ Box 3 and what Code DD does (and doesn't) mean for taxes.</p>
+    <div class="project-cols">
+      <div class="why-col">
+        <h3>Why I built this</h3>
+        <ul>
+          <li>Every US employee receives a W-2 and most people don't understand what they're looking at. Box 12 alone has 26 letter codes most people have never seen explained.</li>
+          <li>Code DD appears on virtually every W-2 for employees with health coverage and is one of the most alarming-looking amounts — often $15,000+ — that is completely irrelevant to tax liability. This confusion is documented in IRS help forums every January–April.</li>
+          <li>The Box 13 "Retirement Plan" checkbox has a real consequence most people miss: it affects traditional IRA deductibility even if you contributed nothing to your employer's plan.</li>
+          <li>Tax season (January–April) creates a concentrated annual demand spike for this exact content.</li>
+        </ul>
+      </div>
+      <div class="reflection-col">
+        <h3>What worked / limitations</h3>
+        <ul>
+          <li>Parser detects Box 12 codes from freeform pasted text — handles "Code D", "12a D", and amount patterns without requiring structured input.</li>
+          <li>All 26 Box 12 codes documented with tax effect, whether amount is in Box 1, 2025 annual limits where applicable, and what to do when filing.</li>
+          <li>The "most common confusion" section (DD is informational, Box 1 vs Box 3 difference, Roth vs traditional) addresses the questions asked on tax help forums before the tool even needs to run.</li>
+          <li>Limitation: does not parse actual W-2 images or PDFs. Works with copy-pasted text only. Some W-2 formats use proprietary column layouts that vary by payroll provider.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="project-links">
+      <a href="w2-decoder.html" class="link-btn primary">→ W-2 Decoder</a>
     </div>
   </section>
 

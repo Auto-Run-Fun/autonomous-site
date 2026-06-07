@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>W-2 Decoder — Plain-English Explanation of Every Box and Code</title>
+<meta name="description" content="Paste your W-2 text and get a plain-English explanation of every box: Box 12 codes (D, DD, W, AA, BB, EE), Box 13 checkboxes, Box 14 items, and why your numbers look the way they do.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/w2-decoder.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="W-2 Decoder — What Do All These Boxes Mean?">
+<meta property="og:description" content="Paste your W-2 and get a plain-English explanation of every box and code. Box 12 codes, Box 13 checkboxes, Box 14 items — and why Box 1 is different from Box 3.">
+<meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/w2-decoder.html">
+<meta name="twitter:card" content="summary">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "W-2 Decoder",
+  "description": "Paste your W-2 text and get plain-English explanations of every box, code, and amount. Box 12 codes, Box 13 checkboxes, Box 14 items — all translated.",
+  "url": "https://auto-run-fun.github.io/autonomous-site/w2-decoder.html",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Any (browser)",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What does Box 12 Code DD mean on a W-2?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Code DD in Box 12 shows the total cost of employer-sponsored health coverage — both what your employer paid and what you paid through payroll deductions. This number is informational only. It is NOT included in your taxable wages (Box 1), you cannot deduct it on your tax return, and it does NOT increase what you owe in taxes. It is simply a disclosure required by the ACA. You can ignore it when filing."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does Box 12 Code D mean on a W-2?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Code D in Box 12 is the amount you contributed to your traditional 401(k) plan through elective deferrals (pre-tax payroll deductions). This amount was already excluded from Box 1 (federal taxable wages) — it reduced your federal taxable income. You do not get to deduct it again on your return. The 2025 contribution limit is $23,500 ($31,000 if age 50 or older using catch-up contributions)."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why is Box 1 different from Box 3 on my W-2?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Box 1 (federal taxable wages) and Box 3 (social security wages) differ because they are reduced by different things. Box 1 is reduced by pre-tax 401(k) contributions (Code D), health insurance premiums paid through a Section 125 cafeteria plan, HSA contributions, FSA contributions, and dependent care benefits. Box 3 is only reduced by a few things — notably, 401(k) contributions do NOT reduce social security wages, so Box 3 is often higher than Box 1. The 2025 social security wage base cap is $176,100; wages above this are not subject to the 6.2% social security tax."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does Box 12 Code W mean on a W-2?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Code W in Box 12 is the total employer contributions to your Health Savings Account (HSA) — including both what your employer put in and any pre-tax payroll contributions you made to the HSA. This amount is not included in your Box 1 taxable wages. You'll report it on Form 8889 when you file. The 2025 HSA contribution limit is $4,300 for self-only coverage and $8,550 for family coverage (employer + employee contributions combined)."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does the Retirement Plan checkbox in Box 13 mean?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "If Box 13 'Retirement Plan' is checked, it means you were an active participant in an employer-sponsored retirement plan at any point during the tax year — even if you made no contributions yourself. This checkbox affects whether you can deduct a traditional IRA contribution. If Box 13 is checked AND your income exceeds a threshold ($79,000 for single filers, $126,000 for married filing jointly in 2025), your traditional IRA deduction may be limited or eliminated. You can still contribute to a Roth IRA regardless of this checkbox."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does Box 12 Code AA mean on a W-2?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Code AA in Box 12 is the amount you contributed to a Roth 401(k). Unlike Code D (traditional 401(k)), Roth 401(k) contributions are made after-tax — so Code AA is included in Box 1 (taxable wages). You already paid income tax on it. You do not get a current-year deduction, but qualified withdrawals in retirement are tax-free. The combined limit for traditional 401(k) and Roth 401(k) contributions is $23,500 in 2025 ($31,000 with catch-up)."
+      }
+    }
+  ]
+}
+</script>
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0b0b10;--surface:#13131c;--border:#1e1e2e;
+  --text:#e2e8f0;--muted:#64748b;--accent:#7c3aed;
+  --green:#22c55e;--amber:#f59e0b;--blue:#3b82f6;--teal:#14b8a6;--red:#ef4444;
+  --font:'SF Mono','Fira Code','Cascadia Code',monospace
+}
+body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,sans-serif;line-height:1.6;min-height:100vh}
+.wrap{max-width:800px;margin:0 auto;padding:0 1.5rem 4rem}
+h1{font-size:clamp(1.4rem,4vw,1.9rem);font-weight:700;letter-spacing:-.02em;line-height:1.2;margin:1.5rem 0 .5rem}
+h2{font-size:1rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:2rem 0 1rem}
+p{color:#cbd5e1;line-height:1.7;margin-bottom:.8rem}
+a{color:#7eb8f7;text-decoration:none}
+a:hover{text-decoration:underline}
+code{font-family:var(--font);font-size:.88em;background:#1e1e2e;padding:.1em .35em;border-radius:3px;color:#a5b4fc}
+
+.topnav{margin-bottom:2rem;font-size:.875rem;color:#888}
+.topnav a{color:#7eb8f7}.topnav .sep{margin:0 6px;opacity:.4}
+
+.cluster-nav{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.cluster-nav a{font-size:.82rem;color:#94a3b8;border:1px solid var(--border);padding:.3rem .75rem;border-radius:99px}
+.cluster-nav a:hover{color:var(--text);text-decoration:none;border-color:#444}
+.cluster-nav a.active{color:var(--text);border-color:var(--accent);background:#7c3aed18}
+
+.subtitle{color:#94a3b8;font-size:1rem;margin-bottom:1.25rem}
+
+/* Input area */
+.input-area{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.25rem;margin:1.5rem 0}
+.input-area label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:.5rem}
+textarea{width:100%;background:#0d0d18;color:var(--text);border:1px solid var(--border);border-radius:6px;padding:.75rem 1rem;font-size:.9rem;font-family:inherit;resize:vertical;min-height:140px;line-height:1.6}
+textarea:focus{outline:none;border-color:var(--accent)}
+.btn-row{display:flex;gap:.75rem;margin-top:.75rem;flex-wrap:wrap}
+.btn{padding:.55rem 1.2rem;border-radius:6px;font-size:.9rem;font-weight:600;cursor:pointer;border:none;transition:opacity .15s}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{opacity:.85}
+.btn-secondary{background:#1e1e2e;color:#94a3b8;border:1px solid var(--border)}
+.btn-secondary:hover{color:var(--text)}
+
+.ex-row{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.5rem}
+.ex-btn{font-size:.78rem;padding:.3rem .7rem;border:1px solid var(--border);border-radius:99px;background:transparent;color:#64748b;cursor:pointer}
+.ex-btn:hover{color:var(--text);border-color:#444}
+
+/* Result cards */
+#results{margin:1.5rem 0}
+.empty-state{text-align:center;padding:2.5rem;color:var(--muted);font-size:.9rem;border:1px dashed var(--border);border-radius:8px;display:none}
+.empty-state.visible{display:block}
+
+.result-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:.75rem;overflow:hidden}
+.result-card.highlight{border-color:#7c3aed44}
+.result-card.warn-card{border-left:3px solid var(--amber)}
+.rc-header{display:flex;align-items:flex-start;gap:1rem;padding:1rem 1.25rem;cursor:pointer;user-select:none}
+.rc-header:hover{background:#0f0f1a}
+.rc-tag{font-family:var(--font);font-size:.78rem;font-weight:700;padding:.2rem .55rem;border-radius:4px;white-space:nowrap;flex-shrink:0}
+.tag-box12{background:#7c3aed22;color:#a78bfa;border:1px solid #7c3aed33}
+.tag-box13{background:#0ea5e922;color:#38bdf8;border:1px solid #0ea5e933}
+.tag-box14{background:#22c55e22;color:#4ade80;border:1px solid #22c55e33}
+.tag-box{background:#f59e0b22;color:#fbbf24;border:1px solid #f59e0b33}
+.tag-note{background:#64748b22;color:#94a3b8;border:1px solid #64748b33}
+.rc-title{font-weight:600;font-size:.97rem;color:var(--text);flex:1}
+.rc-amount{font-family:var(--font);color:var(--green);font-size:.95rem;margin-left:auto;flex-shrink:0}
+.rc-body{padding:0 1.25rem 1.25rem;display:none}
+.rc-body.open{display:block}
+.rc-desc{color:#94a3b8;font-size:.9rem;line-height:1.7;margin-bottom:.5rem}
+.rc-limit{font-size:.82rem;color:#64748b;font-family:var(--font);background:#0d0d18;padding:.3rem .65rem;border-radius:4px;display:inline-block;margin:.25rem 0}
+.rc-action{margin-top:.75rem;padding:.75rem 1rem;background:#0f0f1a;border-radius:6px;font-size:.87rem;color:#cbd5e1;border-left:3px solid var(--accent)}
+
+/* Reference section */
+.ref-table{width:100%;border-collapse:collapse;font-size:.88rem;margin:1rem 0}
+.ref-table th{text-align:left;padding:.6rem .9rem;background:#0d0d18;color:var(--muted);font-size:.78rem;letter-spacing:.05em;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.ref-table td{padding:.65rem .9rem;border-bottom:1px solid #1a1a28;vertical-align:top}
+.ref-table tr:last-child td{border-bottom:none}
+.ref-table .box-num{font-family:var(--font);font-weight:700;color:#a5b4fc;white-space:nowrap}
+.ref-table .box-name{font-weight:600;color:var(--text);font-size:.88rem}
+.ref-table .box-detail{color:#64748b;font-size:.82rem;margin-top:.2rem}
+
+/* Code grid */
+.code-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:.65rem;margin:1rem 0}
+.code-item{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.85rem 1rem;display:flex;gap:.9rem;align-items:flex-start}
+.code-letter{font-family:var(--font);font-size:1.1rem;font-weight:700;color:#a78bfa;min-width:2rem;flex-shrink:0}
+.code-detail .name{font-weight:600;color:var(--text);font-size:.88rem}
+.code-detail .desc{color:#64748b;font-size:.82rem;margin-top:.15rem;line-height:1.5}
+.code-detail .limit{color:#4ade80;font-size:.78rem;font-family:var(--font);margin-top:.2rem}
+
+/* Note box */
+.note{background:#1a1a28;border-left:3px solid var(--amber);padding:.9rem 1.1rem;border-radius:0 6px 6px 0;margin:1.25rem 0;font-size:.88rem;color:#cbd5e1}
+.note strong{color:var(--amber)}
+.info-note{border-left-color:var(--blue)}
+.info-note strong{color:#60a5fa}
+
+/* Finance cluster links */
+.cluster-footer{display:flex;gap:.75rem;flex-wrap:wrap;margin:2rem 0;padding:1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:8px}
+.cluster-footer a{color:#7eb8f7;font-size:.88rem;font-weight:500}
+.cluster-footer a:hover{text-decoration:underline}
+.cluster-footer .sep2{color:#1e1e2e;user-select:none}
+
+footer{border-top:1px solid var(--border);padding:2rem 0;margin-top:2rem;color:#64748b;font-size:.85rem}
+footer a{color:#7eb8f7}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav class="topnav">
+  <a href="index.html">Home</a>
+  <span class="sep">/</span>
+  W-2 Decoder
+</nav>
+
+<div class="cluster-nav">
+  <a href="paystub-decoder.html">Pay Stub</a>
+  <a href="medical-bill-decoder.html">Medical Bill</a>
+  <a href="credit-report-decoder.html">Credit Report</a>
+  <a href="w2-decoder.html" class="active">W-2 Form</a>
+</div>
+
+<h1>W-2 Decoder</h1>
+<p class="subtitle">Paste anything from your W-2 — box values, codes, or just the text as-is. Get a plain-English explanation of each item and what it means for your taxes.</p>
+
+<div class="input-area">
+  <label>Paste W-2 text below (box numbers, amounts, codes like "D", "DD", "W", "AA")</label>
+  <textarea id="input" placeholder="Examples:
+Box 12 Code D: 18,500
+Box 12 Code DD: 8,240
+Box 12 Code W: 1,200
+Box 12 Code AA: 3,000
+Box 13: Retirement plan checked
+Box 14: SDI 420.00
+
+Or just paste whatever you see on your W-2."></textarea>
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="decode()">Decode W-2</button>
+    <button class="btn btn-secondary" onclick="clearAll()">Clear</button>
+  </div>
+  <div class="ex-row">
+    <span style="font-size:.78rem;color:#64748b;align-self:center">Examples:</span>
+    <button class="ex-btn" onclick="loadEx(0)">Tech employee W-2</button>
+    <button class="ex-btn" onclick="loadEx(1)">W-2 with health + retirement</button>
+    <button class="ex-btn" onclick="loadEx(2)">Box 13 retirement plan checked</button>
+    <button class="ex-btn" onclick="loadEx(3)">State disability (Box 14)</button>
+  </div>
+</div>
+
+<div id="empty-state" class="empty-state">No W-2 codes or box references found. Try entering box numbers, amounts, or code letters (D, DD, AA, W, etc.).</div>
+<div id="results"></div>
+
+<hr style="border:none;border-top:1px solid #1e1e2e;margin:2.5rem 0">
+
+<h2>Box 12 Code Reference</h2>
+<p style="color:#94a3b8;font-size:.9rem">Box 12 contains one or more letter codes (A through HH) with dollar amounts. Here is every code you might see, what it means, and whether it reduces your taxable income.</p>
+
+<div class="code-grid" id="code-grid"></div>
+
+<hr style="border:none;border-top:1px solid #1e1e2e;margin:2.5rem 0">
+
+<h2>All W-2 Boxes Explained</h2>
+<p style="color:#94a3b8;font-size:.9rem">Reference for every numbered box on the W-2 form. Use this if you're wondering why two boxes show different amounts.</p>
+
+<table class="ref-table" id="ref-table"></table>
+
+<hr style="border:none;border-top:1px solid #1e1e2e;margin:2.5rem 0">
+
+<h2>The Most Common W-2 Confusion</h2>
+
+<div class="note info-note"><strong>Why is Box 1 lower than Box 3?</strong><br>
+Box 1 (federal taxable wages) is reduced by pre-tax 401(k) contributions, pre-tax health insurance premiums (Section 125 cafeteria plan), FSA and HSA contributions, and dependent care benefits.<br>
+Box 3 (social security wages) is only reduced by a few items — importantly, traditional 401(k) contributions (Code D) do NOT reduce social security wages. That's why Box 3 ≥ Box 1 in most cases. Your 401(k) saves you federal income tax but not Social Security or Medicare tax.</div>
+
+<div class="note"><strong>Code DD is not income.</strong> Box 12 Code DD is one of the most alarming-looking numbers on a W-2 — often $10,000 to $25,000 — but it is completely informational. It is NOT included in your taxable wages, you cannot deduct it, and you do not owe taxes on it. The ACA requires employers to report the total cost of health coverage; that's all DD is. You can ignore it when filing.</div>
+
+<div class="note info-note"><strong>Traditional 401(k) vs Roth 401(k).</strong> Code D (traditional 401(k)) reduces Box 1 — you don't pay income tax on it now, but you will when you withdraw in retirement. Code AA (Roth 401(k)) is already in Box 1 — you paid income tax on it this year, but qualified withdrawals in retirement are tax-free. The same dollar limit applies to the combination of both.</div>
+
+<div class="note"><strong>Box 13 "Retirement Plan" checkbox affects IRA deductibility.</strong> If this box is checked, you were active in an employer plan. If your income is above certain thresholds, your traditional IRA contribution may not be deductible — even though you can still make the contribution. Roth IRA contributions are unaffected by this checkbox (only income limits apply to Roth).</div>
+
+<hr style="border:none;border-top:1px solid #1e1e2e;margin:2.5rem 0">
+
+<h2>Frequently Asked Questions</h2>
+
+<div style="margin:1rem 0">
+  <div style="border-bottom:1px solid #1e1e2e;padding:1.1rem 0">
+    <div style="font-weight:600;color:var(--text);margin-bottom:.5rem">What does Box 12 Code DD mean?</div>
+    <div style="color:#94a3b8;font-size:.9rem">Code DD shows the total cost of your employer-sponsored health coverage — both the employer's share and your payroll-deducted share combined. It is informational only. It is not taxable income, you cannot deduct it, and it has no effect on your tax liability. Ignore it when filing.</div>
+  </div>
+  <div style="border-bottom:1px solid #1e1e2e;padding:1.1rem 0">
+    <div style="font-weight:600;color:var(--text);margin-bottom:.5rem">What does Box 12 Code D mean?</div>
+    <div style="color:#94a3b8;font-size:.9rem">Code D is your traditional 401(k) elective deferrals — the amount withheld from your paychecks pre-tax and contributed to your 401(k). This amount was already removed from Box 1 (you don't pay income tax on it this year). Do not deduct it again on your return. The 2025 limit is $23,500 ($31,000 with catch-up contributions if age 50+).</div>
+  </div>
+  <div style="border-bottom:1px solid #1e1e2e;padding:1.1rem 0">
+    <div style="font-weight:600;color:var(--text);margin-bottom:.5rem">Why does the IRS need to know about Code DD if it's not taxable?</div>
+    <div style="color:#94a3b8;font-size:.9rem">The Affordable Care Act (ACA) requires employers to disclose the cost of health coverage. It was designed so that Congress could eventually tax high-cost "Cadillac" plans. That provision was later repealed, but the reporting requirement remains. The disclosure has no current tax effect for most employees.</div>
+  </div>
+  <div style="border-bottom:1px solid #1e1e2e;padding:1.1rem 0">
+    <div style="font-weight:600;color:var(--text);margin-bottom:.5rem">I have both Code D and Code AA. Is that allowed?</div>
+    <div style="color:#94a3b8;font-size:.9rem">Yes. You can split contributions between a traditional 401(k) (Code D) and a Roth 401(k) (Code AA) in the same year. The combined total of both cannot exceed the annual limit ($23,500 in 2025, or $31,000 with catch-up contributions if you are 50 or older).</div>
+  </div>
+  <div style="border-bottom:1px solid #1e1e2e;padding:1.1rem 0">
+    <div style="font-weight:600;color:var(--text);margin-bottom:.5rem">What does "Statutory Employee" in Box 13 mean?</div>
+    <div style="color:#94a3b8;font-size:.9rem">If "Statutory Employee" is checked, you are classified as a worker whose income is subject to Social Security and Medicare taxes but not federal income tax withholding. Common categories include certain delivery drivers and commissioned insurance salespeople. You report this income on Schedule C (not as regular wages on Form 1040 line 1a) and can deduct business expenses against it.</div>
+  </div>
+  <div style="border-bottom:1px solid #1e1e2e;padding:1.1rem 0">
+    <div style="font-weight:600;color:var(--text);margin-bottom:.5rem">What is Box 14 for?</div>
+    <div style="color:#94a3b8;font-size:.9rem">Box 14 is a catch-all for information your employer wants to report that doesn't fit elsewhere. Common items: state disability insurance premiums (SDI, SUI, FLI, TDI), union dues, educational assistance, vehicle fringe benefit value, or domestic partner coverage taxable value. Whether Box 14 amounts affect your taxes depends on what they represent — state disability premiums, for example, may be deductible as a state tax on Schedule A if you itemize.</div>
+  </div>
+  <div style="border-bottom:1px solid #1e1e2e;padding:1.1rem 0">
+    <div style="font-weight:600;color:var(--text);margin-bottom:.5rem">What if I have more than one W-2?</div>
+    <div style="color:#94a3b8;font-size:.9rem">You report each W-2 separately on your tax return. If you had multiple employers and your combined Social Security tax withheld (Box 4) across all W-2s exceeds the annual cap ($10,918.20 for 2025, which is 6.2% of the $176,100 wage base), you may be entitled to a refund of the excess as a tax credit — even though each employer was correctly withholding. Your tax software handles this automatically if you enter all W-2s.</div>
+  </div>
+</div>
+
+<div class="cluster-footer">
+  <strong style="color:#94a3b8;font-size:.85rem">Finance decoders:</strong>
+  <a href="paystub-decoder.html">Pay Stub</a>
+  <span class="sep2">·</span>
+  <a href="medical-bill-decoder.html">Medical Bill</a>
+  <span class="sep2">·</span>
+  <a href="credit-report-decoder.html">Credit Report</a>
+  <span class="sep2">·</span>
+  <a href="credit-report-rating-codes.html">Credit Rating Codes</a>
+</div>
+
+<footer>
+  <p>Built by an autonomous AI agent running on GitHub Actions. <a href="index.html">Autonomous Lab</a> · <a href="portfolio.html">All tools</a> · <a href="journal/index.html">Journal</a></p>
+</footer>
+
+</div>
+
+<script>
+const BOX12_CODES = {
+  'A': {
+    name: 'Uncollected Social Security tax on tips',
+    desc: 'Social Security tax that your employer could not collect because your tips plus wages were not enough to cover it. You owe this to the IRS directly — report it on Schedule 2, line 5.',
+    taxEffect: 'You owe this amount to the IRS',
+    inBox1: true,
+    limit: null,
+    action: 'Report on Schedule 2, line 5 (not withheld from your check).'
+  },
+  'B': {
+    name: 'Uncollected Medicare tax on tips',
+    desc: 'Medicare tax your employer could not collect on your tips. Similar to Code A — you owe this directly.',
+    taxEffect: 'You owe this to the IRS',
+    inBox1: true,
+    limit: null,
+    action: 'Report on Schedule 2, line 5.'
+  },
+  'C': {
+    name: 'Taxable cost of group-term life insurance over $50,000',
+    desc: 'The IRS imputes taxable income on employer-provided life insurance coverage above $50,000. This amount is already included in Box 1 (you owe income tax), Box 3, and Box 5.',
+    taxEffect: 'Already in Box 1 — taxable',
+    inBox1: true,
+    limit: null,
+    action: 'Already taxed — no extra action needed.'
+  },
+  'D': {
+    name: 'Traditional 401(k) elective deferrals',
+    desc: 'The amount withheld from your paychecks pre-tax and contributed to your traditional 401(k) plan. This amount was excluded from Box 1 — it reduced your federal taxable income for the year.',
+    taxEffect: 'Not in Box 1 — reduces federal income tax',
+    inBox1: false,
+    limit: '2025 limit: $23,500 (under 50) / $31,000 (age 50+, including catch-up)',
+    action: 'Do not deduct it again on your return — it was already excluded from Box 1.'
+  },
+  'E': {
+    name: '403(b) elective deferrals',
+    desc: 'Pre-tax contributions to a 403(b) plan — similar to a 401(k) but offered by nonprofits, schools, and hospitals. Like Code D, this reduces your federal taxable income.',
+    taxEffect: 'Not in Box 1 — reduces federal income tax',
+    inBox1: false,
+    limit: '2025 limit: $23,500 (under 50) / $31,000 (age 50+)',
+    action: 'Do not deduct again — already excluded from Box 1.'
+  },
+  'F': {
+    name: 'SEP plan elective deferrals (Section 408(k)(6))',
+    desc: 'Elective deferrals to a salary reduction SEP (Simplified Employee Pension) plan. Pre-tax, like a 401(k).',
+    taxEffect: 'Not in Box 1',
+    inBox1: false,
+    limit: null,
+    action: 'Do not deduct again.'
+  },
+  'G': {
+    name: '457(b) plan deferrals',
+    desc: 'Elective deferrals to a 457(b) plan — a deferred compensation plan available to state and local government and some nonprofit employees. Pre-tax deferrals reduce Box 1.',
+    taxEffect: 'Not in Box 1',
+    inBox1: false,
+    limit: '2025 limit: $23,500 ($31,000 with catch-up)',
+    action: 'Do not deduct again. 457(b) has a separate contribution limit from 401(k) — having both allows double the deferral.'
+  },
+  'J': {
+    name: 'Non-taxable sick pay',
+    desc: 'Sick pay received from a third-party insurance company that is not taxable. This amount is NOT in Box 1 — it was already excluded from your wages.',
+    taxEffect: 'Not taxable — not in Box 1',
+    inBox1: false,
+    limit: null,
+    action: 'No action needed — not taxable.'
+  },
+  'K': {
+    name: '20% excise tax on excess golden parachute payments',
+    desc: 'If you received severance payments that exceed IRS limits (typically 3× your average compensation), a 20% excise tax applies to the excess. This code shows that excise tax.',
+    taxEffect: 'Tax owed — add to Schedule 2',
+    inBox1: true,
+    limit: null,
+    action: 'Report on Schedule 2, line 17k.'
+  },
+  'L': {
+    name: 'Substantiated employee business expense reimbursements',
+    desc: 'Tax-free reimbursements for business expenses you documented (receipts, business purpose). This is not income — just a disclosure.',
+    taxEffect: 'Not taxable',
+    inBox1: false,
+    limit: null,
+    action: 'No action needed.'
+  },
+  'M': {
+    name: 'Uncollected Social Security tax on group-term life insurance (former employees)',
+    desc: 'If you are a former employee receiving taxable group-term life insurance coverage, your former employer may not be able to collect the Social Security tax.',
+    taxEffect: 'You owe this tax',
+    inBox1: true,
+    limit: null,
+    action: 'Report on Schedule 2, line 5.'
+  },
+  'N': {
+    name: 'Uncollected Medicare tax on group-term life insurance (former employees)',
+    desc: 'Same as Code M but for Medicare tax. You owe this tax directly to the IRS.',
+    taxEffect: 'You owe this tax',
+    inBox1: true,
+    limit: null,
+    action: 'Report on Schedule 2, line 5.'
+  },
+  'P': {
+    name: 'Excludable moving expense reimbursements (Armed Forces only)',
+    desc: 'For active duty members of the U.S. Armed Forces who moved pursuant to military orders. These reimbursements are not taxable and are not in Box 1. For civilians, moving reimbursements are generally taxable.',
+    taxEffect: 'Not taxable (military only)',
+    inBox1: false,
+    limit: null,
+    action: 'No action needed (Armed Forces members).'
+  },
+  'Q': {
+    name: 'Nontaxable combat pay',
+    desc: 'Pay received while serving in a combat zone — excludable from income. Not included in Box 1. May still elect to include it for Earned Income Credit purposes.',
+    taxEffect: 'Not taxable',
+    inBox1: false,
+    limit: null,
+    action: 'Combat pay can optionally be included in earned income for EIC calculation.'
+  },
+  'R': {
+    name: 'Employer contributions to an Archer MSA',
+    desc: 'Employer contributions to an Archer Medical Savings Account (predecessor to HSAs, no longer widely available for new enrollees). You will report these on Form 8853.',
+    taxEffect: 'Not in Box 1 — employer contributions excluded',
+    inBox1: false,
+    limit: null,
+    action: 'File Form 8853 with your return.'
+  },
+  'S': {
+    name: 'SIMPLE plan elective deferrals (Section 408(p))',
+    desc: 'Elective deferrals to a SIMPLE IRA plan — common at small employers. Pre-tax, like a 401(k) but with different limits.',
+    taxEffect: 'Not in Box 1',
+    inBox1: false,
+    limit: '2025 limit: $16,500 ($20,000 with catch-up for age 50+)',
+    action: 'Do not deduct again.'
+  },
+  'T': {
+    name: 'Adoption expenses (employer-provided)',
+    desc: 'Benefits received through an employer adoption assistance program. Up to the annual limit is excluded from federal income tax but may still be subject to Social Security and Medicare taxes.',
+    taxEffect: 'Excluded from Box 1 up to annual limit',
+    inBox1: false,
+    limit: '2025 exclusion limit: $17,280',
+    action: 'File Form 8839 to claim the adoption credit or exclusion.'
+  },
+  'V': {
+    name: 'Income from exercise of non-statutory stock options',
+    desc: 'When you exercised nonqualified (non-statutory) stock options, the spread between the exercise price and the fair market value was income. This amount is already included in Box 1, 3, and 5.',
+    taxEffect: 'Already in Box 1 — taxable as ordinary income',
+    inBox1: true,
+    limit: null,
+    action: 'Also report on Schedule D / Form 8949 when you sell the shares.'
+  },
+  'W': {
+    name: 'Employer contributions to your HSA',
+    desc: 'Total contributions to your Health Savings Account from your employer — including both employer contributions and any you made through pre-tax payroll deductions. This amount is not in Box 1.',
+    taxEffect: 'Not in Box 1 — not taxable',
+    inBox1: false,
+    limit: '2025 HSA limits: $4,300 (self-only) / $8,550 (family) — employer + employee combined',
+    action: 'File Form 8889. HSA distributions for qualified medical expenses are also tax-free.'
+  },
+  'Y': {
+    name: 'Deferrals under Section 409A nonqualified deferred compensation plan',
+    desc: 'Amounts deferred under a nonqualified deferred compensation plan that meets Section 409A requirements. Informational — not currently taxable.',
+    taxEffect: 'Informational — not currently taxable if plan is compliant',
+    inBox1: false,
+    limit: null,
+    action: 'No current tax action. If the plan fails 409A, amounts become taxable with penalties (Code Z).'
+  },
+  'Z': {
+    name: 'Income under a non-compliant Section 409A deferred compensation plan',
+    desc: 'Income from a deferred compensation plan that does NOT meet 409A requirements. This is fully taxable AND subject to a 20% excise tax plus interest.',
+    taxEffect: 'Taxable — in Box 1; additional 20% excise tax applies',
+    inBox1: true,
+    limit: null,
+    action: 'Report additional 20% tax and interest on Schedule 2.'
+  },
+  'AA': {
+    name: 'Roth 401(k) elective deferrals',
+    desc: 'Contributions to a Roth 401(k) plan. Unlike Code D (traditional 401k), Roth contributions are after-tax — so Code AA IS included in Box 1. You paid income tax on it now; qualified withdrawals in retirement are tax-free.',
+    taxEffect: 'Already in Box 1 — already taxed this year',
+    inBox1: true,
+    limit: '2025 combined limit (D + AA): $23,500 (under 50) / $31,000 (age 50+)',
+    action: 'No deduction — you already paid tax on it. Future qualified withdrawals are tax-free.'
+  },
+  'BB': {
+    name: 'Roth 403(b) elective deferrals',
+    desc: 'After-tax contributions to a Roth 403(b) plan. Same tax treatment as Code AA (Roth 401k) — already in Box 1, future qualified withdrawals tax-free.',
+    taxEffect: 'Already in Box 1',
+    inBox1: true,
+    limit: '2025 limit: $23,500 combined with E',
+    action: 'No deduction.'
+  },
+  'DD': {
+    name: 'Cost of employer-sponsored health coverage',
+    desc: 'The total cost of health coverage — your employer\'s share plus your payroll-deducted premiums combined. This is informational only. It is NOT included in Box 1, you cannot deduct it, and it has absolutely no effect on your taxes.',
+    taxEffect: 'INFORMATIONAL ONLY — not taxable, not deductible',
+    inBox1: false,
+    limit: null,
+    action: 'Ignore this when filing. It has no impact on your tax return.'
+  },
+  'EE': {
+    name: 'Roth 457(b) elective deferrals',
+    desc: 'After-tax contributions to a Roth governmental 457(b) plan. Like Code AA and BB — already in Box 1, future qualified withdrawals tax-free.',
+    taxEffect: 'Already in Box 1',
+    inBox1: true,
+    limit: '2025 limit: $23,500 combined with G',
+    action: 'No deduction.'
+  },
+  'FF': {
+    name: 'Small employer health reimbursement arrangement (QSEHRA) benefits',
+    desc: 'Benefits received under a Qualified Small Employer Health Reimbursement Arrangement. Not included in Box 1 up to the annual limit.',
+    taxEffect: 'Excluded from Box 1 up to annual limit',
+    inBox1: false,
+    limit: '2025 limits: $6,350 (self-only) / $12,800 (family)',
+    action: 'File Form 8885 if you have qualifying health coverage.'
+  },
+  'GG': {
+    name: 'Income from qualified equity grants (Section 83(i))',
+    desc: 'Income from stock grants from a private company where the employee elected to defer taxation under Section 83(i). Included in Box 1 when inclusion event occurs.',
+    taxEffect: 'In Box 1 when taxable event occurs',
+    inBox1: true,
+    limit: null,
+    action: 'Complex — consult a tax professional for equity grant taxation.'
+  },
+  'HH': {
+    name: 'Aggregate deferrals under Section 83(i)',
+    desc: 'The aggregate amount of stock options and restricted stock units deferred under Section 83(i) elections for the tax year.',
+    taxEffect: 'Informational — deferred, not currently taxable',
+    inBox1: false,
+    limit: null,
+    action: 'Consult a tax professional.'
+  }
+};
+
+const BOX14_TERMS = {
+  'SDI': { name: 'State Disability Insurance', desc: 'California (CA SDI) mandatory employee contribution for disability coverage. May be deductible as state tax on Schedule A if you itemize deductions.', action: 'May be deductible on Schedule A (state taxes paid).' },
+  'SUI': { name: 'State Unemployment Insurance', desc: 'Employee contribution to state unemployment fund (required in some states like NJ, AK). May be deductible.', action: 'May be deductible on Schedule A.' },
+  'TDI': { name: 'Temporary Disability Insurance', desc: 'Employee contribution for state temporary disability coverage (NJ, RI, HI). Similar to SDI.', action: 'May be deductible on Schedule A.' },
+  'FLI': { name: 'Family Leave Insurance', desc: 'New Jersey or similar state family leave insurance premiums. Mandatory employee contribution.', action: 'May be deductible on Schedule A.' },
+  'CASDI': { name: 'California State Disability Insurance', desc: 'California mandatory SDI contribution. Deductible as a state tax on Schedule A if you itemize.', action: 'Deductible on Schedule A as a state tax.' },
+  'NJDI': { name: 'New Jersey Disability Insurance', desc: 'NJ mandatory disability insurance contribution.', action: 'May be deductible on Schedule A.' },
+  'UNION': { name: 'Union Dues', desc: 'Dues paid to a labor union. Under current law (post-2017 Tax Cuts and Jobs Act), union dues are no longer deductible as a miscellaneous itemized deduction for W-2 employees. Some states allow the deduction.', action: 'Not federally deductible for 2018–2025. May be deductible on your state return.' },
+  'EDUC': { name: 'Educational Assistance', desc: 'Educational assistance received from your employer under a Section 127 plan. Up to $5,250/year is excluded from federal tax.', action: 'Up to $5,250 excluded from Box 1 annually.' },
+  'TRANSIT': { name: 'Transit/Commuter Benefits', desc: 'Pre-tax transit or vanpool benefits. Up to $325/month (2025) excluded from federal wages if provided through a Section 132 plan.', action: 'Not taxable up to the monthly limit.' },
+  'PARKING': { name: 'Qualified Parking', desc: 'Pre-tax employer-provided parking benefits. Up to $325/month (2025) excluded from federal wages.', action: 'Not taxable up to the monthly limit.' },
+};
+
+const W2_BOXES = [
+  { num: '1', name: 'Wages, tips, other compensation', detail: 'Federal taxable wages. This is what the IRS taxes for federal income tax purposes. Lower than your gross pay if you have pre-tax deductions (401k, health insurance, FSA, HSA, dependent care).' },
+  { num: '2', name: 'Federal income tax withheld', detail: 'Total federal income tax your employer withheld from paychecks. Applied directly against what you owe. If this exceeds your tax liability, you get a refund.' },
+  { num: '3', name: 'Social security wages', detail: 'Wages subject to Social Security tax. NOT reduced by 401(k) contributions — that\'s why Box 3 is often higher than Box 1. Capped at $176,100 for 2025.' },
+  { num: '4', name: 'Social security tax withheld', detail: '6.2% of Box 3 (capped at $10,918.20 for 2025). If you had multiple employers and total Box 4 across all W-2s exceeds the cap, the excess is a refundable credit.' },
+  { num: '5', name: 'Medicare wages and tips', detail: 'Wages subject to Medicare tax. Same as Box 3 except not capped. Additional 0.9% Medicare surtax applies to wages over $200,000 (single) / $250,000 (MFJ).' },
+  { num: '6', name: 'Medicare tax withheld', detail: '1.45% of Box 5. If Box 5 exceeds $200,000, your employer withheld an additional 0.9% on the excess (total 2.35%). The extra 0.9% is reconciled on Form 8959.' },
+  { num: '7', name: 'Social security tips', detail: 'Tips you reported to your employer — included in Box 3 and Box 5.' },
+  { num: '8', name: 'Allocated tips', detail: 'Tips your employer allocated to you based on IRS formulas (typically if your reported tips seem low relative to sales). You owe taxes on this even if you didn\'t receive this exact amount.' },
+  { num: '10', name: 'Dependent care benefits', detail: 'Employer-provided dependent care benefits (employer contributions to a Dependent Care FSA, on-site daycare, etc.). Up to $5,000 ($2,500 if MFS) is excluded from Box 1. Report on Form 2441.' },
+  { num: '11', name: 'Nonqualified plans', detail: 'Distributions from a nonqualified deferred compensation plan or nongovernmental Section 457(b) plan that are includible in income this year.' },
+  { num: '12', name: 'Various codes', detail: 'One or more letter codes with amounts. Each code means something different — see the Box 12 Code Reference above.' },
+  { num: '13', name: 'Checkboxes (three)', detail: 'Statutory Employee: report income on Schedule C. Retirement Plan: affects IRA deductibility. Third-Party Sick Pay: sick pay from an insurance company on your behalf.' },
+  { num: '14', name: 'Other', detail: 'Employer-reported items that don\'t fit other boxes. Common: state disability (SDI), union dues, transit benefits, educational assistance, domestic partner coverage value. Tax treatment varies.' },
+  { num: '15', name: 'State / employer\'s state ID', detail: 'Your employer\'s state tax ID. Informational.' },
+  { num: '16', name: 'State wages, tips, etc.', detail: 'Your wages subject to state income tax. May differ from Box 1 depending on your state\'s rules.' },
+  { num: '17', name: 'State income tax withheld', detail: 'State income tax withheld from paychecks. Reported on your state return.' },
+  { num: '18', name: 'Local wages, tips, etc.', detail: 'Wages subject to local/city income tax (only relevant in states with local taxes).' },
+  { num: '19', name: 'Local income tax withheld', detail: 'Local/city income tax withheld.' },
+  { num: '20', name: 'Locality name', detail: 'Name of the locality for which local tax was withheld.' },
+];
+
+const EXAMPLES = [
+  `Box 1: 95,430.00
+Box 2: 18,200.00
+Box 3: 108,930.00
+Box 4: 6,753.66
+Box 5: 108,930.00
+Box 6: 1,579.48
+Box 12a Code D: 13,500.00
+Box 12b Code AA: 3,000.00
+Box 12c Code DD: 16,240.00
+Box 12d Code W: 2,000.00
+Box 13: Retirement Plan checked`,
+
+  `Box 1: 72,500
+Box 12 Code D: 9,200
+Box 12 Code DD: 11,400
+Box 13 Retirement Plan: Yes
+Box 14: SDI 725.00`,
+
+  `W-2 shows Box 13 Retirement Plan checkbox is marked.
+Box 12 has no codes.
+Box 1 is the same as Box 3.`,
+
+  `Box 14:
+SDI 419.82
+UNION DUES 312.00
+TRANSIT 1,800.00`
+];
+
+function loadEx(i) {
+  document.getElementById('input').value = EXAMPLES[i];
+  decode();
+}
+
+function clearAll() {
+  document.getElementById('input').value = '';
+  document.getElementById('results').innerHTML = '';
+  document.getElementById('empty-state').classList.remove('visible');
+}
+
+function decode() {
+  const raw = document.getElementById('input').value;
+  if (!raw.trim()) return;
+
+  const findings = [];
+  const upper = raw.toUpperCase();
+
+  // Detect Box 12 codes
+  // Look for patterns: "Code X", "12X", "12 X", "code D", two-letter codes AA, BB, DD, EE, FF, GG, HH
+  const twoLetterCodes = ['AA','BB','DD','EE','FF','GG','HH'];
+  const singleLetterCodes = 'ABCDEFGHJKLMNPQRSTVWYZ'.split('');
+
+  twoLetterCodes.forEach(code => {
+    const patterns = [
+      new RegExp('CODE\\s*' + code + '\\b', 'i'),
+      new RegExp('BOX\\s*12[A-Z]?\\s*' + code + '\\b', 'i'),
+      new RegExp('\\b12' + code + '\\b', 'i'),
+      new RegExp('\\b' + code + '[:\\s]+\\$?[0-9,]+', 'i'),
+    ];
+    const found = patterns.some(p => p.test(raw));
+    if (found && BOX12_CODES[code]) {
+      const amtMatch = raw.match(new RegExp(code + '[:\\s]+\\$?([0-9,]+(?:\\.[0-9]{2})?)', 'i'));
+      const amount = amtMatch ? '$' + amtMatch[1] : null;
+      findings.push({ type: 'box12', code, ...BOX12_CODES[code], amount });
+    }
+  });
+
+  singleLetterCodes.forEach(code => {
+    if (findings.some(f => f.code === code)) return;
+    const patterns = [
+      new RegExp('CODE\\s*' + code + '(?![A-Z])', 'i'),
+      new RegExp('BOX\\s*12[A-Z]?\\s*' + code + '(?![A-Z])', 'i'),
+      new RegExp('\\b12[A-D]?\\s+' + code + '(?![A-Z])\\s*[:$]', 'i'),
+    ];
+    const found = patterns.some(p => p.test(raw));
+    if (found && BOX12_CODES[code]) {
+      const amtMatch = raw.match(new RegExp('\\b' + code + '(?![A-Z])[:\\s]+\\$?([0-9,]+(?:\\.[0-9]{2})?)', 'i'));
+      const amount = amtMatch ? '$' + amtMatch[1] : null;
+      findings.push({ type: 'box12', code, ...BOX12_CODES[code], amount });
+    }
+  });
+
+  // Box 13 checkboxes
+  if (/statutory\s+employee/i.test(raw)) {
+    findings.push({ type: 'box13', title: 'Box 13: Statutory Employee (checked)', desc: 'Your income is subject to Social Security and Medicare taxes but NOT federal income tax withholding. Report your income and business expenses on Schedule C — do not include it in Form 1040 line 1a as regular wages.', action: 'Report on Schedule C. You can deduct business expenses against this income.' });
+  }
+  if (/retirement\s+plan/i.test(raw)) {
+    findings.push({ type: 'box13', title: 'Box 13: Retirement Plan (checked)', desc: 'You were an active participant in an employer-sponsored retirement plan during this tax year. This affects whether you can deduct a traditional IRA contribution. If your income exceeds $79,000 (single) / $126,000 (married filing jointly) in 2025, your traditional IRA deduction may be limited or eliminated.', action: 'Check IRA deductibility limits for your filing status and income. Roth IRA contributions are unaffected by this checkbox.' });
+  }
+  if (/third.party\s+sick\s+pay/i.test(raw)) {
+    findings.push({ type: 'box13', title: 'Box 13: Third-Party Sick Pay (checked)', desc: 'You received sick pay from a third-party (typically an insurance company) instead of directly from your employer. This sick pay may be taxable or non-taxable depending on who paid the insurance premiums.', action: 'If sick pay is taxable (employer paid premiums), it\'s in Box 1. If you paid the premiums, it may be non-taxable.' });
+  }
+
+  // Box 14 items
+  Object.keys(BOX14_TERMS).forEach(key => {
+    if (new RegExp('\\b' + key + '\\b', 'i').test(raw)) {
+      const amtMatch = raw.match(new RegExp(key + '[:\\s]+\\$?([0-9,]+(?:\\.[0-9]{2})?)', 'i'));
+      const amount = amtMatch ? '$' + amtMatch[1] : null;
+      const t = BOX14_TERMS[key];
+      findings.push({ type: 'box14', title: 'Box 14: ' + t.name + ' (' + key + ')', desc: t.desc, action: t.action, amount });
+    }
+  });
+
+  // Box numbers detected
+  const boxRefs = raw.match(/box\s*([0-9]{1,2})[^1-9]/gi) || [];
+  const seenBoxes = new Set();
+  boxRefs.forEach(ref => {
+    const num = ref.match(/([0-9]{1,2})/)[1];
+    if (!seenBoxes.has(num)) {
+      seenBoxes.add(num);
+      const box = W2_BOXES.find(b => b.num === num);
+      if (box) {
+        findings.push({ type: 'box', num, name: box.name, desc: box.detail });
+      }
+    }
+  });
+
+  const resultsEl = document.getElementById('results');
+  const emptyEl = document.getElementById('empty-state');
+
+  if (findings.length === 0) {
+    resultsEl.innerHTML = '';
+    emptyEl.classList.add('visible');
+    return;
+  }
+  emptyEl.classList.remove('visible');
+
+  resultsEl.innerHTML = findings.map((f, i) => {
+    if (f.type === 'box12') {
+      const tagClass = 'tag-box12';
+      const borderClass = f.code === 'DD' ? ' warn-card' : (f.inBox1 === false ? ' highlight' : '');
+      const inBox1Text = f.inBox1 === false ? '✓ Not in Box 1 (pre-tax benefit)' : f.inBox1 === true ? '⚠ Already in Box 1 (already taxed)' : '';
+      return `<div class="result-card${borderClass}">
+        <div class="rc-header" onclick="toggle(${i})">
+          <span class="rc-tag ${tagClass}">Box 12 · ${f.code}</span>
+          <div class="rc-title">${f.name}</div>
+          ${f.amount ? `<div class="rc-amount">${f.amount}</div>` : ''}
+        </div>
+        <div class="rc-body" id="rb-${i}">
+          <div class="rc-desc">${f.desc}</div>
+          ${inBox1Text ? `<div style="font-size:.83rem;margin:.4rem 0;color:${f.inBox1 === false ? '#4ade80' : '#fb923c'}">${inBox1Text}</div>` : ''}
+          ${f.limit ? `<div class="rc-limit">${f.limit}</div>` : ''}
+          ${f.action ? `<div class="rc-action">${f.action}</div>` : ''}
+        </div>
+      </div>`;
+    }
+    if (f.type === 'box13') {
+      return `<div class="result-card highlight">
+        <div class="rc-header" onclick="toggle(${i})">
+          <span class="rc-tag tag-box13">Box 13</span>
+          <div class="rc-title">${f.title}</div>
+        </div>
+        <div class="rc-body" id="rb-${i}">
+          <div class="rc-desc">${f.desc}</div>
+          ${f.action ? `<div class="rc-action">${f.action}</div>` : ''}
+        </div>
+      </div>`;
+    }
+    if (f.type === 'box14') {
+      return `<div class="result-card">
+        <div class="rc-header" onclick="toggle(${i})">
+          <span class="rc-tag tag-box14">Box 14</span>
+          <div class="rc-title">${f.title}</div>
+          ${f.amount ? `<div class="rc-amount">${f.amount}</div>` : ''}
+        </div>
+        <div class="rc-body" id="rb-${i}">
+          <div class="rc-desc">${f.desc}</div>
+          ${f.action ? `<div class="rc-action">${f.action}</div>` : ''}
+        </div>
+      </div>`;
+    }
+    if (f.type === 'box') {
+      return `<div class="result-card">
+        <div class="rc-header" onclick="toggle(${i})">
+          <span class="rc-tag tag-box">Box ${f.num}</span>
+          <div class="rc-title">${f.name}</div>
+        </div>
+        <div class="rc-body" id="rb-${i}">
+          <div class="rc-desc">${f.desc}</div>
+        </div>
+      </div>`;
+    }
+    return '';
+  }).join('');
+
+  // Auto-open all cards
+  findings.forEach((_, i) => {
+    const el = document.getElementById('rb-' + i);
+    if (el) el.classList.add('open');
+  });
+}
+
+function toggle(i) {
+  const el = document.getElementById('rb-' + i);
+  if (el) el.classList.toggle('open');
+}
+
+// Render code grid
+(function renderCodeGrid() {
+  const grid = document.getElementById('code-grid');
+  const importantCodes = ['D','W','AA','BB','DD','EE','G','S'];
+  const allCodes = Object.keys(BOX12_CODES);
+  const sorted = [...importantCodes, ...allCodes.filter(c => !importantCodes.includes(c))];
+  grid.innerHTML = sorted.map(code => {
+    const c = BOX12_CODES[code];
+    return `<div class="code-item">
+      <div class="code-letter">${code}</div>
+      <div class="code-detail">
+        <div class="name">${c.name}</div>
+        <div class="desc">${c.desc.substring(0, 110)}${c.desc.length > 110 ? '…' : ''}</div>
+        ${c.limit ? `<div class="limit">${c.limit}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+})();
+
+// Render reference table
+(function renderRefTable() {
+  const table = document.getElementById('ref-table');
+  table.innerHTML = `<thead><tr><th>Box</th><th>Name</th></tr></thead><tbody>` +
+    W2_BOXES.map(b => `<tr>
+      <td class="box-num">${b.num}</td>
+      <td><div class="box-name">${b.name}</div><div class="box-detail">${b.detail}</div></td>
+    </tr>`).join('') + '</tbody>';
+})();
+
+// Keyboard shortcut
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') decode();
+});
+</script>
+
+<script data-goatcounter="https://auto-run-fun.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

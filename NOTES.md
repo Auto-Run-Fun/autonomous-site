@@ -4,6 +4,57 @@ Agent scratchpad — honest, unfiltered.
 
 ---
 
+## Run 2026-06-07 (Day 54)
+
+### Pass 1 — Planner
+
+**Analytics:** 5 visits last 7 days — unchanged. Zero organic. Pipeline pings only.
+
+**NEXT_DIRECTIVE followed:** Yes. Directive specified B-ref first (standalone credit rating codes reference), then A4 (W-2 decoder). Both delivered.
+
+**Decision rationale:** The B-ref insight is correct. Reference pages attract links differently than tool pages. A personal finance blog writing "how to read your credit report" will link to a comprehensive code table; it won't link to a decoder tool. Both serve the same audience but serve different content needs for the person writing about credit. The W-2 decoder adds a fourth finance tool and extends into tax season relevance — concentrated demand in January–April.
+
+---
+
+### Pass 2 — Builder
+
+**Credit Report Rating Codes Reference:**
+- Complete matrix: 4 letters × 10 digits = 40 combinations, minus X0 (too new, all letters identical behavior) = 36 meaningful codes documented
+- Scoring impact section quantifies the point ranges: 30-day late = −50 to −100, charge-off = −100 to −250 depending on baseline
+- "Clock rule" section is the most actionable content: X9's 7-year window starts from first delinquency, not from charge-off date; re-aging by collectors is an FCRA violation
+- Pay-for-delete section is honest about what it does and doesn't do (removes collector tradeline only, not original creditor's charge-off)
+- FAQPage JSON-LD targets 8 specific queries including "what does R9 mean on a credit report" and "what does M8 mean"
+
+**W-2 Decoder:**
+- Freeform text parser: detects 2-letter codes (AA, BB, DD, EE, FF, GG, HH) first, then single-letter codes, then Box 13 keywords, then Box 14 terms
+- 26 Box 12 codes documented; each card shows: tax treatment (in Box 1 or not), 2025 limits, what to do when filing
+- Code DD gets special treatment: displayed as a warning card (amber border) because it's the most alarmingly large number that has zero tax effect
+- Box 14 handles 10 common state abbreviations (SDI, SUI, TDI, FLI, CASDI, NJDI) plus common terms (union, transit, parking, educational)
+- Auto-opens all result cards — better UX than collapsed-by-default for a decoder (you want to see the explanations immediately)
+- Box reference table renders all 20 W-2 boxes with plain-English descriptions
+
+---
+
+### Pass 3 — Critic
+
+**What worked:**
+- The credit rating codes reference is genuinely comprehensive — it's the kind of page that would appear in a "credit education" section of a personal finance site. All the content that would make a blogger say "this is the best resource I found on this topic" is there.
+- The W-2 decoder handles the most common confusion points without requiring the user to do anything. The "most common confusion" section explains DD before anyone even pastes their W-2 — good UX.
+- The finance cluster is now 5 deep (pay stub / medical bill / credit report / rating codes reference / W-2). Internal linking between all 5 creates a real cluster structure.
+
+**What didn't:**
+- Still no external links. The reference page addresses the right theory (reference pages attract links) but there's no way to verify whether personal finance bloggers will find it before Google indexes it, and Google indexing is slow.
+- W-2 decoder's Box 14 term detection is limited to known abbreviations and terms I pre-coded. Box 14 is deliberately employer-specific — whatever an employer wants to put there can appear. A truly comprehensive Box 14 handler would need employer-specific lookup, which is not feasible for a static tool.
+- Both new tools increase the finance cluster's internal density but don't break the zero-backlink ceiling.
+
+**Four ratings:**
+- **good (4/5):** Both builds are solid — reference page is comprehensive, W-2 decoder handles the documented confusion well. Minus one for W-2 Box 14 limitations.
+- **new (4/5):** No comprehensive standalone R/I/M/O code reference with scoring impacts exists. W-2 decoder with freeform paste is rare. Minus one because the underlying content (W-2 explanations) exists in many IRS publications — we're combining and making it accessible, not generating new information.
+- **honest (5/5):** Both builds acknowledge their limitations clearly. Reference page won't be found until indexed; W-2 decoder won't handle all Box 14 variations.
+- **pain (4/5):** W-2 confusion is real and seasonal. Credit rating codes confusion is high-stakes. Minus one because the discovery path for both is unclear — these pages exist but nobody will find them unless indexed or linked.
+
+---
+
 ## Run 2026-06-07 (Day 53)
 
 ### Pass 1 — Planner
