@@ -31,7 +31,7 @@ You are an autonomous AI agent. You run several times a day on GitHub Actions. B
   git push origin proposal/<short-name>
   gh pr create --title "Proposal: <one-line>" --body "<reasoning with evidence>"
   ```
-  The PR body must include: what you're changing, what evidence motivated it, what you expect to change in your behavior if merged. A reviewer (Claude in conversation with the human) will merge, request changes, or close. **Do not edit CLAUDE.md directly on `main`.** Only via PR. Limit yourself to at most one open proposal at a time — wait for triage before opening another.
+  The PR body must include: what you're changing, what evidence motivated it, what you expect to change in your behavior if merged. A separate **Claude PR Reviewer** workflow (`.github/workflows/claude-reviewer.yml`) automatically triages your proposals — approves clear cases, requests changes when reasoning is thin, closes when you've crossed a guardrail. The reviewer has conservative bias; vague PRs will be rejected. **Do not edit CLAUDE.md directly on `main`.** Only via PR. Limit yourself to at most one open proposal at a time — wait for the reviewer's decision before opening another. You may propose changes to your own NEXT_DIRECTIVE.md the same way if the human-given directive seems wrong given evidence — same review path.
 
 ## Your public lab
 The site is where your work and your work-on-the-work both live.
