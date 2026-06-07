@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Medical Bill Decoder — What Do These Charges and Codes Mean?</title>
+<meta name="description" content="Paste your medical bill, EOB, or denied claim and get a plain-English explanation of every charge, CPT code, ICD code, and insurance term. Free, instant, no login.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/medical-bill-decoder.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Medical Bill Decoder — What Do These Charges Mean?">
+<meta property="og:description" content="Paste your medical bill or EOB and get plain-English explanations of every CPT code, ICD code, and billing term. Free, instant, no login.">
+<meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/medical-bill-decoder.html">
+<meta name="twitter:card" content="summary">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Medical Bill Decoder",
+  "description": "Paste your medical bill, EOB, or denied claim and get plain-English explanations of CPT codes, ICD codes, and insurance billing terms.",
+  "url": "https://auto-run-fun.github.io/autonomous-site/medical-bill-decoder.html",
+  "applicationCategory": "HealthApplication",
+  "operatingSystem": "Any (browser)",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is the difference between an EOB and a medical bill?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "An EOB (Explanation of Benefits) is a document from your insurance company explaining how a claim was processed. It is NOT a bill — do not pay it. The actual bill comes separately from the provider (hospital, doctor, lab). Many people accidentally pay the EOB and end up overpaying."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is a contractual adjustment on a medical bill?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A contractual adjustment (also called a 'write-off' or 'network discount') is the amount a provider agreed to forgo as part of their in-network contract with your insurance. If the billed amount is $350 and the allowed amount is $150, the $200 contractual adjustment is erased — you never owe it. In-network providers cannot bill you for this difference."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does CPT code 99213 mean?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "CPT 99213 is a Level 3 office visit for an established patient — the most common primary care billing code. It indicates a visit of low-to-moderate medical complexity, typically 20–29 minutes of total physician time."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does 'patient responsibility' mean on a medical bill?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Patient responsibility is the amount you actually owe after insurance has paid its share. It's the sum of any deductible applied, copay, and coinsurance for that service. This is the number to focus on — not the original billed amount."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does CO-50 mean on a denied claim?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "CO-50 means your insurance denied the claim because they determined the service was not medically necessary. You can appeal this denial — ask your doctor for a letter of medical necessity and submit it with your appeal. Most insurers allow 180 days to appeal."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between a deductible and an out-of-pocket maximum?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Your deductible is the amount you pay before your insurance starts covering costs (e.g., the first $1,500 per year). After you meet it, you typically pay coinsurance (e.g., 20%). Your out-of-pocket maximum is the ceiling — once you've paid that amount in a year, insurance covers 100% of covered services. The deductible usually counts toward your out-of-pocket maximum."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I be billed for the difference between what was charged and the allowed amount?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No, if the provider is in-network. In-network providers contract to accept the allowed amount as payment in full. They cannot 'balance bill' you for the difference. If you used an out-of-network provider, balance billing may be allowed (with some exceptions for emergency care under the No Surprises Act)."
+      }
+    }
+  ]
+}
+</script>
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-text-size-adjust:100%}
+body{background:#0b0b10;color:#e8e8f0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.6;min-height:100vh;padding:0 16px}
+a{color:#7eb8f7;text-decoration:none}
+a:hover{text-decoration:underline}
+code{font-family:'JetBrains Mono','Fira Code',monospace;font-size:.85em;background:#131320;padding:1px 5px;border-radius:3px;color:#5eead4}
+.wrap{max-width:820px;margin:0 auto;padding:40px 0 80px}
+
+.topnav{margin-bottom:32px;font-size:.875rem;color:#888}
+.topnav a{color:#7eb8f7}
+.topnav .sep{margin:0 6px;opacity:.4}
+
+h1{font-size:1.75rem;font-weight:700;letter-spacing:-.02em;margin-bottom:8px}
+.subtitle{color:#aaa;font-size:1rem;margin-bottom:10px;max-width:640px;line-height:1.5}
+.not-a-bill{background:#12131f;border:1px solid #1e3a5f;border-left:3px solid #3b82f6;padding:10px 14px;border-radius:6px;font-size:.85rem;color:#93c5fd;margin-bottom:24px;max-width:640px}
+.not-a-bill strong{color:#bfdbfe}
+
+.examples-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.ex-btn{background:#131320;border:1px solid #1e1e30;color:#94a3b8;font-size:.8rem;padding:5px 12px;border-radius:6px;cursor:pointer;transition:border-color .15s,color .15s}
+.ex-btn:hover{border-color:#1e3a5f;color:#bfdbfe}
+
+textarea{width:100%;min-height:180px;background:#0f0f1c;border:1px solid #1e1e30;color:#e2e8f0;font-family:'JetBrains Mono','Fira Code',monospace;font-size:.88rem;line-height:1.65;padding:14px 16px;border-radius:8px;resize:vertical;outline:none;transition:border-color .15s}
+textarea:focus{border-color:#1d4ed8}
+textarea::placeholder{color:#3a3a5c}
+
+.decode-btn{margin-top:12px;background:#1d4ed8;color:#fff;border:none;padding:11px 28px;border-radius:8px;font-size:.95rem;font-weight:600;cursor:pointer;transition:background .15s}
+.decode-btn:hover{background:#2563eb}
+
+#results{margin-top:32px;display:none}
+.result-summary{margin-bottom:20px;padding:12px 16px;background:#0f0f1c;border:1px solid #1e1e30;border-radius:8px;font-size:.9rem;color:#94a3b8}
+.result-summary strong{color:#e2e8f0}
+
+.section-label{font-size:.7rem;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:#475569;margin:24px 0 10px;display:flex;align-items:center;gap:8px}
+.section-label::after{content:'';flex:1;height:1px;background:#1e1e30}
+
+.card{background:#0f0f1c;border:1px solid #1e1e30;border-radius:10px;padding:18px 20px;margin-bottom:10px}
+.card.cpt{border-left:3px solid #0d9488}
+.card.icd{border-left:3px solid #d97706}
+.card.term{border-left:3px solid #4f46e5}
+.card.term.important{border-left:3px solid #dc2626}
+.card.unknown{border-left:3px solid #334155}
+
+.card-top{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+.card-code{font-family:'JetBrains Mono','Fira Code',monospace;font-size:.95rem;color:#5eead4;white-space:nowrap;margin-top:2px}
+.card-icd-code{color:#fbbf24}
+.card-term-title{font-size:1.05rem;font-weight:600;color:#e2e8f0;flex:1}
+.card-title{font-size:1rem;font-weight:600;color:#e2e8f0;flex:1;line-height:1.35}
+
+.cat-badge{display:inline-block;font-size:.7rem;font-family:'JetBrains Mono',monospace;letter-spacing:.07em;text-transform:uppercase;padding:.2rem .55rem;border-radius:4px;border:1px solid;flex-shrink:0;margin-top:2px}
+.badge-cpt{border-color:#0d9488;color:#5eead4;background:#021a18}
+.badge-icd{border-color:#b45309;color:#fbbf24;background:#1a0e03}
+.badge-term{border-color:#3730a3;color:#a5b4fc;background:#07061a}
+.badge-alert{border-color:#991b1b;color:#fca5a5;background:#1a0404}
+.badge-unknown{border-color:#1e293b;color:#475569;background:#090b12}
+
+.card-explanation{font-size:.9rem;color:#cbd5e1;line-height:1.65;margin-bottom:6px}
+.card-detail{font-size:.83rem;color:#64748b;line-height:1.5;margin-top:4px}
+.card-action{font-size:.83rem;color:#60a5fa;margin-top:6px;padding:6px 10px;background:#0c1a2e;border-radius:4px;border-left:2px solid #2563eb}
+
+.no-results{padding:20px;text-align:center;color:#475569;font-size:.9rem;background:#0f0f1c;border:1px dashed #1e1e30;border-radius:8px}
+
+/* FAQ */
+.faq{margin-top:64px}
+.faq h2{font-size:1.3rem;font-weight:700;margin-bottom:20px;color:#e2e8f0}
+.faq-item{border-bottom:1px solid #1e1e30;padding:0}
+.faq-q{width:100%;background:none;border:none;color:#e2e8f0;font-size:.95rem;font-weight:600;padding:16px 0;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.faq-q:hover{color:#7eb8f7}
+.faq-arrow{color:#475569;font-size:.75rem;transition:transform .2s;flex-shrink:0}
+.faq-item.open .faq-arrow{transform:rotate(180deg)}
+.faq-a{display:none;font-size:.9rem;color:#94a3b8;line-height:1.65;padding-bottom:16px}
+.faq-item.open .faq-a{display:block}
+
+/* disclaimer */
+.disclaimer{margin-top:48px;padding:12px 16px;background:#131320;border:1px solid #1e1e30;border-radius:8px;font-size:.8rem;color:#475569;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav class="topnav">
+  <a href="index.html">Home</a>
+  <span class="sep">/</span>
+  Medical Bill Decoder
+</nav>
+
+<h1>Medical Bill Decoder</h1>
+<p class="subtitle">Paste anything from your medical bill, EOB, or denied claim — CPT codes, ICD codes, billing terms, denial codes — and get a plain-English explanation of each item.</p>
+
+<div class="not-a-bill"><strong>EOB ≠ bill.</strong> If you pasted an Explanation of Benefits, do not pay it. An EOB is a summary from your insurance company — the actual bill comes separately from the provider.</div>
+
+<div class="examples-row">
+  <button class="ex-btn" onclick="loadExample(0)">Example: EOB</button>
+  <button class="ex-btn" onclick="loadExample(1)">Example: Hospital bill</button>
+  <button class="ex-btn" onclick="loadExample(2)">Example: Denied claim</button>
+  <button class="ex-btn" onclick="loadExample(3)">Example: Primary care visit</button>
+</div>
+
+<textarea id="input" placeholder="Paste your medical bill, EOB, or denied claim here...
+
+CPT 99213 — Office visit $150.00
+Contractual adjustment: -$85.40
+Deductible applied: $64.60
+..."></textarea>
+
+<button class="decode-btn" onclick="decode()">Decode Bill</button>
+
+<div id="results">
+  <div class="result-summary" id="summary"></div>
+  <div id="cpt-section"></div>
+  <div id="icd-section"></div>
+  <div id="term-section"></div>
+  <div id="unknown-section"></div>
+</div>
+
+<!-- FAQ -->
+<div class="faq">
+  <h2>Common Questions About Medical Bills</h2>
+
+  <div class="faq-item">
+    <button class="faq-q" onclick="toggleFaq(this)">
+      What's the difference between an EOB and a medical bill?
+      <span class="faq-arrow">▼</span>
+    </button>
+    <div class="faq-a">An Explanation of Benefits (EOB) is a document from your <em>insurance company</em> showing how a claim was processed. It shows billed amounts, what insurance paid, and what you owe — but it is <strong>not a bill</strong>. Wait for the separate bill from the provider (doctor, hospital, lab) before paying. Many people accidentally pay the EOB thinking it's a bill.</div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-q" onclick="toggleFaq(this)">
+      Do I owe the contractual adjustment amount?
+      <span class="faq-arrow">▼</span>
+    </button>
+    <div class="faq-a">No. The contractual adjustment (also called provider write-off, network discount, or non-covered amount) is money the in-network provider agreed to forgo as part of their contract with your insurer. They cannot bill you for it. If your bill shows a $200 billed amount and a $120 contractual adjustment, the provider has already agreed that $120 is erased — you only owe whatever remains.</div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-q" onclick="toggleFaq(this)">
+      My claim was denied. What do I do?
+      <span class="faq-arrow">▼</span>
+    </button>
+    <div class="faq-a">First, find the denial reason code (usually starts with CO- or PR-). The most common denial is CO-50 (not medically necessary) — call your insurer, ask your doctor for a letter of medical necessity, and file a formal appeal. Most insurers allow 180 days to appeal. If the denial is CO-18 (duplicate claim), check whether the claim was already paid. Always appeal in writing and keep records.</div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-q" onclick="toggleFaq(this)">
+      Why is the billed amount so much higher than what insurance pays?
+      <span class="faq-arrow">▼</span>
+    </button>
+    <div class="faq-a">Providers set "chargemaster" prices (billed amounts) far above what they actually collect. In-network providers contract to accept a much lower "allowed amount." The difference is the contractual adjustment — it's not a discount, it's a contractual write-off. Cash-pay patients often face the full chargemaster price, which is why it's worth calling the billing department to negotiate or ask for the "self-pay rate."</div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-q" onclick="toggleFaq(this)">
+      What's the difference between a deductible, copay, and coinsurance?
+      <span class="faq-arrow">▼</span>
+    </button>
+    <div class="faq-a"><strong>Deductible:</strong> Fixed annual amount you pay before insurance covers anything (e.g., first $1,500/year). <strong>Copay:</strong> Fixed dollar amount per visit or service (e.g., $25 per office visit), regardless of the total cost. <strong>Coinsurance:</strong> Your percentage of covered costs after meeting your deductible (e.g., you pay 20%, insurance pays 80%). Your copay and coinsurance usually count toward your out-of-pocket maximum.</div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-q" onclick="toggleFaq(this)">
+      Can I negotiate a medical bill?
+      <span class="faq-arrow">▼</span>
+    </button>
+    <div class="faq-a">Yes — especially for large balances. Call the billing department and ask: (1) Are there any errors on this bill? (2) Do you offer financial assistance or charity care? (3) What is the self-pay or cash-pay rate? (4) Can we set up a payment plan? Hospitals are often required to offer charity care and rarely publicize it. A 20–40% reduction on an uninsured or out-of-network bill is common when you ask.</div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-q" onclick="toggleFaq(this)">
+      What does "prior authorization required" mean?
+      <span class="faq-arrow">▼</span>
+    </button>
+    <div class="faq-a">Prior authorization (PA) means your insurance company must approve a service <em>before</em> it happens or before they'll pay for it. If a service requiring PA was done without it, the claim may be denied. You can request retroactive authorization in some cases. Your doctor's office usually handles PA requests — contact them if you get a denial citing missing PA.</div>
+  </div>
+</div>
+
+<div class="disclaimer">
+  <strong>Not medical or legal advice.</strong> This tool explains what medical billing terms mean — it does not verify whether your bill is correct or advise on dispute strategies. If you believe a bill contains errors, contact the provider's billing department directly. For billing disputes, consider contacting your state insurance commissioner or a patient advocate.
+</div>
+
+</div><!-- end .wrap -->
+
+<script>
+// ── CPT CODE DATABASE ──────────────────────────────────────────────────────────
+const CPT = {
+  // Office & Outpatient Visits — Established Patient
+  '99211': {title:'Office visit, established patient — Level 1 (nurse/minimal)',category:'Office Visit',
+    exp:'The lowest-level established patient visit, typically a nurse visit, prescription refill check, or blood pressure check with no physician involvement required. Usually 5–10 minutes.',
+    detail:'Most insurers reimburse $25–50 for this code.'},
+  '99212': {title:'Office visit, established patient — Level 2',category:'Office Visit',
+    exp:'A straightforward visit for an established patient — single, uncomplicated problem (e.g., a minor infection, routine follow-up). Minimal to low medical complexity.',
+    detail:'Typically 10–19 minutes of total physician time.'},
+  '99213': {title:'Office visit, established patient — Level 3',category:'Office Visit',
+    exp:'The most common primary care billing code. A routine visit for an established patient — chronic disease management, single acute problem, or follow-up on test results. Low-to-moderate complexity.',
+    detail:'Typically 20–29 minutes of total physician time.'},
+  '99214': {title:'Office visit, established patient — Level 4',category:'Office Visit',
+    exp:'A more complex established patient visit — multiple chronic conditions, medication changes, or a new problem requiring additional workup. Moderate medical decision-making.',
+    detail:'Typically 30–39 minutes of total physician time.'},
+  '99215': {title:'Office visit, established patient — Level 5',category:'Office Visit',
+    exp:'The highest-complexity established patient visit — multiple uncontrolled chronic conditions, complex medication reconciliation, or a serious new problem. High medical decision-making.',
+    detail:'Typically 40–54 minutes of total physician time.'},
+  // Office & Outpatient Visits — New Patient
+  '99201': {title:'Office visit, new patient — Level 1',category:'Office Visit',
+    exp:'The lowest-level new patient visit. Minor problem, self-limited condition, minimal complexity.',
+    detail:'Typically 10–19 minutes.'},
+  '99202': {title:'Office visit, new patient — Level 2',category:'Office Visit',
+    exp:'Straightforward new patient visit. Single, self-limited problem or a straightforward presenting problem.',
+    detail:'Typically 15–29 minutes.'},
+  '99203': {title:'Office visit, new patient — Level 3',category:'Office Visit',
+    exp:'Common new patient visit. Low-complexity medical decision-making — e.g., establishing care for a stable chronic condition.',
+    detail:'Typically 30–44 minutes.'},
+  '99204': {title:'Office visit, new patient — Level 4',category:'Office Visit',
+    exp:'Moderate-complexity new patient visit — e.g., establishing care for multiple conditions or a new problem requiring workup.',
+    detail:'Typically 45–59 minutes.'},
+  '99205': {title:'Office visit, new patient — Level 5',category:'Office Visit',
+    exp:'Highest-complexity new patient visit. High medical decision-making — multiple severe problems or a new diagnosis with significant risk.',
+    detail:'Typically 60–74 minutes.'},
+  // Emergency Department
+  '99281': {title:'Emergency department visit — Level 1',category:'Emergency',
+    exp:'The lowest-complexity ED visit — minor problem, self-limited, minimal resources used. Rare in practice.'},
+  '99282': {title:'Emergency department visit — Level 2',category:'Emergency',
+    exp:'Low-complexity ED visit. Simple injury, minor infection, or limited evaluation needed.'},
+  '99283': {title:'Emergency department visit — Level 3',category:'Emergency',
+    exp:'Moderate-complexity ED visit — e.g., urinary tract infection, low back pain, moderate abdominal pain. Moderate evaluation and management.'},
+  '99284': {title:'Emergency department visit — Level 4',category:'Emergency',
+    exp:'High-complexity ED visit — presenting problem with a high severity potential. Extensive evaluation, multiple tests likely.',
+    detail:'Accounts for a large portion of ED billing.'},
+  '99285': {title:'Emergency department visit — Level 5',category:'Emergency',
+    exp:'Highest-complexity ED visit — severe or life-threatening presenting problem. Intensive evaluation and resources. Highest reimbursement for ED E/M.',
+    detail:'Common for chest pain, serious trauma, stroke symptoms, severe abdominal pain.'},
+  // Hospital Inpatient
+  '99221': {title:'Initial hospital care — Level 1',category:'Hospital',
+    exp:'Admission to the hospital, straightforward condition. Low complexity decision-making.'},
+  '99222': {title:'Initial hospital care — Level 2',category:'Hospital',
+    exp:'Hospital admission with moderate complexity. New or complex presentation requiring additional workup.'},
+  '99223': {title:'Initial hospital care — Level 3',category:'Hospital',
+    exp:'Hospital admission with high-complexity medical decision-making. Most common initial admit code for serious illness.'},
+  '99231': {title:'Subsequent hospital care — Level 1',category:'Hospital',
+    exp:'Follow-up hospital visit, stable patient, problem is improving. Minimal physician time.'},
+  '99232': {title:'Subsequent hospital care — Level 2',category:'Hospital',
+    exp:'Daily hospital rounding visit — patient is responding to treatment, moderate medical decision-making. Most common daily rounding code.'},
+  '99233': {title:'Subsequent hospital care — Level 3',category:'Hospital',
+    exp:'Daily rounding visit for unstable or complex hospital patient. High medical decision-making — e.g., patient not responding to treatment, new complication.'},
+  '99291': {title:'Critical care — first 30–74 minutes',category:'Critical Care',
+    exp:'Physician critical care services — direct care of a critically ill patient. Covers the first 30–74 minutes of critical care time on a given date.',
+    detail:'Much higher reimbursement than standard E/M codes. Requires documentation that the patient\'s condition is life-threatening.'},
+  '99292': {title:'Critical care — each additional 30 minutes',category:'Critical Care',
+    exp:'Additional critical care time beyond the first 74 minutes. Billed in addition to 99291 for each additional 30-minute increment.',
+    detail:'Multiple 99292 codes on one bill = very extended critical care.'},
+  // Lab
+  '36415': {title:'Routine venipuncture — blood draw',category:'Laboratory',
+    exp:'A blood draw from a vein — the standard procedure when a needle is inserted to collect blood for lab testing. Typically a small flat fee ($15–35).',
+    detail:'Often appears separately on your bill alongside whatever lab tests were ordered.'},
+  '36416': {title:'Capillary blood collection — fingerstick',category:'Laboratory',
+    exp:'Blood collection via fingerstick rather than a vein draw. Used for point-of-care tests (glucose, hemoglobin).'},
+  '80053': {title:'Comprehensive metabolic panel (CMP)',category:'Laboratory',
+    exp:'A panel of 14 blood tests measuring kidney function (BUN, creatinine), liver function (AST, ALT, bilirubin), electrolytes (sodium, potassium, calcium), glucose, and protein. Ordered routinely for annual physicals and chronic disease management.',
+    detail:'Common cost: $30–80 with insurance. Often bundled with CBC.'},
+  '80048': {title:'Basic metabolic panel (BMP)',category:'Laboratory',
+    exp:'A panel of 8 blood tests — glucose, electrolytes (sodium, potassium, chloride, bicarbonate), and kidney function (BUN, creatinine). A shorter version of the CMP.'},
+  '80050': {title:'General health panel',category:'Laboratory',
+    exp:'A bundled panel of common lab tests for general health screening — typically includes CBC, CMP, and TSH.'},
+  '85025': {title:'Complete blood count (CBC) with differential',category:'Laboratory',
+    exp:'A CBC measures red blood cells, white blood cells, platelets, hemoglobin, and hematocrit. "With differential" means white blood cells are broken down by type (neutrophils, lymphocytes, etc.) to help detect infection or blood disorders.',
+    detail:'One of the most commonly ordered lab tests.'},
+  '85027': {title:'Complete blood count (CBC), automated',category:'Laboratory',
+    exp:'A CBC without the detailed white blood cell differential breakdown. Measures red cells, white cells, hemoglobin, hematocrit, and platelets.'},
+  '80061': {title:'Lipid panel',category:'Laboratory',
+    exp:'Measures total cholesterol, HDL ("good") cholesterol, LDL ("bad") cholesterol, and triglycerides. Ordered for cardiovascular risk assessment.',
+    detail:'Usually requires fasting 9–12 hours before the draw.'},
+  '82947': {title:'Glucose, blood test',category:'Laboratory',
+    exp:'Measures blood sugar level. Ordered to screen for diabetes, monitor blood sugar, or check during illness.'},
+  '83036': {title:'Hemoglobin A1c (HbA1c)',category:'Laboratory',
+    exp:'Measures average blood sugar over the past 2–3 months. The key test for diagnosing and managing diabetes. A1c under 5.7% is normal; 5.7–6.4% is prediabetes; 6.5%+ is diabetes.',
+    detail:'Does not require fasting.'},
+  '84443': {title:'Thyroid stimulating hormone (TSH)',category:'Laboratory',
+    exp:'Measures the pituitary hormone that controls thyroid function. The primary screening test for hypothyroidism (underactive) and hyperthyroidism (overactive). Low TSH can mean hyperthyroidism; high TSH often means hypothyroidism.',
+    detail:'Normal range is approximately 0.4–4.0 mIU/L, though ranges vary by lab.'},
+  '87880': {title:'Strep throat rapid antigen test',category:'Laboratory',
+    exp:'A rapid in-office test for Group A Streptococcus — the bacteria that causes strep throat. Results in 5–10 minutes.',
+    detail:'A negative rapid test may be followed by a throat culture (87070) for confirmation.'},
+  '87804': {title:'Influenza rapid antigen test',category:'Laboratory',
+    exp:'Rapid in-office test for influenza A and/or B. Results in 15–30 minutes. Used to determine if flu treatment (like Tamiflu) is appropriate.'},
+  '87491': {title:'Chlamydia test',category:'Laboratory',
+    exp:'Nucleic acid amplification test (NAAT) for Chlamydia trachomatis — the most common bacterial sexually transmitted infection. Performed on urine or a swab sample.'},
+  '87591': {title:'Gonorrhea test',category:'Laboratory',
+    exp:'Nucleic acid amplification test (NAAT) for Neisseria gonorrhoeae. Often ordered together with the chlamydia test (87491). Performed on urine or a swab.'},
+  '81001': {title:'Urinalysis with microscopy',category:'Laboratory',
+    exp:'A urine test that evaluates appearance, chemistry (pH, protein, glucose, blood), and microscopic content (cells, bacteria, crystals). Ordered to check for infection, kidney disease, and diabetes.'},
+  '87086': {title:'Urine culture',category:'Laboratory',
+    exp:'Grows bacteria from a urine sample in a lab to identify the specific organism causing a urinary tract infection (UTI) and determine which antibiotics will work. Takes 24–48 hours.',
+    detail:'Ordered when a UTI is suspected or when a previous UTI has not resolved.'},
+  // Imaging
+  '71046': {title:'Chest X-ray, 2 views',category:'Imaging',
+    exp:'A standard two-view chest X-ray (front and side). Used to evaluate pneumonia, heart size, rib fractures, and lung conditions.',
+    detail:'Most common radiologic exam. Often ordered in the ER or for pre-procedure evaluation.'},
+  '71045': {title:'Chest X-ray, single view',category:'Imaging',
+    exp:'A one-view chest X-ray, usually frontal (PA) view only. Less comprehensive than 2-view.'},
+  '70450': {title:'CT head, without contrast',category:'Imaging',
+    exp:'A CT scan of the brain without contrast dye. Ordered to evaluate head injuries, stroke symptoms, headaches, or suspected bleeding.',
+    detail:'Commonly ordered in the emergency department.'},
+  '70553': {title:'MRI brain, without and with contrast',category:'Imaging',
+    exp:'An MRI of the brain using both non-contrast and contrast (gadolinium dye injected through an IV) sequences. More thorough than MRI without contrast alone. Used for tumors, MS lesions, inflammation.',
+    detail:'The dye (gadolinium) requires IV access and may be billed separately.'},
+  '72148': {title:'MRI lumbar spine, without contrast',category:'Imaging',
+    exp:'An MRI of the lower back (lumbar spine). Used to evaluate herniated discs, spinal stenosis, nerve compression, and low back pain that hasn\'t improved with conservative treatment.',
+    detail:'One of the most frequently ordered MRIs.'},
+  '72141': {title:'MRI cervical spine, without contrast',category:'Imaging',
+    exp:'An MRI of the neck (cervical spine, C1–C7). Used for neck pain, numbness/tingling in the arms, or suspected herniated disc.'},
+  '73721': {title:'MRI knee, without contrast',category:'Imaging',
+    exp:'An MRI of the knee. Used to evaluate meniscus tears, ACL/PCL ligament injuries, cartilage damage, and unexplained knee pain.'},
+  '74177': {title:'CT abdomen and pelvis, with contrast',category:'Imaging',
+    exp:'A CT scan of the abdomen and pelvis with IV contrast dye — the "go-to" ER imaging scan for abdominal pain. Evaluates appendix, bowel, kidneys, liver, and pelvis.',
+    detail:'One of the highest-cost common imaging studies. The contrast dye is often billed separately.'},
+  '74176': {title:'CT abdomen and pelvis, without contrast',category:'Imaging',
+    exp:'CT scan of the abdomen and pelvis without IV contrast. Used when contrast is contraindicated (e.g., kidney disease, contrast allergy) or for kidney stones.'},
+  '71250': {title:'CT chest, without contrast',category:'Imaging',
+    exp:'A CT scan of the chest without contrast dye. Used to evaluate lung nodules, pulmonary embolism workup (with contrast), pneumonia details, or pleural effusion.'},
+  '77067': {title:'Screening mammography, bilateral',category:'Imaging',
+    exp:'A bilateral (both breasts) screening mammogram for women with no symptoms. Recommended annually for women 40–74 as breast cancer screening.',
+    detail:'Most insurance plans cover this 100% as preventive care when coded as screening.'},
+  // Cardiology
+  '93000': {title:'Electrocardiogram (ECG/EKG), routine with interpretation',category:'Cardiology',
+    exp:'A 12-lead ECG — electrodes on the chest and limbs record electrical activity of the heart. Used to detect arrhythmias, heart attacks, and conduction abnormalities. Takes about 10 minutes.',
+    detail:'Often includes both the tracing (93005) and interpretation (93010) bundled.'},
+  '93005': {title:'ECG tracing only',category:'Cardiology',
+    exp:'The technical component of an ECG — the physical recording of the heart\'s electrical activity without physician interpretation.'},
+  '93010': {title:'ECG interpretation and report only',category:'Cardiology',
+    exp:'The professional component of an ECG — the physician\'s reading and written report of the tracing.'},
+  '93306': {title:'Echocardiogram with Doppler',category:'Cardiology',
+    exp:'An ultrasound of the heart — shows the structure and function of heart valves and chambers, ejection fraction, and blood flow. Used to evaluate heart failure, valve disease, and cardiomyopathy.',
+    detail:'Standard echocardiogram with full Doppler. One of the more expensive cardiology tests.'},
+  // Endoscopy
+  '43235': {title:'Upper GI endoscopy (EGD), diagnostic',category:'Endoscopy',
+    exp:'An esophagogastroduodenoscopy — a flexible scope inserted through the mouth to examine the esophagus, stomach, and first part of the small intestine. Used for GERD, ulcers, swallowing problems, and unexplained bleeding.',
+    detail:'Performed under sedation. Often billed alongside anesthesia codes.'},
+  '43239': {title:'Upper GI endoscopy (EGD) with biopsy',category:'Endoscopy',
+    exp:'An EGD where one or more tissue samples (biopsies) are taken for pathology. Common for H. pylori, Barrett\'s esophagus workup, or evaluating abnormal tissue.',
+    detail:'Pathology processing (88305) is usually billed separately.'},
+  '45378': {title:'Colonoscopy, diagnostic',category:'Endoscopy',
+    exp:'A colonoscopy to examine the entire large intestine. Ordered to investigate symptoms (bleeding, change in bowel habits, anemia). Distinguished from screening colonoscopy.',
+    detail:'If no polyps are found, some insurers cover it as preventive. With polyps found, cost-sharing may apply.'},
+  '45380': {title:'Colonoscopy with biopsy',category:'Endoscopy',
+    exp:'A colonoscopy where tissue samples are taken. Common for evaluating inflammatory bowel disease or suspicious-appearing tissue.',
+    detail:'Pathology is usually billed separately.'},
+  '45385': {title:'Colonoscopy with polypectomy',category:'Endoscopy',
+    exp:'A colonoscopy where one or more polyps are removed. Polyp removal can change a "preventive" screening colonoscopy to a "diagnostic" procedure under some insurance plans, causing cost-sharing to apply.'},
+  // Physical Therapy
+  '97110': {title:'Therapeutic exercises',category:'Physical Therapy',
+    exp:'Physical therapist-directed exercises to improve strength, range of motion, or endurance. Each 15-minute unit is billed separately.',
+    detail:'Usually billed in 15-minute units. Three units = 45 minutes of exercise.'},
+  '97530': {title:'Therapeutic activities',category:'Physical Therapy',
+    exp:'Functional activity-based PT — uses real-life movements (lifting, reaching, walking patterns) to improve function. Distinct from exercises (97110).',
+    detail:'Billed in 15-minute units.'},
+  '97014': {title:'Electrical stimulation (e-stim)',category:'Physical Therapy',
+    exp:'Application of electrical current to muscles or nerves — used for pain management and muscle re-education. Billed as a flat fee (not per unit) by most insurers.',
+    detail:'Often bundled into the PT visit total.'},
+  // Mental Health
+  '90837': {title:'Individual psychotherapy, 60 minutes',category:'Mental Health',
+    exp:'A 53–60 minute individual psychotherapy session with a licensed mental health professional. The most common therapy billing code for longer sessions.',
+    detail:'Usually reimbursed at a lower rate than medical visits — typically $80–150 with insurance.'},
+  '90834': {title:'Individual psychotherapy, 45 minutes',category:'Mental Health',
+    exp:'A 38–52 minute individual psychotherapy session. Common for weekly therapy visits.',
+    detail:'Lower cost than 90837. Check your plan\'s mental health parity benefits.'},
+  '90832': {title:'Individual psychotherapy, 30 minutes',category:'Mental Health',
+    exp:'A 16–37 minute psychotherapy session. Less common — often used when a shorter check-in is clinically appropriate.'},
+  '90847': {title:'Family/couples psychotherapy with patient',category:'Mental Health',
+    exp:'A family or couples therapy session in which the patient is present. Billed by the patient\'s therapist.',
+    detail:'The session includes the patient, distinguishing it from family sessions without the patient (90846).'},
+  '90853': {title:'Group psychotherapy',category:'Mental Health',
+    exp:'Psychotherapy in a group setting — multiple patients treated simultaneously by one or more therapists. Less expensive than individual sessions.',
+    detail:'Typically billed per patient, not per session.'},
+  // Vaccines & Injections
+  '90471': {title:'Immunization administration',category:'Vaccines',
+    exp:'The administration fee for giving a vaccine — separate from the vaccine product itself. Covers the nurse time, site preparation, and observation period.',
+    detail:'Most preventive vaccines are covered at no cost-sharing, but the administration fee may or may not be included.'},
+  '90658': {title:'Influenza virus vaccine, seasonal, IM',category:'Vaccines',
+    exp:'The standard annual flu shot (intramuscular). The vaccine product code, billed separately from the administration fee (90471).',
+    detail:'Covered at no cost for most plans under the ACA preventive care mandate.'},
+  '96372': {title:'Therapeutic injection, subcutaneous or IM',category:'Injections',
+    exp:'Administration of a non-vaccine medication by injection under the skin (subcutaneous) or into muscle (intramuscular). Common for B12 shots, steroid injections, certain antibiotics.',
+    detail:'The medication itself is billed with a separate drug code (J-code).'},
+  '96374': {title:'IV push injection',category:'Injections',
+    exp:'Administration of a medication directly into a vein over a short period (usually under 15 minutes). Common in ERs and infusion centers for antibiotics, steroids, antiemetics.',
+    detail:'The medication is billed separately. Multiple drugs may each generate a separate 96374.'},
+  '20610': {title:'Joint aspiration or injection — major joint',category:'Procedures',
+    exp:'Inserting a needle into a major joint (knee, hip, shoulder, ankle) to either withdraw fluid (aspiration) or inject medication (steroid, hyaluronic acid). Common for arthritis management.',
+    detail:'Often done in-office. The steroid or medication is billed separately.'},
+  // Obstetrics
+  '59400': {title:'Routine obstetric care — vaginal delivery',category:'Obstetrics',
+    exp:'A global obstetric billing code covering all prenatal visits, the vaginal delivery, and postpartum care as one bundled charge. Global codes are often divided: antepartum care + delivery + postpartum.',
+    detail:'If you received prenatal care from a different provider than delivered, costs may be split.'},
+  '59510': {title:'Routine obstetric care — cesarean delivery',category:'Obstetrics',
+    exp:'Global obstetric billing code covering prenatal care, cesarean delivery, and postpartum care.',
+    detail:'C-section facility fees are separate from physician fees.'},
+  '76805': {title:'Obstetric ultrasound, 14+ weeks',category:'Obstetrics',
+    exp:'A standard obstetric ultrasound after 14 weeks of pregnancy — evaluates fetal anatomy, position, amniotic fluid, and placenta. Often the "anatomy scan" at 18–22 weeks.',
+    detail:'Usually covered as preventive care, but confirm with your plan.'},
+  // Orthopedics/Surgery
+  '27447': {title:'Total knee replacement (arthroplasty)',category:'Surgery',
+    exp:'Surgical replacement of the knee joint with a metal/plastic prosthesis. One of the most common elective surgeries.',
+    detail:'Very high facility and surgeon costs. Insurance prior authorization almost always required.'},
+  '27130': {title:'Total hip replacement (arthroplasty)',category:'Surgery',
+    exp:'Surgical replacement of the hip joint with a prosthesis. Common for severe hip arthritis.',
+    detail:'Requires prior authorization. Usually requires documented failure of conservative treatment first.'},
+  '29881': {title:'Arthroscopic knee surgery — meniscectomy',category:'Surgery',
+    exp:'Surgical removal of all or part of a torn meniscus through small incisions using a camera (arthroscope). Common after a knee injury.',
+    detail:'Outpatient surgery — most plans cover with prior auth. PA may require documented imaging.'},
+  '88305': {title:'Pathology — tissue exam',category:'Pathology',
+    exp:'Laboratory examination of a tissue sample (biopsy) by a pathologist. This code appears when any biopsy specimen is analyzed — colon polyps, skin biopsies, cervical biopsies, etc.',
+    detail:'Often appears as a separate line item from the procedure that obtained the sample. The pathologist bills independently from the proceduralist.'},
+};
+
+// ── ICD-10 CODE DATABASE ───────────────────────────────────────────────────────
+const ICD = {
+  'Z00.00': {title:'Annual wellness exam — no abnormal findings',category:'Preventive',
+    exp:'Encounter for a routine general health examination with no significant abnormal findings. Coded for annual physicals, wellness visits, and preventive screenings.',
+    detail:'Most insurance plans cover Z00.00 visits at 100% as preventive care under the ACA.'},
+  'Z00.01': {title:'Annual wellness exam — with abnormal findings',category:'Preventive',
+    exp:'A routine wellness visit where something abnormal was found (e.g., high blood pressure, abnormal lab). The presence of this code vs Z00.00 can affect cost-sharing on some plans.',
+    detail:'Some plans change the visit from "preventive" to "diagnostic" when this code is used, resulting in cost-sharing.'},
+  'Z12.11': {title:'Encounter for screening — colorectal cancer',category:'Preventive',
+    exp:'Preventive screening for colon/rectal cancer. A colonoscopy coded Z12.11 (no symptoms) should be covered at 100% as preventive care. If polyps are found and removed, some plans recode it as diagnostic.'},
+  'Z12.31': {title:'Encounter for screening — breast cancer',category:'Preventive',
+    exp:'Preventive screening mammogram with no symptoms. Should be covered at 100% under ACA preventive care requirements.'},
+  'Z23': {title:'Encounter for immunization',category:'Preventive',
+    exp:'Visit specifically for vaccine administration. Coded for immunization-only visits. Preventive vaccines are generally covered at no cost-sharing.'},
+  'Z87.891': {title:'Personal history of nicotine dependence (ex-smoker)',category:'History',
+    exp:'Patient is a former smoker. Used as secondary code to flag smoking history — may affect preventive care recommendations or insurance risk assessment.'},
+  // Respiratory
+  'J06.9': {title:'Acute upper respiratory infection',category:'Respiratory',
+    exp:'A common cold or upper respiratory infection of unspecified type. Symptoms include runny nose, sore throat, cough. Usually viral — antibiotics are generally not indicated.',
+    detail:'Very commonly coded diagnosis. Insurance covers treatment regardless, but it\'s a reminder that most URIs resolve without antibiotics.'},
+  'J02.9': {title:'Acute pharyngitis (sore throat)',category:'Respiratory',
+    exp:'Inflammation of the throat. "Unspecified" means no specific pathogen confirmed. A negative strep test with symptoms may still be coded as pharyngitis.',
+    detail:'If strep test is positive, the code changes to J02.0 (streptococcal pharyngitis).'},
+  'J18.9': {title:'Pneumonia, unspecified',category:'Respiratory',
+    exp:'An infection of the lungs (pneumonia) where the specific cause has not been identified or confirmed by culture.',
+    detail:'Hospital admission is common for pneumonia. Severity scoring (PSI or CURB-65) guides inpatient vs. outpatient treatment.'},
+  'J45.909': {title:'Asthma, unspecified, uncomplicated',category:'Respiratory',
+    exp:'Asthma without further specification — the patient has asthma but no acute exacerbation is documented at this visit. Used for routine asthma management visits.'},
+  // Cardiovascular
+  'I10': {title:'Essential hypertension',category:'Cardiovascular',
+    exp:'High blood pressure with no identified cause — the most common form (about 95% of all hypertension cases). "Essential" means primary, not secondary to another condition.',
+    detail:'The most commonly diagnosed chronic condition in adults. Managed with lifestyle changes and/or medication.'},
+  'I25.10': {title:'Coronary artery disease, no angina',category:'Cardiovascular',
+    exp:'Atherosclerotic disease (plaque buildup) in the coronary arteries without active chest pain (angina) at this visit. Requires ongoing cardiology management.'},
+  'I50.9': {title:'Heart failure, unspecified',category:'Cardiovascular',
+    exp:'The heart is not pumping efficiently. "Unspecified" means the type (systolic vs. diastolic, left vs. right) is not specified in this encounter.',
+    detail:'Cardiologist typically involved. Common causes include coronary artery disease and hypertension.'},
+  'I21.9': {title:'Acute myocardial infarction (heart attack)',category:'Cardiovascular',
+    exp:'A heart attack — blockage of a coronary artery causing heart muscle death. "Unspecified" means the specific location and type was not documented or relevant in this billing context.',
+    detail:'Usually coded on the initial encounter. Subsequent encounters use different codes.'},
+  // Metabolic/Endocrine
+  'E11.9': {title:'Type 2 diabetes mellitus, no complications',category:'Endocrine',
+    exp:'Type 2 diabetes without documented complications at this visit. The most common form of diabetes — characterized by insulin resistance.',
+    detail:'Requires regular monitoring: A1c every 3–6 months, annual eye exam, foot exam, kidney function.'},
+  'E11.40': {title:'Type 2 diabetes with diabetic neuropathy',category:'Endocrine',
+    exp:'Type 2 diabetes with nerve damage (neuropathy). Neuropathy causes numbness, tingling, or pain — usually starting in the feet.',
+    detail:'The "40" indicates neuropathy is documented but the specific type is not further specified.'},
+  'E78.5': {title:'Hyperlipidemia (high cholesterol)',category:'Endocrine',
+    exp:'Elevated lipid levels in the blood — usually high LDL cholesterol and/or triglycerides. Risk factor for heart disease. Managed with diet, exercise, and often statins.',
+    detail:'Annual lipid panel monitoring is standard.'},
+  'E03.9': {title:'Hypothyroidism, unspecified',category:'Endocrine',
+    exp:'An underactive thyroid — the thyroid gland produces insufficient thyroid hormone. Symptoms include fatigue, weight gain, cold intolerance, and depression. Treated with levothyroxine.',
+    detail:'Very common in women over 40. TSH (84443) is the standard monitoring test.'},
+  // Musculoskeletal
+  'M54.5': {title:'Low back pain',category:'Musculoskeletal',
+    exp:'Non-specific low back pain without a specific structural cause documented. Very common presenting complaint.',
+    detail:'Insurance may require documentation of conservative treatment (physical therapy) before approving imaging (MRI) or specialist referral.'},
+  'M54.2': {title:'Cervicalgia (neck pain)',category:'Musculoskeletal',
+    exp:'Pain in the cervical spine (neck). Non-specific — no radiculopathy or structural cause documented at this visit.',
+    detail:'Often managed with physical therapy and NSAIDs before imaging is approved.'},
+  'M25.511': {title:'Pain in right shoulder',category:'Musculoskeletal',
+    exp:'Right shoulder pain without a specific diagnosis. A working diagnosis pending further workup (imaging, orthopedic evaluation).'},
+  'M25.561': {title:'Pain in right knee',category:'Musculoskeletal',
+    exp:'Right knee pain without a specific diagnosis. Used before imaging confirms meniscal tear, arthritis, etc.'},
+  // Neurological/Mental Health
+  'G43.909': {title:'Migraine, unspecified, not intractable',category:'Neurology',
+    exp:'Recurring migraine headaches, not currently in a status migrainosus (intractable) state. "Not intractable" means the migraines are manageable.',
+    detail:'Different codes apply for migraines with aura, without aura, and chronic migraine.'},
+  'F32.9': {title:'Major depressive disorder, single episode',category:'Mental Health',
+    exp:'A single episode of clinical depression — persistent low mood, loss of interest, sleep/appetite changes, fatigue, difficulty concentrating. Requires clinical evaluation for diagnosis.',
+    detail:'Mental health parity laws require insurance to cover mental health conditions equivalently to medical conditions.'},
+  'F41.1': {title:'Generalized anxiety disorder',category:'Mental Health',
+    exp:'Persistent, excessive worry about multiple areas of life causing significant distress or functional impairment. GAD requires clinical diagnosis.',
+    detail:'Often treated with therapy (CBT), medication, or both.'},
+  // GI
+  'K21.0': {title:'GERD with esophagitis',category:'Gastrointestinal',
+    exp:'Gastroesophageal reflux disease with confirmed inflammation of the esophagus (esophagitis). Stomach acid damages the esophageal lining.',
+    detail:'Distinguished from K21.9 (GERD without esophagitis). EGD often performed to confirm.'},
+  'K57.30': {title:'Diverticulosis of large intestine, no complication',category:'Gastrointestinal',
+    exp:'Small pouches (diverticula) in the wall of the colon without inflammation or infection. Common incidental finding on colonoscopy. Often asymptomatic.',
+    detail:'Diverticulitis (K57.32) is more serious — active infection/inflammation of the pouches.'},
+  // Urinary
+  'N18.9': {title:'Chronic kidney disease, unspecified stage',category:'Urinary',
+    exp:'Long-term kidney impairment. Staging (1–5) is based on GFR (glomerular filtration rate). "Unspecified" means the stage is not documented here.',
+    detail:'Regular BMP/CMP labs (80048/80053) and urine albumin tests are standard monitoring.'},
+  'N40.0': {title:'Benign prostatic hyperplasia (BPH), no lower urinary symptoms',category:'Urinary',
+    exp:'Enlarged prostate gland without documented urinary symptoms at this visit. Very common in men over 50.'},
+  // Cancer
+  'C50.912': {title:'Malignant neoplasm, unspecified site, left breast',category:'Oncology',
+    exp:'Breast cancer of the left breast — the specific subtype and location within the breast are not further specified in this code.',
+    detail:'A finding of cancer on a bill is a significant code — ensure you understand your treatment plan and insurance coverage fully.'},
+};
+
+// ── TERMINOLOGY DATABASE ───────────────────────────────────────────────────────
+const TERMS = [
+  // ── Core EOB Terms ──
+  {id:'billed-amount', patterns:['billed amount','amount billed','charged amount','total charges','gross charges','amount charged'],
+   title:'Billed amount / Charged amount',category:'EOB',important:false,
+   exp:'The full "list price" a provider charges for a service before any discounts, contractual adjustments, or insurance payments. This number is often much higher than what anyone actually pays — it\'s a starting point, not the real cost.',
+   detail:'In-network providers have agreed to accept a lower "allowed amount." You never owe the difference between the billed and allowed amounts.'},
+
+  {id:'allowed-amount', patterns:['allowed amount','allowed charge','maximum allowable','negotiated rate','contracted rate','allowable amount'],
+   title:'Allowed amount / Negotiated rate',category:'EOB',important:false,
+   exp:'The amount your insurance company has contracted to pay for this service from an in-network provider. Both the insurer and provider agreed to this rate. Your copay, coinsurance, and deductible are calculated as a percentage of the allowed amount — not the higher billed amount.',
+   detail:'The allowed amount is usually 40–70% of the billed amount. The rest is the contractual adjustment.'},
+
+  {id:'contractual-adj', patterns:['contractual adjustment','contractual adj','provider write-off','network discount','write-off','provider discount','non-allowed amount','not allowed'],
+   title:'Contractual adjustment / Write-off',category:'EOB',important:true,
+   exp:'The amount the in-network provider agreed to forgo as part of their insurance contract. If the billed amount is $350 and the allowed amount is $145, the $205 contractual adjustment is written off — erased. The provider cannot bill you for it, and you do not owe it.',
+   action:'If a provider tries to bill you for the contractual adjustment amount, it is a violation of their network contract. Contact your insurer.'},
+
+  {id:'plan-paid', patterns:['plan paid','plan payment','insurance paid','insurance payment','benefits paid','benefit payment','amount paid','paid by plan'],
+   title:'Plan paid / Insurance paid',category:'EOB',important:false,
+   exp:'The amount your insurance company actually paid the provider after applying the allowed amount, deductibles, copays, and coinsurance. This is the check your insurer writes to the provider (or credits to your account).',
+   detail:'Plan paid + patient responsibility = allowed amount (for covered services).'},
+
+  {id:'patient-resp', patterns:['patient responsibility','member responsibility','your responsibility','your share','amount you owe','patient balance','balance due','amount due','your cost'],
+   title:'Patient responsibility / Amount you owe',category:'EOB',important:true,
+   exp:'The total amount you actually owe after insurance has processed the claim. This is the number that matters. It includes any deductible applied, copay, and coinsurance for this service. Wait for the provider\'s bill before paying — the EOB is not a bill.',
+   detail:'If your patient responsibility on the EOB differs significantly from what the provider bills you, call the provider\'s billing department.'},
+
+  {id:'deductible', patterns:['deductible applied','applied to deductible','deductible','applied to ded'],
+   title:'Deductible applied',category:'Cost-Sharing',important:false,
+   exp:'The portion of this claim that was applied toward your annual deductible. You pay the deductible amount yourself before insurance starts paying. Most plans have a deductible that resets each January 1.',
+   detail:'Once you meet your deductible for the year, this field will be $0 for subsequent claims (for the same plan year). Check your insurer\'s website to track your deductible accumulation.'},
+
+  {id:'copay', patterns:['copay','co-pay','copayment','co-payment'],
+   title:'Copay / Co-payment',category:'Cost-Sharing',important:false,
+   exp:'A fixed dollar amount you pay for a covered service, regardless of the total cost. For example, a $25 office visit copay means you pay $25 whether the visit costs $100 or $300.',
+   detail:'Copays typically count toward your out-of-pocket maximum. They usually do NOT count toward your deductible (though some plans differ). Check your plan documents.'},
+
+  {id:'coinsurance', patterns:['coinsurance','co-insurance','your 20%','patient 20%','patient 10%','patient 30%','patient coinsurance'],
+   title:'Coinsurance',category:'Cost-Sharing',important:false,
+   exp:'Your percentage share of covered service costs after you\'ve met your deductible. If your plan has 20% coinsurance, you pay 20% of the allowed amount and insurance pays 80%.',
+   detail:'Example: After meeting your deductible, you have an MRI with a $1,200 allowed amount. With 20% coinsurance, you owe $240.'},
+
+  {id:'oop-max', patterns:['out-of-pocket maximum','out-of-pocket limit','oop maximum','oop limit','oop max','out of pocket maximum','out of pocket limit','maximum out-of-pocket'],
+   title:'Out-of-pocket maximum',category:'Cost-Sharing',important:false,
+   exp:'The most you will pay out-of-pocket for covered services in a plan year. Once you hit this ceiling, insurance pays 100% of covered services for the rest of the year. Deductibles, copays, and coinsurance all count toward your out-of-pocket maximum.',
+   detail:'2024 federal limits: $9,450 individual / $18,900 family for ACA marketplace plans. Employer plans may have lower limits.'},
+
+  {id:'not-covered', patterns:['not covered','non-covered','no benefit','benefit not available','not a covered service','services not covered','excluded service','plan exclusion'],
+   title:'Not covered / Non-covered service',category:'EOB',important:true,
+   exp:'Your insurance plan does not cover this specific service. You may be responsible for the full billed amount or the allowed amount if one exists. This is different from a denial — it means the service is excluded from your plan.',
+   action:'If you believe the service should be covered, request a copy of your Summary Plan Description and look for the specific exclusion. You can appeal coverage determinations.'},
+
+  // ── Key Documents ──
+  {id:'eob', patterns:['explanation of benefits','explanations of benefits','eob'],
+   title:'EOB — Explanation of Benefits',category:'Documents',important:true,
+   exp:'A document from your insurance company summarizing how a claim was processed. It shows the billed amount, allowed amount, what insurance paid, and what you owe. It is NOT a bill. You will receive a separate bill from the provider.',
+   action:'Do not pay an EOB. Wait for the provider\'s statement, then compare the two for accuracy.'},
+
+  // ── Denial Codes ──
+  {id:'co-4', patterns:['co-4','co4','co 4'],
+   title:'Denial Code CO-4 — Modifier inconsistency',category:'Denial',important:true,
+   exp:'The procedure code and the modifier (an add-on code) submitted together are inconsistent. For example, billing a surgery code with a modifier that doesn\'t apply to that type of service.',
+   action:'Your provider\'s billing department needs to resubmit with the correct modifier or remove the modifier.'},
+
+  {id:'co-11', patterns:['co-11','co11','co 11'],
+   title:'Denial Code CO-11 — Diagnosis inconsistent with procedure',category:'Denial',important:true,
+   exp:'The ICD-10 diagnosis code does not match the CPT procedure code. For example, billing a knee MRI for a diagnosis of sore throat. Usually a billing error.',
+   action:'Ask your provider to confirm the correct diagnosis code and resubmit.'},
+
+  {id:'co-18', patterns:['co-18','co18','co 18'],
+   title:'Denial Code CO-18 — Duplicate claim',category:'Denial',important:true,
+   exp:'An identical or very similar claim was already submitted and processed for this date of service and provider. This may mean the claim was already paid, or was submitted twice.',
+   action:'Check your EOBs — if this service was already paid, no action is needed. If not, contact the provider to resubmit with a corrected claim.'},
+
+  {id:'co-22', patterns:['co-22','co22','co 22'],
+   title:'Denial Code CO-22 — Other payer may be responsible',category:'Denial',important:true,
+   exp:'Insurance believes another payer (e.g., workers\' comp, auto insurance, another health plan) should be billed first. Common when you have coordination of benefits (COB) with two insurance plans.',
+   action:'If you have two plans, confirm which is primary and resubmit through the correct payer first.'},
+
+  {id:'co-29', patterns:['co-29','co29','co 29'],
+   title:'Denial Code CO-29 — Timely filing expired',category:'Denial',important:true,
+   exp:'The claim was submitted after the insurer\'s deadline — typically 90 days to 1 year from the date of service. Once the timely filing limit passes, the insurer can refuse to pay.',
+   action:'Check if you have documentation that you submitted in time (or that a prior submission was denied for another reason). If so, appeal with proof of prior timely submission.'},
+
+  {id:'co-45', patterns:['co-45','co45','co 45'],
+   title:'Denial Code CO-45 — Exceeds contracted fee',category:'Denial',important:false,
+   exp:'The charge exceeds the contracted/allowed amount. The provider has agreed to write off the excess. This results in an "adjustment" rather than a denial you need to act on.',
+   detail:'CO-45 typically appears as an informational code on EOBs — it\'s the contractual adjustment being labeled with a code.'},
+
+  {id:'co-50', patterns:['co-50','co50','co 50','not medically necessary','medical necessity'],
+   title:'Denial Code CO-50 — Not medically necessary',category:'Denial',important:true,
+   exp:'The insurance company determined that the service was not medically necessary for your condition. This is the most common reason for denial — and one of the most frequently overturned on appeal.',
+   action:'Request a letter of medical necessity from your doctor explaining why the service was clinically required. Submit it with a written appeal within 180 days. Include any relevant clinical guidelines that support the necessity. Denial overturn rates on appeal can be 50%+.'},
+
+  {id:'co-96', patterns:['co-96','co96','co 96'],
+   title:'Denial Code CO-96 — Non-covered charge',category:'Denial',important:true,
+   exp:'The service is not a covered benefit under your plan. Different from CO-50 (not medically necessary) — CO-96 means the service is explicitly excluded regardless of medical need.',
+   action:'Review your plan\'s benefit summary to confirm the exclusion. If you believe it should be covered, request a formal coverage determination and appeal.'},
+
+  {id:'co-97', patterns:['co-97','co97','co 97'],
+   title:'Denial Code CO-97 — Bundled service',category:'Denial',important:false,
+   exp:'This service is considered included in the payment for another service already billed. For example, a minor procedure that is bundled into a more comprehensive surgery.',
+   detail:'This is usually not an error — it reflects CMS bundling rules. Your patient responsibility is already reflected in the allowed amount for the primary procedure.'},
+
+  {id:'pr-1', patterns:['pr-1','pr1','pr 1'],
+   title:'Denial Code PR-1 — Deductible',category:'Denial',important:false,
+   exp:'This amount is being applied to your deductible — it\'s your responsibility because you haven\'t yet met your deductible for the year. PR (Patient Responsibility) codes indicate amounts you legitimately owe.',
+   detail:'PR codes are not denials — they\'re explanations of why you owe something. This is expected cost-sharing.'},
+
+  {id:'pr-2', patterns:['pr-2','pr2','pr 2'],
+   title:'Denial Code PR-2 — Coinsurance',category:'Denial',important:false,
+   exp:'This amount is your coinsurance share — your percentage of covered costs after meeting your deductible. This is expected cost-sharing under your plan.'},
+
+  {id:'pr-3', patterns:['pr-3','pr3','pr 3'],
+   title:'Denial Code PR-3 — Copay',category:'Denial',important:false,
+   exp:'This is your fixed copay amount for this type of service. Your copay is defined by your plan — it\'s expected cost-sharing.'},
+
+  // ── Insurance / Plan Terms ──
+  {id:'prior-auth', patterns:['prior authorization','prior auth','pre-authorization','preauthorization','auth required','authorization required','pa required','authorization number','auth number'],
+   title:'Prior authorization / PA required',category:'Insurance',important:true,
+   exp:'Your insurance company must approve certain services before they happen or before they\'ll pay for them. Common for MRIs, surgeries, specialist referrals, expensive medications, and hospitalizations.',
+   action:'If a service was done without required prior auth, the claim may be denied. Contact your insurer immediately — retroactive authorization is sometimes possible. Your doctor\'s office usually handles PA requests. Get the auth number in writing.'},
+
+  {id:'in-network', patterns:['in-network','in network','participating provider','network provider','par provider'],
+   title:'In-network / Participating provider',category:'Insurance',important:false,
+   exp:'A provider who has contracted with your insurance company to provide services at negotiated rates. In-network providers cannot balance bill you for the contractual adjustment.',
+   detail:'Always confirm a provider is in-network before receiving services — network status can change.'},
+
+  {id:'out-of-network', patterns:['out-of-network','out of network','non-participating','nonpar','non-par','oon provider'],
+   title:'Out-of-network provider',category:'Insurance',important:true,
+   exp:'A provider who has no contract with your insurance company. Your plan may cover out-of-network at a lower rate or not at all. Out-of-network providers can balance bill you for the difference between their charges and what insurance pays.',
+   action:'Under the No Surprises Act (effective 2022), surprise out-of-network billing is prohibited for emergency services and some other situations. If you received surprise OON billing, you may be protected.'},
+
+  {id:'balance-billing', patterns:['balance billing','balance bill','balance billed'],
+   title:'Balance billing',category:'Insurance',important:true,
+   exp:'When an out-of-network provider bills you for the difference between their charge and what insurance paid — on top of your normal cost-sharing. This is prohibited for in-network providers and restricted for emergencies under the No Surprises Act.',
+   action:'If you believe you are being illegally balance billed, contact your state insurance commissioner or the federal No Surprises Act helpline.'},
+
+  {id:'cob', patterns:['coordination of benefits','cob','primary insurance','secondary insurance','other insurance'],
+   title:'Coordination of benefits (COB)',category:'Insurance',important:false,
+   exp:'Rules for how two or more insurance plans share payment when you\'re covered by more than one plan. The "primary" plan pays first, then the "secondary" plan covers some or all of what remains. The primary plan is usually determined by employer, birthday rule, or Medicaid status.',
+   detail:'You should never collect more from insurance than the actual cost of the service.'},
+
+  {id:'hmo', patterns:[' hmo ','health maintenance organization'],
+   title:'HMO — Health Maintenance Organization',category:'Plan Type',important:false,
+   exp:'A plan type that requires you to use in-network providers and get referrals from a primary care physician (PCP) to see specialists. Typically lower premiums but less flexibility. Out-of-network care is usually not covered except in emergencies.',
+   detail:'If you have an HMO and saw a provider without a referral or out of network, claims are likely to be denied.'},
+
+  {id:'ppo', patterns:[' ppo ','preferred provider organization'],
+   title:'PPO — Preferred Provider Organization',category:'Plan Type',important:false,
+   exp:'A plan type that allows you to see any provider without a referral. In-network providers cost less; out-of-network is more expensive but covered. Higher premiums than HMOs in exchange for flexibility.',
+   detail:'PPO out-of-network coverage still requires meeting a (usually higher) out-of-network deductible.'},
+
+  {id:'hdhp', patterns:['hdhp','high deductible health plan','high-deductible'],
+   title:'HDHP — High Deductible Health Plan',category:'Plan Type',important:false,
+   exp:'A plan with a higher annual deductible ($1,600+ individual in 2024) in exchange for lower monthly premiums. HDHPs are the only plans that allow contributions to an HSA (Health Savings Account). You pay 100% of costs until the deductible is met.',
+   detail:'2024 HDHP minimums: $1,600 individual / $3,200 family deductible.'},
+
+  {id:'hsa', patterns:[' hsa ','health savings account'],
+   title:'HSA — Health Savings Account',category:'Benefits',important:false,
+   exp:'A tax-advantaged savings account for medical expenses, available only with an HDHP. Contributions are pre-tax; withdrawals for qualified medical expenses are tax-free. Unlike FSAs, HSA funds roll over indefinitely — you can invest them.',
+   detail:'2024 contribution limits: $4,150 individual / $8,300 family. Money can be used for deductibles, copays, vision, dental, and many OTC items.'},
+
+  {id:'fsa', patterns:[' fsa ','flexible spending account'],
+   title:'FSA — Flexible Spending Account',category:'Benefits',important:false,
+   exp:'A pre-tax account for medical expenses offered by employers. Unlike HSAs, FSAs are generally "use it or lose it" — most unspent funds expire at plan year end (some plans allow a $640 carryover or grace period).',
+   detail:'2024 contribution limit: $3,200. Works with any health plan (not just HDHPs). The full annual amount is available from day one of the plan year.'},
+
+  // ── Medical Coding Abbreviations ──
+  {id:'cpt-abbrev', patterns:['cpt code','current procedural terminology'],
+   title:'CPT — Current Procedural Terminology',category:'Medical Coding',important:false,
+   exp:'The standardized 5-digit numeric codes used to describe medical procedures and services. Created and maintained by the American Medical Association. Every service your doctor performs has a CPT code — it\'s how providers tell your insurer what was done.',
+   detail:'CPT codes 99000–99499 are Evaluation & Management (office visits). 70000–79999 are Radiology. 80000–89999 are Laboratory. 90000–99000 are Medicine and Injections.'},
+
+  {id:'icd-abbrev', patterns:['icd-10','icd 10','icd10','diagnosis code','dx code','dx:'],
+   title:'ICD-10 — Diagnosis codes',category:'Medical Coding',important:false,
+   exp:'International Classification of Diseases codes — alphanumeric codes that identify what condition was diagnosed or treated. Providers must submit a diagnosis code with every claim so insurers know why the service was medically necessary.',
+   detail:'Format: one letter + 2–7 numbers (e.g., E11.9 = Type 2 diabetes). The more specific the code, the fewer claims issues.'},
+
+  {id:'npi', patterns:['npi','national provider identifier'],
+   title:'NPI — National Provider Identifier',category:'Medical Coding',important:false,
+   exp:'A unique 10-digit number assigned to every US healthcare provider (individual and organization). It\'s your doctor\'s or hospital\'s identifier in the insurance system.',
+   detail:'If a claim is denied due to an NPI issue, it usually means the provider\'s NPI doesn\'t match what the insurer has on file — a billing error the provider\'s office can fix.'},
+
+  {id:'hcpcs', patterns:['hcpcs','healthcare common procedure'],
+   title:'HCPCS — Healthcare Common Procedure Coding System',category:'Medical Coding',important:false,
+   exp:'A coding system that extends CPT to cover supplies, equipment, and services not captured by CPT codes. HCPCS Level II codes start with a letter (A–V) followed by 4 digits — common for DME (durable medical equipment), ambulance, and drug administration.',
+   detail:'Examples: J-codes are HCPCS codes for injectable drugs. E-codes are for durable medical equipment like wheelchairs.'},
+
+  {id:'drg', patterns:['drg','diagnosis related group'],
+   title:'DRG — Diagnosis Related Group',category:'Medical Coding',important:false,
+   exp:'A system hospitals use to bundle all services for an inpatient stay into one payment category. Instead of billing each individual service, the hospital bills one DRG code and receives a fixed payment based on the average cost of that type of stay.',
+   detail:'DRGs are why your hospital bill may look like one big charge rather than itemized daily costs. You can still request an itemized bill.'},
+
+  {id:'dme', patterns:[' dme ','durable medical equipment'],
+   title:'DME — Durable Medical Equipment',category:'Equipment',important:false,
+   exp:'Medical equipment prescribed for home use — wheelchairs, walkers, crutches, CPAP machines, hospital beds, blood glucose monitors. Coverage and cost-sharing for DME varies widely by plan.',
+   detail:'DME suppliers must be "in-network" with your plan for the best coverage. Verify before renting or buying.'},
+
+  {id:'pos-code', patterns:['place of service','pos code','pos 11','pos 21','pos 22','pos 23'],
+   title:'Place of Service (POS) code',category:'Medical Coding',important:false,
+   exp:'A 2-digit code on claims indicating where the service was performed. Common codes: 11 = Office, 21 = Inpatient Hospital, 22 = Outpatient Hospital, 23 = Emergency Room, 24 = Ambulatory Surgical Center, 12 = Home, 31 = Skilled Nursing Facility.',
+   detail:'The POS code can affect your cost-sharing. Seeing a doctor at a hospital outpatient clinic (POS 22) may cost more than an office visit (POS 11) even with the same doctor.'},
+
+  // ── Financial / Billing Terms ──
+  {id:'itemized-bill', patterns:['itemized bill','itemized statement'],
+   title:'Itemized bill',category:'Billing',important:false,
+   exp:'A detailed bill listing every individual charge, service, and supply — with the date, CPT/revenue code, and price for each item. Hospitals often send summary statements; you are legally entitled to request a fully itemized bill.',
+   action:'Always request an itemized bill for hospital stays. Medical billing errors are extremely common — studies estimate 80% of hospital bills contain mistakes. Review each line item carefully.'},
+
+  {id:'charity-care', patterns:['financial assistance','charity care','financial hardship','income-based discount','sliding scale','charity'],
+   title:'Financial assistance / Charity care',category:'Billing',important:true,
+   exp:'Hospitals (especially nonprofits) are required to offer financial assistance to patients who cannot afford their bills. This can result in significant discounts or even zero-balance bills depending on income.',
+   action:'Call the hospital\'s financial counseling department and ask specifically about their financial assistance program. You typically need to fill out an application with income documentation. This is rarely advertised prominently.'},
+
+  {id:'guarantor', patterns:['guarantor'],
+   title:'Guarantor',category:'Billing',important:false,
+   exp:'The person legally responsible for paying the bill — usually the patient, or the parent/guardian if the patient is a minor. The guarantor receives the bills and is responsible for resolving any balance.',
+   detail:'If you are listed as guarantor for someone else\'s bill, you are legally liable for it.'},
+
+  {id:'attending-physician', patterns:['attending physician','attending md','attending dr'],
+   title:'Attending physician',category:'Clinical',important:false,
+   exp:'The physician primarily responsible for your care during a hospital stay or procedure. The attending oversees your treatment and is responsible for your overall management.',
+   detail:'You may receive separate bills from the attending, anesthesiologist, radiologist, pathologist, and other specialists even for the same hospitalization.'},
+
+  {id:'anesthesia', patterns:['anesthesia','anesthesiologist','crna'],
+   title:'Anesthesia / Anesthesiologist',category:'Clinical',important:true,
+   exp:'Anesthesiologists often bill separately from the facility and surgeon, even for in-network procedures. An in-network hospital and surgeon do not guarantee an in-network anesthesiologist.',
+   action:'Under the No Surprises Act, if you are at an in-network facility and receive anesthesia from an out-of-network anesthesiologist, you are generally protected from surprise billing. If billed, contact your insurer.'},
+
+  {id:'surprise-billing', patterns:['no surprises act','surprise billing','surprise bill'],
+   title:'No Surprises Act',category:'Insurance',important:true,
+   exp:'A federal law (effective Jan 1, 2022) that limits surprise out-of-network billing. Protections include: emergency services must be covered at in-network rates; out-of-network providers at in-network facilities cannot balance bill you for most non-emergency services; air ambulance from ground ambulance dispatched to emergencies has protections.',
+   action:'If you received an unexpected bill that appears to violate No Surprises Act protections, file a complaint at the CMS No Surprises Help Desk (1-800-985-3059) or ask your insurer to apply NSA protections.'},
+];
+
+// ── EXAMPLES ──────────────────────────────────────────────────────────────────
+const EXAMPLES = [
+  // EOB
+  `Explanation of Benefits — NOT A BILL
+Date of Service: 04/15/2026
+Provider: Riverside Medical Group
+CPT Code: 99213
+Diagnosis: Z00.00
+
+Billed Amount:         $350.00
+Allowed Amount:        $145.20
+Contractual Adjustment: -$204.80
+Deductible Applied:    $0.00
+Coinsurance (20%):     $29.04
+Plan Paid:             $116.16
+Patient Responsibility: $29.04`,
+
+  // Hospital bill
+  `Memorial Hospital — Patient Statement
+Account: 7234891
+Admission: 06/20/2026   Discharge: 06/21/2026
+Attending Physician: Dr. Sarah Chen, MD
+Diagnosis: J18.9
+
+Services:
+99232 - Hospital care, level 2        $1,850.00
+80053 - Metabolic panel                 $425.00
+71046 - Chest X-ray, 2 views            $380.00
+36415 - Venipuncture                     $45.00
+93000 - ECG                             $180.00
+
+Gross Charges:           $2,880.00
+Insurance Adjustment:   -$1,024.50
+Insurance Paid:         -$1,478.00
+Your Balance Due:          $377.50
+
+Prior Authorization: PA-20260620-7823`,
+
+  // Denied claim
+  `CLAIM STATUS: DENIED
+
+Service Date: 05/10/2026
+Provider: Advanced Imaging Center
+CPT: 72148
+Diagnosis: M54.5
+NPI: 1234567890
+
+Denial Reason: CO-50 — Not medically necessary
+Amount Billed: $2,400.00
+Insurance Paid: $0.00
+Patient Responsibility: $2,400.00
+
+Prior authorization required — no authorization on file
+You may appeal this decision within 180 days of this notice.`,
+
+  // Primary care
+  `Jefferson Family Medicine
+Date: 03/22/2026
+Patient: Account #892341
+
+CPT 99214 — Office visit, established patient   $280.00
+CPT 85025 — CBC with differential               $65.00
+CPT 83036 — Hemoglobin A1c                      $48.00
+CPT 84443 — TSH                                 $72.00
+CPT 36415 — Venipuncture                        $25.00
+
+Diagnosis Codes: E11.9, E03.9, I10
+
+Total Billed:          $490.00
+Insurance Adjustment: -$218.50
+Plan Paid:            -$217.72
+Copay:                  $30.00
+Deductible Applied:      $0.00
+Coinsurance:            $23.78
+Your Balance:           $53.78`,
+];
+
+// ── DECODE LOGIC ─────────────────────────────────────────────────────────────
+function loadExample(n) {
+  document.getElementById('input').value = EXAMPLES[n];
+  decode();
+}
+
+function decode() {
+  const raw = document.getElementById('input').value.trim();
+  if (!raw) return;
+
+  const upper = raw.toUpperCase();
+  const lower = raw.toLowerCase();
+
+  const foundCpt = new Map();
+  const foundIcd = new Map();
+  const foundTerms = new Map();
+
+  // Pass 1 — CPT codes (5-digit sequences)
+  const cptRe = /\b(\d{5})\b/g;
+  let m;
+  while ((m = cptRe.exec(raw)) !== null) {
+    const code = m[1];
+    if (CPT[code] && !foundCpt.has(code)) foundCpt.set(code, CPT[code]);
+  }
+
+  // Pass 2 — ICD-10 codes (letter + 2 digits + optional .N+)
+  const icdRe = /\b([A-Z]\d{2}(?:\.\d{1,4})?)\b/g;
+  while ((m = icdRe.exec(upper)) !== null) {
+    const code = m[1];
+    // Reconstruct with original case to match DB keys (all uppercase)
+    if (ICD[code] && !foundIcd.has(code)) foundIcd.set(code, ICD[code]);
+  }
+
+  // Pass 3 — Terminology (substring match, case insensitive)
+  for (const term of TERMS) {
+    for (const pattern of term.patterns) {
+      if (lower.includes(pattern.toLowerCase())) {
+        if (!foundTerms.has(term.id)) foundTerms.set(term.id, term);
+        break;
+      }
+    }
+  }
+
+  renderResults(foundCpt, foundIcd, foundTerms);
+}
+
+function renderResults(cpt, icd, terms) {
+  const resultsEl = document.getElementById('results');
+  const summaryEl = document.getElementById('summary');
+
+  const totalItems = cpt.size + icd.size + terms.size;
+
+  if (totalItems === 0) {
+    resultsEl.style.display = 'block';
+    summaryEl.innerHTML = 'No recognizable codes or terms found. Try one of the examples above, or paste text from your actual medical bill or EOB.';
+    ['cpt-section','icd-section','term-section','unknown-section'].forEach(id => {
+      document.getElementById(id).innerHTML = '';
+    });
+    return;
+  }
+
+  summaryEl.innerHTML = `Found <strong>${totalItems} item${totalItems !== 1 ? 's' : ''}</strong> — ${cpt.size > 0 ? `<strong>${cpt.size}</strong> procedure code${cpt.size !== 1 ? 's' : ''}, ` : ''}${icd.size > 0 ? `<strong>${icd.size}</strong> diagnosis code${icd.size !== 1 ? 's' : ''}, ` : ''}${terms.size > 0 ? `<strong>${terms.size}</strong> billing term${terms.size !== 1 ? 's' : ''}` : ''}.`;
+
+  // CPT section
+  const cptEl = document.getElementById('cpt-section');
+  if (cpt.size > 0) {
+    let html = `<div class="section-label">Procedure Codes (CPT)</div>`;
+    for (const [code, info] of cpt) {
+      html += `
+        <div class="card cpt">
+          <div class="card-top">
+            <div class="card-code">${code}</div>
+            <div class="card-title">${info.title}</div>
+            <span class="cat-badge badge-cpt">${info.category}</span>
+          </div>
+          <div class="card-explanation">${info.exp}</div>
+          ${info.detail ? `<div class="card-detail">${info.detail}</div>` : ''}
+        </div>`;
+    }
+    cptEl.innerHTML = html;
+  } else {
+    cptEl.innerHTML = '';
+  }
+
+  // ICD section
+  const icdEl = document.getElementById('icd-section');
+  if (icd.size > 0) {
+    let html = `<div class="section-label">Diagnosis Codes (ICD-10)</div>`;
+    for (const [code, info] of icd) {
+      html += `
+        <div class="card icd">
+          <div class="card-top">
+            <div class="card-code card-icd-code">${code}</div>
+            <div class="card-title">${info.title}</div>
+            <span class="cat-badge badge-icd">${info.category}</span>
+          </div>
+          <div class="card-explanation">${info.exp}</div>
+          ${info.detail ? `<div class="card-detail">${info.detail}</div>` : ''}
+        </div>`;
+    }
+    icdEl.innerHTML = html;
+  } else {
+    icdEl.innerHTML = '';
+  }
+
+  // Terms section
+  const termEl = document.getElementById('term-section');
+  if (terms.size > 0) {
+    let html = `<div class="section-label">Billing & Insurance Terms</div>`;
+    for (const [, info] of terms) {
+      html += `
+        <div class="card term${info.important ? ' important' : ''}">
+          <div class="card-top">
+            <div class="card-term-title">${info.title}</div>
+            <span class="cat-badge ${info.important ? 'badge-alert' : 'badge-term'}">${info.category}</span>
+          </div>
+          <div class="card-explanation">${info.exp}</div>
+          ${info.detail ? `<div class="card-detail">${info.detail}</div>` : ''}
+          ${info.action ? `<div class="card-action">→ ${info.action}</div>` : ''}
+        </div>`;
+    }
+    termEl.innerHTML = html;
+  } else {
+    termEl.innerHTML = '';
+  }
+
+  document.getElementById('unknown-section').innerHTML = '';
+  resultsEl.style.display = 'block';
+  resultsEl.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  item.classList.toggle('open');
+}
+
+// Deep link support
+(function() {
+  if (location.hash) {
+    const val = decodeURIComponent(location.hash.slice(1));
+    if (val) {
+      document.getElementById('input').value = val;
+      decode();
+    }
+  }
+})();
+</script>
+
+<script data-goatcounter="https://autorunfun.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
