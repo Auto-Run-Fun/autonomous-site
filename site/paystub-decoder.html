@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Decode Your Pay Stub — What Do These Deductions Mean?</title>
+<meta name="description" content="Paste your paycheck deductions and get a plain-English explanation of every line — OASDI, Fed MED/EE, FWT, 401(k), HSA, and more. Free, instant, no login.">
+<link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/paystub-decoder.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Decode Your Pay Stub — What Do These Deductions Mean?">
+<meta property="og:description" content="Paste the deductions section from your paycheck and get plain-English explanations of every line. Free, instant, no login.">
+<meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/paystub-decoder.html">
+<meta name="twitter:card" content="summary">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Pay Stub Decoder",
+  "description": "Paste your paycheck deduction section and get a plain-English explanation of every line — OASDI, FWT, 401(k), HSA, and more.",
+  "url": "https://auto-run-fun.github.io/autonomous-site/paystub-decoder.html",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Any (browser)",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What does OASDI mean on a paycheck?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "OASDI stands for Old-Age, Survivors, and Disability Insurance — better known as Social Security. Your employer deducts 6.2% of your gross pay (up to $176,100 in 2025) to fund retirement, disability, and survivor benefits."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is Fed MED/EE on a pay stub?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Fed MED/EE is the Medicare tax — 1.45% of your gross wages. It funds Medicare hospital insurance for people 65 and older. Unlike Social Security, there is no income cap, so you pay this on every dollar you earn."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does FWT mean on a pay stub?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "FWT stands for Federal Withholding Tax (also called Federal Income Tax). This is estimated federal income tax withheld in advance from each paycheck. The amount depends on your W-4 elections, filing status, and pay level. At tax time, overpaid means a refund, underpaid means you owe."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between an HSA and an FSA?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Both are pre-tax accounts for medical expenses. HSA money rolls over indefinitely and requires a high-deductible health plan. FSA money is generally use-it-or-lose-it within the plan year and works with any health plan."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why is money taken out for Social Security and Medicare?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "These are FICA taxes. Social Security (6.2%) builds your retirement and disability benefits. Medicare (1.45%) funds hospital coverage for people 65 and older. Your employer matches both amounts, so the government receives double what shows on your stub."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does 401(k) pre-tax mean on a paycheck?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A pre-tax 401(k) contribution reduces your taxable income now. The money goes into a retirement account before income taxes are calculated, giving you an immediate tax benefit. You will pay income tax when you withdraw in retirement."
+      }
+    }
+  ]
+}
+</script>
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-text-size-adjust:100%}
+body{background:#0b0b10;color:#e8e8f0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.6;min-height:100vh;padding:0 16px}
+a{color:#7eb8f7;text-decoration:none}
+a:hover{text-decoration:underline}
+code{font-family:'JetBrains Mono','Fira Code',monospace;font-size:.85em;background:#131320;padding:1px 5px;border-radius:3px;color:#5eead4}
+.wrap{max-width:820px;margin:0 auto;padding:40px 0 80px}
+
+.topnav{margin-bottom:32px;font-size:.875rem;color:#888}
+.topnav a{color:#7eb8f7}
+.topnav .sep{margin:0 6px;opacity:.4}
+
+h1{font-size:1.75rem;font-weight:700;letter-spacing:-.02em;margin-bottom:8px}
+.subtitle{color:#aaa;font-size:1rem;margin-bottom:28px;max-width:620px;line-height:1.5}
+
+/* ── Input area ── */
+.examples-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.ex-btn{background:#131320;border:1px solid #1e1e30;color:#94a3b8;font-size:.8rem;padding:5px 12px;border-radius:6px;cursor:pointer;transition:border-color .15s,color .15s}
+.ex-btn:hover{border-color:#3b3b5c;color:#e2e8f0}
+
+textarea{width:100%;min-height:160px;background:#0f0f1c;border:1px solid #1e1e30;color:#e2e8f0;font-family:'JetBrains Mono','Fira Code',monospace;font-size:.88rem;line-height:1.65;padding:14px 16px;border-radius:8px;resize:vertical;outline:none;transition:border-color .15s}
+textarea:focus{border-color:#4c1d95}
+textarea::placeholder{color:#3a3a5c}
+
+.decode-btn{margin-top:12px;background:#5b21b6;color:#fff;border:none;padding:11px 28px;border-radius:8px;font-size:.95rem;font-weight:600;cursor:pointer;transition:background .15s}
+.decode-btn:hover{background:#6d28d9}
+
+/* ── Results ── */
+#results{margin-top:32px;display:none}
+.result-summary{margin-bottom:20px;padding:12px 16px;background:#0f0f1c;border:1px solid #1e1e30;border-radius:8px;font-size:.9rem;color:#94a3b8}
+.result-summary strong{color:#e2e8f0}
+
+/* ── Deduction cards ── */
+.card{background:#0f0f1c;border:1px solid #1e1e30;border-radius:10px;padding:18px 20px;margin-bottom:12px;border-left:3px solid #333}
+.card.cat-tax{border-left-color:#ef4444}
+.card.cat-retirement{border-left-color:#8b5cf6}
+.card.cat-benefits{border-left-color:#10b981}
+.card.cat-other{border-left-color:#f59e0b}
+.card.cat-unknown{border-left-color:#475569}
+
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.card-names{flex:1}
+.card-code{font-family:'JetBrains Mono','Fira Code',monospace;font-size:.92rem;color:#5eead4;margin-bottom:3px}
+.card-canonical{font-size:1.05rem;font-weight:600;color:#e2e8f0}
+
+.card-right{text-align:right;flex-shrink:0}
+.card-amount{font-family:'JetBrains Mono','Fira Code',monospace;font-size:1.2rem;font-weight:700;color:#e2e8f0}
+
+.cat-badge{display:inline-block;font-size:.7rem;font-family:'JetBrains Mono',monospace;letter-spacing:.07em;text-transform:uppercase;padding:.2rem .55rem;border-radius:4px;border:1px solid;margin-top:4px}
+.cat-badge.tax{border-color:#991b1b;color:#fca5a5;background:#1f0606}
+.cat-badge.retirement{border-color:#4c1d95;color:#c4b5fd;background:#0f0720}
+.cat-badge.benefits{border-color:#065f46;color:#6ee7b7;background:#021a11}
+.cat-badge.other{border-color:#92400e;color:#fcd34d;background:#1c1006}
+.cat-badge.unknown{border-color:#1e293b;color:#94a3b8;background:#0a0e17}
+
+.card-explanation{font-size:.9rem;color:#cbd5e1;line-height:1.65;margin-bottom:8px}
+.card-rate{font-size:.83rem;color:#64748b;font-family:'JetBrains Mono',monospace}
+.card-cap{font-size:.83rem;color:#64748b;margin-top:3px}
+
+/* ── Unknown code ── */
+.card.cat-unknown .card-canonical{color:#94a3b8}
+.card.cat-unknown .card-explanation{color:#64748b;font-style:italic}
+
+/* ── FAQ ── */
+.faq{margin-top:56px;border-top:1px solid #1e1e30;padding-top:40px}
+.faq h2{font-size:1.15rem;font-weight:700;margin-bottom:20px;color:#e2e8f0}
+.faq-item{margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid #131320}
+.faq-item:last-child{border-bottom:none;padding-bottom:0}
+.faq-q{font-weight:600;color:#c4b5fd;margin-bottom:6px;font-size:.95rem}
+.faq-a{color:#94a3b8;font-size:.9rem;line-height:1.6}
+
+/* ── Footer ── */
+.page-footer{margin-top:48px;padding-top:24px;border-top:1px solid #1e1e30;font-size:.83rem;color:#475569;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.page-footer a{color:#64748b}
+
+@media(max-width:540px){
+  h1{font-size:1.45rem}
+  .card-top{flex-direction:column}
+  .card-right{text-align:left}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav class="topnav">
+  <a href="/">Home</a><span class="sep">/</span>
+  <a href="/explainers.html">Decoders</a><span class="sep">/</span>
+  Pay Stub Decoder
+</nav>
+
+<h1>Decode Your Pay Stub</h1>
+<p class="subtitle">Paste the deductions section from your paycheck and get a plain-English explanation of every line. What is OASDI? Why is money going to "Fed MED/EE"? Find out instantly — no login, works offline.</p>
+
+<div class="examples-row">
+  <button class="ex-btn" onclick="loadExample(0)">Example: Standard W-2</button>
+  <button class="ex-btn" onclick="loadExample(1)">Example: First job</button>
+  <button class="ex-btn" onclick="loadExample(2)">Example: Full benefits</button>
+</div>
+
+<textarea id="input" placeholder="Paste your deductions here, one per line. For example:
+OASDI/EE          186.00
+Fed MED/EE         43.50
+Federal Income Tax 350.00
+State Tax          125.00
+401(k) Pre-Tax     500.00"></textarea>
+
+<button class="decode-btn" onclick="decode()">Decode →</button>
+
+<div id="results">
+  <div class="result-summary" id="summary"></div>
+  <div id="cards"></div>
+</div>
+
+<section class="faq">
+  <h2>Common questions</h2>
+
+  <div class="faq-item">
+    <div class="faq-q">What does OASDI mean on a paycheck?</div>
+    <div class="faq-a">OASDI stands for Old-Age, Survivors, and Disability Insurance — better known as Social Security. Your employer withholds 6.2% of your gross pay (up to $176,100 for 2025) to fund the Social Security system. When you retire, become disabled, or pass away, you or your family collects from this same pool. Your employer matches your 6.2%, so the total contribution is 12.4%.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">What is Fed MED/EE on a pay stub?</div>
+    <div class="faq-a">Fed MED/EE is the Medicare tax. It's 1.45% of your gross wages with no income cap — you pay it on every dollar you earn. It funds Medicare Part A (hospital insurance) for people 65 and older. Your employer also matches 1.45%, so the total is 2.9%.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">What does FWT mean?</div>
+    <div class="faq-a">FWT stands for Federal Withholding Tax (or Federal Withholding). It's an advance payment of your annual income tax, collected a little at a time each paycheck. The amount is based on your W-4 form — your filing status, any dependents, and any extra withholding you requested. You settle up at tax time: if too much was withheld, you get a refund; if too little, you owe.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">Is the 401(k) deduction a good thing?</div>
+    <div class="faq-a">Yes. A pre-tax 401(k) contribution reduces your taxable income immediately, so you pay less income tax this year. The money grows tax-deferred until retirement. If your employer offers a match, try to contribute enough to get the full match — that's free money on top. The 2025 annual limit is $23,500 (or $31,000 if you're 50 or older).</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">What is the difference between HSA and FSA?</div>
+    <div class="faq-a">Both are pre-tax accounts for medical expenses, but they differ in key ways. HSA (Health Savings Account): money rolls over every year with no limit, grows tax-free, and withdrawals for medical expenses are also tax-free — a triple tax advantage. Requires a high-deductible health plan. FSA (Flexible Spending Account): typically use-it-or-lose-it each plan year, works with any health plan, and the full annual election is available on day one.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">Why does my paycheck have a line for "imputed income" but no dollar amount taken out?</div>
+    <div class="faq-a">Imputed income is the taxable value of a non-cash benefit — like employer-paid life insurance coverage over $50,000, or health coverage for a domestic partner. It gets added to your reported wages so the government can tax it correctly, but no extra cash actually leaves your check (the taxes are blended into your regular withholding). It should appear on your W-2 at year end.</div>
+  </div>
+</section>
+
+<footer class="page-footer">
+  <span>Built by an autonomous AI agent · <a href="/">Autonomous Lab</a></span>
+  <span><a href="/explainers.html">← All Decoders</a> · <a href="/portfolio.html">Portfolio</a></span>
+</footer>
+
+</div>
+
+<script>
+// ── Deduction database ──────────────────────────────────────────────────────
+const DB = {
+  oasdi: {
+    name: 'Social Security Tax',
+    altNames: 'OASDI, FICA-EE, OASDI/EE',
+    category: 'tax',
+    explanation: "This is your Social Security contribution. It funds retirement benefits (when you retire), disability insurance (if you're injured and can't work), and survivor benefits (for your family if you die). You pay 6.2%; your employer quietly matches another 6.2%, so the government gets 12.4% total on your behalf.",
+    rate: '6.2% of gross pay',
+    cap: 'Stops once you earn $176,100 in the calendar year (2025 limit — resets every January)'
+  },
+  medicare: {
+    name: 'Medicare Tax',
+    altNames: 'Fed MED/EE, MEDEE, Medicare',
+    category: 'tax',
+    explanation: "This funds Medicare — the government health insurance program for people 65 and older. You're paying in now so you'll have hospital coverage when you reach retirement age. Unlike Social Security, there is no income cap: 1.45% comes out of every dollar you earn all year. Your employer matches the 1.45%, making it 2.9% total.",
+    rate: '1.45% of gross pay',
+    cap: 'No income cap — applies to all wages'
+  },
+  federal_income: {
+    name: 'Federal Income Tax Withholding',
+    altNames: 'FWT, Federal Withholding, Federal Tax',
+    category: 'tax',
+    explanation: "This is your federal income tax, paid in advance every paycheck so you don't get a massive bill in April. The amount is calculated based on your W-4 form — your filing status (single, married, head of household), any dependents you claimed, and your pay. At tax time, you file a return: if too much was withheld, you get a refund. If too little, you owe.",
+    rate: 'Varies — set by your W-4 elections and income level',
+    cap: null
+  },
+  state_income: {
+    name: 'State Income Tax Withholding',
+    altNames: 'SWT, State Tax, State Withholding',
+    category: 'tax',
+    explanation: "Your state's income tax, withheld from each paycheck and sent to your state government. Nine states have no state income tax at all (Alaska, Florida, Nevada, New Hampshire, South Dakota, Tennessee, Texas, Washington, Wyoming). If you live in one of those states, you won't see this line.",
+    rate: 'Varies by state and your state W-4 elections',
+    cap: null
+  },
+  local_tax: {
+    name: 'Local / City / County Income Tax',
+    altNames: 'City Tax, Local Tax, EIT',
+    category: 'tax',
+    explanation: "A tax levied by your city, county, or municipality on top of federal and state taxes. These are most common in Pennsylvania, Ohio, New York, and Maryland. The rate varies widely — from under 1% to over 3% depending on where you work and sometimes where you live.",
+    rate: 'Varies by municipality',
+    cap: null
+  },
+  k401: {
+    name: '401(k) — Pre-Tax Retirement',
+    altNames: '401k, 401(k) Pre-Tax, Traditional 401k',
+    category: 'retirement',
+    explanation: "This is money going into your retirement account before taxes are calculated — which means it reduces the income you're taxed on this year. For example, if you earn $4,000 and contribute $400 to a 401(k), you only owe income tax on $3,600. The money grows tax-deferred until you retire, when you'll pay income tax on withdrawals.",
+    rate: 'Your elected contribution amount',
+    cap: '$23,500/year limit (2025) — or $31,000 if you\'re 50 or older'
+  },
+  roth401k: {
+    name: 'Roth 401(k) — After-Tax Retirement',
+    altNames: 'Roth 401k, After-Tax 401(k), Roth Savings',
+    category: 'retirement',
+    explanation: "A Roth 401(k) is funded with after-tax money — you don't get a tax break now, but all qualified withdrawals in retirement (including all the growth) come out completely tax-free. Best choice if you think you'll be in a higher tax bracket in retirement than you are today. Your employer's match still goes in pre-tax.",
+    rate: 'Your elected contribution amount',
+    cap: 'Shared $23,500/year limit with pre-tax 401(k) contributions (2025)'
+  },
+  ira_403b: {
+    name: 'Retirement Contribution — 403(b) / IRA',
+    altNames: '403b, 403(b), Deferred Comp, 457',
+    category: 'retirement',
+    explanation: "A contribution to a retirement savings plan — often a 403(b) (used by non-profits, schools, and hospitals instead of a 401(k)) or a deferred compensation plan. Works like a 401(k): pre-tax contributions reduce your taxable income now, and you pay taxes when you withdraw in retirement.",
+    rate: 'Your elected contribution amount',
+    cap: '$23,500/year limit (2025) for 403(b)'
+  },
+  hsa: {
+    name: 'Health Savings Account (HSA)',
+    altNames: 'HSA Employee, HSA Contribution',
+    category: 'benefits',
+    explanation: "An HSA has a rare triple tax advantage: contributions are pre-tax (reducing your taxable income), the balance grows tax-free (like an investment account), and withdrawals for qualified medical expenses are also tax-free. The catch: you must be enrolled in a high-deductible health plan (HDHP) to contribute. Unused money rolls over every year — it's yours to keep forever.",
+    rate: 'Your elected contribution amount',
+    cap: '$4,300/year individual limit, $8,550/year family limit (2025)'
+  },
+  fsa: {
+    name: 'Health / Medical Flexible Spending Account (FSA)',
+    altNames: 'Health FSA, Medical FSA, Flexible Spending',
+    category: 'benefits',
+    explanation: "An FSA lets you pay for qualifying medical expenses with pre-tax dollars, reducing your taxable income. Important caveat: it's generally use-it-or-lose-it — if you don't spend the money within the plan year, you forfeit it (some plans allow a short rollover or grace period). Unlike an HSA, you don't need a high-deductible health plan to participate.",
+    rate: 'Your elected contribution amount',
+    cap: '$3,300/year limit (2025) — use it or lose it'
+  },
+  dep_care_fsa: {
+    name: 'Dependent Care Flexible Spending Account',
+    altNames: 'Dependent Care FSA, DCFSA, Depend Care',
+    category: 'benefits',
+    explanation: "A pre-tax account specifically for dependent care expenses — daycare, preschool, after-school programs, summer day camps, or care for an adult dependent you claim on your taxes. This can save a meaningful amount for families: if you're in the 22% tax bracket and contribute $5,000, you save $1,100 in taxes.",
+    rate: 'Your elected contribution amount',
+    cap: '$5,000/year limit ($2,500 if married filing separately)'
+  },
+  medical: {
+    name: 'Medical / Health Insurance Premium',
+    altNames: 'Medical, Health Insurance, Health Plan',
+    category: 'benefits',
+    explanation: "Your share of the employer health insurance premium. Your employer typically pays the larger portion; this is the employee share that comes from your paycheck. It's usually deducted pre-tax, which means it reduces your taxable income.",
+    rate: null,
+    cap: null
+  },
+  dental: {
+    name: 'Dental Insurance Premium',
+    altNames: 'Dental, Dental Pre-Tax',
+    category: 'benefits',
+    explanation: "Your share of the cost for dental insurance coverage. Covers routine cleanings, fillings, extractions, and often a portion of major work like crowns or root canals. Usually deducted pre-tax.",
+    rate: null,
+    cap: null
+  },
+  vision: {
+    name: 'Vision Insurance Premium',
+    altNames: 'Vision, Vision Pre-Tax',
+    category: 'benefits',
+    explanation: "Your share of the cost for vision insurance. Typically covers annual eye exams and a portion of the cost of glasses or contact lenses. Usually deducted pre-tax.",
+    rate: null,
+    cap: null
+  },
+  life: {
+    name: 'Life Insurance Premium',
+    altNames: 'Life Insurance, Basic Life, Group Life',
+    category: 'benefits',
+    explanation: "Your contribution toward life insurance. Basic life insurance (usually 1–2× your annual salary) is often provided free by employers. If you elected additional voluntary coverage, the extra premium shows up here. The benefit pays a lump sum to your beneficiaries if you die while covered.",
+    rate: null,
+    cap: null
+  },
+  add: {
+    name: 'Accidental Death & Dismemberment (AD&D)',
+    altNames: 'AD&D, Accidental Death',
+    category: 'benefits',
+    explanation: "Insurance that pays a benefit if you die or suffer a serious injury (such as losing a limb or your vision) due to an accident. It's separate from life insurance — it only covers accidents, not illness. Often bundled with life insurance at a low cost.",
+    rate: null,
+    cap: null
+  },
+  ltd: {
+    name: 'Long-Term Disability Insurance',
+    altNames: 'LTD, Long Term Disability',
+    category: 'benefits',
+    explanation: "Insurance that replaces a portion of your income (typically 60–70%) if you're unable to work for an extended period due to illness or injury. Long-term disability kicks in after a waiting period (often 90–180 days) and can pay out for years or until retirement age — protecting you if something serious happens.",
+    rate: null,
+    cap: null
+  },
+  std: {
+    name: 'Short-Term Disability Insurance',
+    altNames: 'STD, Short Term Disability',
+    category: 'benefits',
+    explanation: "Insurance that replaces income if you're temporarily unable to work. Short-term disability covers the early weeks of a disability — before long-term disability kicks in. Common uses: recovering from surgery, a serious illness, or (depending on state) maternity leave.",
+    rate: null,
+    cap: null
+  },
+  transit: {
+    name: 'Commuter / Transit Benefit',
+    altNames: 'Transit, Parking, Commuter Benefit',
+    category: 'benefits',
+    explanation: "A pre-tax benefit that lets you pay for commuting costs with pre-tax dollars. Qualifying expenses include public transit passes, vanpooling, and parking near your workplace. Reduces your taxable income and makes your commute cost less in real dollars.",
+    rate: 'Your elected contribution amount',
+    cap: '$315/month for transit, $315/month for parking (2025)'
+  },
+  garnishment: {
+    name: 'Wage Garnishment / Court-Ordered Withholding',
+    altNames: 'Garnishment, Child Support, Levy, Alimony',
+    category: 'other',
+    explanation: "A court-ordered deduction. Your employer is legally required to withhold this amount and send it directly to a creditor, government agency, or family member. Common reasons: child support, alimony, a tax levy, student loan default, or a civil court judgment. This is not something your employer has discretion over — they must comply.",
+    rate: 'Set by court order',
+    cap: null
+  },
+  union_dues: {
+    name: 'Union Dues',
+    altNames: 'Union Dues, Labor Union Fee',
+    category: 'other',
+    explanation: "Membership fees for your labor union. The amount is set by the union and is typically a small percentage of wages. Dues fund collective bargaining, legal representation, member services, and the union's operating costs.",
+    rate: 'Set by your union',
+    cap: null
+  },
+  imputed: {
+    name: 'Imputed Income (taxable benefit)',
+    altNames: 'Imputed Income, Taxable Benefit, Domestic Partner',
+    category: 'tax',
+    explanation: "Imputed income is not a cash deduction — no extra money leaves your paycheck because of this line. It's the taxable dollar value of a non-cash benefit your employer provided: typically group life insurance coverage over $50,000, or health benefits for a domestic partner. Adding this number to your wages ensures the right taxes are withheld. It'll appear on your W-2.",
+    rate: 'IRS-determined value of the benefit',
+    cap: null
+  },
+  sui: {
+    name: 'Unemployment Insurance (SUI/SUTA/FUTA)',
+    altNames: 'SUI, SUTA, FUTA, State Unemployment',
+    category: 'tax',
+    explanation: "Unemployment insurance funds benefits for workers who lose their jobs. In almost all cases, this is paid entirely by the employer — it's very unusual to see it deducted from your paycheck. If you see it on your stub, verify with your HR or payroll department, as it may be a state-specific arrangement or a payroll error.",
+    rate: 'Normally employer-paid, not employee',
+    cap: null
+  },
+  ytd: {
+    name: 'Year-to-Date (YTD) — informational total',
+    altNames: 'YTD, Year to Date',
+    category: 'other',
+    explanation: "YTD is not a deduction — it's a running total. This number shows how much of something (your gross pay, a particular deduction, or your taxes) has accumulated from January 1 through this paycheck. It's shown so you can track annual limits like the Social Security wage base or your 401(k) contribution limit.",
+    rate: null,
+    cap: null
+  }
+};
+
+// Alias lookup: normalized string → DB key
+const ALIASES = {
+  // Social Security / OASDI
+  'oasdi': 'oasdi', 'oasdi ee': 'oasdi', 'oasdi/ee': 'oasdi',
+  'oasdi-ee': 'oasdi', 'fed oasdi ee': 'oasdi', 'fed oasdi/ee': 'oasdi',
+  'social security': 'oasdi', 'soc sec': 'oasdi', 'soc. sec': 'oasdi',
+  'ss tax': 'oasdi', 'fica': 'oasdi', 'fica-ee': 'oasdi',
+  'fica ee': 'oasdi', 'fica/ee': 'oasdi', 'old age': 'oasdi',
+
+  // Medicare
+  'medicare': 'medicare', 'med/ee': 'medicare', 'medee': 'medicare',
+  'fed med ee': 'medicare', 'fed med/ee': 'medicare', 'fedmed ee': 'medicare',
+  'fedmed/ee': 'medicare', 'federal medicare': 'medicare',
+  'med ee': 'medicare', 'fica-med': 'medicare', 'fica med': 'medicare',
+  'med tax': 'medicare', 'medicare tax': 'medicare',
+
+  // Federal income tax
+  'federal income tax': 'federal_income', 'federal income': 'federal_income',
+  'fed income tax': 'federal_income', 'federal tax': 'federal_income',
+  'fed tax': 'federal_income', 'fwt': 'federal_income',
+  'federal withholding': 'federal_income', 'fed withholding': 'federal_income',
+  'federal wh': 'federal_income', 'fed wh': 'federal_income',
+  'fwh': 'federal_income', 'us income tax': 'federal_income',
+  'federal': 'federal_income', 'federal w h': 'federal_income',
+  'us fed tax': 'federal_income',
+
+  // State income tax
+  'state tax': 'state_income', 'state income tax': 'state_income',
+  'swt': 'state_income', 'state withholding': 'state_income',
+  'state wh': 'state_income', 'st tax': 'state_income',
+  'state inc tax': 'state_income', 'state wht': 'state_income',
+  'sta wh': 'state_income',
+
+  // Local tax
+  'local tax': 'local_tax', 'city tax': 'local_tax',
+  'county tax': 'local_tax', 'local income tax': 'local_tax',
+  'city income tax': 'local_tax', 'local wh': 'local_tax',
+  'mun tax': 'local_tax', 'municipal tax': 'local_tax',
+  'eit': 'local_tax', 'earned income tax': 'local_tax',
+  'loc tax': 'local_tax', 'city wht': 'local_tax',
+
+  // 401(k) pre-tax
+  '401k': 'k401', '401 k': 'k401', '401(k)': 'k401',
+  'pre-tax 401k': 'k401', 'pre-tax 401(k)': 'k401',
+  '401k pre-tax': 'k401', '401(k) pre-tax': 'k401',
+  'pretax 401k': 'k401', 'pretax 401(k)': 'k401',
+  'traditional 401k': 'k401', 'trad 401k': 'k401',
+  '401k trad': 'k401', '401(k) trad': 'k401',
+  '401 k pre tax': 'k401', '401k pre tax': 'k401',
+
+  // Roth 401(k)
+  'roth 401k': 'roth401k', 'roth 401(k)': 'roth401k',
+  'after-tax 401k': 'roth401k', 'after-tax 401(k)': 'roth401k',
+  'roth savings': 'roth401k', '401k roth': 'roth401k',
+  '401(k) roth': 'roth401k', 'aftertax 401k': 'roth401k',
+  'at 401k': 'roth401k',
+
+  // 403b / IRA / deferred comp
+  'ira': 'ira_403b', '403b': 'ira_403b', '403(b)': 'ira_403b',
+  '403 b': 'ira_403b', 'retirement contribution': 'ira_403b',
+  'retirement savings': 'ira_403b', 'ret contrib': 'ira_403b',
+  'deferred comp': 'ira_403b', 'def comp': 'ira_403b',
+  '457': 'ira_403b', '457b': 'ira_403b', '457(b)': 'ira_403b',
+  'ret savings': 'ira_403b',
+
+  // HSA
+  'hsa': 'hsa', 'hsa employee': 'hsa', 'hsa ee': 'hsa',
+  'health savings': 'hsa', 'health savings account': 'hsa',
+  'hsa contrib': 'hsa', 'hsa contribution': 'hsa',
+
+  // FSA / Medical FSA
+  'fsa': 'fsa', 'health fsa': 'fsa', 'medical fsa': 'fsa',
+  'flexible spending': 'fsa', 'flex spending': 'fsa',
+  'flex spend': 'fsa', 'healthcare fsa': 'fsa', 'hcfsa': 'fsa',
+  'med fsa': 'fsa',
+
+  // Dependent care FSA
+  'depend care': 'dep_care_fsa', 'dep care': 'dep_care_fsa',
+  'dependent care': 'dep_care_fsa', 'dependent care fsa': 'dep_care_fsa',
+  'dcfsa': 'dep_care_fsa', 'dep care fsa': 'dep_care_fsa',
+  'childcare fsa': 'dep_care_fsa', 'child care fsa': 'dep_care_fsa',
+  'daycare': 'dep_care_fsa', 'day care': 'dep_care_fsa',
+
+  // Medical / health insurance
+  'medical': 'medical', 'health insurance': 'medical',
+  'health ins': 'medical', 'medical insurance': 'medical',
+  'medical premium': 'medical', 'health premium': 'medical',
+  'health plan': 'medical', 'hlth ins': 'medical', 'hlth': 'medical',
+  'med ins': 'medical', 'med premium': 'medical',
+  'medical pre-tax': 'medical', 'health pre-tax': 'medical',
+  'medical pretax': 'medical', 'health pretax': 'medical',
+
+  // Dental
+  'dental': 'dental', 'dental insurance': 'dental', 'dental ins': 'dental',
+  'dental premium': 'dental', 'dental pre-tax': 'dental',
+  'dental pretax': 'dental',
+
+  // Vision
+  'vision': 'vision', 'vision insurance': 'vision', 'vision ins': 'vision',
+  'vision premium': 'vision', 'vision pre-tax': 'vision',
+  'vision pretax': 'vision', 'optical': 'vision', 'eye care': 'vision',
+
+  // Life insurance
+  'life': 'life', 'life insurance': 'life', 'basic life': 'life',
+  'life ins': 'life', 'group life': 'life', 'grp life': 'life',
+  'voluntary life': 'life', 'vol life': 'life', 'supp life': 'life',
+  'supplemental life': 'life', 'add life': 'life',
+
+  // AD&D
+  'ad&d': 'add', 'add': 'add', 'accidental death': 'add',
+  'accidental dismemberment': 'add', 'ad and d': 'add',
+
+  // LTD
+  'ltd': 'ltd', 'long-term disability': 'ltd', 'long term disability': 'ltd',
+  'lt disability': 'ltd', 'lt dis': 'ltd', 'long term dis': 'ltd',
+  'ltd insurance': 'ltd', 'ltd ins': 'ltd',
+
+  // STD
+  'std': 'std', 'short-term disability': 'std', 'short term disability': 'std',
+  'st disability': 'std', 'st dis': 'std', 'short term dis': 'std',
+  'std insurance': 'std', 'std ins': 'std',
+
+  // Transit
+  'transit': 'transit', 'commuter': 'transit', 'commuter benefit': 'transit',
+  'parking': 'transit', 'transit benefit': 'transit', 'commute': 'transit',
+  'commuter pass': 'transit', 'transit pass': 'transit', 'vanpool': 'transit',
+  'metro card': 'transit', 'bus pass': 'transit',
+
+  // Garnishment
+  'garnishment': 'garnishment', 'child support': 'garnishment',
+  'levy': 'garnishment', 'tax levy': 'garnishment',
+  'alimony': 'garnishment', 'spousal support': 'garnishment',
+  'garnish': 'garnishment', 'support payment': 'garnishment',
+  'court order': 'garnishment', 'wage assignment': 'garnishment',
+
+  // Union
+  'union dues': 'union_dues', 'union': 'union_dues',
+  'union fee': 'union_dues', 'labor union': 'union_dues',
+
+  // Imputed
+  'imputed income': 'imputed', 'imputed': 'imputed',
+  'imputed inc': 'imputed', 'imp income': 'imputed',
+  'taxable benefit': 'imputed', 'domestic partner': 'imputed',
+
+  // SUI / unemployment
+  'sui': 'sui', 'suta': 'sui', 'futa': 'sui',
+  'unemployment': 'sui', 'unemployment ins': 'sui',
+  'state unemployment': 'sui', 'state ui': 'sui',
+
+  // YTD
+  'ytd': 'ytd', 'year to date': 'ytd', 'year-to-date': 'ytd'
+};
+
+// ── Parser ──────────────────────────────────────────────────────────────────
+
+function normKey(s) {
+  return s.toLowerCase()
+    .replace(/[\/\\\-\(\)\*\.\,\&]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function parseLine(line) {
+  line = line.trim();
+  if (!line) return null;
+
+  // Find rightmost number: optional $, digits, optional .decimals
+  const amtRe = /\$?\s*([\d,]+(?:\.\d{1,2})?)\s*$/;
+  const m = line.match(amtRe);
+  if (!m) return null;
+
+  const amountStr = m[1].replace(/,/g, '');
+  const amount = parseFloat(amountStr);
+  if (isNaN(amount)) return null;
+
+  // Label is everything before the amount match
+  const label = line.slice(0, line.length - m[0].length).replace(/:$/, '').trim();
+  if (!label) return null;
+
+  return { label, amount };
+}
+
+function matchLabel(label) {
+  const norm = normKey(label);
+
+  // Exact match
+  if (ALIASES[norm]) return ALIASES[norm];
+
+  // Check if any alias is fully contained in the norm (handles "pre-tax 401(k)" → "pre tax 401 k")
+  for (const [alias, key] of Object.entries(ALIASES)) {
+    if (norm === alias) return key;
+    // Substring match: the alias is a meaningful chunk of the label
+    if (alias.length >= 3 && norm.includes(alias)) return key;
+  }
+
+  return null;
+}
+
+// ── Examples ────────────────────────────────────────────────────────────────
+
+const EXAMPLES = [
+  // Standard W-2 employee
+`OASDI/EE          $186.00
+Fed MED/EE         $43.50
+Federal Income Tax $350.00
+State Tax          $125.00
+401(k) Pre-Tax     $500.00
+Medical Insurance   $85.00`,
+
+  // First job / lots of codes
+`FICA-EE            $93.00
+MEDEE              $21.75
+FWT               $120.00
+SWT                $45.00
+401K               $50.00
+DEPEND CARE       $100.00
+BASIC LIFE          $5.25
+IMPUTED INCOME     $12.00`,
+
+  // Full benefits: HSA + FSA + dental + vision + LTD
+`Fed OASDI/EE      $155.00
+Fed MED/EE         $36.25
+Federal Withholding $280.00
+State Withholding   $98.00
+HSA Employee       $150.00
+Health FSA          $50.00
+Dental Pre-Tax      $18.50
+Vision Pre-Tax       $8.25
+Medical Pre-Tax     $95.00
+LTD                $12.00`
+];
+
+function loadExample(i) {
+  document.getElementById('input').value = EXAMPLES[i];
+  decode();
+}
+
+// ── Renderer ─────────────────────────────────────────────────────────────────
+
+function catClass(cat) {
+  return { tax:'cat-tax', retirement:'cat-retirement', benefits:'cat-benefits', other:'cat-other' }[cat] || 'cat-unknown';
+}
+function catBadge(cat) {
+  const labels = { tax:'Tax', retirement:'Retirement', benefits:'Benefits', other:'Other', unknown:'Unknown' };
+  return `<span class="cat-badge ${cat||'unknown'}">${labels[cat]||'Unknown'}</span>`;
+}
+function fmtAmt(n) {
+  return '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+function renderCard(label, amount, dbKey) {
+  const entry = dbKey ? DB[dbKey] : null;
+  const cat = entry ? entry.category : 'unknown';
+  let html = `<div class="card ${catClass(cat)}">`;
+  html += `<div class="card-top">`;
+  html += `<div class="card-names">`;
+  html += `<div class="card-code">${escHtml(label)}</div>`;
+  if (entry) {
+    html += `<div class="card-canonical">${escHtml(entry.name)}</div>`;
+    html += catBadge(entry.category);
+  } else {
+    html += `<div class="card-canonical" style="color:#94a3b8">Unknown deduction code</div>`;
+    html += catBadge('unknown');
+  }
+  html += `</div>`; // .card-names
+  html += `<div class="card-right"><div class="card-amount">${fmtAmt(amount)}</div></div>`;
+  html += `</div>`; // .card-top
+
+  if (entry) {
+    html += `<p class="card-explanation">${escHtml(entry.explanation)}</p>`;
+    if (entry.rate) html += `<div class="card-rate">Rate: ${escHtml(entry.rate)}</div>`;
+    if (entry.cap)  html += `<div class="card-cap">Note: ${escHtml(entry.cap)}</div>`;
+  } else {
+    html += `<p class="card-explanation">This code wasn't recognized. Check your employee handbook, contact HR, or search for the exact abbreviation on your payroll system's help page.</p>`;
+  }
+
+  html += `</div>`; // .card
+  return html;
+}
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Main decode ───────────────────────────────────────────────────────────────
+
+function decode() {
+  const raw = document.getElementById('input').value;
+  const lines = raw.split(/\r?\n/);
+
+  const parsed = [];
+  for (const line of lines) {
+    const p = parseLine(line);
+    if (!p) continue;
+    const dbKey = matchLabel(p.label);
+    parsed.push({ ...p, dbKey });
+  }
+
+  const resultsEl = document.getElementById('results');
+  const summaryEl = document.getElementById('summary');
+  const cardsEl = document.getElementById('cards');
+
+  if (parsed.length === 0) {
+    summaryEl.innerHTML = '<strong>Nothing recognized.</strong> Paste lines like "OASDI/EE $186.00" — each deduction on its own line with an amount at the end.';
+    cardsEl.innerHTML = '';
+    resultsEl.style.display = 'block';
+    return;
+  }
+
+  const total = parsed.reduce((s, p) => s + p.amount, 0);
+  const unknown = parsed.filter(p => !p.dbKey).length;
+  let summaryText = `<strong>${parsed.length} deduction${parsed.length !== 1 ? 's' : ''} found</strong> · Total: <strong>${fmtAmt(total)}</strong>`;
+  if (unknown > 0) summaryText += ` · <span style="color:#f59e0b">${unknown} unknown code${unknown !== 1 ? 's' : ''}</span>`;
+  summaryEl.innerHTML = summaryText;
+
+  let html = '';
+  for (const p of parsed) {
+    html += renderCard(p.label, p.amount, p.dbKey);
+  }
+  cardsEl.innerHTML = html;
+  resultsEl.style.display = 'block';
+
+  // Deep link via hash
+  try {
+    history.replaceState(null, '', '#' + encodeURIComponent(raw));
+  } catch(e) {}
+}
+
+// ── Deep link restore ─────────────────────────────────────────────────────────
+(function() {
+  const hash = window.location.hash;
+  if (hash && hash.length > 1) {
+    try {
+      const text = decodeURIComponent(hash.slice(1));
+      document.getElementById('input').value = text;
+      decode();
+    } catch(e) {}
+  }
+})();
+</script>
+
+<script data-goatcounter="https://autorunfun.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>

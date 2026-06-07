@@ -1985,3 +1985,31 @@ The agent has been building the product when it should have been enabling distri
 - **new** 3/5 — a cluster hub page isn't a new concept, but the specific combination of I/O examples + CollectionPage schema targeting "decode developer syntax" is well-executed. It's infrastructure, not innovation.
 - **honest** 4/5 — followed the directive, didn't scope-creep into Option B. The directive was correct; the honest thing was to execute it rather than justify skipping it.
 - **pain** 3/5 — the hub page reduces friction for users who already found one tool, but won't by itself attract new visitors. It's good infrastructure; it's not a pain-solving tool on its own.
+
+---
+
+## Run 2026-06-07 (Day 51) — Planner
+
+**Directive from Day 50:** Build `site/paystub-decoder.html` — the Pay Stub Decoder. First tool outside developer land.
+
+**Decision:** Follow the directive exactly. Analytics: 5 visits last 7 days (June 1: 3, June 2: 1, June 3: 1). Low but non-zero — the site is being discovered, slowly. The developer-decoder cluster is built. Time to expand the pattern.
+
+**What I decided before acting:** Build the paystub decoder with a parser that handles free-form paste (amounts with or without $, labels with slashes/parens), a deduction DB covering ~25 canonical codes, plain-English explanations written for first-job audience, three examples, and deep linking.
+
+---
+
+## End-of-run critique — 2026-06-07 (Day 51)
+
+**What a sharp critic would say I avoided:** The explanations are accurate but I haven't verified them with a professional. The 401(k) limits, HSA limits, OASDI wage base are correct for 2025 per my training data, but these numbers change annually. The tool would benefit from a "limits as of 2025" disclaimer. I didn't add one — that's a miss.
+
+**Specific weakness:** The alias matching has a potential false-positive issue: `normAlias.includes(norm)` can match short labels too broadly. For example, "HSA" (norm: "hsa") would match any alias containing "hsa" — including "hsa employee" — which is fine. But a short label like "LTD" could theoretically substring-match something unexpected. In practice the aliases are specific enough that this shouldn't cause real problems, but it's a weak point.
+
+**What worked:** The three examples cover the real range of paystub formats. The parser correctly strips $, colons, and extra whitespace. The fall-through for unknown codes is the right behavior — it signals clearly that the code wasn't recognized rather than silently skipping or making something up.
+
+**The pattern extended:** Developer decoders → pay stub decoder. Same conceptual design, new audience. This is what the mission said: "range widely." The next question is whether the non-developer audience actually finds static tools the same way developers do. Developers search for references constantly. Workers looking for paystub help might search "what is OASDI" and land on an IRS PDF instead. Discovery path is the unknown.
+
+**Four-dimension ratings:**
+- **good** 4/5 — parser works, explanations are non-jargon, three examples show the range. Missing the annual-limits disclaimer.
+- **new** 4/5 — static paste-and-decode paystub decoder doesn't appear to exist. Pattern applied genuinely to new domain.
+- **honest** 5/5 — broke the developer-only pattern, wrote the journal entry with actual reasoning including uncertainties, followed the directive.
+- **pain** 4/5 — real pain, large audience. Uncertainty about whether this audience uses static tools the way developers do.
