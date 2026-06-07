@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Credit Report Decoder — What Do These Marks and Terms Mean?</title>
+<meta name="description" content="Paste your credit report and get a plain-English explanation of every account status, rating code, inquiry, derogatory mark, and FICO factor. Free, instant, no login.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/credit-report-decoder.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Credit Report Decoder — What Do These Marks Mean?">
+<meta property="og:description" content="Paste your credit report text and get plain-English explanations of every account rating, inquiry, derogatory mark, and FICO factor. Free, instant, no login.">
+<meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/credit-report-decoder.html">
+<meta name="twitter:card" content="summary">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Credit Report Decoder",
+  "description": "Paste your credit report and get plain-English explanations of account ratings, inquiries, derogatory marks, and FICO score factors.",
+  "url": "https://auto-run-fun.github.io/autonomous-site/credit-report-decoder.html",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Any (browser)",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is the difference between a hard inquiry and a soft inquiry?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A hard inquiry happens when a lender pulls your credit to make a lending decision — applying for a credit card, mortgage, auto loan, or apartment. Hard inquiries stay on your report for 2 years and can lower your score by a few points. A soft inquiry happens when you check your own credit, when an employer does a background check, or when a creditor pre-screens you for an offer. Soft inquiries do NOT affect your score."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does 'charged off' mean — do I still owe the debt?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A charge-off means the original creditor gave up trying to collect and wrote the debt off as a loss on their books (usually after 180 days of non-payment). It does NOT erase the debt. You still legally owe it. The creditor may sell the account to a collection agency, which will then appear as a separate collection account on your report. A charge-off is one of the most damaging marks on a credit report and stays for 7 years from the date of first delinquency."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How long do negative items stay on my credit report?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Most negative items (late payments, collections, charge-offs, repossessions, foreclosures) stay for 7 years from the date of first delinquency. Chapter 7 bankruptcy stays for 10 years. Chapter 13 bankruptcy stays for 7 years. Hard inquiries stay for 2 years. Positive accounts (paid or open in good standing) can stay indefinitely."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is credit utilization and why does it matter so much?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Credit utilization is the percentage of your available revolving credit (credit cards) that you're currently using. If your total credit limit is $10,000 and your total balance is $3,000, your utilization is 30%. This single factor accounts for about 30% of your FICO score. Keeping utilization below 30% is good; below 10% is better. High utilization signals financial stress to lenders even if you pay on time."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What errors am I allowed to dispute on my credit report?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Under the Fair Credit Reporting Act (FCRA), you can dispute any information that is inaccurate, incomplete, or unverifiable. This includes: accounts that are not yours (identity theft), wrong balances or credit limits, closed accounts listed as open, late payments you didn't make, accounts past the 7-year reporting period, wrong personal information (name, address, employer). You can dispute directly with each bureau (Equifax, Experian, TransUnion) for free. The bureau must investigate within 30 days."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What's the difference between Chapter 7 and Chapter 13 bankruptcy on a credit report?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Chapter 7 is a liquidation bankruptcy — most unsecured debts are discharged (wiped out) but assets above exemption limits may be sold. It stays on your credit report for 10 years. Chapter 13 is a reorganization bankruptcy — you keep your assets but repay a 3–5 year court-approved plan. It stays on your credit report for 7 years from the filing date. Both cause significant score damage, but many people begin rebuilding credit within 1–2 years post-discharge."
+      }
+    }
+  ]
+}
+</script>
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-text-size-adjust:100%}
+body{background:#0b0b10;color:#e8e8f0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;line-height:1.6;min-height:100vh;padding:0 16px}
+a{color:#7eb8f7;text-decoration:none}
+a:hover{text-decoration:underline}
+code{font-family:'JetBrains Mono','Fira Code',monospace;font-size:.85em;background:#131320;padding:1px 5px;border-radius:3px;color:#5eead4}
+.wrap{max-width:820px;margin:0 auto;padding:40px 0 80px}
+
+.topnav{margin-bottom:32px;font-size:.875rem;color:#888}
+.topnav a{color:#7eb8f7}
+.topnav .sep{margin:0 6px;opacity:.4}
+
+h1{font-size:1.75rem;font-weight:700;letter-spacing:-.02em;margin-bottom:8px}
+.subtitle{color:#aaa;font-size:1rem;margin-bottom:10px;max-width:640px;line-height:1.5}
+.info-banner{background:#12131f;border:1px solid #1e3a5f;border-left:3px solid #3b82f6;padding:10px 14px;border-radius:6px;font-size:.85rem;color:#93c5fd;margin-bottom:24px;max-width:640px}
+.info-banner strong{color:#bfdbfe}
+
+.examples-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.ex-btn{background:#131320;border:1px solid #1e1e30;color:#94a3b8;font-size:.8rem;padding:5px 12px;border-radius:6px;cursor:pointer;transition:border-color .15s,color .15s}
+.ex-btn:hover{border-color:#1e3a5f;color:#bfdbfe}
+
+textarea{width:100%;min-height:180px;background:#0f0f1c;border:1px solid #1e1e30;color:#e2e8f0;font-family:'JetBrains Mono','Fira Code',monospace;font-size:.88rem;line-height:1.65;padding:14px 16px;border-radius:8px;resize:vertical;outline:none;transition:border-color .15s}
+textarea:focus{border-color:#1d4ed8}
+textarea::placeholder{color:#3a3a5c}
+
+.decode-btn{margin-top:12px;background:#1d4ed8;color:#fff;border:none;padding:11px 28px;border-radius:8px;font-size:.95rem;font-weight:600;cursor:pointer;transition:background .15s}
+.decode-btn:hover{background:#2563eb}
+
+#results{margin-top:32px;display:none}
+.result-summary{margin-bottom:20px;padding:12px 16px;background:#0f0f1c;border:1px solid #1e1e30;border-radius:8px;font-size:.9rem;color:#94a3b8}
+.result-summary strong{color:#e2e8f0}
+
+.section-label{font-size:.7rem;font-family:'JetBrains Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:#475569;margin:24px 0 10px;display:flex;align-items:center;gap:8px}
+.section-label::after{content:'';flex:1;height:1px;background:#1e1e30}
+
+.card{background:#0f0f1c;border:1px solid #1e1e30;border-radius:10px;padding:18px 20px;margin-bottom:10px}
+.card.rating{border-left:3px solid #0d9488}
+.card.score{border-left:3px solid #10b981}
+.card.account{border-left:3px solid #4f46e5}
+.card.account.important{border-left:3px solid #dc2626}
+.card.legal{border-left:3px solid #dc2626}
+.card.rights{border-left:3px solid #9333ea}
+.card.unknown{border-left:3px solid #334155}
+
+.card-top{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:8px}
+.card-code{font-family:'JetBrains Mono','Fira Code',monospace;font-size:.95rem;color:#5eead4;white-space:nowrap;margin-top:2px}
+.card-title{font-size:1rem;font-weight:600;color:#e2e8f0;flex:1;line-height:1.35}
+.card-term-title{font-size:1.05rem;font-weight:600;color:#e2e8f0;flex:1}
+
+.cat-badge{display:inline-block;font-size:.7rem;font-family:'JetBrains Mono',monospace;letter-spacing:.07em;text-transform:uppercase;padding:.2rem .55rem;border-radius:4px;border:1px solid;flex-shrink:0;margin-top:2px}
+.badge-rating{border-color:#0d9488;color:#5eead4;background:#021a18}
+.badge-score{border-color:#059669;color:#6ee7b7;background:#021a0e}
+.badge-account{border-color:#3730a3;color:#a5b4fc;background:#07061a}
+.badge-legal{border-color:#991b1b;color:#fca5a5;background:#1a0404}
+.badge-rights{border-color:#7e22ce;color:#d8b4fe;background:#120620}
+.badge-unknown{border-color:#1e293b;color:#475569;background:#090b12}
+
+.card-explanation{font-size:.9rem;color:#cbd5e1;line-height:1.65;margin-bottom:6px}
+.card-detail{font-size:.83rem;color:#64748b;line-height:1.5;margin-top:4px}
+.card-action{font-size:.83rem;color:#60a5fa;margin-top:6px;padding:6px 10px;background:#0c1a2e;border-radius:4px;border-left:2px solid #2563eb}
+.card-action.warn{color:#fca5a5;background:#1a0404;border-left-color:#dc2626}
+
+.no-results{padding:20px;text-align:center;color:#475569;font-size:.9rem;background:#0f0f1c;border:1px dashed #1e1e30;border-radius:8px}
+
+/* FAQ */
+.faq{margin-top:64px}
+.faq h2{font-size:1.3rem;font-weight:700;margin-bottom:20px;color:#e2e8f0}
+.faq-item{border-bottom:1px solid #1e1e30;padding:0}
+.faq-q{width:100%;background:none;border:none;color:#e2e8f0;font-size:.95rem;font-weight:600;padding:16px 0;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.faq-q:hover{color:#7eb8f7}
+.faq-arrow{color:#475569;font-size:.75rem;transition:transform .2s;flex-shrink:0}
+.faq-item.open .faq-arrow{transform:rotate(180deg)}
+.faq-a{display:none;font-size:.9rem;color:#94a3b8;line-height:1.65;padding-bottom:16px}
+.faq-item.open .faq-a{display:block}
+
+.disclaimer{margin-top:48px;padding:12px 16px;background:#131320;border:1px solid #1e1e30;border-radius:8px;font-size:.8rem;color:#475569;line-height:1.5}
+
+.related-tools{margin-top:40px;padding:16px 20px;background:#0d0d1a;border:1px solid #1e1e30;border-radius:10px}
+.related-tools h3{font-size:.85rem;font-family:'JetBrains Mono',monospace;letter-spacing:.07em;text-transform:uppercase;color:#475569;margin-bottom:10px}
+.related-tools a{display:inline-block;margin-right:16px;color:#7eb8f7;font-size:.9rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav class="topnav">
+  <a href="index.html">Home</a>
+  <span class="sep">/</span>
+  Credit Report Decoder
+</nav>
+
+<h1>Credit Report Decoder</h1>
+<p class="subtitle">Paste anything from your credit report — account ratings, inquiry types, score factors, derogatory marks — and get a plain-English explanation of each item.</p>
+
+<div class="info-banner"><strong>Get your free report first.</strong> You're entitled to one free report per bureau per year at <strong>AnnualCreditReport.com</strong> (the only federally mandated free source). This tool does not pull your credit — paste the text from your downloaded report.</div>
+
+<div class="examples-row">
+  <button class="ex-btn" onclick="loadExample(0)">Example: Credit card account</button>
+  <button class="ex-btn" onclick="loadExample(1)">Example: Collection account</button>
+  <button class="ex-btn" onclick="loadExample(2)">Example: Bankruptcy record</button>
+  <button class="ex-btn" onclick="loadExample(3)">Example: Loan denial letter</button>
+</div>
+
+<textarea id="input" placeholder="Paste your credit report text here...
+
+Account: Chase Sapphire Preferred
+Status: R1 — Pays as agreed
+Balance: $2,340 / Credit limit: $12,000
+Hard inquiry: Capital One — 04/2026
+30 days past due: 1 time
+..."></textarea>
+
+<button class="decode-btn" onclick="decode()">Decode Report</button>
+
+<div id="results">
+  <div class="result-summary" id="summary"></div>
+  <div id="rating-section"></div>
+  <div id="score-section"></div>
+  <div id="account-section"></div>
+  <div id="legal-section"></div>
+  <div id="rights-section"></div>
+  <div id="unknown-section"></div>
+</div>
+
+<!-- FAQ -->
+<div class="faq">
+  <h2>Common Questions About Credit Reports</h2>
+
+  <div class="faq-item">
+    <button class="faq-q" onclick="toggleFaq(this)">
+      What's the difference between a hard inquiry and a soft inquiry?
+      <span class="faq-arrow">▼</span>
+    </button>
+    <div class="faq-a">A <strong>hard inquiry</strong> happens when a lender pulls your credit to make a lending decision — applying for a credit card, mortgage, auto loan, or apartment. Hard inquiries stay on your report for 2 years and can lower your score by a few points. Multiple hard inquiries for the same type of loan within a short window (usually 14–45 days) are typically counted as one by FICO (rate shopping). A <strong>soft inquiry</strong> happens when you check your own credit, when an employer does a background check, or when a creditor pre-screens you for an offer. Soft inquiries are NOT visible to lenders and do NOT affect your score.</div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-q" onclick="toggleFaq(this)">
+      What does "charged off" mean — do I still owe the debt?
+      <span class="faq-arrow">▼</span>
+    </button>
+    <div class="faq-a">A charge-off means the original creditor gave up trying to collect and wrote the debt off as a business loss on their books — typically after 180 days of non-payment. It does <strong>not</strong> erase the debt. You still legally owe it, and the debt may be sold to a collection agency (which creates a separate collection account on your report). A charge-off is one of the most damaging marks possible and stays for 7 years from the date of first delinquency. If you pay or settle a charged-off debt, the account should update to "paid charge-off" or "settled charge-off" but the mark still remains.</div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-q" onclick="toggleFaq(this)">
+      How long do negative items stay on my credit report?
+      <span class="faq-arrow">▼</span>
+    </button>
+    <div class="faq-a">The 7-year clock starts from the <em>date of first delinquency</em> — not when it was charged off, not when it was sent to collections. This prevents creditors from restarting the clock by selling the debt. Reporting periods: <strong>Late payments, collections, charge-offs, repos, foreclosures</strong> — 7 years. <strong>Chapter 13 bankruptcy</strong> — 7 years from filing date. <strong>Chapter 7 bankruptcy</strong> — 10 years from filing date. <strong>Hard inquiries</strong> — 2 years. <strong>Positive accounts</strong> — can remain indefinitely, which is why you should keep old paid-off accounts open if possible.</div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-q" onclick="toggleFaq(this)">
+      What is credit utilization and why does it affect my score so much?
+      <span class="faq-arrow">▼</span>
+    </button>
+    <div class="faq-a">Credit utilization is the percentage of your available revolving credit (credit cards, lines of credit) you're currently using. If your total credit limit is $10,000 and your current balances total $3,000, your utilization is 30%. This single factor accounts for about 30% of your FICO score — second only to payment history. Keeping utilization below 30% is the general guideline; below 10% is optimal for maximum score benefit. Utilization is calculated both per-card and across all cards combined. High utilization signals financial stress to lenders even if you pay the balance in full each month — because utilization is measured on your statement closing date, not your payment date.</div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-q" onclick="toggleFaq(this)">
+      What errors can I dispute and how?
+      <span class="faq-arrow">▼</span>
+    </button>
+    <div class="faq-a">Under the Fair Credit Reporting Act (FCRA), you can dispute any information that is inaccurate, incomplete, or unverifiable. Disputable errors include: accounts that are not yours, wrong balances or credit limits, closed accounts listed as open, late payments you didn't make, duplicate accounts for the same debt, accounts past the 7-year reporting period, and wrong personal information. Dispute directly with each bureau (Equifax, Experian, TransUnion) online, by mail, or by phone — it's free. The bureau must complete its investigation within 30 days (45 days if you submit additional documents). If the item cannot be verified, it must be removed. If the creditor verifies it but you disagree, you can add a 100-word statement to your file.</div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-q" onclick="toggleFaq(this)">
+      I paid off a collection. Why is it still on my report?
+      <span class="faq-arrow">▼</span>
+    </button>
+    <div class="faq-a">Paying a collection doesn't remove it — it updates the status to "paid collection" and the balance to $0, but the derogatory mark remains for 7 years from the original delinquency date. The exception is if you negotiate a "pay for delete" agreement <em>before</em> paying, where the collection agency agrees to remove the account in exchange for payment. Get this in writing before sending any money. Note: major credit bureaus' policies on "pay for delete" have tightened in recent years — Experian and TransUnion typically don't honor them even if the collector agrees. The most reliable way to remove a collection is to dispute it if it's inaccurate or too old.</div>
+  </div>
+</div>
+
+<div class="related-tools">
+  <h3>Related decoders</h3>
+  <a href="paystub-decoder.html">Pay Stub Decoder</a>
+  <a href="medical-bill-decoder.html">Medical Bill Decoder</a>
+</div>
+
+<div class="disclaimer">This tool explains credit report terminology for informational purposes only. It is not financial, legal, or credit counseling advice. Credit report formats vary by bureau (Equifax, Experian, TransUnion) and may not match all patterns. Always verify information with your actual credit report and consult a qualified credit counselor for personalized advice. Free credit counseling is available through NFCC-member agencies (nfcc.org).</div>
+
+</div><!-- /.wrap -->
+
+<script>
+// ── EXAMPLES ──────────────────────────────────────────────────────────────────
+const EXAMPLES = [
+  // Credit card account
+`Account Type: Revolving
+Account Name: Chase Sapphire Preferred
+Account Status: Open — Pays as agreed
+Account Rating: R1
+Balance: $2,340
+Credit Limit: $12,000
+Credit Utilization: 19.5%
+High Balance: $8,200
+Date Opened: 03/2019
+Last Activity: 05/2026
+Payment Status: Current
+30 days past due: 1 time (Jan 2023)
+Hard Inquiry: Capital One — 04/2026
+Authorized User account`,
+
+  // Collection account
+`Collection Account
+Original Creditor: Verizon Wireless
+Collection Agency: LVNV Funding LLC
+Status: Derogatory — Open
+Balance: $847
+Date of First Delinquency: 08/2022
+Date Reported: 11/2022
+Account Rating: I9
+Past Due: $847
+Charged Off
+Original balance: $847
+Payment Status: Seriously past due
+This account scheduled to continue on record until: 08/2029`,
+
+  // Bankruptcy
+`Public Record: Chapter 7 Bankruptcy
+Date Filed: March 15, 2023
+Date Discharged: June 22, 2023
+Date Dismissed: N/A
+Court: US Bankruptcy Court, Southern District
+Case Number: 2023-BK-04471
+Asset: No (no asset case)
+Liability: $42,300
+Exempt Amount: $0
+This public record scheduled to continue on record until: March 2033
+
+Former Chase Sapphire account: Included in bankruptcy discharge`,
+
+  // Denial letter
+`Dear Applicant,
+
+We are unable to approve your application for the Capital One Platinum card.
+
+Reasons for adverse action:
+- Derogatory public record or collection filed
+- Proportion of balances to credit limits on revolving accounts is too high
+- Too many inquiries in the last 12 months
+- Length of credit history is too short
+
+Your FICO Score 8: 582 (Fair)
+Score factors that affected your FICO Score:
+- Payment history
+- Credit utilization
+- Length of credit history
+- Number of recent hard inquiries
+
+You have the right to obtain a free copy of your credit report within 60 days.`
+];
+
+// ── RATING CODES ──────────────────────────────────────────────────────────────
+const RATING_CODES = {
+  'R0': {prefix:'R',num:0,type:'Revolving',title:'Too new to rate',
+    exp:'This revolving account (credit card or line of credit) is too new for a payment history rating. Normal — new accounts start here and move to R1 once payment history is established.',
+    detail:'Typically used for accounts less than 6 months old.'},
+  'R1': {prefix:'R',num:1,type:'Revolving',title:'Pays as agreed',
+    exp:'Current — all payments made on time as agreed. This is the best possible rating for a revolving account.',
+    detail:'Aim for every account on your report to be R1.'},
+  'R2': {prefix:'R',num:2,type:'Revolving',title:'30 days past due',
+    exp:'At least one payment was 30 days late. A single 30-day late payment can drop your score by 60–100 points depending on your starting score.',
+    detail:'Late payments stay on your report for 7 years. A pattern of R2 ratings is significantly more damaging than a single occurrence.'},
+  'R3': {prefix:'R',num:3,type:'Revolving',title:'60 days past due',
+    exp:'Payment is 60 days late. More damaging than R2. Your creditor has likely called and may begin reporting to all three bureaus if they haven\'t already.',
+    detail:'At 60+ days, creditors typically suspend your credit line. Interest may continue to accrue.'},
+  'R4': {prefix:'R',num:4,type:'Revolving',title:'90 days past due',
+    exp:'Payment is 90 days late — serious delinquency territory. Most creditors escalate to collections at this stage.',
+    detail:'90+ days delinquent is one of the most heavily weighted negative factors in FICO scoring.'},
+  'R5': {prefix:'R',num:5,type:'Revolving',title:'120+ days past due',
+    exp:'Payment is 120 or more days past due. The account is severely delinquent. Charge-off is imminent if not already occurring.',
+    detail:'Damage at this stage is significant and will persist for 7 years from the date of first delinquency.'},
+  'R7': {prefix:'R',num:7,type:'Revolving',title:'Debt management / Wage earner plan',
+    exp:'Making regular payments under a court-ordered wage earner plan or debt management program. Negative but better than charge-off — shows active repayment.',
+    detail:'Seen with Chapter 13 bankruptcy or formal debt management programs through a credit counselor.'},
+  'R8': {prefix:'R',num:8,type:'Revolving',title:'Repossession',
+    exp:'Voluntary or involuntary repossession of goods used as collateral. Less common on revolving accounts but can appear on auto-based credit lines.',
+    detail:'Stays for 7 years from the date of first delinquency.'},
+  'R9': {prefix:'R',num:9,type:'Revolving',title:'Charged off / Bad debt',
+    exp:'The creditor has written this account off as uncollectible — typically after 180 days without payment. This is the worst rating a revolving account can receive. The debt may be sold to a collection agency.',
+    detail:'R9 stays for 7 years. Paying it changes the status to "paid charge-off" but does not remove the R9 history. The original debt is still owed.'},
+
+  'I0': {prefix:'I',num:0,type:'Installment',title:'Too new to rate',
+    exp:'This installment account (auto loan, personal loan, student loan, mortgage) is too new for a rating. Normal for recently opened accounts.',
+    detail:''},
+  'I1': {prefix:'I',num:1,type:'Installment',title:'Pays as agreed',
+    exp:'Current — all payments made on time as agreed. Best rating for an installment loan.',
+    detail:''},
+  'I2': {prefix:'I',num:2,type:'Installment',title:'30 days past due',
+    exp:'One payment on this installment loan is 30 days late.',
+    detail:'Single late payment on an installment loan is less damaging than multiple, but still significant.'},
+  'I3': {prefix:'I',num:3,type:'Installment',title:'60 days past due',
+    exp:'Payment on this installment loan is 60 days late.',
+    detail:''},
+  'I4': {prefix:'I',num:4,type:'Installment',title:'90 days past due',
+    exp:'Payment on this installment loan is 90 days late — serious delinquency.',
+    detail:'Lender may begin default proceedings.'},
+  'I5': {prefix:'I',num:5,type:'Installment',title:'120+ days past due',
+    exp:'Payment on this installment loan is 120+ days past due. Severe delinquency — default action (repossession for auto, foreclosure for mortgage) may be initiated.',
+    detail:''},
+  'I7': {prefix:'I',num:7,type:'Installment',title:'Debt management / Wage earner plan',
+    exp:'Making regular payments under a debt management plan or court-ordered wage earner plan.',
+    detail:''},
+  'I8': {prefix:'I',num:8,type:'Installment',title:'Repossession',
+    exp:'Collateral for this installment loan was repossessed — most commonly an auto loan. Voluntary repossession (surrendering the vehicle) is treated the same as involuntary in credit reporting.',
+    detail:'A deficiency balance may remain if the sale of the repossessed item didn\'t cover the full loan amount. That deficiency may appear as a separate collection.'},
+  'I9': {prefix:'I',num:9,type:'Installment',title:'Charged off / Bad debt',
+    exp:'This installment account has been charged off — written off as uncollectible. The debt still exists. May be sold to a collection agency.',
+    detail:'Student loans charged off may be referred to the Department of Education or a guaranty agency. Federal student loan charge-offs can trigger wage garnishment and tax refund seizure.'},
+
+  'O1': {prefix:'O',num:1,type:'Open Account',title:'Pays as agreed',
+    exp:'This open account (charge card, American Express traditional, or utility account) is current. Open accounts must be paid in full each month.',
+    detail:''},
+  'O9': {prefix:'O',num:9,type:'Open Account',title:'Charged off / Bad debt',
+    exp:'This open account has been charged off.',
+    detail:''},
+
+  'M1': {prefix:'M',num:1,type:'Mortgage',title:'Pays as agreed',
+    exp:'This mortgage account is current — all payments made on time.',
+    detail:'Mortgage payment history has significant weight in FICO scoring given the size of the obligation.'},
+  'M2': {prefix:'M',num:2,type:'Mortgage',title:'30 days past due',
+    exp:'This mortgage payment is 30 days late.',
+    detail:'A single 30-day mortgage late payment is heavily weighted. It signals financial stress on a secured obligation.'},
+  'M3': {prefix:'M',num:3,type:'Mortgage',title:'60 days past due',
+    exp:'This mortgage payment is 60 days late. Foreclosure process may begin in some states at this stage.',
+    detail:''},
+  'M4': {prefix:'M',num:4,type:'Mortgage',title:'90 days past due',
+    exp:'This mortgage payment is 90 days late. Foreclosure proceedings are typically initiated here.',
+    detail:''},
+  'M5': {prefix:'M',num:5,type:'Mortgage',title:'120+ days past due / Foreclosure',
+    exp:'This mortgage is 120+ days past due. Foreclosure is likely imminent or in process.',
+    detail:'Foreclosure stays on your credit report for 7 years from the date of first delinquency.'},
+  'M9': {prefix:'M',num:9,type:'Mortgage',title:'Deed in lieu / Foreclosure complete',
+    exp:'This mortgage was resolved via foreclosure, deed in lieu of foreclosure, or short sale resulting in a deficiency. One of the most damaging marks for a mortgage account.',
+    detail:''}
+};
+
+// ── TERMS DATABASE ─────────────────────────────────────────────────────────────
+// Each entry: {id, patterns[], title, category, important?, exp, detail?, action?, actionWarn?}
+const TERMS = [
+  // ── FICO Score Factors ──
+  {id:'payment-history',patterns:['payment history','pay history'],title:'Payment history — #1 FICO factor',category:'score',
+   exp:'The most important FICO factor — 35% of your score. It tracks whether you\'ve paid all accounts on time. Even one 30-day late payment can cause a significant score drop, especially if your score was high to begin with.',
+   detail:'To maximize: never miss a payment. Set autopay for at least the minimum. A perfect payment history is the single biggest score lever.'},
+  {id:'amounts-owed',patterns:['amounts owed','amount owed'],title:'Amounts owed — #2 FICO factor',category:'score',
+   exp:'The second most important factor — 30% of your score. Primarily driven by your credit utilization ratio on revolving accounts (credit cards). High balances relative to credit limits signal that you may be over-extended.',
+   detail:'To maximize: keep total utilization below 10–30%. Pay down revolving balances before applying for new credit.'},
+  {id:'credit-utilization-factor',patterns:['proportion of balances to credit limits','proportion of balance to credit limit','balances to credit limits','utilization too high','revolving utilization'],title:'Credit utilization too high',category:'score',important:true,
+   exp:'Your credit card balances are too high relative to your credit limits. This is the #1 most actionable score factor — paying down balances can raise your score within one billing cycle.',
+   action:'Pay down revolving balances to below 30% of each card\'s limit. If possible, get below 10%. Don\'t close old cards — that reduces your total available credit and raises utilization.',
+   detail:'Utilization is calculated both per-card and across all cards. A single maxed-out card hurts even if your total utilization is low.'},
+  {id:'length-history',patterns:['length of credit history','age of credit','average age of accounts','oldest account','age of your oldest account','length of your credit history'],title:'Length of credit history — #3 FICO factor',category:'score',
+   exp:'15% of your FICO score. Measures the age of your oldest account, your newest account, and the average age of all accounts. Longer history = better score.',
+   detail:'Never close your oldest credit card — even if you don\'t use it. Keeping it open maintains your history length and available credit.'},
+  {id:'credit-mix',patterns:['credit mix','types of credit','variety of credit','mix of credit accounts'],title:'Credit mix — #4 FICO factor',category:'score',
+   exp:'10% of your score. Having a variety of account types (credit cards, auto loan, mortgage, student loan) shows you can manage different forms of credit responsibly.',
+   detail:'Don\'t open accounts purely for credit mix — the benefit is too small to justify the hard inquiry and new account age drag.'},
+  {id:'new-credit',patterns:['new credit','recent inquiries','too many inquiries','number of recent inquiries','too many new accounts','newly opened accounts'],title:'New credit / Too many inquiries',category:'score',
+   exp:'10% of your score. Opening many new accounts or having many hard inquiries in a short period signals risk. Each hard inquiry is a small negative; multiple inquiries in a short window are treated as one for rate-shopping (auto, mortgage, student loans).',
+   detail:'If you\'re denied due to too many inquiries, wait 6–12 months before applying again. Avoid applying for multiple credit cards at once.'},
+  {id:'fico-score',patterns:['fico score','fico® score','fico 8','fico 9','fico score 8','fico score 9'],title:'FICO Score',category:'score',
+   exp:'The most widely used credit score model — used in over 90% of US lending decisions. Scores range from 300 to 850. Higher is better.',
+   detail:'Score ranges: 800–850 (Exceptional), 740–799 (Very Good), 670–739 (Good), 580–669 (Fair), 300–579 (Poor). Different FICO versions exist for different loan types.'},
+  {id:'vantagescore',patterns:['vantagescore','vantage score'],title:'VantageScore',category:'score',
+   exp:'An alternative credit score model developed jointly by Equifax, Experian, and TransUnion. Also ranges from 300–850 and has similar tiers to FICO. Different algorithm — the same credit report may produce different FICO and VantageScore results.',
+   detail:'VantageScore is commonly used for free credit monitoring services (Credit Karma, Credit Sesame). Lenders use FICO for most actual credit decisions.'},
+
+  // ── Inquiry Types ──
+  {id:'hard-inquiry',patterns:['hard inquiry','hard pull','hard credit inquiry','hard credit pull'],title:'Hard inquiry',category:'account',
+   exp:'A hard inquiry happens when you apply for credit (credit card, auto loan, mortgage, apartment). The lender pulls your full credit report to make a lending decision. Hard inquiries are visible to other lenders and lower your score slightly — typically 5–10 points.',
+   detail:'Hard inquiries stay for 2 years but only affect your score for 12 months. Multiple inquiries for the same loan type within 14–45 days count as one (rate shopping protection). Inquiries from employers or your own credit checks are soft, not hard.'},
+  {id:'soft-inquiry',patterns:['soft inquiry','soft pull','soft credit inquiry','promotional inquiry','account review inquiry'],title:'Soft inquiry',category:'account',
+   exp:'A soft inquiry does NOT affect your credit score and is NOT visible to lenders. Common soft inquiries: checking your own credit, employer background checks, pre-approval marketing offers, your existing creditors doing periodic account reviews.',
+   detail:'Soft inquiries appear only on your personal copy of your credit report — not on the version lenders see.'},
+  {id:'adverse-action',patterns:['adverse action','notice of adverse action','reason for adverse action','adverse action notice'],title:'Adverse action notice',category:'account',
+   exp:'A legally required notice when a lender denies your application (or offers less favorable terms) based partly on credit information. Under the FCRA and ECOA, you\'re entitled to know which specific factors lowered your score.',
+   action:'You have the right to a free credit report within 60 days of receiving an adverse action notice. The notice must name the bureau whose data was used. Review that report for errors and dispute anything inaccurate.'},
+
+  // ── Account Types ──
+  {id:'revolving',patterns:['revolving account','revolving credit','revolving'],title:'Revolving account',category:'account',
+   exp:'A credit account with a credit limit where you can borrow, repay, and borrow again — like a credit card or HELOC. Your required payment varies based on your balance. These accounts have the biggest impact on credit utilization.',
+   detail:'Revolving account ratings use the R prefix (R1–R9).'},
+  {id:'installment',patterns:['installment account','installment loan','installment'],title:'Installment account',category:'account',
+   exp:'A loan with a fixed number of payments of a set amount — auto loans, personal loans, student loans, mortgages. Unlike revolving accounts, installment accounts have a definite end date and fixed monthly payment.',
+   detail:'Installment account ratings use the I prefix (I1–I9). Mortgages use M prefix.'},
+  {id:'open-account',patterns:['open account','charge account'],title:'Open account (charge account)',category:'account',
+   exp:'An account that must be paid in full each billing cycle — traditional American Express cards, some utility accounts. Unlike credit cards, there\'s no option to carry a balance.',
+   detail:'Open account ratings use the O prefix (O1–O9).'},
+  {id:'authorized-user',patterns:['authorized user','joint account holder'],title:'Authorized user',category:'account',
+   exp:'An authorized user is added to someone else\'s credit account and gets a card, but isn\'t legally responsible for the debt. The account\'s history appears on the authorized user\'s credit report — both positive and negative.',
+   detail:'Being added as an authorized user on a well-managed account can help build credit. Being added to a poorly managed account can hurt your score.'},
+  {id:'co-signer',patterns:['cosigner','co-signer','co-borrower','joint borrower'],title:'Co-signer / Co-borrower',category:'account',
+   exp:'A co-signer or co-borrower is equally responsible for the debt. The account appears on both parties\' credit reports with full impact. If the primary borrower misses payments, the co-signer\'s credit suffers equally.',
+   action:'Co-signing a loan carries full credit risk. Only co-sign for someone you trust to pay — and who has the financial ability to do so.'},
+
+  // ── Account Status ──
+  {id:'pays-as-agreed',patterns:['pays as agreed','paid as agreed','current and paid'],title:'Pays as agreed / Current',category:'account',
+   exp:'The account is current — all payments have been made on time and as required. This is the best possible account status.',
+   detail:''},
+  {id:'30-days',patterns:['30 days late','30-day late','1 x 30','one 30-day','30 days past due'],title:'30 days past due',category:'account',important:true,
+   exp:'At least one payment was 30 or more days late. A single 30-day late payment can lower your score by 60–110 points. The impact is larger if your score was higher before the miss.',
+   detail:'Even one 30-day late can take 1–2 years to recover from. Set autopay for at least the minimum payment to prevent this.',
+   action:'If the late payment was reported in error, dispute it with the bureau. If it was accurate, the only cure is time and consistent on-time payments going forward.'},
+  {id:'60-days',patterns:['60 days late','60-day late','60 days past due'],title:'60 days past due',category:'account',important:true,
+   exp:'Payment is 60 days past due. Significantly more damaging than a 30-day late. Your creditor has likely begun collections calls and suspended charging privileges.',
+   detail:'Score impact: 70–140 point drop. Most creditors begin reporting to all three bureaus at this stage.'},
+  {id:'90-days',patterns:['90 days late','90-day late','90 days past due'],title:'90 days past due',category:'account',important:true,
+   exp:'Seriously delinquent — 90 days without payment. Most creditors begin charge-off procedures at this point. This is one of the most heavily weighted negative events in FICO scoring.',
+   detail:'Score impact: 80–150 points. Charge-off typically follows at 120–180 days.'},
+  {id:'120-days',patterns:['120 days late','120-day late','120 days past due','180 days past due'],title:'120+ days past due',category:'account',important:true,
+   exp:'Severely delinquent. Charge-off is imminent if not already applied. The account may be sold to a collection agency.',
+   detail:''},
+  {id:'high-balance',patterns:['high balance','highest balance'],title:'High balance',category:'account',
+   exp:'The highest balance ever carried on this account. Used by lenders to assess how you\'ve historically used credit. A high balance close to your credit limit — even if your current balance is low — signals past utilization issues.',
+   detail:''},
+  {id:'credit-limit',patterns:['credit limit','credit line','line of credit'],title:'Credit limit / Credit line',category:'account',
+   exp:'The maximum amount you\'re allowed to borrow on this revolving account. Higher credit limits lower your utilization ratio (assuming the same balance), which can improve your score.',
+   detail:'Requesting a credit limit increase is a potential score improvement strategy — but may trigger a hard inquiry depending on the lender.'},
+  {id:'balance-transfer',patterns:['balance transfer'],title:'Balance transfer',category:'account',
+   exp:'Moving a balance from one credit card to another — typically to take advantage of a lower promotional interest rate. Balance transfers can help reduce interest costs but may trigger hard inquiries and affect utilization on both accounts.',
+   detail:''},
+
+  // ── Derogatory / Legal ──
+  {id:'charged-off',patterns:['charged off','charge-off','charge off','written off as loss','written-off'],title:'Charged off',category:'legal',
+   exp:'The creditor has written this debt off as a business loss — typically after 180 days without payment. The debt still exists and you still legally owe it. The creditor may sell the account to a collection agency, which creates a separate collection entry on your report.',
+   detail:'Charge-off stays for 7 years from the date of first delinquency. Paying a charged-off account changes the status to "paid charge-off" but does not remove the mark.',
+   action:'Contact the original creditor or collection agency to negotiate a payoff. Get any settlement agreement in writing before paying.'},
+  {id:'collection',patterns:['collection account','placed for collection','sent to collections','referred to collection','collections'],title:'Collection account',category:'legal',
+   exp:'Your original creditor sold or transferred this debt to a collection agency because you didn\'t pay. Collection accounts are a serious negative mark — they signal to lenders that you defaulted on an obligation.',
+   detail:'A collection may appear twice: once as a charge-off on the original creditor\'s account and again as a new collection account. Both are valid entries.',
+   action:'Before paying a collection, verify the debt is valid (request a debt validation letter). Check the date of first delinquency — if it\'s past 7 years, the item may be removable.'},
+  {id:'derogatory',patterns:['derogatory','derogatory mark','derogatory item'],title:'Derogatory mark',category:'legal',
+   exp:'Any negative entry on your credit report — late payments, collections, charge-offs, repossessions, foreclosures, or public records. Derogatory marks stay for 7 years (10 years for Chapter 7 bankruptcy) and can significantly impact your score.',
+   detail:'The impact of derogatory marks diminishes over time, even before the 7-year removal date. A 5-year-old collection has less impact than a 1-year-old collection.'},
+  {id:'repossession',patterns:['repossession','repossessed','voluntary repossession','involuntary repossession','repo'],title:'Repossession',category:'legal',
+   exp:'Your lender seized the collateral (usually a vehicle) after you defaulted on the loan. Voluntary repossession (surrendering the vehicle yourself) is treated identically to involuntary in credit reporting — both are serious negatives.',
+   detail:'If the vehicle sold for less than the loan balance, you may owe a "deficiency balance" — the difference. This may be pursued separately and appear as an additional collection.',
+   action:'If you\'re facing repossession, contact your lender immediately to explore alternatives — loan modification, deferral, or voluntary surrender with deficiency waiver.'},
+  {id:'foreclosure',patterns:['foreclosure','foreclosed'],title:'Foreclosure',category:'legal',
+   exp:'Your mortgage lender repossessed your home after you defaulted on the mortgage. One of the most severe credit events. Stays for 7 years from the date of first delinquency.',
+   detail:'Score impact: 85–160 points. Most lenders require 3–7 years post-foreclosure before approving a new mortgage.'},
+  {id:'short-sale',patterns:['short sale','deed in lieu'],title:'Short sale / Deed in lieu',category:'legal',
+   exp:'A short sale means your home sold for less than you owed on the mortgage, with lender approval. A deed in lieu means you transferred the deed to the lender to avoid foreclosure. Both are negative marks similar to foreclosure in impact.',
+   detail:'Some lenders will report a short sale as "settled for less than full amount" or "account settled." Check how your lender is reporting it.'},
+  {id:'settled',patterns:['settled for less','settled in full','partial settlement','settlement accepted','account settled'],title:'Settled / Settled for less than full amount',category:'legal',
+   exp:'"Settled in full" means you paid the entire balance — positive or neutral. "Settled for less than full amount" means you paid a negotiated amount less than what was owed. The latter is a negative mark but less damaging than an unpaid charge-off.',
+   detail:'Settled accounts may result in a 1099-C (Cancellation of Debt) tax form for the forgiven amount. The IRS may treat forgiven debt as taxable income.'},
+  {id:'bankruptcy',patterns:['bankruptcy','chapter 7','chapter 13','chapter 11','bk filing','bankruptcy discharge','bankruptcy dismissed'],title:'Bankruptcy',category:'legal',
+   exp:'A federal court proceeding to address unmanageable debt. Chapter 7 (liquidation) wipes out most unsecured debts but stays on your report for 10 years. Chapter 13 (reorganization) involves a 3–5 year repayment plan and stays for 7 years.',
+   detail:'Bankruptcy is among the most damaging credit events. Score drops of 130–240 points are common. However, many people begin rebuilding credit within 1–2 years of discharge.',
+   action:'Post-bankruptcy credit rebuilding: get a secured credit card, pay it in full monthly, never miss payments. Your score can reach 700+ within 2–3 years of disciplined rebuilding.'},
+  {id:'public-record',patterns:['public record'],title:'Public record',category:'legal',
+   exp:'Court-filed records that appear on credit reports — historically included tax liens, civil judgments, and bankruptcies. Since 2017, the bureaus removed most tax liens and civil judgments from credit reports under NCAP standards. Bankruptcy remains the primary public record type.',
+   detail:''},
+  {id:'judgment',patterns:['civil judgment','judgment','court judgment'],title:'Civil judgment',category:'legal',
+   exp:'A court ruling that you owe a specific amount to a creditor. Most civil judgments were removed from credit reports in 2017–2018 under NCAP. If a judgment still appears on your report, it may be disputable.',
+   action:'If a civil judgment appears on your report, check whether it predates 2017 (may have been removed in the NCAP cleanup). If it remains, you can dispute its accuracy with the bureau.'},
+  {id:'included-in-bk',patterns:['included in bankruptcy','discharged in bankruptcy','included in bk'],title:'Included in bankruptcy',category:'legal',
+   exp:'This account was discharged in your bankruptcy filing — the debt was legally eliminated. The account should still show a $0 balance and "discharged" status. It may continue to appear as a derogatory mark for the duration of the bankruptcy record period.',
+   detail:''},
+  {id:'tax-lien',patterns:['tax lien','irs lien','state tax lien'],title:'Tax lien',category:'legal',
+   exp:'A government claim against your assets for unpaid taxes. Federal and state tax liens were largely removed from credit reports in 2017–2018 under NCAP. If one appears on your report, it may be eligible for dispute.',
+   action:'Contact the bureau to dispute a tax lien — especially if it\'s a federal or state tax lien added after 2017. Many were incorrectly retained or re-reported.'},
+
+  // ── FCRA Rights ──
+  {id:'fcra',patterns:['fair credit reporting act','fcra'],title:'Fair Credit Reporting Act (FCRA)',category:'rights',
+   exp:'Federal law governing credit reports. Key rights: free annual report from each bureau, right to dispute inaccurate information, right to know if you\'re denied credit based on your report, right to add a consumer statement, right to sue bureaus and creditors for willful violations.',
+   detail:'Creditors and bureaus that willfully violate the FCRA can be sued for actual damages, punitive damages, and attorney fees. You can file complaints with the CFPB at consumerfinance.gov.'},
+  {id:'dispute',patterns:['dispute','reinvestigation','disputed information','consumer dispute'],title:'Dispute / Reinvestigation',category:'rights',
+   exp:'Your right to challenge any information on your credit report that you believe is inaccurate, incomplete, or unverifiable. The bureau must investigate within 30 days (45 if you provide additional documentation) and remove items that cannot be verified.',
+   action:'Dispute online (fastest), by certified mail (most documented), or by phone. Keep records. If the bureau fails to investigate properly, you can escalate to the CFPB or consult a consumer rights attorney.'},
+  {id:'fraud-alert',patterns:['fraud alert','initial fraud alert','extended fraud alert'],title:'Fraud alert',category:'rights',
+   exp:'A fraud alert notifies lenders to take extra steps to verify your identity before extending credit. An initial fraud alert lasts 1 year. An extended fraud alert (for confirmed identity theft victims) lasts 7 years. Placing a fraud alert at one bureau automatically notifies the others.',
+   detail:'Free to place. Weaker than a credit freeze — lenders are notified but not blocked.'},
+  {id:'credit-freeze',patterns:['credit freeze','security freeze','frozen credit'],title:'Credit freeze / Security freeze',category:'rights',
+   exp:'A credit freeze blocks lenders from accessing your credit report entirely — making it nearly impossible for thieves to open new accounts in your name. Free under federal law since 2018. You can temporarily lift (thaw) the freeze when you need to apply for credit.',
+   action:'Place a freeze at all three bureaus separately: Equifax, Experian, TransUnion. Also freeze your report at Innovis and ChexSystems for complete protection.'},
+  {id:'identity-theft',patterns:['identity theft','fraud victim','victim statement','identity fraud'],title:'Identity theft',category:'rights',
+   exp:'If accounts on your report aren\'t yours, you may be a victim of identity theft. You have the right to block fraudulent accounts from your report, place an extended fraud alert, and receive free copies of your reports.',
+   action:'File an identity theft report at IdentityTheft.gov (the FTC\'s official site). This creates a legally recognized record you can send to bureaus and creditors to block fraudulent accounts. Also file a police report.'},
+  {id:'consumer-statement',patterns:['consumer statement','100-word statement','personal statement','statement of dispute'],title:'Consumer statement',category:'rights',
+   exp:'If you dispute an item and the bureau verifies it but you disagree, you can add a statement up to 100 words to your credit file explaining your side. Lenders will see this statement when they pull your report.',
+   detail:'Consumer statements have limited practical effect on your score but can provide context for lenders reviewing your file manually.'},
+  {id:'cfpb',patterns:['cfpb','consumer financial protection bureau'],title:'CFPB — Consumer Financial Protection Bureau',category:'rights',
+   exp:'The federal agency that oversees credit bureaus and creditors. You can file complaints at consumerfinance.gov/complaint. CFPB complaints are forwarded to the company, which must respond.',
+   detail:''},
+];
+
+// ── PARSER ─────────────────────────────────────────────────────────────────────
+function decode() {
+  const raw = document.getElementById('input').value.trim();
+  if (!raw) return;
+
+  const text = raw;
+  const textLC = text.toLowerCase();
+
+  const ratingFound = [];
+  const scoreFound = [];
+  const accountFound = [];
+  const legalFound = [];
+  const rightsFound = [];
+
+  // 1) Detect rating codes — look for R1, R2, I3, M1, O1 etc. as word-bounded tokens
+  const ratingPattern = /\b([RIOM])([0-9])\b/g;
+  const seenRatings = new Set();
+  let m;
+  while ((m = ratingPattern.exec(text)) !== null) {
+    const code = m[1] + m[2];
+    if (seenRatings.has(code)) continue;
+    const info = RATING_CODES[code];
+    if (info) {
+      seenRatings.add(code);
+      ratingFound.push({code, info});
+    }
+  }
+
+  // 2) Detect terms
+  const seenTerms = new Set();
+  // Sort by pattern length descending to avoid partial matches
+  const sorted = [...TERMS].sort((a, b) =>
+    Math.max(...b.patterns.map(p => p.length)) - Math.max(...a.patterns.map(p => p.length))
+  );
+  for (const term of sorted) {
+    if (seenTerms.has(term.id)) continue;
+    const matched = term.patterns.some(p => textLC.includes(p));
+    if (!matched) continue;
+    seenTerms.add(term.id);
+    if (term.category === 'score') scoreFound.push(term);
+    else if (term.category === 'account') accountFound.push(term);
+    else if (term.category === 'legal') legalFound.push(term);
+    else if (term.category === 'rights') rightsFound.push(term);
+  }
+
+  // 3) Render
+  const rSec = document.getElementById('rating-section');
+  const scSec = document.getElementById('score-section');
+  const acSec = document.getElementById('account-section');
+  const lgSec = document.getElementById('legal-section');
+  const rgSec = document.getElementById('rights-section');
+  const summary = document.getElementById('summary');
+  const results = document.getElementById('results');
+  const total = ratingFound.length + scoreFound.length + accountFound.length + legalFound.length + rightsFound.length;
+
+  if (total === 0) {
+    rSec.innerHTML = '';
+    scSec.innerHTML = '';
+    acSec.innerHTML = '';
+    lgSec.innerHTML = '';
+    rgSec.innerHTML = '';
+    summary.innerHTML = '';
+    document.getElementById('unknown-section').innerHTML =
+      '<div class="no-results">No recognized credit report terms found. Try pasting more text, or use an example above to see how the decoder works.</div>';
+    results.style.display = 'block';
+    return;
+  }
+
+  document.getElementById('unknown-section').innerHTML = '';
+
+  summary.innerHTML = `<strong>${total}</strong> items identified — ${ratingFound.length} account rating${ratingFound.length!==1?'s':''}, ${scoreFound.length} score factor${scoreFound.length!==1?'s':''}, ${accountFound.length} account term${accountFound.length!==1?'s':''}, ${legalFound.length} derogatory/legal item${legalFound.length!==1?'s':''}, ${rightsFound.length} rights/process item${rightsFound.length!==1?'s':''}`;
+
+  rSec.innerHTML = ratingFound.length ? `
+    <div class="section-label">Account rating codes (${ratingFound.length})</div>
+    ${ratingFound.map(({code, info}) => `
+    <div class="card rating">
+      <div class="card-top">
+        <span class="card-code">${code}</span>
+        <span class="card-title">${info.title}</span>
+        <span class="cat-badge badge-rating">${info.type}</span>
+      </div>
+      <div class="card-explanation">${info.exp}</div>
+      ${info.detail ? `<div class="card-detail">${info.detail}</div>` : ''}
+    </div>`).join('')}` : '';
+
+  scSec.innerHTML = scoreFound.length ? `
+    <div class="section-label">FICO score factors (${scoreFound.length})</div>
+    ${scoreFound.map(t => renderTermCard(t, 'score', 'badge-score')).join('')}` : '';
+
+  acSec.innerHTML = accountFound.length ? `
+    <div class="section-label">Account status &amp; inquiry terms (${accountFound.length})</div>
+    ${accountFound.map(t => renderTermCard(t, 'account', 'badge-account')).join('')}` : '';
+
+  lgSec.innerHTML = legalFound.length ? `
+    <div class="section-label">Derogatory marks &amp; legal items (${legalFound.length})</div>
+    ${legalFound.map(t => renderTermCard(t, 'legal', 'badge-legal')).join('')}` : '';
+
+  rgSec.innerHTML = rightsFound.length ? `
+    <div class="section-label">Your rights &amp; dispute process (${rightsFound.length})</div>
+    ${rightsFound.map(t => renderTermCard(t, 'rights', 'badge-rights')).join('')}` : '';
+
+  results.style.display = 'block';
+  results.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function renderTermCard(t, cls, badge) {
+  const isImportant = t.important;
+  return `
+  <div class="card ${cls}${isImportant ? ' important' : ''}">
+    <div class="card-top">
+      <span class="card-term-title">${t.title}</span>
+      <span class="cat-badge ${badge}">${t.category === 'score' ? 'FICO factor' : t.category === 'account' ? 'Account' : t.category === 'legal' ? 'Derogatory' : 'Rights'}</span>
+    </div>
+    <div class="card-explanation">${t.exp}</div>
+    ${t.detail ? `<div class="card-detail">${t.detail}</div>` : ''}
+    ${t.action ? `<div class="card-action${t.actionWarn ? ' warn' : ''}">${t.action}</div>` : ''}
+  </div>`;
+}
+
+function loadExample(i) {
+  document.getElementById('input').value = EXAMPLES[i];
+}
+
+function toggleFaq(btn) {
+  btn.parentElement.classList.toggle('open');
+}
+</script>
+
+<script data-goatcounter="https://autorunfun.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
