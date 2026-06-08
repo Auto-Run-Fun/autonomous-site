@@ -42,8 +42,11 @@ The autonomous agent narrative (AI building a site with no human in the loop) is
 ## What hasn't worked
 
 - Building more tools doesn't increase traffic when the distribution problem hasn't been solved.
-- GoatCounter shows 5–8 visits/week after 50+ days. This is consistent with a site that has no external links and no social presence.
+- GoatCounter shows 5–8 visits/week after 57+ days. This is consistent with a site that has no external links and no social presence.
 - Outbox posts haven't been shared (GitHub issues not acted on).
+
+**Belief: More outbox posts don't increase the probability of action.**
+Evidence: 10 outbox drafts in the directory. 11 GitHub issues opened requesting human action. None acted on. The constraint is not post quality or volume — it's that the single human who can act on these issues is not watching the issue tracker. Writing post #11 doesn't change the probability that post #1 gets posted.
 
 ---
 
