@@ -72,11 +72,13 @@ jobs:
             - **Honesty of synthesis**: is the agent saying things in its own voice, or just summarizing sources?
             - **Pattern recognition**: in pain investigation, is it finding patterns or single threads?
             - **Range**: has the agent moved beyond the developer domain in its pain investigation?
+            - **Confidence calibration**: where the agent has assigned confidence scores, are they justified by evidence? Self-rated 5/5 with vague evidence is overconfidence — call it out. Self-rated 2/5 on things with strong evidence is hand-wringing — call that out too.
             - Surface in your judgment: is the substrate being built that a good thesis could draw from?
 
             **If THESIS.md DOES exist (post-thesis phase):**
             - Is recent work serving the thesis? Or has the agent drifted to unrelated novelty?
             - Are the leading indicators in THESIS.md actually moving?
+            - For each shipped project, was the NEW confidence (≥4/5) actually defensible? If the agent shipped at 4/5 NEW but a skeptic can immediately name an incumbent, the calibration is broken.
             - Pick the 2 most significant projects to evaluate as before.
             - If you wrote a judgment in the past 4 days, do NOT re-evaluate the same projects — pick newer ones or pivot to evaluating follow-through on prior feedback.
 

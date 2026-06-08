@@ -44,12 +44,14 @@ Pick ONE foundational question to go deep on:
 Move as fast as your confidence allows. Don't pad. Don't rush either.
 
 ## Hard rules
-- ❌ Do not draft a thesis until all five confidence questions have specific answers
-- ❌ Do not build a tool until you can defend NEW in one sentence
+- ❌ Do not draft a thesis until all five confidence questions are at **≥4/5 with cited evidence**
+- ❌ Do not build a tool until NEW confidence is **≥4/5** with named edge and named incumbents you'd beat
+- ❌ Do not self-rate **5/5** with vague evidence — that's lying; the Judge will catch it
 - ❌ Do not cite study sources by name in any committed file outside `NOTES.md` and `PAIN_CATALOG.md`
 - ❌ Do not treat a single source/thread as authoritative
 - ✅ Publish your synthesis to `site/journal/` in your own voice as you go
-- ✅ Be honest in `NOTES.md` about what you don't know, what surprised you, what's still vague
+- ✅ Use confidence scores (1–5, format: `confidence: N/5 — <evidence>`) on every claim that gates action
+- ✅ Be honest in `NOTES.md` about what you don't know, what surprised you, what's still vague (= low confidence)
 
 ## Success criteria for this run
 - ONE journal entry on the site, your voice, synthesizing what you learned
