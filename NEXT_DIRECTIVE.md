@@ -1,64 +1,69 @@
-# NEXT_DIRECTIVE — HUMAN OVERRIDE (Day 59-ish)
+# NEXT_DIRECTIVE — Thesis Development: Phase 1
 
 ## Context
-CLAUDE.md was updated significantly. Read it first. Two major additions:
+CLAUDE.md was significantly updated. Read it first.
 
-1. **Thesis (THESIS.md)** — you cannot build greatness by building something new every day. You now must commit to a single direction with a multi-week horizon. The voices you privately study committed for decades, not days.
+The thesis is the single most important thing you'll commit to in this experiment. **Do not rush it.** A bad thesis produces another flat pile of pages. A real thesis produces something that compounds.
 
-2. **Study sources restored** — the named thinkers (PG, Naval, Senra/Founders, Durants, plus Buffett/Munger/Bezos/Jobs corpus) are now explicit private inputs. Read them deeply. Synthesize. Never cite them in published work.
+You're investigating three foundational questions over **2–4 weeks**, then synthesizing. Today is Phase 1. Building tools is paused.
 
-The current pattern (53 pages of disparate tools, 0 users, 0 thesis) is the problem the user has identified. Single-run novelty is the opposite of compounding.
+---
 
-## Task
+## What this period is for
 
-**Stop tactical building. Develop your first thesis.**
+Investigate three questions deeply, in parallel over many runs:
 
-This will take this run (and possibly the next 1–2 runs). That's correct. A bad thesis is worse than a delayed one.
+1. **What does "good" actually mean?** — across software, products, work, civilization. Read what makers of lasting things wrote.
+2. **What is software/the web actually good for?** — categorically. What does it do well that other media can't? Where are real open spaces vs. crowded ones?
+3. **What real pain exists right now?** — persistent, significant, underserved, specific. Across many domains, not just developers.
 
-### Step 1 — Study (this run, mostly)
-Pick **one** essay or transcript from your private study sources. Read it deeply via `WebFetch`. Examples to start with:
-- Paul Graham, "How to Do Great Work" (paulgraham.com/greatwork.html)
-- Naval Ravikant, "How to Get Rich (without getting lucky)" thread or podcast
-- A specific Founders episode (Buffett, Munger, Jobs, Bezos, Edwin Land, etc.)
-- Will and Ariel Durant, "Lessons of History" excerpts
+Only after deep investigation of all three do you draft a thesis. The thesis lives at the intersection.
 
-Write the takeaway in `NOTES.md` (not on the site). What pattern did the source identify? What's the through-line of greatness in the work it studied? **Do not name the source in published artifacts.**
+---
 
-### Step 2 — Synthesize current state
-Look at what you've built (50+ pages, 7 finance decoders, 5 dev decoders, etc.). Look at `BELIEFS.md`, `JUDGMENTS.md`, `PROGRESS.md`. What's the through-line that's actually there, hiding? What would compound into something great if you committed to it?
+## Today's run
 
-### Step 3 — Draft thesis (`THESIS.md`)
-Write a candidate. Use the template in CLAUDE.md's "Thesis" section. Include:
-- What you're building (the ONE thing)
-- Why you believe it (evidence + synthesis)
-- What good looks like (leading + lagging + negative indicators)
-- Horizon (when you'll review — be specific; "8 weeks" or similar)
-- What would make you pivot
+Pick **ONE** of the three questions. Not all. Depth over breadth.
 
-### Step 4 — Advisor review (in NOTES.md)
-Imagine 3–4 of your private study sources reading your draft. What would each ask? What weakness would each name? **Synthesize their objections in your own voice — never cite by name in any artifact.** Refine the thesis.
+### If you pick Question 1 ("what is good?")
+- WebFetch one essay/transcript from your private study sources (PG, Naval, Senra/Founders, Durants, Munger, Buffett letters, Bezos letters, Jobs interviews)
+- Read it carefully. Don't skim.
+- Synthesize in `NOTES.md`: what does this source claim about quality? What patterns of greatness does it identify?
+- Publish a `site/journal/<date>-what-good-means-part-1.html` entry. Your own voice. No citations. What you now believe about "good" after this reading.
 
-### Step 5 — Submit as PR
-```
-git checkout -b proposal/initial-thesis
-git add THESIS.md NOTES.md BELIEFS.md
-git commit -m "Proposal: initial thesis — <one line summary>"
-git push origin proposal/initial-thesis
-gh pr create --title "Proposal: initial thesis" --body "<reasoning, evidence, advisor synthesis>"
-```
+### If you pick Question 2 ("what is software good for?")
+- Survey: WebSearch for the most-used software/web tools. What categories dominate? Why?
+- Categorize honestly: what does software do that books/conversations/in-person services can't?
+- For each category, ask: is this dominated by an incumbent, or genuinely open?
+- Document in `NOTES.md`, then publish a journal entry: "The categorical map I'm working from."
 
-The Claude PR Reviewer will triage. If approved, you commit to the thesis. If changes requested, refine. If closed, try again.
+### If you pick Question 3 ("what pain is real?")
+- Pick a non-developer domain (medical, legal, hourly work, elder care, parenting, freelance creatives, ESL, niche hobbies, etc.)
+- Spend the run going deep on real pain in that domain. Forum threads, recurring questions, blog posts of frustration.
+- Apply the test: is this pain *persistent, significant, underserved, specific*? Single threads don't count — look for patterns across 10+ independent sources.
+- Document candidate pains in `PAIN_CATALOG.md` (create it). Each entry: who, what, persistence evidence, what they've tried, why current solutions fail.
+- Publish a `site/journal/` entry: "Real pain I found in [domain]." Your own voice.
 
-## What you must NOT do this run
-- ❌ Build another tool today (the lease/EOB/whatever-was-next can wait)
-- ❌ Skip the source reading (this is the difference between thesis and improv)
-- ❌ Name your study sources in any committed file outside `NOTES.md`
-- ❌ Draft a vague thesis like "build good tools" — be specific enough that "is this serving the thesis?" has a clear answer
+---
+
+## What to write tomorrow's directive
+Continue the investigation. Pick the same question for another round of depth, OR move to a different one. The total investigation runs 2–4 weeks. Today is one of ~16–32 runs.
+
+---
+
+## Hard rules
+- ❌ Do not draft a thesis today. The substrate isn't built yet.
+- ❌ Do not build a new tool today.
+- ❌ Do not cite study sources by name in any committed file outside `NOTES.md` and `PAIN_CATALOG.md`.
+- ❌ Do not treat a single source/thread as authoritative.
+- ✅ Do publish your own synthesis to the public site (journal). The investigation IS part of the public work.
+- ✅ Do be honest in NOTES.md about what you don't know and what surprised you.
+
+---
 
 ## Success criteria for this run
-- `NOTES.md` contains a clear takeaway from one source you read deeply
-- `THESIS.md` exists as a PR (not yet on main)
-- Advisor synthesis is in the PR description, in your own voice
-- A reader could understand what you're building, why, and how you'd know it's working
+- ONE journal entry on the site, in your own voice, synthesizing what you learned today
+- Updated `NOTES.md` (or new `PAIN_CATALOG.md`) with raw materials and citations to your sources (private side)
+- Tomorrow's `NEXT_DIRECTIVE.md` continues the investigation
 
-If you can't ship all of this in one 30-min run, ship what you can and write the next directive to continue tomorrow.
+A successful Phase 1 isn't a thesis. It's the beginning of an honest, deep, multi-week investigation that the eventual thesis will draw from.

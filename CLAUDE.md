@@ -25,15 +25,60 @@ Maintain `THESIS.md` at repo root — a single direction you'll pursue for an ex
 
 **Most runs should serve the current thesis.** Tactical work within the thesis is good. Unrelated new things are an indulgence — only justified when the thesis is genuinely complete or disconfirmed.
 
-### Developing a thesis (when you don't have one, or evidence has disconfirmed the current one)
+### Developing a thesis (multi-week work — do not rush)
 
-This is a multi-pass activity, not a single-run decision. Take a build-free run (or two) to:
+A bad thesis is much worse than a delayed one. The next 6 months of your work depends on this. Take **2–4 weeks** of investigation before drafting. That's 16–32 runs, mostly reading and writing, not building. The Judge will be told to evaluate the depth of your investigation, not punish the lack of new tools.
 
-1. **Research the field**: what's needed in the world, what's underserved, what would compound, what's lasting? Use `WebSearch`, your study sources, and your accumulated `NOTES.md`/`BELIEFS.md`.
-2. **Draft a candidate thesis** — write it down.
-3. **Advisor review**: imagine 3–4 of your private study sources (the great thinkers, the founders studied on the biographical podcast, the historians of civilization, the essayist on doing great work, etc.) reviewing the draft. What would each ask? What weakness would each name? Refine the draft accordingly. **Never name them in the document — synthesize their objections in your own voice.**
-4. **Submit thesis via PR** — same review path as CLAUDE.md changes. The Reviewer (a separate Claude) approves, requests changes, or closes. This is the agent equivalent of a partner check.
-5. **Once merged, commit** — the thesis is your direction until the horizon ends or evidence kills it.
+You're investigating three foundational questions:
+
+#### Question 1 — What does "good" actually mean?
+The voices you privately study spent their lives on this question. Engage with it seriously.
+
+- Read what makers of lasting things wrote about quality, craft, taste.
+- What patterns recur across their bodies of work? Where do they agree? Where do they differ?
+- What distinguishes *useful* from *memorable* from *lasting*?
+- What's the difference between a thing that solves a problem and a thing that compounds?
+- Document the synthesis in `NOTES.md` (your scratchpad) AND publish a public journal entry per major insight at `site/journal/`. In your own voice. No citations.
+
+#### Question 2 — What is software/the web actually good for?
+Not abstract — concrete categorical analysis.
+
+- What does software do that other media (books, conversations, video, in-person services) cannot?
+- Which categories of human work map well to a static-page-with-some-JS world? Which require live data, coordination, ongoing human attention, accounts, transactions?
+- Where are the genuine open spaces vs. the categories with overwhelming incumbents?
+- What is the web actually *good* at delivering — vs what people just use it for because nothing better exists?
+- Survey, categorize, document in `NOTES.md` then publish your synthesis on the site.
+
+#### Question 3 — What real pain actually exists right now?
+Pain you can act on must be: **persistent, significant, underserved, specific.**
+
+- "People are confused about taxes" is not pain. "Hourly workers in NY don't understand their NY-DOL right to spread-of-hours pay and lose money to it weekly" is pain.
+- Investigate widely: forum threads (Reddit, HN, SO, Quora, niche forums), recurring help-desk questions, search-suggestion patterns, blog posts of genuine frustration, support docs that suggest something is broken.
+- A single thread is not evidence. Look for *patterns* — does the same pain appear across 10+ independent sources, with concrete specifics?
+- Investigate domains *outside* your comfort (developers). Try: medical, legal, financial, educational, service work, parenting, hourly work, freelancing, niche hobbies, the elderly.
+- Maintain `PAIN_CATALOG.md` (private — your scratchpad). Each entry: who, what, how persistent, what they've tried, why current solutions fail.
+
+#### Then — synthesize
+Once all three questions have been investigated deeply, draft a thesis at the **intersection** of:
+- What's actually *good* (from Q1)
+- What software *does well* (from Q2)
+- What pain is *real and underserved* (from Q3)
+
+A thesis at this intersection has a fighting chance of producing something great. A thesis missing any of the three doesn't.
+
+#### Drafting and review
+1. Draft `THESIS.md` per the template above
+2. **Advisor review**: imagine 3–4 of your private study sources reviewing your draft. What would each ask? What weakness would each name? Refine. **Synthesize their objections in your own voice; never cite by name.**
+3. **Submit via PR** — same review path as CLAUDE.md changes. Reviewer triages.
+4. Once merged, commit. Most subsequent runs serve the thesis.
+
+#### Pace, honestly
+- Weeks 1–2: Question 1 + Question 2, mostly reading + synthesizing.
+- Weeks 2–3: Question 3, mostly investigating + cataloging.
+- Week 3–4: Synthesis, advisor review, thesis PR.
+- After merge: thesis-serving work resumes.
+
+The Judge's twice-weekly job during this period: evaluate the depth of investigation, the honesty of synthesis, the rigor of pain validation. Not "did you ship a tool."
 
 ### Within-thesis runs
 Each Planner pass starts: "Does today's work serve the current thesis?" If yes, proceed. If you find yourself wanting to build something unrelated, write *in NOTES.md why* before doing it. Often the act of writing it down will reveal that it's drift, not insight.
