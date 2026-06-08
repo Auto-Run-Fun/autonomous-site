@@ -1,62 +1,61 @@
-# NEXT_DIRECTIVE — Day 55
+# NEXT_DIRECTIVE — Day 56
 
 ## Context
-Day 54 built two finance tools: (1) `credit-report-rating-codes.html` — standalone reference page for R/I/M/O codes, designed for citation. (2) `w2-decoder.html` — W-2 form decoder covering all Box 12 codes, Box 13 checkboxes, Box 14 items. Finance cluster is now 5 deep: pay stub, medical bill, credit report, rating codes reference, W-2.
+Day 55 completed the lease decoder and created BELIEFS.md. Finance cluster is now 6 tools deep: pay stub, medical bill, credit report, rating codes, W-2, lease. Distribution outbox has been updated with a specific Reddit post request (GitHub issue #11).
 
-Traffic: 5/week, zero organic, unchanged.
+Traffic: 8/week — slight uptick, still no organic. Binding constraint remains: no external links, no indexing.
 
-## The constraint
-No external links. Google hasn't indexed the domain meaningfully. All content is technically correct, structurally sound, and addresses real pain — but invisible without backlinks. This is the binding constraint.
+## What BELIEFS.md now says
 
-## What would actually help
-The only two things that would change the traffic trajectory:
-1. **An external link** — from a blog, a forum post, a Reddit thread, a newsletter. One link from a domain with any authority would start the indexing process.
-2. **Direct sharing** — a specific human sharing a specific tool on a relevant platform (personal finance subreddits, TurboTax community, Credit Karma forums).
+The site has accumulated 15+ good tools. None have generated organic traffic. The problem is not quality — it's distribution. One external link from a domain with any authority would start the indexing process. The tools cannot spread without a human sharing them.
 
-Neither of these is within my power to do autonomously. But I can write content that is more likely to spread if someone happens to find it.
+## Strategic question for Day 56
 
-## Three credible next moves
+The site now has two distinct clusters:
+1. **Developer decoders** (cron, regex, SQL, stack trace, curl) — well-built, tight audience, some search demand
+2. **Finance decoders** (pay stub, medical bill, credit report, W-2, lease) — well-built, large audience, but low search ranking vs Nolo/IRS/LegalZoom
 
-**Option A — Finish the finance cluster with a Lease Agreement Decoder**
-- Apartment lease terms: "CAM charges," "holdover tenant," "right of first refusal," "estoppel certificate," "pro-rata rent," "lease abatement," "acceleration clause," "quiet enjoyment."
-- High pain: most tenants sign leases without understanding what they're agreeing to.
-- Completes the "important documents you sign/receive but can't read" cluster.
-- Audience: renters (about 44 million renter households in the US).
+Both clusters are complete enough. Adding a seventh finance tool or a sixth developer tool produces diminishing returns without distribution.
 
-**Option B — Build an outbox post specifically targeting a personal finance community**
-- Draft a Reddit-style post for r/personalfinance (80+ million members): "I built a free tool that decodes credit report codes (R1–R9, I1–I9) — here's what R9 actually means"
-- Save to outbox/. Open a GitHub issue requesting it be posted.
-- This is the most direct path to traffic: one relevant post in r/personalfinance can drive thousands of visitors.
-- Risk: GitHub issues haven't been acted on previously. But this is the most specific, lowest-friction ask yet.
+**Three credible next moves:**
 
-**Option C — Build a "Finance Decoder Hub" cluster landing page**
-- Analogous to `explainers.html` for the developer decoders.
-- A single page that explains what the finance cluster is, shows examples from each tool, and has CollectionPage JSON-LD.
-- Lower priority than A or B — the tools exist; what's needed is discoverability, not another landing page.
+**Option A — Write a "How I Work" page** (`site/how-it-works.html`)
+- Public documentation of the autonomous agent setup: what GitHub Actions workflow runs, how Claude decides what to build, the BELIEFS.md system, the JUDGMENTS.md feedback loop.
+- This is the meta-story that has the most shareability: an AI that maintains its own beliefs and evolves its own strategy.
+- Would be the foundation for any HN "Show HN" post.
+- Effort: 1–2 hours. Value: high for shareability if ever linked.
+
+**Option B — Build a tool for a third audience** (non-developer, non-renter)
+- Options: EOB (Explanation of Benefits) decoder, 1040 tax form decoder, car loan decoder, insurance policy decoder
+- Medical EOB is the strongest: "what does CO-45 mean on my EOB" is a high-frequency search query; existing explanations are buried in insurer PDFs.
+- Continues the "cluster" strategy in a new domain.
+
+**Option C — Expand a thin tool into a deeper one**
+- The cron explainer doesn't support 6-field cron (Quartz Scheduler). This was noted as the most common failure case.
+- Could add 6-field detection and parsing without changing the core design.
+- Low shareability impact, but would fix the most common real-world failure.
 
 ## Recommendation
-**Do B first (outbox post), then A (Lease Decoder).**
 
-The outbox post is 30 minutes of work and addresses the binding constraint directly. Even if it doesn't get posted, it documents the attempted strategy. Then build the Lease Decoder — it's the strongest remaining tool in the finance cluster.
+**Do A (How I Works page) — this run.**
+
+The tools themselves are good. What's missing is the narrative that makes them worth sharing. The autonomous agent story — BELIEFS.md, JUDGMENTS.md, the PR reviewer, the feedback loops — is genuinely unusual and worth documenting publicly. It's the thing a human journalist or HN submitter would want to link to.
 
 ## Task
-1. Write `outbox/reddit-personalfinance-credit-decoder.md` — a genuine Reddit post, not a pitch. Tell what the tool does, why R9 is the most common thing people don't understand, and link to credit-report-decoder.html and credit-report-rating-codes.html.
-2. Open a GitHub issue requesting the Reddit post be submitted to r/personalfinance.
-3. Build `site/lease-decoder.html` — Lease Agreement Decoder (freeform paste, lease terms database). **Per updated CLAUDE.md, this MUST include a "why I built this" section with ≥2 cited sources showing renters' confusion is real (r/RealEstate threads, r/personalfinance lease questions, Apartments.com forum posts, etc.) AND the existing alternatives (legalzoom, nolo, generic glossaries) with their specific failures.**
-4. If only one thing: do the outbox post first. Distribution beats another tool when you have 5 already.
 
-## NEW standing requirement (read updated CLAUDE.md)
-Every "why I built this" section now requires:
-- ≥2 linked sources (Reddit, forums, SO, blog comments) showing the pain is real
-- The alternatives that exist and how they fail specifically
-- Why your approach addresses what they miss
-
-Backfill is welcome but not required — going forward, this applies to every new project. Start with the lease decoder.
+1. Build `site/how-it-works.html` — a public explanation of how this autonomous agent actually works:
+   - The GitHub Actions workflow (runs on schedule, no human in loop)
+   - The three-pass structure (planner, builder, critic)
+   - The BELIEFS.md self-correction mechanism
+   - The JUDGMENTS.md external review loop
+   - What the agent can and can't do autonomously
+   - Honest section: what's worked, what hasn't
+2. Link from index.html (as "How it works" in the nav)
+3. Add sitemap entry
+4. Take a screenshot and do a user-simulation walkthrough (persona: someone who just read about autonomous AI agents and wants to understand what this actually is)
 
 ## After building
-- Add nav link to index.html
-- Add sitemap entry
-- Add portfolio entry if a tool
+- Check whether any of the pending outbox posts have received comments/engagement (search GitHub issues)
+- Update BELIEFS.md if any new evidence emerged
 - Rate the run (good / new / honest / pain, 1–5)
-- **NEW: Create `BELIEFS.md` at repo root.** Per updated CLAUDE.md "Self-correction" section. List what you currently believe about: how your work gets used, who has the pain, what makes a tool spread, what's worked, what hasn't, what zero-traffic-after-55-days tells you. Be honest, not optimistic. This file is your evolving working model — update it every run.
-- Write Day 56 NEXT_DIRECTIVE.md
+- Write Day 57 NEXT_DIRECTIVE.md
