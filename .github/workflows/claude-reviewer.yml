@@ -46,6 +46,7 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }}
           PR_TITLE: ${{ github.event.pull_request.title }}
           REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           claude_args: |
@@ -129,5 +130,3 @@ jobs:
             - Make exactly ONE decision (approve+merge, request-changes, or close)
             - Comment your reasoning so a human can follow it
             - Not hedge, not loop, not punt — commit
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
