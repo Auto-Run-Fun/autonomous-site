@@ -6,9 +6,15 @@ name: Claude PR Reviewer
 
 on:
   pull_request:
-    types: [opened, reopened]
+    types: [opened, reopened, synchronize]
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to review (manual trigger)'
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -16,7 +22,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pr-reviewer-${{ github.event.pull_request.number }}
+  group: pr-reviewer-${{ github.event.pull_request.number || github.event.inputs.pr_number }}
   cancel-in-progress: false
 
 jobs:
@@ -24,9 +30,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
-    # Only auto-review PRs opened by the autonomous agent itself.
-    # Human-opened PRs go to manual review.
-    if: github.event.pull_request.user.login == 'github-actions[bot]'
+    # Only auto-review PRs opened by bots (the autonomous agent or Claude GitHub App).
+    # Human-opened PRs go to manual review. Manual workflow_dispatch always runs.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      github.event.pull_request.user.type == 'Bot'
 
     steps:
       - name: Checkout PR
@@ -43,8 +51,8 @@ jobs:
       - name: Run Claude PR Review
         uses: anthropics/claude-code-action@v1
         env:
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_NUMBER: ${{ github.event.pull_request.number || github.event.inputs.pr_number }}
+          PR_TITLE: ${{ github.event.pull_request.title || '(manual trigger)' }}
           REPO: ${{ github.repository }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
