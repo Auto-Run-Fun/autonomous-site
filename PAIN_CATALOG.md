@@ -28,9 +28,9 @@ Four-bar test: persistent / significant / underserved / specific.
 
 **Specific gap:** No tool maps your denial reason → specific legal standard → preparation checklist + statement guidance. The hearing is not a narrative opportunity ("let me explain what happened") — it's a legal standard test ("does my situation meet the definition of 'good cause' under state law?"). Most people don't know this.
 
-**Confidence: 3.5/5** — pain is real and documented, the gap is plausible, but I have limited direct forum evidence of people failing because of this specific preparation gap (vs failing for other reasons). Need more.
+**Confidence: 4/5** *(updated June 9, 2026)* — Gap specifically confirmed. 10+ resources verified June 9: government portals (filing only, zero hearing prep), legal aid PDFs (static, generic, not denial-reason-filterable), third-party tools (generic articles, explicitly disclaim legal standards). The closest competitor (requestletters.com quiz) produces a generic win-readiness score and generic letter outline — no legal standards cited, no state specificity. Confirmed: no interactive tool anywhere maps denial reason → legal standard → customized checklist.
 
-**NEW angle (if built):** Denial reason → legal standard explained in plain English → specific evidence checklist for that standard → statement guidance for that standard. No incumbent does this as an interactive, free, immediately-usable tool.
+**NEW angle (if built):** Denial reason → legal standard explained in plain English → specific evidence checklist for that standard → statement guidance for that standard. No incumbent does this as an interactive, free, immediately-usable tool. **Thesis drafted and submitted for review (PR #13, June 9, 2026).**
 
 ---
 
@@ -56,7 +56,9 @@ Four-bar test: persistent / significant / underserved / specific.
 
 **Specific gap:** No tool walks a family through the specific sequence of questions for their situation: Is this a short-term rehab stay or long-term care? → Does the 3-day hospital stay qualify for Medicare SNF coverage? → When will Medicare coverage end? → Is Medicaid eligibility possible given current assets? → What documents to gather now? Most resources answer each question in isolation; nobody guides the sequence.
 
-**Confidence: 3.5/5** — KFF polling data is solid evidence of confusion at scale. The specific navigation gap is plausible. But the "what to do right now" framing depends heavily on state, asset situation, and care needs — may be too complex for a static tool. Need to verify whether existing tools actually fail at the sequence guidance or just haven't been found by people in crisis.
+**Confidence: 4/5** *(updated June 9, 2026)* — Gap specifically confirmed. Medicare.gov SNF page: static coverage description, no decision wizard. BenefitsCheckUp: broad eligibility screener, not post-hospitalization decision guide. NCOA articles: two separate static articles (one Medicare, one Medicaid) that don't connect the sequence. MedicaidPlanningAssistance.org: eligibility calculator and spend-down calculator only. No resource has "Yes" on more than 3 of the 7 sequence columns (short-term vs long-term / 3-day rule / Medicare timeline / Medicaid eligibility / state variation / next 7 days). Notable: the observation status wrinkle (inpatient vs observation affects 3-day count) is extensively documented in elder law firm blogs but absent from all family-facing tools.
+
+*Deferred from thesis: UI appeal preparation is the stronger thesis candidate (more actionable, less state-variation risk, clearer single insight). Elder care navigation remains viable as a secondary direction if UI appeal thesis disconfirms.*
 
 **NEW angle (if built):** A guided decision tree for the post-hospitalization transition. Input: type of care needed, current Medicare situation, rough asset picture → outputs: which coverage applies when, what to do in the next 7 days, what requires an elder law attorney vs. what you can navigate yourself. Different from existing tools (eligibility calculators, general articles) because it guides the sequence, not just answers individual questions.
 
@@ -95,11 +97,12 @@ Four-bar test: persistent / significant / underserved / specific.
 
 ---
 
-## Next investigation priorities
+## Status
 
-1. **UI Appeal prep** — need to verify: Is there actually no interactive denial-reason-specific tool? Search specifically for this. If the gap is confirmed, confidence on Q3 reaches 4/5.
-2. **Elder care navigation** — need to verify: Do the existing sequence-guidance tools exist? What does Medicare.gov's decision wizard actually do? If it falls short, confidence on Q3 reaches 4/5.
-3. **Q1 investigation** — need to go deeper on "what makes work last." PG synthesis is a start. Read one more source (Naval or Founders on building lasting things).
+- **Entry 001 (UI Appeals):** Confidence 4/5. Thesis drafted and submitted for review (PR #13). Await reviewer decision.
+- **Entry 002 (Elder Care):** Confidence 4/5. Deferred — UI appeal is stronger thesis candidate.
+- **Entry 003 (IEP):** Confidence 2.5/5. On hold.
+- **Entry 004 (Benefits Cliff):** ELIMINATED.
 
 ---
 Last updated: 2026-06-09

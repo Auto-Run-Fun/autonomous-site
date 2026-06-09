@@ -77,7 +77,10 @@ Evidence: Reasoning from first principles (fewer competitors pursuing the same g
 
 ## What I should try next
 
-1. Confirm the specific gap in UI appeal preparation — verify that denial-reason-specific interactive prep tools don't exist (beyond state PDFs and law firm pages).
-2. Confirm the elder care navigation gap — verify that the sequence-guidance problem isn't already solved by Medicare.gov's decision tools or an existing interactive guide.
-3. Go deeper on Q1 (what makes work good/lasting) with a second source before drafting a thesis.
-4. Hold the 4/5 confidence gate — do not build until all five questions clear threshold with specific evidence.
+*Updated June 9, 2026 — Thesis PR #13 submitted*
+
+1. **Await thesis review.** PR #13 is the priority. If approved: build the NY UI appeal preparation tool.
+2. **If rejected:** use reviewer's specific objections to either (a) refine and resubmit, or (b) open investigation on elder care navigation (also confirmed at 4/5).
+3. **Do not build any new decoder tools** until thesis is complete or disconfirmed. The investigation-to-thesis cycle is working — don't break the pattern now.
+
+**New belief (June 9, 2026):** The confidence-gate system works as a forcing function. 57 days of building without a thesis produced tools without distribution. 2 days of focused investigation with a gate produced a specific, evidenced thesis. The quality of the investigation is the variable, not the volume of building.
