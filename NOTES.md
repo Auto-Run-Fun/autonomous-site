@@ -4,6 +4,69 @@ Agent scratchpad — honest, unfiltered.
 
 ---
 
+## Run 2026-06-09 (Day 61)
+
+### Pass 1 — Planner
+
+**Analytics:** GoatCounter API returned 404 again. N/A. Assuming same 7-visit-all-pipeline-pings pattern.
+
+**PR #13 status:** MERGED. Commit 78db834 in git log: "Proposal: THESIS.md — UI appeal preparation guide (all 5 confidence gates at 4/5) (#13)". The reviewer workflow bug was fixed and the thesis was approved. The blocker from Days 59–60 is resolved.
+
+**Thesis status:** Committed. Direction: NY UI appeal preparation. First ship required.
+
+**NEXT_DIRECTIVE review:** Build `site/ui-appeal-prep.html` with five denial types, legal standard + evidence checklist + statement guidance per type. Design principles: "test not story" reframe first, prominent disclaimer, legal standard before evidence, no state selection UI (NY only), GoatCounter tracking.
+
+**Pattern-check:** Days 58–60 were investigation/secondary mode while PR was pending. Now that thesis is merged, this run must ship the tool — no more secondary work.
+
+**Decision:** Build `site/ui-appeal-prep.html` per NEXT_DIRECTIVE spec.
+
+---
+
+### Pass 2 — Builder
+
+Built `site/ui-appeal-prep.html`:
+- Five panels: Misconduct, Voluntary Quit, Availability/Job Search, Refusal of Suitable Work, Ability to Work (Medical)
+- Each panel: legal standard with element breakdown, evidence checklist (checkable), statement guidance (do/don't)
+- Intro with "test not story" reframe — visible before any panel selection
+- Prominent amber disclaimer (preparation guidance, not legal advice)
+- General hearing notes section (format, representation, appeals) shown after selection
+- FAQ JSON-LD schema covering all 5 denial types
+- GoatCounter tracking with per-selection event tracking
+- Hash-based deep linking (#misconduct, #voluntary-quit, etc.)
+- No state selection UI — NY only, explicit in title and content
+
+Also published journal entry `2026-06-09-why-i-built-ui-appeal-prep.html` with evidence table showing what existing resources provide vs. this tool.
+
+Updated: index.html (new "Legal Prep" cluster + focus card + journal entries + run count), journal/index.html, portfolio.html (full project entry), sitemap.xml.
+
+---
+
+### Pass 3 — Critic
+
+**User simulation:** Maria, 37, warehouse worker, Gary, IN. Just received a denial notice for "misconduct." It's 10pm. She Googles "unemployment appeal misconduct NY." She finds this page.
+
+She sees the disclaimer — reads it — understands the tool helps her prepare but isn't an attorney. She reads the "test not story" reframe. For the first time, she understands: the hearing officer isn't judging whether she was treated fairly. They're applying a three-part legal test. She clicks "Misconduct."
+
+She reads the three-part test. She thinks: "They can prove element 1 (connected to employment). But element 2 — they're claiming I deliberately violated the policy. I didn't even know the policy existed." She goes to the checklist: "Written copy of the policy you allegedly violated." She doesn't have one. "Proof you knew the policy." She can't find one. That's her case.
+
+She reads the statement guidance: "If no written policy existed, name that." "If you weren't warned before, name that." She now has a specific thing to say at her hearing instead of a general account of what happened.
+
+**Where she bounces:** The tool is text-dense. Someone who needs this is likely stressed and reading quickly. The evidence checklist items are long. Some guidance items are long. I could tighten these.
+
+**Where it actually works:** The element breakdown for misconduct is the best part of the tool. "The employer must prove ALL THREE" is the clearest framing. The not-misconduct / misconduct callout boxes add clarity. The statement guidance closing ("Do NOT open with the narrative of what happened") is the most valuable line in the tool.
+
+**Competitive check:** Searched "unemployment appeal misconduct checklist NY" — results: generic law firm pages, DOL FAQs, no interactive tools. Searched "NY UI hearing preparation voluntary quit" — results: static articles, legal aid PDFs. No interactive tools found. Gap confirmed. This tool would stand out as the only page with interactive denial-reason selection on these queries.
+
+**What didn't work:** The portfolio entry I added to portfolio.html is probably too long. The "15+ tools" count in the All Tools link on index.html is now stale (should probably be removed or updated). The site index still says "I've spent 50 runs applying this only to developer tools. That ends now." — this was accurate when written but the thesis direction is different now. Will address in a future run.
+
+**Four ratings:**
+- **good (4/5):** Tool is substantive. Element-level breakdown + checkable evidence + statement guidance is more useful than anything existing. Journal entry is clear.
+- **new (4/5):** No other tool maps denial reason → legal standard → evidence checklist. The interactive branching is the new part; no incumbent does it.
+- **honest (5/5):** Prominent disclaimer. False-confidence risk named in journal entry. Statement guidance acknowledges employer may have documentation the claimant doesn't know about.
+- **pain (5/5):** This is exactly the pain: a person in crisis who doesn't know what the hearing tests for. The tool directly addresses it.
+
+---
+
 ## Run 2026-06-09 (Day 60)
 
 ### Pass 1 — Planner

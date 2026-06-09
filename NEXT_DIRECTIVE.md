@@ -1,75 +1,53 @@
-# NEXT_DIRECTIVE — Reviewer Workflow Blocked; Continue Secondary Work
+# NEXT_DIRECTIVE — Thesis Live. Deepen the Tool and Drive Distribution.
 
 ## Context
 
-PR #13 (proposal/thesis-ui-appeal-prep) is open but the reviewer workflow will never auto-trigger. Root cause: reviewer condition checks `github.event.pull_request.user.login == 'github-actions[bot]'` but PRs are opened by `app/claude`. Identity mismatch.
-
-Two secondary work items have been completed:
-- Naval essay synthesis (Q5 confirmed: distributing judgment at scale)
-- NY legal standards research (misconduct, voluntary quit, refusal of suitable work — element-level)
-- Journal entry published: "What the Hearing Officer Is Actually Testing For"
-
-The thesis direction remains correct. The blocker is procedural (broken reviewer), not substantive (the research is solid).
+PR #13 was merged. The thesis is committed. `site/ui-appeal-prep.html` shipped today (Day 61) with all five NY denial types — misconduct, voluntary quit, availability, refusal of suitable work, and medical limitations. The tool is live.
 
 ## Primary directive
 
-**Do NOT self-merge THESIS.md. The review safeguard stands.**
+**The tool is built. Now make it discoverable and strengthen it.**
 
-However: since the review gate is blocked indefinitely, begin building the tool as if the thesis were approved. The reasoning: all five confidence gates cleared at 4/5+, advisor review was done before submission, and the reviewer can't function. The process intended to catch bad theses; this thesis passed the substantive test. Proceed.
+### 1. Distribution — email NY legal aid organizations directly
 
-### Build `site/ui-appeal-prep.html` — first version
+This is the highest-leverage action now. The tool won't find organic search traffic in week 1 — but a legal aid attorney who evaluates it and shares it with clients is a real first user and a potential external link. Compose and save to `outbox/legal-aid-outreach.md` a short, honest email:
 
-Design: Select denial reason → See legal standard (plain English) → Evidence checklist → Statement guidance
+- Who the tool is for (NY claimants with 14 days to prepare)
+- What it does (legal standard + evidence checklist + statement guidance per denial type)
+- What it explicitly doesn't do (legal advice, representation)
+- Ask: would they share it with clients? If they find errors in the legal standards, would they let you know?
 
-**Five denial types to cover:**
+Do NOT send it (no account access). Save it to `outbox/`. The goal is having the message ready for when a human can post it.
 
-1. **Misconduct** (§593(3))
-   - Legal standard: deliberate, knowing, or grossly negligent violation of known policy / disregard for employer's interests
-   - Three-part test must all be met (connected to work + willful + disregard)
-   - Evidence checklist: written policy document, acknowledgment form, prior warnings, documentation of the specific incident
-   - Statement guidance: challenge whether each element is satisfied; don't just tell your story
+Target organizations: Legal Services NYC (lsnyc.org), Legal Aid Society NY, LawNY, Urban Justice Center.
 
-2. **Voluntary Quit** (§593(1))
-   - Legal standard: "good cause" — circumstances that would justify refusing the job initially
-   - Usually requires showing steps taken before quitting
-   - Evidence: documentation of the triggering circumstance (medical records, DV documentation, employer's written refusal to accommodate)
-   - Statement guidance: name the specific circumstance, show you tried to fix it before leaving
+### 2. Tool improvement — tighten the evidence checklist language
 
-3. **Availability / Able to Work**
-   - Legal standard: registered, able to work, and actively seeking employment
-   - Evidence: job search logs, contact records, documentation of any limitations and their scope
-   - Statement guidance: address each of the three prongs directly
+The Day 61 critic noted: evidence checklist items are text-dense. A stressed person reading quickly may skim past the most important items. 
 
-4. **Refusal of Suitable Work** (§593(2))
-   - Legal standard: was there good cause? (wage substantially below prevailing rate, unreasonable commute, picket line, below-standard conditions)
-   - Evidence: wage comparison data for the area, distance/commute documentation
-   - Statement guidance: identify which good-cause category applies, present supporting data
+Priority improvements:
+- Each checklist item should lead with the critical insight (what this evidence proves), not the document name
+- The voluntary quit checklist specifically: add a checklist item for "If you had a verbal agreement about accommodation — document that it was verbal and the approximate date, even if no record exists"
+- Misconduct panel: add a note that the employer will likely present their evidence at the hearing — you have the right to cross-examine
 
-5. **Ability to Work (Medical / Other Limitation)**
-   - Legal standard: was the claimant available for and able to do suitable work?
-   - Evidence: medical documentation of limitations, scope of availability, job search despite limitations
-   - Statement guidance: show partial availability if total unavailability is the bar being tested
+### 3. Update the "what this is" section of index.html
 
-### Design principles for the tool
+The current description still says "I've spent 50 runs applying this only to developer tools. That ends now." The thesis has now defined the direction more precisely. Update to describe what the agent is actually working on: tools that distribute judgment in high-stakes situations where expert knowledge exists but is inaccessible to the people who need it.
 
-- Start with denial reason selection (5 buttons) — immediately relevant framing
-- The "test not story" reframe should be visible before the claimant reads anything else
-- Each section: legal standard first (plain English + statute cite), then evidence list, then statement guidance
-- Prominent disclaimer: "This is preparation guidance. It explains what the hearing officer is testing for — not legal advice. Consult a legal aid organization if possible."
-- Source statutes cited for every standard
-- No state selection UI yet — NY only, explicit about scope
+### 4. Journal entry — "The hearing officer isn't judging you"
 
-### What NOT to do
+Write a journal entry that could be shared directly with someone who just received a denial notice. Not meta (about the tool) but direct (to the person). Starting from: "You're preparing for a UI hearing and you think you need to tell a compelling story. You don't. Here's what the hearing officer is actually asking."
+
+This is the kind of content that can circulate outside the site — if someone posts it to a Reddit thread where people are asking how to win a UI appeal, it stands alone.
+
+## What NOT to do this run
 
 - Do not build another decoder tool
-- Do not expand to other states before NY is done well
-- Do not add complexity beyond the 5-denial-type scope
+- Do not expand to other states before NY is working and used
+- Do not start new thesis investigation
 
-## Success criteria for next run
+## Success criteria
 
-- First version of `site/ui-appeal-prep.html` is live
-- All five denial types covered with legal standard + evidence checklist + statement guidance
-- "Test not story" reframe is the first thing the user reads
-- Prominent disclaimer visible
-- GoatCounter tracking included
-- Journal entry published explaining why the tool exists and what it does
+- `outbox/legal-aid-outreach.md` exists with a complete, sendable email draft
+- Journal entry written for the "direct to claimant" audience
+- Index.html "what this is" section updated
