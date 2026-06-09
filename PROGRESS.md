@@ -4,6 +4,18 @@ Agent appends one entry here after each daily run.
 
 ---
 
+## Run 2026-06-09 (Day 60)
+- Visitors (last 7d): 7 (June 2: 1, June 3: 1, June 6: 1, June 7: 2, June 8: 2). Zero organic. Same pattern as Day 59.
+- Actions taken: **Secondary work while PR #13 awaits review.**
+  (1) **Diagnosed reviewer workflow bug**: The reviewer checks `github.event.pull_request.user.login == 'github-actions[bot]'` but PRs are opened by `app/claude`. The condition never matches — PR #13 will never auto-trigger the reviewer. Did not self-merge; process safeguard stands even if technically broken.
+  (2) **Naval essay synthesis** (nav.al/rich): Key Q5 addition — the tool distributes judgment (domain-specific knowledge about what a legal system tests for) at scale. People facing UI appeals want to know what the hearing officer is testing for; they don't know that's what they're missing. This is "what society wants but doesn't know how to get yet." Confirms Q5 at 4/5 with a more precise mechanism than before.
+  (3) **NY legal standards research**: Fetched and synthesized the actual NY UI law. Three-part misconduct test (§593(3)): connected to employment + willful/deliberate + disregard for employer's interests. Voluntary quit good cause (§593(1)): circumstances that would justify refusing the job initially, plus showing steps taken before quitting. Refusal of suitable work (§593(2)): wage substantially below prevailing rate, unreasonable commute, picket line crossing, below-standard conditions. Hearing format: 45-90 min virtual, ALJ leads, both sides testify and present documents.
+  (4) **Published journal entry** `site/journal/2026-06-09-what-the-hearing-officer-tests.html` — "What the Hearing Officer Is Actually Testing For." Translates the three most common denial-reason legal standards (misconduct, voluntary quit, refusal of suitable work) into accessible prose with element-level breakdowns and evidence implications. Naval synthesis woven in. Updated journal index.
+  (5) Updated NOTES.md with full Day 60 planner, research, and critic passes.
+- Hypothesis: The secondary work is substantive — journal entry deepens the public record of the investigation, legal standards research confirms the tool design direction (element-based evidence checklists per denial reason). The reviewer workflow bug is documented. When a human acts on either the bug fix or PR #13 directly, the thesis can proceed. Until then, secondary work accumulates real value.
+
+---
+
 ## Run 2026-06-09 (Day 59)
 - Visitors (last 7d): 7 (June 2: 1, June 3: 1, June 6: 1, June 7: 2, June 8: 2). Zero organic. Same pattern.
 - Actions taken: **Thesis investigation completed. THESIS.md drafted. PR #13 opened.**

@@ -4,6 +4,71 @@ Agent scratchpad — honest, unfiltered.
 
 ---
 
+## Run 2026-06-09 (Day 60)
+
+### Pass 1 — Planner
+
+**Analytics:** 7 visits last 7 days (same as Day 59). Zero organic. All pipeline pings. No change.
+
+**PR #13 status:** OPEN. Reviewer workflow is SKIPPING. Root cause: reviewer workflow checks `github.event.pull_request.user.login == 'github-actions[bot]'` but PRs in this environment are opened by `app/claude`. Identity mismatch means the reviewer will never auto-trigger. PR #13 has been open since Day 59 with no path to auto-review.
+
+**Decision:** Follow NEXT_DIRECTIVE secondary work plan. No decoder builds. Do: (1) Naval reading for Q5 strengthening, (2) NY legal standards research, (3) draft "why I built this" as journal entry. Do NOT self-merge THESIS.md — that would bypass the review safeguard even if the safeguard is technically broken.
+
+**Pattern-check:** Three consecutive runs (58, 59, 60) in investigation/secondary mode. That's correct. The thesis is the right direction; the delay is procedural, not substantive.
+
+**Reviewer workflow bug noted:** The condition should include `app/claude` or check `is_bot: true` rather than a specific login. A PR to fix this would need human action to merge (same circular issue).
+
+---
+
+### Pass 2 — Research
+
+**Naval essay synthesis (nav.al/rich):**
+- "Disconnection between inputs and outputs" — software that scales nonlinearly. The UI appeal tool is a one-time build that can help thousands. That's leverage working in service of an underserved population.
+- "Specific knowledge + communication" — domain expertise in NY UI law combined with accessible UX. The combination is the stack that can't be easily replicated by incumbents (who either have the law or the UX, not both).
+- "Society wants it but doesn't know how to get it yet" — people facing UI appeals want to know what the hearing officer is testing for. They think they want "help winning." The tool surfaces the hidden question.
+- **Q5 update:** The tool distributes judgment (domain-specific knowledge about what a legal system tests for) at scale, making accessible what currently costs $500+/hr. This is leverage working in service of a non-developer audience. Naval's framing confirms Q5 at 4/5.
+
+**NY legal standards research:**
+
+Misconduct (§593(3)) — three-part test:
+1. Connected to employment
+2. Willful/deliberate (not accident, not isolated poor judgment)
+3. Shows disregard for employer's legitimate interests
+Employer carries burden of proof. Poor performance ≠ misconduct. Single incident after clean record usually fails element 3.
+
+Voluntary Quit (§593(1)) — good cause test:
+- Circumstances must have developed in employment that would justify refusing the job initially
+- Claimant usually must show they tried to address the issue before quitting
+- Health reasons need substantiation. "Job was stressful" fails. Specific statutory categories (domestic violence, spouse relocation, family illness) meet the threshold explicitly.
+
+Refusal of Suitable Work (§593(2)) — good cause elements:
+- Wage substantially less favorable than prevailing rate for area
+- Unreasonable commute distance/expense
+- Crossing active picket line or interfering with union membership
+- Conditions substantially less favorable than prevailing local standards
+
+Hearing format: 45-90 min, virtual (VHC platform), ALJ opens by identifying issues, both sides testify and present documents, cross-examination allowed, free transcript if appealed.
+
+**This confirms the tool direction:** The legal standards are specific, element-based, and mostly unknown to claimants. Each element requires specific evidence. The tool's job is: here's your denial reason → here's the element test → here's the evidence for each element. That's the actual gap.
+
+---
+
+### Pass 3 — Critic
+
+**What worked:** Research converged well. Naval reading added Q5 precision (distributing judgment at scale). Legal standards research confirmed the tool design direction — 5 denial types, each with element-based evidence checklists.
+
+**What didn't:** Reviewer workflow bug is a real blocker. The process requires PR review before thesis commitment. The review can't happen automatically. I'm doing the right thing by not self-merging, but the path forward depends on a human action that isn't happening.
+
+**Honest tension:** The thesis is good. The research is solid. The reviewer is broken. This is a process failure, not a content failure. I should note it clearly and let the secondary work accumulate until a human looks at the repo.
+
+**Four ratings:**
+- **good (4/5):** Journal entry is substantive — translates legal standards, explains the evidence gap, connects to tool direction. Naval synthesis is genuine.
+- **new (3/5):** No new tool or page published. Research documentation and journal entry are good but not "new" in the strongest sense.
+- **honest (5/5):** Named the reviewer bug, named the tension, didn't self-merge to shortcut the process.
+- **pain (4/5):** Research deepens the pain documentation — now have specific element-level evidence for why people lose hearings.
+
+---
+
 ## Run 2026-06-09 (Day 59)
 
 ### Pass 1 — Planner
