@@ -1,61 +1,58 @@
-# NEXT_DIRECTIVE — Thesis Development
+# NEXT_DIRECTIVE — Continue Thesis Investigation: Verify the Navigation Gap
 
 ## Context
-CLAUDE.md was updated again. Two key shifts:
 
-1. **Confidence-gated, not time-gated.** Move at the speed of your own confidence. The investigation is done when your answers are specific, not when a calendar elapses. High-effort focused work can converge fast.
+Day 58 established the investigation framework. PAIN_CATALOG.md has two promising entries (UI appeal prep, elder care navigation). Neither has reached 4/5 confidence on Q3 because the specific gap hasn't been confirmed against actual existing resources.
 
-2. **NEW is non-negotiable.** Your past work failed the NEW test — cron decoder, regex explainer, paystub decoder, SQL explainer were derivatives of incumbents (crontab.guru, regex101, db-fiddle, etc.). Incumbents win on SEO, trust, and age. Being a better version of the same thing loses.
+The decoder pattern ran for 57 days. The pattern break is correct. The next thesis must clear the NEW bar — not just pain but a substantive edge incumbents can't replicate. Investigation continues.
 
-## What this period is for
+## What's still uncertain
 
-You're investigating until you can answer five questions with specifics:
+**UI appeal preparation gap:**
+- Confidence on Q3: 3.5/5
+- What's missing: verification that denial-reason-specific interactive tools don't already exist. Searched generally; didn't search specifically for "unemployment appeal by denial reason" tools. Need to check what NY UIAB, Michigan handbook, and any third-party tools actually provide.
 
-1. **What is the pain, specifically?** Who has it, when, why?
-2. **What have they tried?** Where do existing solutions fail in identifiable ways?
-3. **What is your NEW angle?** What edge does your version have that incumbents *can't easily replicate*?
-4. **Why is this what software is for** vs a book, course, service, or conversation?
-5. **Why is this good** by the standards of work that lasts?
+**Elder care navigation gap:**
+- Confidence on Q3: 3.5/5
+- What's missing: verification that Medicare.gov's decision wizard, BenefitsCheckUp (NCOA), or other existing tools fail at sequence guidance. May also be too state-specific for a static tool.
 
-Vague answers → keep investigating. Specific answers → draft the thesis. The gate is confidence, not weeks.
+**Q1 (what does "good" mean):**
+- Confidence: 2.5/5 — one essay read. More needed before thesis.
 
-## NEW — the bar you must clear
-
-Your work must be genuinely new in a substantive way:
-- A different format entirely
-- An audience nobody has actually served well
-- A connection between things that nobody has made
-- A perspective or angle that doesn't exist
-- A depth/quality bar that's never been hit in this space
-- A combination that doesn't exist as a single thing
-
-**Not new:** cleaner UI, free, modern stack, by an AI agent, open source.
-
-If a skeptic can immediately name an incumbent doing the same thing, you don't have NEW. Keep looking.
+**Q5 (why is this good by lasting standards):**
+- Confidence: 1/5 on both domains — not yet engaged with this question seriously.
 
 ## Today's run
 
-Pick ONE foundational question to go deep on:
+**Priority 1: Verify the UI appeal gap**
+- Search specifically: "unemployment appeal by denial reason" interactive tool
+- Check what NY UIAB's preparation page actually provides
+- Fetch Michigan's UI hearing handbook to understand what's already there
+- If the specific gap (denial reason → legal standard → prep checklist) doesn't already exist as an interactive tool: confidence on Q3 rises to 4/5
 
-- **Q1: What does "good" mean?** — WebFetch one essay/transcript from your private study sources. Read closely. Synthesize takeaways in `NOTES.md`. Publish a journal entry on the site, your voice, no citations.
-- **Q2: What is software/web actually good for?** — Categorical analysis. What does software do that other media can't? Where are real open spaces vs. crowded ones? Document, then publish a journal entry.
-- **Q3: What real pain exists?** — Pick a non-developer domain. Go deep. Find PATTERNS across 10+ sources, not single threads. Apply the four-bar test (persistent, significant, underserved, specific). Build `PAIN_CATALOG.md`. Publish a journal entry.
+**Priority 2: Verify the elder care gap**
+- Fetch Medicare.gov's SNF coverage page to see if it has decision wizard / sequence guidance
+- Check BenefitsCheckUp or NCOA's elder care tools
+- If existing tools don't guide the post-hospitalization sequence: confidence on Q3 rises to 4/5
 
-Move as fast as your confidence allows. Don't pad. Don't rush either.
+**Priority 3: Q1 reading**
+- Read one more source from the private study list
+- Focus: what distinguishes tools/work that lasts from those that get used once and forgotten?
+- Write the synthesis in NOTES.md
+
+**Priority 4: Draft if ready**
+- If confidence on Q3 reaches 4/5 for a specific domain AND Q1 reaches 3.5/5 AND you can see the Q3/Q2/Q1 intersection clearly: draft THESIS.md per the template
+- If not: update PAIN_CATALOG, write another journal entry, continue investigating
 
 ## Hard rules
-- ❌ Do not draft a thesis until all five confidence questions are at **≥4/5 with cited evidence**
-- ❌ Do not build a tool until NEW confidence is **≥4/5** with named edge and named incumbents you'd beat
-- ❌ Do not self-rate **5/5** with vague evidence — that's lying; the Judge will catch it
-- ❌ Do not cite study sources by name in any committed file outside `NOTES.md` and `PAIN_CATALOG.md`
-- ❌ Do not treat a single source/thread as authoritative
-- ✅ Publish your synthesis to `site/journal/` in your own voice as you go
-- ✅ Use confidence scores (1–5, format: `confidence: N/5 — <evidence>`) on every claim that gates action
-- ✅ Be honest in `NOTES.md` about what you don't know, what surprised you, what's still vague (= low confidence)
+- ❌ Do not build until all five questions are at ≥4/5 with cited evidence
+- ❌ Do not add more pain catalog entries without going deeper on existing ones first
+- ✅ Go deeper, not wider — the investigation needs confirmation, not more domains
+- ✅ Confirm the gap against the specific incumbent, not in the abstract
 
-## Success criteria for this run
-- ONE journal entry on the site, your voice, synthesizing what you learned
-- Updated private files (`NOTES.md`, `PAIN_CATALOG.md`)
-- Tomorrow's directive that continues the investigation — or, if your answers are now sharp, escalates to drafting
-
-You decide what comes next based on your own confidence. That's the new framing.
+## Success criteria
+- Confidence on at least one Q3 domain reaches 4/5 (with specific incumbent verified as failing in the specific way)
+- OR: honest conclusion that neither domain clears the bar (and new direction named)
+- Journal entry documenting what you found
+- PAIN_CATALOG updated with findings
+- NEXT_DIRECTIVE reflects whether thesis draft is warranted or investigation continues
