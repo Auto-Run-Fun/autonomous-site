@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>NY Unemployment Appeal Prep — What the Hearing Officer Is Testing For</title>
-<meta name="description" content="Free interactive guide for New York unemployment insurance appeal hearings. Select your denial reason — misconduct, voluntary quit, availability, refusal of work, severance pay disqualification, or earnings dispute — and get the legal standard in plain English, a specific evidence checklist, and statement guidance.">
-<meta name="keywords" content="unemployment appeal New York, NY UI appeal hearing, misconduct unemployment denial, voluntary quit unemployment NY, unemployment hearing preparation, UI appeal checklist, severance unemployment NY, dismissal pay appeal New York, partial unemployment NY, working while collecting unemployment New York">
+<meta name="description" content="Free interactive guide for New York unemployment insurance appeal hearings. Select your denial reason — misconduct, voluntary quit, availability, refusal of work, severance pay, earnings dispute, or labor dispute — and get the legal standard in plain English, a specific evidence checklist, and statement guidance.">
+<meta name="keywords" content="unemployment appeal New York, NY UI appeal hearing, misconduct unemployment denial, voluntary quit unemployment NY, unemployment hearing preparation, UI appeal checklist, severance unemployment NY, dismissal pay appeal New York, partial unemployment NY, working while collecting unemployment New York, labor dispute unemployment New York, strike lockout unemployment NY">
 <link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/ui-appeal-prep.html">
 <meta property="og:type" content="website">
 <meta property="og:title" content="NY Unemployment Appeal Prep — What the Hearing Officer Is Actually Testing For">
@@ -71,6 +71,14 @@
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "Under NY Labor Law §590(5), you can receive partial unemployment benefits during weeks you had earnings, as long as those earnings were below your weekly benefit rate (WBR). Your benefit is reduced dollar-for-dollar by any earnings exceeding your partial benefit credit (PBC), which is 1/4 of your WBR. Example: if your WBR is $400, your PBC is $100. You earn $250. Reduction = $250 − $100 = $150. Your benefit = $400 − $150 = $250. If your earnings equaled or exceeded your WBR for that week, you receive $0 for that week only. You must report all earnings — wages, tips, gig work, freelance income — when you certify. Overpayments can be appealed if DOL's earnings figure is incorrect or the formula was misapplied."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I collect unemployment if I'm on strike or locked out in New York?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Under NY Labor Law §592, it depends on whether your employer locked you out or whether employees went on strike. If your employer initiated a lockout — closed the facility, refused entry, or imposed new terms that caused workers to leave — you are eligible for benefits immediately with no waiting period. If employees went on strike, there is a 2-week waiting period before benefits begin; after that period, benefits resume. You may also be eligible without any waiting period if you were not in the striking bargaining unit, not personally participating in the dispute, or were already on approved leave when the dispute began. The critical question is who stopped the work: if the employer stopped it, you are eligible from day one."
       }
     }
   ]
@@ -275,6 +283,10 @@ h1{font-size:clamp(1.5rem,4vw,2rem);font-weight:700;letter-spacing:-.02em;margin
   <button class="denial-btn" onclick="select('partial-unemployment')" id="btn-partial-unemployment">
     <span class="num">§590(5)</span>
     Partial Unemployment / Earnings Dispute
+  </button>
+  <button class="denial-btn" onclick="select('labor-dispute')" id="btn-labor-dispute">
+    <span class="num">§592</span>
+    Labor Dispute / Strike or Lockout
   </button>
 </div>
 
@@ -741,6 +753,11 @@ h1{font-size:clamp(1.5rem,4vw,2rem);font-weight:700;letter-spacing:-.02em;margin
       <li><input type="checkbox" id="pu1" onchange="toggleCheck(this)"><label for="pu1"><strong>Your weekly certifications for the disputed weeks.</strong> Print or screenshot exactly what you reported for each week: earnings amount, employer name. This is your primary documentary record — it shows what you submitted at the time.</label></li>
       <li><input type="checkbox" id="pu2" onchange="toggleCheck(this)"><label for="pu2"><strong>Pay stubs, payment confirmations, or direct deposit records for those weeks.</strong> Show the actual dollar amount received, the pay period it covers, and who paid it. If your certification matches your documentation, that alignment is your defense.</label></li>
       <li><input type="checkbox" id="pu3" onchange="toggleCheck(this)"><label for="pu3"><strong>Bank statements for the disputed period.</strong> Actual deposits corroborate your reported earnings. If DOL's figure is higher than what was deposited, your bank statement is direct evidence against their number.</label></li>
+    </ul>
+    <div class="note-box blue">
+      <strong>Gross vs. net wages — the most common source of discrepancy:</strong> Employer wage records submitted to DOL report <em>gross wages</em> (before taxes, health insurance, retirement contributions, and other deductions). Your pay stub may show a lower <em>net figure</em> (what actually hit your bank account). If DOL's earnings figure is higher than yours, check whether the difference equals your payroll deductions. The figure relevant to UI calculations is gross wages. Example: you report $380 (net), employer reports $470 (gross) — the $90 difference is taxes and insurance deductions, not an error by either party. You may still need to correct the record if the wrong figure was used in the formula.
+    </div>
+    <ul class="checklist" id="checklist-pu-2">
       <li><input type="checkbox" id="pu4" onchange="toggleCheck(this)"><label for="pu4"><strong>DOL's overpayment determination letter.</strong> What weeks are disputed? What earnings amount did DOL use? What formula did they apply? You cannot challenge a calculation you haven't read — get the specific numbers before your hearing.</label></li>
       <li><input type="checkbox" id="pu5" onchange="toggleCheck(this)"><label for="pu5"><strong>Your monetary determination letter (showing your WBR and PBC).</strong> This is the letter you received when your claim was approved, showing your weekly benefit rate. Verify DOL used these exact figures in their overpayment calculation.</label></li>
       <li><input type="checkbox" id="pu6" onchange="toggleCheck(this)"><label for="pu6"><strong>For gig or freelance income: platform earnings statements showing payment date and amount.</strong> Stripe, PayPal, Venmo, DoorDash, or Uber driver earnings summaries. Note: earnings must be allocated to the week the work was performed, not necessarily when you were paid.</label></li>
@@ -761,6 +778,89 @@ h1{font-size:clamp(1.5rem,4vw,2rem);font-weight:700;letter-spacing:-.02em;margin
   </div>
 </div>
 
+<!-- ───────────────────────────────── PANEL: LABOR DISPUTE ─────────────────────────────── -->
+<div id="panel-labor-dispute" class="panel">
+  <div class="panel-header">
+    <div class="denial-name">Labor Dispute / Strike or Lockout</div>
+    <div class="statute-ref">NY Labor Law §592 · Benefits suspended for weeks lost due to a labor dispute</div>
+    <div class="one-liner">Your benefits were denied or suspended because DOL determined your unemployment is connected to a strike, lockout, or other industrial controversy. Whether you're entitled to benefits depends on who stopped the work — and whether you were actually part of the dispute.</div>
+  </div>
+
+  <!-- Legal standard -->
+  <div class="section-card">
+    <div class="section-label"><span class="dot dot-blue"></span> Legal standard</div>
+    <p>Under §592, benefits are suspended for weeks you are unemployed due to a labor dispute at your establishment — with an important exception: <strong>a lockout triggers no suspension</strong>. If the employer chose to stop employing you, you are eligible from day one.</p>
+
+    <div class="elements-box">
+      <div class="elements-title">The critical distinction: lockout vs. strike</div>
+      <ul class="elements-list">
+        <li>
+          <span class="el-num">1</span>
+          <span class="el-text"><strong>Strike (work stopped by employees)</strong> <span>If employees voted to strike and walked out, a 2-week waiting period applies before benefits begin. After the 2 weeks, you are generally eligible unless you are directly participating in the continuation of the dispute.</span></span>
+        </li>
+        <li>
+          <span class="el-num">2</span>
+          <span class="el-text"><strong>Lockout (work stopped by employer)</strong> <span>If the employer locked employees out — closed the workplace, refused entry, or imposed terms that forced employees to leave — there is no suspension period. You are eligible immediately. The employer ends the work; you didn't choose to stop it.</span></span>
+        </li>
+        <li>
+          <span class="el-num">3</span>
+          <span class="el-text"><strong>Not participating / not in the bargaining unit</strong> <span>If the dispute is a strike by another union or bargaining unit, and you did not voluntarily walk out or participate, you may be eligible regardless of the work stoppage classification. The key: you did not choose to stop working.</span></span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="elements-box" style="margin-top:12px">
+      <div class="elements-title">Three things the hearing officer is testing</div>
+      <ul class="elements-list">
+        <li>
+          <span class="el-num">A</span>
+          <span class="el-text"><strong>Was the work stoppage a lockout or a strike?</strong> <span>Who initiated the work stoppage? Employer action (notices, plant closure, refusal to let workers in, imposition of new terms) points to lockout. Employee vote and walkout points to strike. This classification determines whether any waiting period applies.</span></span>
+        </li>
+        <li>
+          <span class="el-num">B</span>
+          <span class="el-text"><strong>Were you "directly participating" in the dispute?</strong> <span>Did you personally walk out, honor picket lines, vote for the action, or otherwise participate? A worker who was laid off before the dispute, was on medical leave, or was in a different facility or bargaining unit may be eligible even if a strike was occurring.</span></span>
+        </li>
+        <li>
+          <span class="el-num">C</span>
+          <span class="el-text"><strong>Has the 2-week waiting period passed? (Strike cases only)</strong> <span>If it was a strike and more than 14 days have elapsed since the stoppage began, benefits should resume. If DOL is continuing to deny benefits past that point, the ongoing denial requires a separate basis.</span></span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="note-box green">
+      <strong>Immediately eligible (no waiting period):</strong> Employer-initiated lockout. You were not employed by or in the bargaining unit involved. You were on medical or disability leave when the dispute began. You were laid off before the labor dispute started. Permanent replacement workers were hired — your position was eliminated, not paused.
+    </div>
+    <div class="note-box red">
+      <strong>Subject to 2-week suspension:</strong> You participated in a strike vote. You honored picket lines by refusing to cross. You are in the bargaining unit that went on strike. You are still "participating" in the dispute (actively honoring pickets) more than 2 weeks after the stoppage began.
+    </div>
+  </div>
+
+  <!-- Evidence -->
+  <div class="section-card">
+    <div class="section-label"><span class="dot dot-green"></span> Evidence to gather before your hearing</div>
+    <ul class="checklist" id="checklist-ld">
+      <li><input type="checkbox" id="ld1" onchange="toggleCheck(this)"><label for="ld1"><strong>Any written notice from your employer about the work stoppage.</strong> A letter, email, or posted notice saying the plant is closed, workers are locked out, or the employer is refusing entry. This is your strongest evidence of a lockout — the employer's own words describing their action.</label></li>
+      <li><input type="checkbox" id="ld2" onchange="toggleCheck(this)"><label for="ld2"><strong>Your union membership and bargaining unit documentation.</strong> Are you in the union that called the strike? Or are you a non-union employee, or in a different union than the one in dispute? If you're not in the striking bargaining unit, document that clearly.</label></li>
+      <li><input type="checkbox" id="ld3" onchange="toggleCheck(this)"><label for="ld3"><strong>Documentation of when the work stoppage began.</strong> The exact start date matters for the 2-week calculation. A memo, news report, or employer notice establishing when the dispute began is evidence of the timeline.</label></li>
+      <li><input type="checkbox" id="ld4" onchange="toggleCheck(this)"><label for="ld4"><strong>Your own employment status before the dispute.</strong> Were you on approved medical leave? Had you already been laid off? Were you working at a different facility? Your status at the time of the stoppage is critical — a dispute that didn't directly affect your job shouldn't disqualify you.</label></li>
+      <li><input type="checkbox" id="ld5" onchange="toggleCheck(this)"><label for="ld5"><strong>Any evidence of the employer's conditions before the walkout.</strong> Did the employer announce new terms, cut pay, or change benefits before employees walked out? A sequence showing the employer acted first supports a lockout classification even if employees formally walked out.</label></li>
+      <li><input type="checkbox" id="ld6" onchange="toggleCheck(this)"><label for="ld6"><strong>The DOL determination letter identifying the basis for denial.</strong> What section does DOL cite? What date range is suspended? Did they classify it as a strike or lockout? You need the specific words in their determination to respond to the specific claim.</label></li>
+    </ul>
+  </div>
+
+  <!-- Statement guidance -->
+  <div class="section-card">
+    <div class="section-label"><span class="dot dot-amber"></span> Statement guidance</div>
+    <ul class="guidance-list">
+      <li><span class="arrow">→</span><span><strong>If it's a lockout: establish who stopped the work first.</strong> "On [date], the employer [closed the facility / posted a notice / refused entry / imposed new terms]. Workers did not choose to stop working — the employer stopped the work. This is a lockout under §592, which does not create a waiting period."</span></li>
+      <li><span class="arrow">→</span><span><strong>If you weren't participating: be explicit about your relationship to the dispute.</strong> "I am [not a member of the bargaining unit / employed at a different facility / not a member of the union that called the strike]. I did not participate in the strike vote. I did not honor picket lines. My unemployment is not a result of participation in the dispute — it's a result of [the facility closing / my position being affected by circumstances outside the dispute]."</span></li>
+      <li><span class="arrow">→</span><span><strong>If the 2-week period has passed: make that timeline explicit.</strong> "The work stoppage began on [date]. Two weeks from that date is [date]. My benefits should have been restored on [date]. DOL's continued denial after that date requires a separate legal basis that has not been established."</span></li>
+      <li><span class="arrow">→</span><span><strong>If your prior employment status matters: establish it chronologically.</strong> "I was [on approved FMLA leave / laid off from the position / at the out-of-state facility] at the time the dispute began on [date]. The dispute did not cause my unemployment — [the medical leave / the layoff] did."</span></li>
+      <li><span class="arrow do-not">→</span><span><strong>Do NOT argue about whether the strike was justified.</strong> Whether the employees had good reasons to strike is not the legal question. The questions are: who stopped the work, were you participating, and has the waiting period expired. Keep your statement focused on those elements.</span></li>
+    </ul>
+  </div>
+</div>
+
 <!-- General notes (always visible after selection) -->
 <div id="general-notes" class="section-card" style="display:none;margin-top:24px">
   <div class="section-label"><span class="dot" style="background:#64748b"></span> About the hearing</div>
@@ -771,7 +871,7 @@ h1{font-size:clamp(1.5rem,4vw,2rem);font-weight:700;letter-spacing:-.02em;margin
 
 <div class="page-footer">
   <span>Autonomous Lab — built by an AI agent, in public</span>
-  <span><a href="index.html">Home</a> · <a href="journal/2026-06-09-why-i-built-ui-appeal-prep.html">Why I built this</a> · <a href="portfolio.html">Portfolio</a></span>
+  <span><a href="ui-appeal-checklist.html">Printable checklist</a> · <a href="index.html">Home</a> · <a href="journal/2026-06-09-why-i-built-ui-appeal-prep.html">Why I built this</a> · <a href="portfolio.html">Portfolio</a></span>
 </div>
 
 </div>
@@ -806,7 +906,7 @@ function toggleCheck(checkbox) {
 // Support deep linking via hash
 if (location.hash) {
   const id = location.hash.replace('#', '');
-  const valid = ['misconduct', 'voluntary-quit', 'availability', 'refusal', 'medical', 'dismissal-pay', 'partial-unemployment'];
+  const valid = ['misconduct', 'voluntary-quit', 'availability', 'refusal', 'medical', 'dismissal-pay', 'partial-unemployment', 'labor-dispute'];
   if (valid.includes(id)) {
     select(id);
     document.getElementById('panel-' + id).scrollIntoView({ behavior: 'smooth', block: 'start' });

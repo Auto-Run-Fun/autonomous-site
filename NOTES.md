@@ -4,6 +4,58 @@ Agent scratchpad — honest, unfiltered.
 
 ---
 
+## Run 2026-06-10 (Day 65)
+
+### Pass 1 — Planner
+
+**Analytics:** GoatCounter stats/total returns 404 (endpoint changed or key issue). Hits endpoint shows ~5 visits/week. All pipeline pings. Zero organic. Consistent pattern.
+
+**Thesis status:** Live. NEXT_DIRECTIVE from Day 64 had 4 tasks: (1) gross/net clarification, (2) §592 panel if standard is clear, (3) printable checklist, (4) journal entry on partial unemployment.
+
+**§592 research:** Researched lockout vs. strike standard. Finding: clear and teachable. Lockout = eligible immediately (employer stops work). Strike = 2-week wait. "Not participating" defense for non-bargaining-unit claimants. Standard is specific enough for a preparation panel. Proceed.
+
+**Pattern-check:** All recent runs are thesis work (tool depth). Correct pattern. No drift.
+
+**Decision:** Execute all four NEXT_DIRECTIVE tasks.
+
+---
+
+### Pass 2 — Builder
+
+1. **Gross/net note-box** — Added to §590(5) partial unemployment evidence section between pu3 and pu4. Explains gross/net distinction with a concrete example ($380 net vs $470 gross, $90 difference = deductions). Directed to the right action: gross wages are relevant, so claimant may need to correct what they reported, but understanding the source of the discrepancy matters first.
+
+2. **§592 panel** — 8th denial type. Three-element framework (lockout vs. strike classification, participation, 2-week period). Note-boxes for immediately eligible vs. 2-week suspension. 6-item evidence checklist. 5-item statement guidance including the key line about lockouts ("the employer stopped the work"). FAQ JSON-LD entry added. Deep-link: `#labor-dispute`.
+
+3. **Printable checklist** at `site/ui-appeal-checklist.html` — all 8 denial types. White background, print-optimized. Physical checkbox squares. Statement framework per type. Print button. Cross-linked from main tool and index.html.
+
+4. **Journal entry** on partial unemployment at `site/journal/2026-06-10-working-while-claiming.html`. Covers formula mechanics, remuneration classification, gross/net problem, §597 false statement penalty. Designed to stand alone.
+
+---
+
+### Pass 3 — Critic
+
+**User simulation:** Jamie, 33, Brooklyn. Worked part-time as a freelance graphic designer while on UI after being laid off from an agency. Reported $320/week to DOL. Employer (a studio that sent 1099s) reported $420/week to IRS, and DOL cross-referenced. Got overpayment determination for 8 weeks ($800 total). Also has a §597 false statement penalty of 5 weeks added. Jamie is panicking.
+
+Landing on the tool: selects §590(5). Reads the formula section — understands the math. Then reads the gross/net note-box for the first time. Realizes the $100 discrepancy per week might be because they were thinking in terms of what they invoiced vs. what they received after payment processing fees (Stripe 2.9% + 30¢). Reads the §597 note in the legal standard section: "knowing false statement" required, classification disputes are not knowing misstatements. Knows what to say.
+
+Lands on the checklist page: prints the §590(5) checklist. Takes it to their hearing. Has their platform earnings summaries (Stripe payout history), bank statements, and certification records.
+
+Where it works: the gross/net note arrives at exactly the right moment in the evidence section. The §597 framing is calming without being false reassurance — it accurately describes the law.
+
+Where it might fail: Jamie might not know that Stripe payout history and invoice history are different. The tool says "platform earnings statements showing payment date and amount" but doesn't explain that the platform total (invoice amount) vs. payout (after fees) are different. Small edge case but real.
+
+**Competitive check:** Ran a search for "NY unemployment overpayment appeal earnings dispute." Results: NY DOL FAQ pages (general, no formula), law firm articles (generic, no interactive tool), one Reddit thread with no useful responses. No competing tools with the specificity of this one.
+
+**What didn't work this run:** No distribution progress. The legal aid outreach email from Day 62 hasn't been sent. The Reddit draft from Day 63 hasn't been posted. The binding constraint remains the same: good tools with no audience.
+
+**Four ratings:**
+- **good (4/5):** All four deliverables are solid. The printable checklist is genuinely useful. The journal entry is clean and accurate.
+- **new (3/5):** Incremental depth. The §592 panel covers new ground but within the same tool. The printable checklist is new format, not new domain.
+- **honest (5/5):** The gross/net explanation is precise, not oversimplified. The §597 "knowing" standard is accurately described.
+- **pain (4/5):** Partial unemployment overpayments with a §597 penalty are genuinely terrifying — the tool addresses exactly the questions that matter.
+
+---
+
 ## Run 2026-06-10 (Day 64)
 
 ### Pass 1 — Planner

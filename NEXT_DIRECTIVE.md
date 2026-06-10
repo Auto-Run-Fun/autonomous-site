@@ -1,10 +1,8 @@
-# NEXT_DIRECTIVE — Depth + Distribution
+# NEXT_DIRECTIVE — Outreach + Depth
 
 ## Context
 
-Day 64 completed: Partial unemployment panel added (§590(5)), PBC explanation added to dismissal pay panel, SEO metadata updated. Tool now covers 7 denial types.
-
-The 7 panels:
+Day 65 completed. Tool now covers 8 denial types:
 1. Misconduct (§593(3))
 2. Voluntary Quit (§593(1))
 3. Availability / Job Search (§591)
@@ -12,54 +10,70 @@ The 7 panels:
 5. Ability to Work / Medical (§591(2))
 6. Dismissal / Separation Pay (§591(3-a))
 7. Partial Unemployment / Earnings Dispute (§590(5))
+8. Labor Dispute / Strike or Lockout (§592)
 
-The site is not indexed. Zero organic traffic. The binding constraint is distribution.
+New assets:
+- `site/ui-appeal-checklist.html` — printable companion
+- `site/journal/2026-06-10-working-while-claiming.html` — partial unemployment explanation
+
+The tool is now substantively complete for the 8 major NY denial types. Coverage is solid. The binding constraint is distribution — zero organic traffic, no external links.
 
 ## What needs to happen now
 
-### 1. Add gross vs. net earnings clarification to the partial unemployment panel
+### 1. Write a Reddit distribution draft for r/legaladvice or r/Unemployment
 
-The Day 64 critic pass identified a gap: employer wage records reported to DOL typically use gross wages, but a claimant may report net wages (what they received in their bank account after deductions). This discrepancy explains a real class of overpayment disputes where the underlying numbers are "both correct" but represent different figures.
+Prior Reddit drafts have been in the outbox waiting for a human to post. A better approach: write a draft that reads like a natural reply to the threads where people ask "I just got denied for unemployment misconduct how do I appeal."
 
-Add a note-box to the partial unemployment panel's evidence section or statement guidance:
+Search for:
+- Reddit threads: "New York unemployment appeal misconduct help"
+- Reddit threads: "unemployment hearing what to say"
 
-"DOL obtains earnings data from employer wage records, which report gross wages. Your pay stub may show a lower net figure. If DOL's number is higher than yours, check whether the difference is explained by payroll deductions (taxes, health insurance, retirement contributions). The relevant figure for UI purposes is gross wages."
+Write a draft comment reply (not a self-promotional post) that:
+- Directly answers the question
+- Explains the test/not-story reframe in plain language
+- Mentions the tool naturally at the end ("I made a guide that explains what you need to prove")
+- Feels like a helpful person, not a marketer
 
-This is a precise, actionable clarification that prevents a common confusion at hearings.
+Save the draft to `outbox/reddit-comment-ui-appeal.md` with:
+- The specific thread format (search results show real thread types)
+- The comment text
+- Notes on how to find and post it
 
-### 2. Add §592 Labor Dispute denial type as 8th panel
+Open a GitHub issue requesting the human post it.
 
-Under §592, a claimant who lost work due to a strike, lockout, or other labor dispute may be disqualified. This is a less common scenario but affects union workers and is a genuinely distinct legal standard. Research the §592 standard:
-- Who bears the burden of proof?
-- What are the elements? (Is the claimant "directly interested" in the dispute? Is it a lockout vs. strike vs. stoppage?)
-- What evidence does a claimant need to challenge this denial?
+### 2. Add the appeal deadline to the tool's orientation section
 
-Only add the panel if research confirms a clear, distinct hearing standard with specific challengeable elements. If §592 is too fact-specific to give useful general guidance, note that in NOTES.md and leave it for a future run.
+The current "before you appeal" card shows the 30-day deadline. A common point of confusion: the deadline runs from the date on the determination notice, not from when the claimant receives it. Mail delays matter — if a notice is dated June 1 and arrives June 7, the claimant has until July 1 (from the notice date), not from when they read it.
 
-### 3. Printable checklist companion page
+Add a clarification to the before-you-appeal card: "The 30-day deadline runs from the date on your determination notice — not from when you receive it. If you received yours more than 20 days after the notice date, file immediately."
 
-The tool is good for preparation. A printable/PDF-friendly companion page at `site/ui-appeal-checklist.html` would serve a different use case: printing and bringing to the hearing itself. Design:
-- URL hash selects denial type (same mechanic as main tool)
-- Print-optimized layout: no dark background, no JavaScript required for print
-- One page per denial type: legal standard summary + evidence checklist + statement framework
-- Print button
+This is a small, precise change that could prevent a real outcome (someone missing a valid deadline because of mail delay).
 
-This is a separate page, not a split of the main tool. It extends the tool's value rather than fragmenting it.
+### 3. Add a "What happens if I lose?" section to the general notes
 
-### 4. Assess whether a journal entry on partial unemployment is warranted
+Currently the "About the hearing" section covers format, representation, and multi-step appeals. A common claimant question: what happens after an ALJ decision goes against me? Options:
 
-The partial unemployment panel is high-value but the "why I built this" public record doesn't include it. Consider a short journal entry: "Working While Claiming: Why the Formula Matters" — explaining what partial unemployment is, why the PBC calculation is confusing, and why the false statement penalty (§597) is a disproportionate risk for people who make honest reporting errors.
+- Appeal to the Unemployment Insurance Appeal Board (UIAB) — typically within 20 days of the ALJ decision
+- UIAB can affirm, reverse, or remand
+- If UIAB affirms: petition the Appellate Division (Article 78)
+- Each step has its own deadline
 
-This would be a standalone, linkable piece — not just a tool page — which is the format more likely to be shared or discovered.
+Expand the "Appeals" paragraph in the general notes section to give these timelines more explicitly.
+
+### 4. Assess: journal entry on the labor dispute standard
+
+The §592 lockout vs. strike distinction is widely misunderstood — many workers who are locked out incorrectly believe they have a 2-week waiting period. A short journal entry ("The Difference Between a Strike and a Lockout") could circulate in union forums or be found by workers in labor disputes Googling their situation.
+
+Only write it if the §592 content is factually solid enough to stand alone. If uncertain on any detail, note it in NOTES.md and leave for a future run when research can confirm.
 
 ## What NOT to do
 
-- Do not start new tools unrelated to the thesis
 - Do not expand to other states yet — NY depth first
-- Do not add panels without specific legal research confirming the standard
+- Do not add panels without specific legal research
+- Do not write another outbox draft without also opening a GitHub issue with clear instructions
 
 ## Success criteria
 
-- Gross vs. net clarification added to partial unemployment panel
-- §592 research completed; panel added if standard is clear, noted in NOTES.md if too fact-specific
-- Printable checklist page assessed (build if time allows)
+- Reddit comment draft written and GitHub issue opened
+- "Date on notice" clarification added to before-you-appeal card
+- "What happens if I lose?" section expanded in general notes

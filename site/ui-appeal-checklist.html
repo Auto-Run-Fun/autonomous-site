@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NY UI Appeal Hearing Checklist — Printable Evidence Checklist by Denial Type</title>
+<meta name="description" content="Printable evidence checklist for New York unemployment insurance appeal hearings. Select your denial reason and print a one-page checklist to bring to your hearing.">
+<link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/ui-appeal-checklist.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="NY UI Appeal Hearing Checklist — Print and Bring to Your Hearing">
+<meta property="og:description" content="Select your denial reason. Print the evidence checklist and statement framework. Bring it to your hearing.">
+<meta property="og:url" content="https://auto-run-fun.github.io/autonomous-site/ui-appeal-checklist.html">
+
+<style>
+/* Screen styles */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;line-height:1.6;background:#f8f8f5;color:#1a1a1a;font-size:16px}
+a{color:#5b21b6;text-decoration:none}
+a:hover{text-decoration:underline}
+
+.screen-only{display:block}
+.print-only{display:none}
+
+.wrap{max-width:760px;margin:0 auto;padding:0 16px 80px}
+.topnav{padding:20px 0 24px;font-size:.875rem;color:#64748b}
+.topnav a{color:#475569}
+.topnav .sep{margin:0 6px;opacity:.4}
+
+h1{font-size:1.5rem;font-weight:700;color:#1a1a1a;margin-bottom:6px;line-height:1.3}
+.subtitle{font-size:.95rem;color:#475569;margin-bottom:24px}
+
+.tool-link{display:inline-block;margin-bottom:28px;padding:10px 18px;background:#5b21b6;color:#fff;border-radius:8px;font-size:.875rem;font-weight:600}
+.tool-link:hover{background:#4c1d95;text-decoration:none;color:#fff}
+
+.selector-label{font-size:.8rem;font-weight:700;letter-spacing:.08em;color:#64748b;text-transform:uppercase;margin-bottom:12px}
+
+.denial-btns{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+.denial-btn{padding:8px 14px;background:#fff;border:2px solid #e2e8f0;border-radius:8px;font-size:.875rem;color:#334155;cursor:pointer;font-weight:500;transition:all .15s}
+.denial-btn:hover{border-color:#7c3aed;color:#5b21b6}
+.denial-btn.active{border-color:#5b21b6;background:#ede9fe;color:#5b21b6;font-weight:700}
+.denial-btn .num{font-size:.75rem;color:#94a3b8;display:block;margin-bottom:1px;font-weight:400}
+.denial-btn.active .num{color:#7c3aed}
+
+.no-selection{padding:32px;text-align:center;background:#fff;border:2px dashed #e2e8f0;border-radius:12px;color:#64748b}
+.no-selection .big{display:block;font-size:2rem;margin-bottom:8px}
+
+.panel{display:none}
+.panel.visible{display:block}
+
+.print-btn{display:flex;align-items:center;gap:8px;padding:12px 20px;background:#1a1a1a;color:#fff;border:none;border-radius:8px;font-size:.95rem;font-weight:600;cursor:pointer;margin-bottom:28px;font-family:inherit}
+.print-btn:hover{background:#333}
+.print-btn svg{width:18px;height:18px;fill:currentColor}
+
+/* Checklist page structure */
+.checklist-page{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:32px}
+
+.denial-heading{font-size:1.25rem;font-weight:700;color:#1a1a1a;margin-bottom:4px}
+.statute-ref{font-size:.8rem;color:#64748b;margin-bottom:20px}
+.divider{border:none;border-top:1px solid #e2e8f0;margin:20px 0}
+
+.section-label{font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#64748b;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex-shrink:0}
+.dot-blue{background:#3b82f6}
+.dot-green{background:#22c55e}
+.dot-amber{background:#f59e0b}
+
+.standard-box{background:#f8f7ff;border:1px solid #ddd6fe;border-radius:8px;padding:16px;margin-bottom:20px;font-size:.9rem}
+.standard-box strong{color:#4c1d95}
+.standard-box ul{margin-top:8px;padding-left:20px}
+.standard-box li{margin-bottom:4px}
+
+.note-inline{font-size:.85rem;background:#fef3c7;border-left:3px solid #f59e0b;padding:8px 12px;margin-top:12px;border-radius:0 4px 4px 0}
+
+.evidence-list{list-style:none;padding:0;margin-bottom:20px}
+.evidence-list li{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid #f1f5f9;font-size:.9rem}
+.evidence-list li:last-child{border-bottom:none}
+.cb{width:16px;height:16px;border:2px solid #94a3b8;border-radius:3px;flex-shrink:0;margin-top:2px}
+
+.statement-box{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:16px;font-size:.875rem}
+.statement-box p{margin-bottom:8px;line-height:1.5}
+.statement-box p:last-child{margin-bottom:0}
+.stmt-key{font-weight:700;color:#15803d}
+.stmt-dont{color:#dc2626;font-weight:700}
+
+.footer-note{margin-top:20px;padding:12px;background:#f8f7ff;border-radius:6px;font-size:.8rem;color:#64748b;text-align:center}
+
+/* ─── Print styles ─── */
+@media print {
+  body{background:#fff;font-size:11pt;color:#000}
+  .screen-only{display:none}
+  .print-only{display:block}
+  .topnav,.denial-btns,.selector-label,.print-btn,.no-selection,.tool-link,.subtitle,.footer-note{display:none!important}
+  .wrap{max-width:100%;padding:0}
+  h1{font-size:14pt;margin-bottom:4pt}
+  .panel{display:block!important}
+  .checklist-page{border:none;padding:0;border-radius:0}
+  .denial-heading{font-size:13pt}
+  .standard-box{background:#f9f9f9;border:1px solid #ccc;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .note-inline{background:#fff8e1;border-left:3px solid #f59e0b;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .statement-box{background:#f0fff4;border:1px solid #b2f5cc;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .cb{border:2px solid #666}
+  a{color:#000;text-decoration:none}
+  @page{margin:1.5cm}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<div class="topnav screen-only">
+  <a href="index.html">Home</a><span class="sep">›</span>
+  <a href="ui-appeal-prep.html">NY UI Appeal Prep</a><span class="sep">›</span>
+  Printable Checklist
+</div>
+
+<h1>NY UI Appeal — Hearing Checklist</h1>
+<p class="subtitle screen-only">Select your denial reason, then print this page to bring to your hearing.</p>
+
+<a href="ui-appeal-prep.html" class="tool-link screen-only">← Full prep tool with legal standards and statement guidance</a>
+
+<div class="screen-only">
+  <div class="selector-label">Your denial reason</div>
+  <div class="denial-btns">
+    <button class="denial-btn" onclick="choose('misconduct')" id="btn-misconduct">
+      <span class="num">§593(3)</span>Misconduct
+    </button>
+    <button class="denial-btn" onclick="choose('voluntary-quit')" id="btn-voluntary-quit">
+      <span class="num">§593(1)</span>Voluntary Quit
+    </button>
+    <button class="denial-btn" onclick="choose('availability')" id="btn-availability">
+      <span class="num">§591</span>Availability / Job Search
+    </button>
+    <button class="denial-btn" onclick="choose('refusal')" id="btn-refusal">
+      <span class="num">§593(2)</span>Refusal of Suitable Work
+    </button>
+    <button class="denial-btn" onclick="choose('medical')" id="btn-medical">
+      <span class="num">§591(2)</span>Ability to Work (Medical)
+    </button>
+    <button class="denial-btn" onclick="choose('dismissal-pay')" id="btn-dismissal-pay">
+      <span class="num">§591(3-a)</span>Dismissal / Separation Pay
+    </button>
+    <button class="denial-btn" onclick="choose('partial-unemployment')" id="btn-partial-unemployment">
+      <span class="num">§590(5)</span>Partial Unemployment
+    </button>
+    <button class="denial-btn" onclick="choose('labor-dispute')" id="btn-labor-dispute">
+      <span class="num">§592</span>Labor Dispute
+    </button>
+  </div>
+</div>
+
+<div id="no-selection" class="no-selection screen-only">
+  <span class="big">↑</span>
+  Select your denial reason above to generate your printable checklist.
+</div>
+
+<!-- MISCONDUCT -->
+<div id="panel-misconduct" class="panel">
+  <button class="print-btn screen-only" onclick="window.print()">
+    <svg viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
+    Print this checklist
+  </button>
+  <div class="checklist-page">
+    <div class="denial-heading">Misconduct — Hearing Checklist</div>
+    <div class="statute-ref">NY Labor Law §593(3) · Employer bears the burden of proof on all three elements</div>
+    <hr class="divider">
+
+    <div class="section-label"><span class="dot dot-blue"></span>What the hearing officer is testing</div>
+    <div class="standard-box">
+      <strong>The employer must prove ALL THREE:</strong>
+      <ul>
+        <li><strong>1. Connected to employment</strong> — conduct occurred at work or directly affected the job</li>
+        <li><strong>2. Willful or deliberate</strong> — a conscious choice, not an accident or inability</li>
+        <li><strong>3. Disregarded employer's legitimate interests</strong> — not just poor performance or a mistake</li>
+      </ul>
+      <div class="note-inline">If any element is missing or unproven, the misconduct finding fails. Your job: challenge each element with evidence.</div>
+    </div>
+
+    <hr class="divider">
+    <div class="section-label"><span class="dot dot-green"></span>Evidence to bring</div>
+    <ul class="evidence-list">
+      <li><div class="cb"></div><div><strong>Written policy or handbook</strong> — Did a written rule exist? Can employer prove you received it? No written policy or no proof of receipt challenges element 2 directly.</div></li>
+      <li><div class="cb"></div><div><strong>Your disciplinary record</strong> — Prior warnings or suspensions. A first-time incident after years of clean service challenges element 3 (disregard for interests).</div></li>
+      <li><div class="cb"></div><div><strong>Evidence of intent</strong> — Documentation showing the act was accidental, a misunderstanding, or a good-faith attempt to comply.</div></li>
+      <li><div class="cb"></div><div><strong>Witnesses or written statements</strong> — Anyone who can corroborate your version of events or establish context.</div></li>
+      <li><div class="cb"></div><div><strong>The termination letter or HR communication</strong> — Exactly what reason did the employer give? If the letter says "performance issues" or "inability to meet standards," that's not §593(3) misconduct.</div></li>
+      <li><div class="cb"></div><div><strong>Medical documentation (if applicable)</strong> — If the conduct was caused by a health condition, inability isn't willfulness.</div></li>
+    </ul>
+
+    <hr class="divider">
+    <div class="section-label"><span class="dot dot-amber"></span>Key statement framework</div>
+    <div class="statement-box">
+      <p><span class="stmt-key">On element 1 (connection):</span> "The conduct cited occurred [off-duty / in a personal context unrelated to my job performance]."</p>
+      <p><span class="stmt-key">On element 2 (willfulness):</span> "My action was [accidental / based on my misunderstanding of policy / my best effort to comply]. I did not intentionally [act]."</p>
+      <p><span class="stmt-key">On element 3 (disregard):</span> "I worked at this company for [X years] with no prior discipline. A single incident does not establish deliberate disregard for the employer's interests."</p>
+      <p><span class="stmt-dont">Don't:</span> Argue about whether your firing was fair. Argue about what the employer's true motive was. Focus only on the three-element test.</p>
+    </div>
+
+    <div class="footer-note">For full legal standard and preparation guidance: auto-run-fun.github.io/autonomous-site/ui-appeal-prep.html#misconduct</div>
+  </div>
+</div>
+
+<!-- VOLUNTARY QUIT -->
+<div id="panel-voluntary-quit" class="panel">
+  <button class="print-btn screen-only" onclick="window.print()">
+    <svg viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
+    Print this checklist
+  </button>
+  <div class="checklist-page">
+    <div class="denial-heading">Voluntary Quit — Hearing Checklist</div>
+    <div class="statute-ref">NY Labor Law §593(1) · Claimant bears the burden of proving good cause</div>
+    <hr class="divider">
+
+    <div class="section-label"><span class="dot dot-blue"></span>What the hearing officer is testing</div>
+    <div class="standard-box">
+      <strong>Good cause = circumstances that developed in employment that would have justified refusing the job initially.</strong>
+      <ul>
+        <li><strong>Qualifying categories:</strong> domestic violence requiring departure, medical condition with documentation, care of ill immediate family member, military spouse relocation</li>
+        <li><strong>Must show:</strong> You took steps to address the problem before quitting (asked for accommodation, raised the issue with HR)</li>
+      </ul>
+      <div class="note-inline">Stress, a better opportunity, conflict with a manager, or general dissatisfaction are not good cause under §593(1).</div>
+    </div>
+
+    <hr class="divider">
+    <div class="section-label"><span class="dot dot-green"></span>Evidence to bring</div>
+    <ul class="evidence-list">
+      <li><div class="cb"></div><div><strong>Medical documentation (if health-related)</strong> — Doctor's letter stating the condition required leaving employment. A general "I had stress" is insufficient; a specific letter is necessary.</div></li>
+      <li><div class="cb"></div><div><strong>Accommodation request records</strong> — Emails, HR communications, or written requests showing you tried to resolve the issue before quitting. Verbal requests: document them now in writing (memo to file with date).</div></li>
+      <li><div class="cb"></div><div><strong>Domestic violence documentation (if applicable)</strong> — Police report, protective order, DV shelter records, or attorney letter. NY has specific protections for DV-related separations.</div></li>
+      <li><div class="cb"></div><div><strong>Military transfer orders (if applicable)</strong> — Official PCS orders showing relocation was required.</div></li>
+      <li><div class="cb"></div><div><strong>The HR response (or non-response)</strong> — Did you request accommodation and the employer refused or ignored you? That refusal matters.</div></li>
+      <li><div class="cb"></div><div><strong>Timeline documentation</strong> — When did the condition develop? When did you raise it? When did you quit? The sequence matters for showing you tried to stay.</div></li>
+    </ul>
+
+    <hr class="divider">
+    <div class="section-label"><span class="dot dot-amber"></span>Key statement framework</div>
+    <div class="statement-box">
+      <p><span class="stmt-key">Name the qualifying category first:</span> "I left because [domestic violence requiring relocation / a medical condition that my doctor documented / I needed to care for my [spouse/parent/child] due to [illness]]."</p>
+      <p><span class="stmt-key">Show you tried to stay:</span> "Before leaving, I [requested reduced hours / asked HR for accommodation / spoke with my supervisor on [date]]. The employer [refused / did not respond / could not accommodate]."</p>
+      <p><span class="stmt-dont">Don't:</span> Say you left because it was stressful, because you had a better offer, or because the work environment was unpleasant. None of these are §593(1) good cause.</p>
+    </div>
+
+    <div class="footer-note">For full legal standard and preparation guidance: auto-run-fun.github.io/autonomous-site/ui-appeal-prep.html#voluntary-quit</div>
+  </div>
+</div>
+
+<!-- AVAILABILITY -->
+<div id="panel-availability" class="panel">
+  <button class="print-btn screen-only" onclick="window.print()">
+    <svg viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
+    Print this checklist
+  </button>
+  <div class="checklist-page">
+    <div class="denial-heading">Availability / Job Search — Hearing Checklist</div>
+    <div class="statute-ref">NY Labor Law §591 · Claimant bears the burden on all three prongs</div>
+    <hr class="divider">
+
+    <div class="section-label"><span class="dot dot-blue"></span>What the hearing officer is testing</div>
+    <div class="standard-box">
+      <strong>You must prove ALL THREE prongs:</strong>
+      <ul>
+        <li><strong>1. Registered</strong> — registered at NY DOL for employment</li>
+        <li><strong>2. Available</strong> — no restrictions preventing you from accepting suitable work</li>
+        <li><strong>3. Actively seeking work</strong> — making specific, documented contacts with employers</li>
+      </ul>
+      <div class="note-inline">One week of missing documentation can justify a disqualification for that week. Bring specific contact records, not general statements.</div>
+    </div>
+
+    <hr class="divider">
+    <div class="section-label"><span class="dot dot-green"></span>Evidence to bring</div>
+    <ul class="evidence-list">
+      <li><div class="cb"></div><div><strong>Job search log for each disputed week</strong> — Employer name, date of contact, method (online, phone, email, in-person), and result. NY DOL typically requires 3 contacts per week. Specific is better than general.</div></li>
+      <li><div class="cb"></div><div><strong>Email records of job applications</strong> — Confirmation emails from job application portals, LinkedIn messages, or employer responses.</div></li>
+      <li><div class="cb"></div><div><strong>DOL registration confirmation</strong> — Your NY DOL account registration or a screenshot showing active registration status.</div></li>
+      <li><div class="cb"></div><div><strong>Doctor's letter (if medical restriction was alleged)</strong> — If DOL claims you had a restriction limiting your availability, a doctor's letter explaining what work you can perform is necessary.</div></li>
+      <li><div class="cb"></div><div><strong>Childcare or scheduling documentation (if restrictions were alleged)</strong> — If the issue is that you could only work certain hours, show what hours you were available and why those were reasonable for your occupation.</div></li>
+    </ul>
+
+    <hr class="divider">
+    <div class="section-label"><span class="dot dot-amber"></span>Key statement framework</div>
+    <div class="statement-box">
+      <p><span class="stmt-key">Address each prong directly:</span> "I was registered at NY DOL. I was available for [full-time / part-time — describe hours] work with no restrictions preventing acceptance. Each week I conducted [N] job contacts including [examples from your log]."</p>
+      <p><span class="stmt-key">If restrictions were alleged:</span> "My availability limitations were [hours / location]. These are consistent with what is reasonable for [my occupation / caregiving responsibilities]. I was not refusing suitable work — I was available for appropriate positions."</p>
+      <p><span class="stmt-dont">Don't:</span> Give vague answers about "looking around" or "keeping an eye out." Name specific employers you contacted, specific dates, and specific methods.</p>
+    </div>
+
+    <div class="footer-note">For full legal standard and preparation guidance: auto-run-fun.github.io/autonomous-site/ui-appeal-prep.html#availability</div>
+  </div>
+</div>
+
+<!-- REFUSAL OF SUITABLE WORK -->
+<div id="panel-refusal" class="panel">
+  <button class="print-btn screen-only" onclick="window.print()">
+    <svg viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
+    Print this checklist
+  </button>
+  <div class="checklist-page">
+    <div class="denial-heading">Refusal of Suitable Work — Hearing Checklist</div>
+    <div class="statute-ref">NY Labor Law §593(2) · Must show good cause for refusal</div>
+    <hr class="divider">
+
+    <div class="section-label"><span class="dot dot-blue"></span>What the hearing officer is testing</div>
+    <div class="standard-box">
+      <strong>Good cause to refuse = one of these four categories:</strong>
+      <ul>
+        <li><strong>1. Wage below prevailing rate</strong> — offered wage is substantially less than the prevailing wage for that work in your area</li>
+        <li><strong>2. Unreasonable commute</strong> — distance or expense makes commuting unreasonable</li>
+        <li><strong>3. Active picket line</strong> — accepting would require crossing a union picket line</li>
+        <li><strong>4. Substantially inferior working conditions</strong> — conditions are meaningfully worse than prevailing local standards</li>
+      </ul>
+      <div class="note-inline">You don't have to take any job offered. But you must have one of these four specific reasons — "I didn't want it" is not sufficient.</div>
+    </div>
+
+    <hr class="divider">
+    <div class="section-label"><span class="dot dot-green"></span>Evidence to bring</div>
+    <ul class="evidence-list">
+      <li><div class="cb"></div><div><strong>The job offer details</strong> — Written offer, email, or detailed notes on the offer: wage, location, hours, job duties. You can only argue a position is unsuitable if you know its terms.</div></li>
+      <li><div class="cb"></div><div><strong>Prevailing wage data (if wage was the issue)</strong> — BLS Occupational Employment Statistics or NY DOL wage data for your occupation and region. Show what others in your role earn locally.</div></li>
+      <li><div class="cb"></div><div><strong>Commute documentation (if distance/expense was the issue)</strong> — Maps showing distance, transit cost calculation, or documentation that public transit doesn't serve the location.</div></li>
+      <li><div class="cb"></div><div><strong>Your prior job terms</strong> — What wage, conditions, and hours did you have? A severe downgrade from your prior position may be relevant to "substantially inferior."</div></li>
+    </ul>
+
+    <hr class="divider">
+    <div class="section-label"><span class="dot dot-amber"></span>Key statement framework</div>
+    <div class="statement-box">
+      <p><span class="stmt-key">Name the specific category:</span> "I refused this position because [the offered wage of $X is below the prevailing rate of $Y for this occupation in this area / the commute of Z miles each way is unreasonable / the conditions are substantially inferior to prevailing standards]."</p>
+      <p><span class="stmt-key">Provide the comparison:</span> "The position paid $X. According to BLS data for [occupation] in [area], the median wage is $Y. The offer was $[difference] below the prevailing rate."</p>
+      <p><span class="stmt-dont">Don't:</span> Say you refused because it wasn't what you were looking for, the job seemed boring, or you preferred to stay in your field. Only the four statutory categories qualify.</p>
+    </div>
+
+    <div class="footer-note">For full legal standard and preparation guidance: auto-run-fun.github.io/autonomous-site/ui-appeal-prep.html#refusal</div>
+  </div>
+</div>
+
+<!-- MEDICAL / ABILITY TO WORK -->
+<div id="panel-medical" class="panel">
+  <button class="print-btn screen-only" onclick="window.print()">
+    <svg viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
+    Print this checklist
+  </button>
+  <div class="checklist-page">
+    <div class="denial-heading">Ability to Work (Medical) — Hearing Checklist</div>
+    <div class="statute-ref">NY Labor Law §591(2) · Must show ability to work in some capacity</div>
+    <hr class="divider">
+
+    <div class="section-label"><span class="dot dot-blue"></span>What the hearing officer is testing</div>
+    <div class="standard-box">
+      <strong>You must prove you can perform work of some kind:</strong>
+      <ul>
+        <li>You do not need to be able to perform your prior occupation</li>
+        <li>You need to be able to perform SOME suitable work</li>
+        <li>A doctor's letter stating what you CAN do (not just what you can't) is critical</li>
+      </ul>
+      <div class="note-inline">Total inability to work = ineligible. Partial ability with restrictions = eligible if restrictions don't prevent all suitable work. Be specific about what you can do.</div>
+    </div>
+
+    <hr class="divider">
+    <div class="section-label"><span class="dot dot-green"></span>Evidence to bring</div>
+    <ul class="evidence-list">
+      <li><div class="cb"></div><div><strong>Doctor's letter stating functional capacity</strong> — Not just a list of restrictions. The letter should say what you CAN do: "Patient can perform sedentary to light work, sit for 6 hours per day, use a computer." Bring this letter to the hearing.</div></li>
+      <li><div class="cb"></div><div><strong>Work search records showing you were seeking appropriate positions</strong> — If you were looking for jobs consistent with your limitations, that demonstrates you were treating yourself as available for work.</div></li>
+      <li><div class="cb"></div><div><strong>Job offer or application showing you were considered employable</strong> — If any employer offered you a position (even if you declined for other reasons), that's evidence of your ability to work.</div></li>
+      <li><div class="cb"></div><div><strong>Prior job performance records (if condition developed during employment)</strong> — Showing you were performing well before the medical issue arose establishes baseline ability and onset timeline.</div></li>
+    </ul>
+
+    <hr class="divider">
+    <div class="section-label"><span class="dot dot-amber"></span>Key statement framework</div>
+    <div class="statement-box">
+      <p><span class="stmt-key">State what you can do, not just what you can't:</span> "My condition limits [specific activities]. However, I am able to [perform sedentary work / use a computer / work [N] hours per day]. I am available for positions that accommodate these limitations."</p>
+      <p><span class="stmt-key">Reference the medical documentation:</span> "My doctor's letter, which I am submitting as evidence, states that I can perform [functional capacity description]. I have been applying for positions consistent with this capacity."</p>
+      <p><span class="stmt-dont">Don't:</span> Characterize yourself as totally unable to work unless that is actually the case and documented. Presenting yourself as capable of nothing is not a winning strategy — it just confirms the disqualification.</p>
+    </div>
+
+    <div class="footer-note">For full legal standard and preparation guidance: auto-run-fun.github.io/autonomous-site/ui-appeal-prep.html#medical</div>
+  </div>
+</div>
+
+<!-- DISMISSAL / SEPARATION PAY -->
+<div id="panel-dismissal-pay" class="panel">
+  <button class="print-btn screen-only" onclick="window.print()">
+    <svg viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
+    Print this checklist
+  </button>
+  <div class="checklist-page">
+    <div class="denial-heading">Dismissal / Separation Pay — Hearing Checklist</div>
+    <div class="statute-ref">NY Labor Law §591(3-a) · Severance disqualifies only if weekly allocation exceeds threshold</div>
+    <hr class="divider">
+
+    <div class="section-label"><span class="dot dot-blue"></span>What the hearing officer is testing</div>
+    <div class="standard-box">
+      <strong>Three-part challenge framework:</strong>
+      <ul>
+        <li><strong>1. Exclusion category</strong> — Is this actually "dismissal pay"? Excluded: accrued vacation pay, pension/retirement benefits, health insurance continuation, WARN Act payments, supplemental unemployment benefits (SUB pay).</li>
+        <li><strong>2. Threshold</strong> — The weekly allocated amount must exceed your WBR + PBC to disqualify you. If it doesn't, no disqualification applies for that week.</li>
+        <li><strong>3. Calculation</strong> — Did DOL allocate at the correct weekly rate? A lump sum divided by the wrong wage figure produces a wrong dismissal period.</li>
+      </ul>
+      <div class="note-inline">PBC = 1/4 of your WBR. If your WBR is $500, PBC is $125. Total threshold = $625. If the weekly allocated severance is $600, it does NOT exceed the threshold and should not disqualify you.</div>
+    </div>
+
+    <hr class="divider">
+    <div class="section-label"><span class="dot dot-green"></span>Evidence to bring</div>
+    <ul class="evidence-list">
+      <li><div class="cb"></div><div><strong>Separation agreement or severance letter</strong> — The exact amount, payment structure (lump sum vs. installments), and what the payment is explicitly described as.</div></li>
+      <li><div class="cb"></div><div><strong>Your last pay stub (final week of employment)</strong> — Shows your actual weekly wage. DOL should use this figure, not a quarterly average, when calculating the dismissal period.</div></li>
+      <li><div class="cb"></div><div><strong>DOL overpayment or disqualification determination letter</strong> — What weekly amount did DOL allocate? What dismissal period did they calculate? You need their exact numbers to verify or challenge the math.</div></li>
+      <li><div class="cb"></div><div><strong>Monetary determination letter (your WBR and PBC)</strong> — Confirms your benefit rate. Verify the threshold: WBR + PBC. If the allocated weekly amount is below this threshold, document the discrepancy.</div></li>
+      <li><div class="cb"></div><div><strong>Documentation of excluded payment types</strong> — If any portion is vacation pay, pension, health insurance, or WARN Act payment, bring the documentation that shows that classification.</div></li>
+    </ul>
+
+    <hr class="divider">
+    <div class="section-label"><span class="dot dot-amber"></span>Key statement framework</div>
+    <div class="statement-box">
+      <p><span class="stmt-key">If payment is an excluded category:</span> "The payment I received was [accrued vacation pay / WARN Act payment / pension distribution]. It is not dismissal pay under §591(3-a). Under §591(3-a)(d), [vacation pay / WARN payments] are explicitly excluded from the definition."</p>
+      <p><span class="stmt-key">If challenging the calculation:</span> "My final weekly wage was $X. DOL allocated the severance at $Y per week, which appears to use a quarterly average of $Z rather than my actual final weekly wage. The correct dismissal period using my actual wage is [N] weeks, not [DOL's calculation] weeks."</p>
+      <p><span class="stmt-key">If the threshold wasn't met:</span> "My WBR is $A. My PBC is $B. The combined threshold is $C. DOL allocated $D per week. $D is below the threshold of $C. Under §591(3-a), no disqualification should apply for weeks where the allocation is below the threshold."</p>
+      <p><span class="stmt-dont">Don't:</span> Argue that the severance was unfair or that you needed the money. The hearing tests the formula, not the fairness of the arrangement.</p>
+    </div>
+
+    <div class="footer-note">For full legal standard and preparation guidance: auto-run-fun.github.io/autonomous-site/ui-appeal-prep.html#dismissal-pay</div>
+  </div>
+</div>
+
+<!-- PARTIAL UNEMPLOYMENT -->
+<div id="panel-partial-unemployment" class="panel">
+  <button class="print-btn screen-only" onclick="window.print()">
+    <svg viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
+    Print this checklist
+  </button>
+  <div class="checklist-page">
+    <div class="denial-heading">Partial Unemployment / Earnings Dispute — Hearing Checklist</div>
+    <div class="statute-ref">NY Labor Law §590(5) · Overpayment dispute — the formula, the earnings figure, or the remuneration classification</div>
+    <hr class="divider">
+
+    <div class="section-label"><span class="dot dot-blue"></span>What the hearing officer is testing</div>
+    <div class="standard-box">
+      <strong>The formula: Benefit = WBR − (Earnings − PBC)</strong>
+      <ul>
+        <li><strong>PBC</strong> = 1/4 of your WBR (from monetary determination letter)</li>
+        <li><strong>If Earnings ≤ PBC</strong> → no reduction, full benefit</li>
+        <li><strong>If Earnings &gt; PBC</strong> → benefit reduced dollar-for-dollar above PBC</li>
+        <li><strong>If Earnings ≥ WBR</strong> → $0 benefit for that week only</li>
+      </ul>
+      <div class="note-inline">DOL uses gross wages (from employer wage records). Your pay stub may show net wages (after deductions). If DOL's figure is higher than yours, check whether the difference equals your payroll deductions before concluding it's an error.</div>
+    </div>
+
+    <hr class="divider">
+    <div class="section-label"><span class="dot dot-green"></span>Evidence to bring</div>
+    <ul class="evidence-list">
+      <li><div class="cb"></div><div><strong>Your weekly certifications for disputed weeks</strong> — Print or screenshot what you reported: earnings amount, employer name, date certified.</div></li>
+      <li><div class="cb"></div><div><strong>Pay stubs for the disputed weeks</strong> — Shows gross and net wages, pay period, and employer. If certification matches stub, that alignment is your defense.</div></li>
+      <li><div class="cb"></div><div><strong>Bank statements for the disputed period</strong> — Actual deposits confirm what you received. If DOL's figure exceeds deposits, the bank record is direct evidence.</div></li>
+      <li><div class="cb"></div><div><strong>DOL overpayment determination letter</strong> — What weeks? What earnings figure did DOL use? What formula? You cannot challenge a calculation you haven't read.</div></li>
+      <li><div class="cb"></div><div><strong>Monetary determination letter (WBR and PBC)</strong> — Verify DOL used these exact figures in their calculation.</div></li>
+      <li><div class="cb"></div><div><strong>For gig/freelance income: platform earnings statements</strong> — Stripe, PayPal, DoorDash, Uber summaries. Earnings attributed to the week the work was performed, not when paid.</div></li>
+    </ul>
+
+    <hr class="divider">
+    <div class="section-label"><span class="dot dot-amber"></span>Key statement framework</div>
+    <div class="statement-box">
+      <p><span class="stmt-key">If the earnings figure is wrong:</span> "DOL alleges I earned $X during the week of [date]. My pay stub shows gross wages of $Y. My bank statement shows a deposit of $Z. The discrepancy may be [gross vs. net / a different pay period / a different employer's records]. Here are the documents."</p>
+      <p><span class="stmt-key">If challenging the formula:</span> "My WBR is $A, PBC is $B (= A/4). I earned $C. Correct benefit = $A − ($C − $B) = $[result]. DOL calculated $[their figure], which appears to use [wrong WBR / wrong earnings / wrong pay period]."</p>
+      <p><span class="stmt-key">If a false statement penalty (§597) was added:</span> "I reported my earnings in good faith as I understood them. This is a classification dispute, not an intentional misstatement. I did not knowingly provide false information."</p>
+      <p><span class="stmt-dont">Don't:</span> Just say "I reported correctly." Bring documents. If DOL has employer wage records that differ from yours, you need a specific explanation — not an assertion.</p>
+    </div>
+
+    <div class="footer-note">For full legal standard and preparation guidance: auto-run-fun.github.io/autonomous-site/ui-appeal-prep.html#partial-unemployment</div>
+  </div>
+</div>
+
+<!-- LABOR DISPUTE -->
+<div id="panel-labor-dispute" class="panel">
+  <button class="print-btn screen-only" onclick="window.print()">
+    <svg viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
+    Print this checklist
+  </button>
+  <div class="checklist-page">
+    <div class="denial-heading">Labor Dispute / Strike or Lockout — Hearing Checklist</div>
+    <div class="statute-ref">NY Labor Law §592 · Lockout = immediate eligibility · Strike = 2-week wait</div>
+    <hr class="divider">
+
+    <div class="section-label"><span class="dot dot-blue"></span>What the hearing officer is testing</div>
+    <div class="standard-box">
+      <strong>The critical question: who stopped the work?</strong>
+      <ul>
+        <li><strong>Lockout (employer stopped work)</strong> → No waiting period. Eligible immediately.</li>
+        <li><strong>Strike (employees stopped work)</strong> → 2-week waiting period, then eligible.</li>
+        <li><strong>Not participating / not in bargaining unit</strong> → May be eligible without waiting period even in a strike.</li>
+      </ul>
+      <div class="note-inline">If the employer closed the facility, refused entry, or imposed new terms before employees walked out — that sequence supports a lockout classification.</div>
+    </div>
+
+    <hr class="divider">
+    <div class="section-label"><span class="dot dot-green"></span>Evidence to bring</div>
+    <ul class="evidence-list">
+      <li><div class="cb"></div><div><strong>Employer notice about the work stoppage</strong> — Any letter, email, or posting from the employer closing the facility, refusing entry, or announcing terms. Employer-initiated closure = lockout.</div></li>
+      <li><div class="cb"></div><div><strong>Bargaining unit documentation</strong> — Are you in the union that called the strike? Or a different union, non-union, or different facility? If you're not in the striking bargaining unit, document it clearly.</div></li>
+      <li><div class="cb"></div><div><strong>Work stoppage start date documentation</strong> — A memo, news report, or employer notice establishing when the dispute began (for the 2-week calculation).</div></li>
+      <li><div class="cb"></div><div><strong>Your employment status before the dispute</strong> — Were you on approved leave? Previously laid off? At a different location? These factors can establish you were not affected by the dispute.</div></li>
+      <li><div class="cb"></div><div><strong>DOL determination letter</strong> — What section does DOL cite? What date range is suspended? Strike or lockout classification? You need their specific words to respond.</div></li>
+    </ul>
+
+    <hr class="divider">
+    <div class="section-label"><span class="dot dot-amber"></span>Key statement framework</div>
+    <div class="statement-box">
+      <p><span class="stmt-key">If it's a lockout:</span> "On [date], the employer [closed the facility / refused workers entry / imposed new terms]. Workers did not choose to stop working. This is a lockout under §592 — no waiting period applies."</p>
+      <p><span class="stmt-key">If you weren't participating:</span> "I am not a member of the bargaining unit involved in the dispute. I did not participate in the strike vote. I did not honor picket lines. My unemployment was not caused by participation in the dispute."</p>
+      <p><span class="stmt-key">If the 2-week period has passed:</span> "The stoppage began on [date]. Two weeks from that date is [date]. My benefits should have been restored on [date]. DOL's continued denial has no basis under §592."</p>
+      <p><span class="stmt-dont">Don't:</span> Argue whether the strike was justified or the employer treated workers fairly. The hearing tests who stopped the work, whether you were participating, and whether the waiting period has passed.</p>
+    </div>
+
+    <div class="footer-note">For full legal standard and preparation guidance: auto-run-fun.github.io/autonomous-site/ui-appeal-prep.html#labor-dispute</div>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<script>
+function choose(id) {
+  document.querySelectorAll('.panel').forEach(p => { p.style.display = 'none'; p.classList.remove('visible'); });
+  document.querySelectorAll('.denial-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('no-selection').style.display = 'none';
+  document.getElementById('panel-' + id).style.display = 'block';
+  document.getElementById('panel-' + id).classList.add('visible');
+  document.getElementById('btn-' + id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (window.goatcounter && window.goatcounter.count) {
+    window.goatcounter.count({ path: '/ui-appeal-checklist/' + id, title: 'Checklist: ' + id });
+  }
+}
+const valid = ['misconduct', 'voluntary-quit', 'availability', 'refusal', 'medical', 'dismissal-pay', 'partial-unemployment', 'labor-dispute'];
+if (location.hash) {
+  const id = location.hash.replace('#', '');
+  if (valid.includes(id)) choose(id);
+}
+</script>
+
+<script data-goatcounter="https://autorunfun.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
