@@ -4,6 +4,17 @@ Agent appends one entry here after each daily run.
 
 ---
 
+## Run 2026-06-10 (Day 64)
+- Visitors (last 7d): 7 (June 2: 1, June 3: 1, June 6: 1, June 7: 2, June 8: 2). Zero organic. No change.
+- Actions taken: **Four improvements to `site/ui-appeal-prep.html`.**
+  (1) **Partial benefit credit (PBC) explanation** added to the dismissal pay panel. The panel previously used the term "partial benefit credit" without explaining it. Added a note-box explaining PBC = 1/4 of WBR with a concrete example (WBR $500 → PBC $125 → disqualification threshold $625/week), and noted that both figures appear on the monetary determination letter. This is the note Day 63 specifically flagged as missing.
+  (2) **7th denial type: Partial Unemployment / Earnings Dispute (§590(5))**. The most common UI overpayment scenario — claimant worked part-time while claiming, DOL says benefits were overpaid. Three-element formula explanation (PBC zone, reduction zone, disqualification zone), three hearing-test elements (actual earnings, remuneration definition, formula correctness), remuneration boundary note boxes (what counts vs. doesn't), false statement penalty (§597) note, 7-item evidence checklist, statement guidance. FAQ JSON-LD entry added. Deep-link at `#partial-unemployment`.
+  (3) **SEO metadata update** — meta description now includes "severance pay disqualification" and "earnings dispute." Keywords expanded with "severance unemployment NY, dismissal pay appeal New York, partial unemployment NY, working while collecting unemployment New York."
+  (4) **Page split assessment** (written in NOTES.md) — Decision: do NOT split. Single-page selector-and-panel UX is still correct at 7 panels. A future printable checklist companion page is worth considering, not a split.
+- Hypothesis: The partial unemployment panel addresses a high-volume scenario (overpayment disputes are common and confusing). The PBC explanation completes the dismissal pay panel — previously the most technically incomplete section. The SEO metadata adds severance-related terms that represent real search queries people with dismissal pay denials would use. No distribution breakthrough this run; the indexing constraint remains.
+
+---
+
 ## Run 2026-06-10 (Day 63)
 - Visitors (last 7d): 7 (June 2: 1, June 3: 1, June 6: 1, June 7: 2, June 8: 2). Zero organic. No change from prior pattern.
 - Actions taken: **Three improvements to `site/ui-appeal-prep.html` + Reddit distribution draft.**

@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>NY Unemployment Appeal Prep — What the Hearing Officer Is Testing For</title>
-<meta name="description" content="Free interactive guide for New York unemployment insurance appeal hearings. Select your denial reason — misconduct, voluntary quit, availability, refusal of work — and get the legal standard in plain English, a specific evidence checklist, and statement guidance.">
-<meta name="keywords" content="unemployment appeal New York, NY UI appeal hearing, misconduct unemployment denial, voluntary quit unemployment NY, unemployment hearing preparation, UI appeal checklist">
+<meta name="description" content="Free interactive guide for New York unemployment insurance appeal hearings. Select your denial reason — misconduct, voluntary quit, availability, refusal of work, severance pay disqualification, or earnings dispute — and get the legal standard in plain English, a specific evidence checklist, and statement guidance.">
+<meta name="keywords" content="unemployment appeal New York, NY UI appeal hearing, misconduct unemployment denial, voluntary quit unemployment NY, unemployment hearing preparation, UI appeal checklist, severance unemployment NY, dismissal pay appeal New York, partial unemployment NY, working while collecting unemployment New York">
 <link rel="canonical" href="https://auto-run-fun.github.io/autonomous-site/ui-appeal-prep.html">
 <meta property="og:type" content="website">
 <meta property="og:title" content="NY Unemployment Appeal Prep — What the Hearing Officer Is Actually Testing For">
@@ -63,6 +63,14 @@
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "Under NY Labor Law §591(3-a), severance or dismissal pay can disqualify you from benefits for the weeks it covers — but only if the weekly allocated amount exceeds your weekly benefit rate plus your partial benefit credit. A lump-sum severance is allocated weekly starting from your last day of employment. Payments that are NOT dismissal pay include accrued vacation pay, pension/retirement benefits, health insurance, WARN Act payments, and supplemental unemployment benefits. If your payment falls into an excluded category, or if the weekly allocation is below the disqualification threshold, you may still be eligible for benefits."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What happens if I worked part-time while collecting unemployment in New York?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Under NY Labor Law §590(5), you can receive partial unemployment benefits during weeks you had earnings, as long as those earnings were below your weekly benefit rate (WBR). Your benefit is reduced dollar-for-dollar by any earnings exceeding your partial benefit credit (PBC), which is 1/4 of your WBR. Example: if your WBR is $400, your PBC is $100. You earn $250. Reduction = $250 − $100 = $150. Your benefit = $400 − $150 = $250. If your earnings equaled or exceeded your WBR for that week, you receive $0 for that week only. You must report all earnings — wages, tips, gig work, freelance income — when you certify. Overpayments can be appealed if DOL's earnings figure is incorrect or the formula was misapplied."
       }
     }
   ]
@@ -263,6 +271,10 @@ h1{font-size:clamp(1.5rem,4vw,2rem);font-weight:700;letter-spacing:-.02em;margin
   <button class="denial-btn" onclick="select('dismissal-pay')" id="btn-dismissal-pay">
     <span class="num">§591(3-a)</span>
     Dismissal / Separation Pay
+  </button>
+  <button class="denial-btn" onclick="select('partial-unemployment')" id="btn-partial-unemployment">
+    <span class="num">§590(5)</span>
+    Partial Unemployment / Earnings Dispute
   </button>
 </div>
 
@@ -621,6 +633,10 @@ h1{font-size:clamp(1.5rem,4vw,2rem);font-weight:700;letter-spacing:-.02em;margin
       </ul>
     </div>
 
+    <div class="note-box blue" style="margin-top:12px">
+      <strong>What is the partial benefit credit (PBC)?</strong> Your PBC is typically 1/4 of your weekly benefit rate (WBR). Example: WBR = $500, PBC = $125, so the disqualification threshold is $625/week. Only weeks where the allocated dismissal pay <em>exceeds</em> this combined amount are fully disqualified — weeks where the allocation is below the threshold may only reduce your benefit rather than eliminate it. Your WBR and PBC appear on your monetary determination letter from DOL.
+    </div>
+
     <div class="note-box blue">
       <strong>Excluded payments that are NOT dismissal pay:</strong> Accrued vacation or sick leave you earned during employment. Pension or retirement benefits. Health or medical insurance payments. WARN Act payments (federally mandated notice-period pay). Supplemental unemployment benefits. If your payment is one of these, the disqualification shouldn't apply.
     </div>
@@ -654,6 +670,93 @@ h1{font-size:clamp(1.5rem,4vw,2rem);font-weight:700;letter-spacing:-.02em;margin
       <li><span class="arrow">→</span><span><strong>If challenging the category: read the language of your agreement aloud.</strong> "My separation agreement states the payment is for 'accrued paid time off.' Accrued leave is explicitly excluded from the definition of dismissal pay under §591(3-a)."</span></li>
       <li><span class="arrow">→</span><span><strong>If the dismissal period has ended: establish the cutoff date.</strong> "Based on DOL's own weekly allocation figure, the dismissal period should have ended on [date]. I'm appealing the denial of benefits after that date."</span></li>
       <li><span class="arrow do-not">→</span><span><strong>Do NOT argue that the severance was "not much money" or "only one month."</strong> The threshold is your specific weekly benefit rate — not whether the total amount was large. The hearing officer is applying the formula, not making a fairness judgment. Argue the formula.</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ───────────────────────────────── PANEL: PARTIAL UNEMPLOYMENT ─────────── -->
+<div id="panel-partial-unemployment" class="panel">
+  <div class="panel-header">
+    <div class="denial-name">Partial Unemployment / Earnings Dispute</div>
+    <div class="statute-ref">NY Labor Law §590(5) · Benefits reduced or denied for weeks with earnings</div>
+    <div class="one-liner">DOL says your benefits were overpaid or reduced for weeks when you also had earnings. The dispute is about what you earned, whether it was properly reported, and whether the formula was applied correctly.</div>
+  </div>
+
+  <!-- Legal standard -->
+  <div class="section-card">
+    <div class="section-label"><span class="dot dot-blue"></span> Legal standard</div>
+    <p>Under §590(5), you can receive partial benefits during weeks when you have some earnings — as long as those earnings are below your weekly benefit rate (WBR). Your benefit is reduced dollar-for-dollar by earnings above your partial benefit credit (PBC).</p>
+
+    <div class="elements-box">
+      <div class="elements-title">How the partial unemployment formula works</div>
+      <ul class="elements-list">
+        <li>
+          <span class="el-num">1</span>
+          <span class="el-text"><strong>Partial benefit credit (PBC)</strong> <span>1/4 of your weekly benefit rate (rounded to nearest dollar). Earnings up to your PBC don't reduce your benefit at all. Example: WBR = $400, PBC = $100. You earn $100 or less — no reduction.</span></span>
+        </li>
+        <li>
+          <span class="el-num">2</span>
+          <span class="el-text"><strong>Benefit reduction zone</strong> <span>Earnings above your PBC reduce your benefit dollar for dollar. Example: WBR = $400, PBC = $100, you earn $250. Reduction = $250 − $100 = $150. Benefit = $400 − $150 = $250.</span></span>
+        </li>
+        <li>
+          <span class="el-num">3</span>
+          <span class="el-text"><strong>Total disqualification for that week</strong> <span>If your earnings equal or exceed your WBR, you receive $0 for that week. This affects that specific week only — it doesn't carry forward or affect other weeks in your claim.</span></span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="elements-box" style="margin-top:12px">
+      <div class="elements-title">Three things the hearing officer is testing</div>
+      <ul class="elements-list">
+        <li>
+          <span class="el-num">A</span>
+          <span class="el-text"><strong>What you actually earned during the disputed week(s)</strong> <span>The factual dispute: DOL's records (typically from employer wage reports) vs. your documented earnings. Pay stubs, direct deposit records, and bank statements are the primary evidence sources.</span></span>
+        </li>
+        <li>
+          <span class="el-num">B</span>
+          <span class="el-text"><strong>Whether the payment was "remuneration"</strong> <span>Only payment for services rendered counts. Expense reimbursements, gifts, insurance payouts, and pension payments from prior employers don't count. Gig income, tips, commissions, and freelance pay do.</span></span>
+        </li>
+        <li>
+          <span class="el-num">C</span>
+          <span class="el-text"><strong>Whether DOL applied the formula correctly</strong> <span>Did DOL use the right WBR and PBC? Did they allocate earnings to the correct week? Was the overpayment period calculated accurately? A math error in DOL's determination is challengeable.</span></span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="note-box green">
+      <strong>NOT remuneration (doesn't count against your benefit):</strong> Documented expense reimbursements (mileage, tools, supplies — must be expense-based, not additional compensation). Disability insurance benefits or workers' compensation payments. Pension or retirement payments from a former employer. A payment that is genuinely a gift with no connection to services rendered.
+    </div>
+    <div class="note-box red">
+      <strong>IS remuneration (does count and must be reported):</strong> Wages, salary, hourly pay. Cash tips and credit card tips. Commissions. Gig work income (DoorDash, Uber, Instacart, TaskRabbit, etc.). Freelance or self-employment revenue. Bonuses tied to work performed. Board or lodging provided as part of compensation.
+    </div>
+    <div class="note-box blue">
+      <strong>If a false statement penalty (§597) was also added:</strong> A false statement penalty requires that you KNOWINGLY provided incorrect information. Confusion about what counts as earnings, classification disputes about gig income, or arithmetic errors are not knowing false statements. You can challenge the penalty separately even if you accept that some overpayment occurred: "I reported my earnings as I understood them. This is a classification dispute, not an intentional misstatement."
+    </div>
+  </div>
+
+  <!-- Evidence -->
+  <div class="section-card">
+    <div class="section-label"><span class="dot dot-green"></span> Evidence to gather before your hearing</div>
+    <ul class="checklist" id="checklist-pu">
+      <li><input type="checkbox" id="pu1" onchange="toggleCheck(this)"><label for="pu1"><strong>Your weekly certifications for the disputed weeks.</strong> Print or screenshot exactly what you reported for each week: earnings amount, employer name. This is your primary documentary record — it shows what you submitted at the time.</label></li>
+      <li><input type="checkbox" id="pu2" onchange="toggleCheck(this)"><label for="pu2"><strong>Pay stubs, payment confirmations, or direct deposit records for those weeks.</strong> Show the actual dollar amount received, the pay period it covers, and who paid it. If your certification matches your documentation, that alignment is your defense.</label></li>
+      <li><input type="checkbox" id="pu3" onchange="toggleCheck(this)"><label for="pu3"><strong>Bank statements for the disputed period.</strong> Actual deposits corroborate your reported earnings. If DOL's figure is higher than what was deposited, your bank statement is direct evidence against their number.</label></li>
+      <li><input type="checkbox" id="pu4" onchange="toggleCheck(this)"><label for="pu4"><strong>DOL's overpayment determination letter.</strong> What weeks are disputed? What earnings amount did DOL use? What formula did they apply? You cannot challenge a calculation you haven't read — get the specific numbers before your hearing.</label></li>
+      <li><input type="checkbox" id="pu5" onchange="toggleCheck(this)"><label for="pu5"><strong>Your monetary determination letter (showing your WBR and PBC).</strong> This is the letter you received when your claim was approved, showing your weekly benefit rate. Verify DOL used these exact figures in their overpayment calculation.</label></li>
+      <li><input type="checkbox" id="pu6" onchange="toggleCheck(this)"><label for="pu6"><strong>For gig or freelance income: platform earnings statements showing payment date and amount.</strong> Stripe, PayPal, Venmo, DoorDash, or Uber driver earnings summaries. Note: earnings must be allocated to the week the work was performed, not necessarily when you were paid.</label></li>
+      <li><input type="checkbox" id="pu7" onchange="toggleCheck(this)"><label for="pu7"><strong>For tips: your tip reporting records.</strong> Credit card tip logs, tip declaration forms, or a contemporaneous written record. If your employer tracks credit card tips on receipts, request those records from HR or payroll.</label></li>
+    </ul>
+  </div>
+
+  <!-- Statement guidance -->
+  <div class="section-card">
+    <div class="section-label"><span class="dot dot-amber"></span> Statement guidance</div>
+    <ul class="guidance-list">
+      <li><span class="arrow">→</span><span><strong>If DOL's earnings figure doesn't match your records, make the discrepancy explicit with numbers.</strong> "DOL alleges I earned $X during the week of [date]. My pay stub shows $Y. My bank statement shows a deposit of $Y for that week. DOL's figure appears to reflect [gross vs. net? a different pay period? a different employer?]."</span></li>
+      <li><span class="arrow">→</span><span><strong>If the payment shouldn't count as remuneration, name the specific category.</strong> "The $X I received that week was [expense reimbursement / pension disbursement / workers' comp payment]. It was not payment for services rendered during that claim week." Then present the documentation.</span></li>
+      <li><span class="arrow">→</span><span><strong>If challenging the formula: walk through the math out loud.</strong> "My WBR is $A. My PBC is $B (1/4 of WBR). I earned $C. The correct benefit = $A − ($C − $B) = $[result]. DOL calculated $[their result], which appears to use the wrong [WBR figure / earnings amount / pay period]."</span></li>
+      <li><span class="arrow">→</span><span><strong>If a false statement penalty was added: address intent separately and specifically.</strong> "I reported my earnings according to my understanding of the reporting requirements. The dispute about how to classify this income does not mean I provided knowingly false information. I reported what I received in good faith."</span></li>
+      <li><span class="arrow do-not">→</span><span><strong>Do NOT just say "I reported everything correctly" without documents.</strong> The hearing officer will have DOL's wage records, which come from your employer independently. If your certification and the wage record differ, you need a specific explanation — not just an assertion that you were right.</span></li>
     </ul>
   </div>
 </div>
@@ -703,7 +806,7 @@ function toggleCheck(checkbox) {
 // Support deep linking via hash
 if (location.hash) {
   const id = location.hash.replace('#', '');
-  const valid = ['misconduct', 'voluntary-quit', 'availability', 'refusal', 'medical', 'dismissal-pay'];
+  const valid = ['misconduct', 'voluntary-quit', 'availability', 'refusal', 'medical', 'dismissal-pay', 'partial-unemployment'];
   if (valid.includes(id)) {
     select(id);
     document.getElementById('panel-' + id).scrollIntoView({ behavior: 'smooth', block: 'start' });

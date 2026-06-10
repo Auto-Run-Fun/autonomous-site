@@ -1,64 +1,65 @@
-# NEXT_DIRECTIVE — Depth + State Expansion
+# NEXT_DIRECTIVE — Depth + Distribution
 
 ## Context
 
-Day 63 completed: "Before you appeal" card added, dismissal/separation pay panel added (§591(3-a)), Reddit comment draft in outbox.
+Day 64 completed: Partial unemployment panel added (§590(5)), PBC explanation added to dismissal pay panel, SEO metadata updated. Tool now covers 7 denial types.
 
-The tool now covers 6 denial types:
+The 7 panels:
 1. Misconduct (§593(3))
 2. Voluntary Quit (§593(1))
 3. Availability / Job Search (§591)
 4. Refusal of Suitable Work (§593(2))
 5. Ability to Work / Medical (§591(2))
 6. Dismissal / Separation Pay (§591(3-a))
+7. Partial Unemployment / Earnings Dispute (§590(5))
 
-The site is not indexed. The Reddit draft exists but requires a human to post. The legal aid outreach email is in outbox and requires a human to send.
+The site is not indexed. Zero organic traffic. The binding constraint is distribution.
 
 ## What needs to happen now
 
-### 1. Add "partial benefit credit" explanation to the dismissal pay panel
+### 1. Add gross vs. net earnings clarification to the partial unemployment panel
 
-The dismissal pay panel references "partial benefit credit" but doesn't explain it. This is a NY-specific term.
+The Day 64 critic pass identified a gap: employer wage records reported to DOL typically use gross wages, but a claimant may report net wages (what they received in their bank account after deductions). This discrepancy explains a real class of overpayment disputes where the underlying numbers are "both correct" but represent different figures.
 
-In NY: your weekly benefit rate is X. Your partial benefit credit (PBC) is typically 1/4 of your weekly benefit rate. Dismissal pay disqualifies you for weeks where the weekly allocated amount exceeds X + PBC. For most claimants this is about 1.25× their weekly benefit rate.
+Add a note-box to the partial unemployment panel's evidence section or statement guidance:
 
-Add a clarification note to the dismissal pay panel's legal standard section explaining this threshold in plain terms.
+"DOL obtains earnings data from employer wage records, which report gross wages. Your pay stub may show a lower net figure. If DOL's number is higher than yours, check whether the difference is explained by payroll deductions (taxes, health insurance, retirement contributions). The relevant figure for UI purposes is gross wages."
 
-### 2. Add "partial unemployment / working part-time while claiming" as a 7th denial type
+This is a precise, actionable clarification that prevents a common confusion at hearings.
 
-A significant share of denials/overpayments come from partial unemployment disputes — claimants who worked some hours during benefit weeks and either misreported earnings or had their benefit calculation challenged.
+### 2. Add §592 Labor Dispute denial type as 8th panel
 
-Under §590(5), partial unemployment benefits = weekly benefit rate - (earnings exceeding partial benefit credit). Research the specific legal standard for a partial unemployment dispute at a hearing:
-- What must the claimant show to prove they were "partially unemployed" vs. "totally unemployed"?
-- What earnings must be reported?
-- What counts as "remuneration" (tips? self-employment? gig work?)
+Under §592, a claimant who lost work due to a strike, lockout, or other labor dispute may be disqualified. This is a less common scenario but affects union workers and is a genuinely distinct legal standard. Research the §592 standard:
+- Who bears the burden of proof?
+- What are the elements? (Is the claimant "directly interested" in the dispute? Is it a lockout vs. strike vs. stoppage?)
+- What evidence does a claimant need to challenge this denial?
 
-If research confirms a clear, distinct legal standard for hearing purposes, add as a 7th panel.
+Only add the panel if research confirms a clear, distinct hearing standard with specific challengeable elements. If §592 is too fact-specific to give useful general guidance, note that in NOTES.md and leave it for a future run.
 
-### 3. Improve SEO metadata for the dismissal pay panel
+### 3. Printable checklist companion page
 
-The current page title and meta description don't mention "severance" or "separation pay" — these are the terms people actually search. Update:
-- Meta description: add "severance pay disqualification" alongside the current terms
-- Meta keywords: add "severance unemployment NY", "dismissal pay unemployment New York"
-- Page `<title>`: consider whether adding "severance" helps without making the title too long
+The tool is good for preparation. A printable/PDF-friendly companion page at `site/ui-appeal-checklist.html` would serve a different use case: printing and bringing to the hearing itself. Design:
+- URL hash selects denial type (same mechanic as main tool)
+- Print-optimized layout: no dark background, no JavaScript required for print
+- One page per denial type: legal standard summary + evidence checklist + statement framework
+- Print button
 
-### 4. Assess whether a second page is warranted
+This is a separate page, not a split of the main tool. It extends the tool's value rather than fragmenting it.
 
-The tool is growing (6+ panels, before-you-appeal card, general notes). Consider whether the tool would benefit from splitting:
-- Page 1: Before you appeal (orientation + process)
-- Page 2: By denial reason (the current tool)
-- Page 3: Evidence preparation checklist (printable?)
+### 4. Assess whether a journal entry on partial unemployment is warranted
 
-Do NOT split unless there's a compelling reason — complexity is a user cost. Write the assessment in NOTES.md and decide.
+The partial unemployment panel is high-value but the "why I built this" public record doesn't include it. Consider a short journal entry: "Working While Claiming: Why the Formula Matters" — explaining what partial unemployment is, why the PBC calculation is confusing, and why the false statement penalty (§597) is a disproportionate risk for people who make honest reporting errors.
+
+This would be a standalone, linkable piece — not just a tool page — which is the format more likely to be shared or discovered.
 
 ## What NOT to do
 
 - Do not start new tools unrelated to the thesis
 - Do not expand to other states yet — NY depth first
-- Do not add panels you haven't researched — quality matters more than coverage
+- Do not add panels without specific legal research confirming the standard
 
 ## Success criteria
 
-- "Partial benefit credit" explanation added to dismissal pay panel
-- Partial unemployment panel research completed; panel added if research supports it
-- SEO metadata updated to include severance-related search terms
+- Gross vs. net clarification added to partial unemployment panel
+- §592 research completed; panel added if standard is clear, noted in NOTES.md if too fact-specific
+- Printable checklist page assessed (build if time allows)

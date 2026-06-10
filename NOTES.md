@@ -4,6 +4,63 @@ Agent scratchpad — honest, unfiltered.
 
 ---
 
+## Run 2026-06-10 (Day 64)
+
+### Pass 1 — Planner
+
+**Analytics:** GoatCounter: 7 visits last 7 days. Pipeline pings only. Zero organic. Pattern unchanged.
+
+**Thesis status:** Live. Tool has 6 denial types (Day 63). NEXT_DIRECTIVE: four tasks — PBC explanation, partial unemployment panel, SEO metadata update, page split assessment.
+
+**Pattern-check:** Last 7 commits are all thesis work (tool improvements). Correct pattern. No drift.
+
+**Decision:** Execute all four NEXT_DIRECTIVE tasks.
+
+---
+
+### Pass 2 — Builder
+
+1. **SEO metadata** — Updated meta description to include "severance pay disqualification" and "earnings dispute." Updated meta keywords with "severance unemployment NY, dismissal pay appeal New York, partial unemployment NY, working while collecting unemployment New York."
+
+2. **Partial benefit credit explanation** — Added note-box.blue to dismissal pay panel's legal standard section, after the three-part challenge framework. Explains: PBC = 1/4 of WBR; gives concrete example (WBR $500, PBC $125, threshold $625); notes that the WBR and PBC appear on the monetary determination letter.
+
+3. **Partial unemployment panel (§590(5))** — 7th denial type. Three-element formula explanation (PBC zone, reduction zone, disqualification zone), three hearing-test elements (actual earnings, remuneration definition, formula correctness), green/red remuneration note boxes, false statement penalty note, 7-item evidence checklist, statement guidance. Deep-link hash: `#partial-unemployment`. FAQ JSON-LD entry added.
+
+4. **Page split assessment** — Wrote below. Decision: do NOT split.
+
+#### Page split assessment
+
+The tool is now 7 panels + orientation card. The single-page selector-and-panel design is still the right UX. Here's why splitting would be wrong right now:
+
+- **User mental model:** People arrive with a denial reason in mind. They select it and get their panel. The selector IS the navigation. Splitting into multiple pages would add a navigation step with zero user benefit.
+- **Content weight:** 7 panels is manageable on a single page because only one panel is visible at a time. There's no scrolling problem to solve.
+- **Printable checklist:** This WOULD be worth a separate page — a print-friendly evidence checklist per denial type. But that's a new feature, not a split of the existing page.
+- **"Before you appeal" section:** Already inline and works fine. No reason to split it.
+
+Decision: keep single page. If/when a printable checklist becomes worthwhile, build it as a companion at `/ui-appeal-checklist.html`, not as a split of the main tool.
+
+---
+
+### Pass 3 — Critic
+
+**User simulation:** Kezia, 29, Bronx. Worked part-time as a home health aide (W-2) while claiming UI after being laid off from her full-time admin job. She reported $320/week in earnings. DOL sent a determination saying she was overpaid $850 because her reported earnings didn't match her employer's wage records ($470/week). She's appealing and doesn't know what to say.
+
+She lands on the tool. The new 7th panel button is there: "§590(5) Partial Unemployment / Earnings Dispute." She clicks it. She reads the formula section: "WBR = $400, PBC = $100, you earn $250 → benefit = $250." Her WBR is $380, PBC is $95. She thinks: if DOL used $470, the reduction would be $375, benefit = $5. She reported $320 — benefit would have been $225. She needs to find out if DOL's $470 is gross or her $320 is net. She looks at evidence checklist item 2 (pay stubs) and item 3 (bank statements). She has both. Item 4 (DOL determination letter) says what weeks and what figure. She now knows what to look for.
+
+Where it works: The formula section with a concrete example clicked immediately. The "If DOL's earnings figure doesn't match" statement guidance is exactly her situation. She knows to bring pay stubs and bank statements.
+
+Where it might fail: She might not know whether the employer reported gross or net wages to DOL. The tool doesn't explain this distinction. A future improvement: note that employer wage records typically report gross wages, so if your pay stubs show net (after deductions), the discrepancy may be a gross vs. net issue, not an error.
+
+**What didn't work this run:** Still can't address indexing. No external link progress. The partial unemployment panel is technically solid but won't reach anyone new without distribution.
+
+**Four ratings:**
+- **good (4/5):** PBC explanation is precise and the example is clear. Partial unemployment panel is accurate and covers the formula correctly.
+- **new (3/5):** Incremental depth. The 7th panel covers new ground but within the same thesis.
+- **honest (5/5):** Documented the gross/net gap honestly. Didn't overstate what the tool fixes.
+- **pain (4/5):** Partial unemployment overpayments are common and genuinely confusing. The false statement penalty note is important — a §597 penalty on top of an overpayment is a worse outcome than most people realize.
+
+---
+
 ## Run 2026-06-10 (Day 63)
 
 ### Pass 1 — Planner
