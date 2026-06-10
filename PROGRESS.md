@@ -4,6 +4,17 @@ Agent appends one entry here after each daily run.
 
 ---
 
+## Run 2026-06-10 (Day 63)
+- Visitors (last 7d): 7 (June 2: 1, June 3: 1, June 6: 1, June 7: 2, June 8: 2). Zero organic. No change from prior pattern.
+- Actions taken: **Three improvements to `site/ui-appeal-prep.html` + Reddit distribution draft.**
+  (1) **"Before you appeal" orientation card** added above the denial selector. Answers 4 questions a first-time user will have before they know their denial reason: what does appealing involve, what happens if you don't, what's the deadline (30 days, hard), how to file. Brief 2x2 grid — doesn't slow down someone who already knows; helps the person who just got the notice and doesn't know what step they're on.
+  (2) **6th denial type panel: Dismissal / Separation Pay** (§591(3-a)) — researched the actual law from nysenate.gov and DOL FAQ. Three-element challenge framework: (a) was it really "dismissal pay" vs. excluded category (accrued leave, pension, WARN Act, etc.), (b) did the weekly amount actually exceed the disqualification threshold, (c) was the allocation calculated on the correct weekly earnings rate. Full evidence checklist + statement guidance. FAQ JSON-LD entry for "Does severance pay affect NY unemployment insurance benefits?" added.
+  (3) **Reddit distribution draft** in `outbox/reddit-unemployment-appeal.md` — framed as a helpful comment to "how do I prepare for my appeal?" threads in r/Unemployment and r/legaladvice. Leads with the test-not-story reframe, links both the tool and the journal entry, includes notes about where/how to post.
+  (4) **Indexing check**: `site:auto-run-fun.github.io` web search returned zero results. Site is not indexed by Google. The sitemap exists at `/sitemap.xml`; no evidence it has been submitted to GSC. This is a distribution constraint but not addressable without search console access.
+- Hypothesis: The "before you appeal" card addresses users who land at the wrong step — the tool previously assumed you already know you're appealing. The dismissal pay panel covers a real, common denial type (any employee who received severance and was denied has no other tool to consult). The Reddit draft is the next distribution lever: if the human posts it as a comment in an active thread asking this exact question, it will reach someone in the exact moment of need. Zero-indexed site means SEO is not contributing yet.
+
+---
+
 ## Run 2026-06-09 (Day 61)
 - Visitors (last 7d): N/A — GoatCounter API returned 404 again (same pattern as Day 60).
 - Actions taken: **Thesis approved (PR #13 merged). Built `site/ui-appeal-prep.html` — NY unemployment insurance appeal preparation guide.**

@@ -56,6 +56,14 @@
         "@type": "Answer",
         "text": "Under NY Labor Law §593(2), you can refuse a job offer with good cause if: the offered wage is substantially less favorable than the prevailing rate for that type of work in your area; the commute is unreasonable (distance or expense); accepting would require crossing an active picket line; or the work conditions are substantially less favorable than prevailing local standards. You need evidence to support whichever category applies — wage comparison data, commute documentation, etc."
       }
+    },
+    {
+      "@type": "Question",
+      "name": "Does severance pay affect New York unemployment insurance benefits?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Under NY Labor Law §591(3-a), severance or dismissal pay can disqualify you from benefits for the weeks it covers — but only if the weekly allocated amount exceeds your weekly benefit rate plus your partial benefit credit. A lump-sum severance is allocated weekly starting from your last day of employment. Payments that are NOT dismissal pay include accrued vacation pay, pension/retirement benefits, health insurance, WARN Act payments, and supplemental unemployment benefits. If your payment falls into an excluded category, or if the weekly allocation is below the disqualification threshold, you may still be eligible for benefits."
+      }
     }
   ]
 }
@@ -167,9 +175,16 @@ h1{font-size:clamp(1.5rem,4vw,2rem);font-weight:700;letter-spacing:-.02em;margin
 .page-footer a{color:var(--muted)}
 .page-footer a:hover{color:var(--muted2)}
 
+/* Before-appeal orientation card */
+.before-appeal-card{background:var(--surface2);border:1px solid var(--border);border-left:3px solid var(--amber);border-radius:10px;padding:18px 20px;margin-bottom:24px}
+.before-appeal-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 20px;margin-top:14px}
+.ba-q{font-size:.82rem;font-weight:600;color:var(--text);margin-bottom:3px}
+.ba-a{font-size:.84rem;color:var(--muted2);line-height:1.55}
+
 @media(max-width:520px){
   .denial-buttons{flex-direction:column}
   .denial-btn{width:100%}
+  .before-appeal-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -199,6 +214,29 @@ h1{font-size:clamp(1.5rem,4vw,2rem);font-weight:700;letter-spacing:-.02em;margin
   </div>
 </div>
 
+<!-- Before you appeal: orientation -->
+<div class="before-appeal-card">
+  <div class="section-label"><span class="dot dot-amber"></span> If you just received your denial notice</div>
+  <div class="before-appeal-grid">
+    <div>
+      <div class="ba-q">What does appealing involve?</div>
+      <div class="ba-a">A phone or video hearing (45–90 min) before an Administrative Law Judge. Both sides give testimony and can present documents. The ALJ issues a written decision.</div>
+    </div>
+    <div>
+      <div class="ba-q">What happens if you don't appeal?</div>
+      <div class="ba-a">The denial becomes final. You lose all benefits for the affected period. After the deadline passes this is generally not reversible.</div>
+    </div>
+    <div>
+      <div class="ba-q">What is the deadline?</div>
+      <div class="ba-a">30 days from the date on your denial notice. This is a hard deadline — missing it almost always forfeits your right to appeal.</div>
+    </div>
+    <div>
+      <div class="ba-q">How do you file?</div>
+      <div class="ba-a">Online at <a href="https://applynow.labor.ny.gov" target="_blank" rel="noopener">applynow.labor.ny.gov</a> → "Request a Hearing." Or call 888-209-8124.</div>
+    </div>
+  </div>
+</div>
+
 <!-- Denial reason selector -->
 <div class="selector-label">Select your denial reason</div>
 <div class="denial-buttons">
@@ -221,6 +259,10 @@ h1{font-size:clamp(1.5rem,4vw,2rem);font-weight:700;letter-spacing:-.02em;margin
   <button class="denial-btn" onclick="select('medical')" id="btn-medical">
     <span class="num">§591(2)</span>
     Ability to Work (Medical)
+  </button>
+  <button class="denial-btn" onclick="select('dismissal-pay')" id="btn-dismissal-pay">
+    <span class="num">§591(3-a)</span>
+    Dismissal / Separation Pay
   </button>
 </div>
 
@@ -548,6 +590,74 @@ h1{font-size:clamp(1.5rem,4vw,2rem);font-weight:700;letter-spacing:-.02em;margin
   </div>
 </div>
 
+<!-- ─────────────────────────────── PANEL: DISMISSAL / SEPARATION PAY ──────────────────── -->
+<div id="panel-dismissal-pay" class="panel">
+  <div class="panel-header">
+    <div class="denial-name">Dismissal / Separation Pay</div>
+    <div class="statute-ref">NY Labor Law §591(3-a) · Disqualification during the "dismissal period"</div>
+    <div class="one-liner">You received severance, a buyout, or separation pay when you left, and your UI benefits were denied or reduced. The question is whether that payment legally qualifies as "dismissal pay," how the weekly amount was calculated, and whether the calculation was done correctly.</div>
+  </div>
+
+  <!-- Legal standard -->
+  <div class="section-card">
+    <div class="section-label"><span class="dot dot-blue"></span> Legal standard</div>
+    <p>NY law says no benefits are payable for any week in which a claimant receives "dismissal pay" that exceeds the weekly benefit rate plus the partial benefit credit. There are three things you can challenge.</p>
+
+    <div class="elements-box">
+      <div class="elements-title">Three-part challenge framework</div>
+      <ul class="elements-list">
+        <li>
+          <span class="el-num">1</span>
+          <span class="el-text"><strong>Was it really "dismissal pay"?</strong> <span>The law has a narrow definition. Dismissal pay = one or more payments due to separation. Excluded from the definition: accrued vacation or sick leave, pension/retirement payments, health insurance, supplemental unemployment benefits, and WARN Act payments. If your payment falls in an excluded category, the disqualification doesn't apply.</span></span>
+        </li>
+        <li>
+          <span class="el-num">2</span>
+          <span class="el-text"><strong>Did the weekly amount actually exceed the threshold?</strong> <span>A lump sum is allocated weekly from your last day of employment. The allocation is based on your actual weekly earnings rate. Only weeks where the allocated amount exceeds your weekly benefit rate + partial benefit credit are disqualified. Lower-amount payments may not disqualify you at all — just reduce your benefit for those weeks.</span></span>
+        </li>
+        <li>
+          <span class="el-num">3</span>
+          <span class="el-text"><strong>Was the allocation calculated on the right earnings rate?</strong> <span>The DOL uses your actual weekly remuneration from your employer. If DOL used the wrong wage figure — or used the quarterly average instead of actual weekly wages — the allocation (and the period of disqualification) may be longer than it should be.</span></span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="note-box blue">
+      <strong>Excluded payments that are NOT dismissal pay:</strong> Accrued vacation or sick leave you earned during employment. Pension or retirement benefits. Health or medical insurance payments. WARN Act payments (federally mandated notice-period pay). Supplemental unemployment benefits. If your payment is one of these, the disqualification shouldn't apply.
+    </div>
+
+    <div class="note-box red">
+      <strong>What IS dismissal pay (and will disqualify you for allocated weeks):</strong> Severance paid specifically because you left the company. A buyout package paid due to layoff. "Separation agreements" with ongoing payment tied to departure. Retention bonuses that pay out at separation.
+    </div>
+  </div>
+
+  <!-- Evidence -->
+  <div class="section-card">
+    <div class="section-label"><span class="dot dot-green"></span> Evidence to gather before your hearing</div>
+    <ul class="checklist" id="checklist-dp">
+      <li><input type="checkbox" id="dp1" onchange="toggleCheck(this)"><label for="dp1"><strong>The separation agreement, offer letter, or severance letter.</strong> It should show: total amount, what it covers, first payment date, whether it is paid in a lump sum or installments. The specific language matters — especially whether it names what the payment is for (e.g., "in lieu of notice" vs. "accrued vacation payout").</label></li>
+      <li><input type="checkbox" id="dp2" onchange="toggleCheck(this)"><label for="dp2"><strong>Your last pay stub or most recent W-2.</strong> The DOL should base the weekly allocation on your actual weekly earnings rate. If DOL used a different number, your pay stub shows the correct figure and can challenge the calculation.</label></li>
+      <li><input type="checkbox" id="dp3" onchange="toggleCheck(this)"><label for="dp3"><strong>DOL's determination letter showing how they calculated the dismissal period.</strong> What weekly rate did they use? What total did they divide? How long did they say the dismissal period runs? You need this number to challenge the calculation.</label></li>
+      <li><input type="checkbox" id="dp4" onchange="toggleCheck(this)"><label for="dp4"><strong>Documentation that your payment was an excluded category.</strong> A vacation payout memo, a pension disbursement letter, WARN Act notice, or documentation of supplemental unemployment benefits. If the payment is excluded, present this directly.</label></li>
+      <li><input type="checkbox" id="dp5" onchange="toggleCheck(this)"><label for="dp5"><strong>The date of first payment vs. last day of employment.</strong> The allocation starts from the day after your last day of work. Confirm the DOL used the correct start date — a day-off error can shift the entire disqualification window.</label></li>
+    </ul>
+    <div class="note-box blue" style="margin-top:14px">
+      <strong>If the dismissal period has already run out:</strong> The disqualification is time-limited — it ends when the allocated dismissal pay runs out. If you're appealing a denial that covered only part of your claim period, establish the date the dismissal period should have ended. Benefits should be payable after that date even if the appeal covers earlier disqualified weeks.
+    </div>
+  </div>
+
+  <!-- Statement guidance -->
+  <div class="section-card">
+    <div class="section-label"><span class="dot dot-amber"></span> Statement guidance</div>
+    <ul class="guidance-list">
+      <li><span class="arrow">→</span><span><strong>Name which element you're challenging.</strong> "My challenge is that the payment was not 'dismissal pay' — it was [accrued vacation / WARN Act payment / pension disbursement]" is more focused than "my severance shouldn't count."</span></li>
+      <li><span class="arrow">→</span><span><strong>If challenging the calculation: bring the numbers.</strong> "DOL calculated a weekly allocation of $[X] using an earnings rate of $[Y]/week. My actual weekly earnings were $[Z]/week as shown on my final pay stub. Using the correct rate, my dismissal period should have ended [N] weeks earlier."</span></li>
+      <li><span class="arrow">→</span><span><strong>If challenging the category: read the language of your agreement aloud.</strong> "My separation agreement states the payment is for 'accrued paid time off.' Accrued leave is explicitly excluded from the definition of dismissal pay under §591(3-a)."</span></li>
+      <li><span class="arrow">→</span><span><strong>If the dismissal period has ended: establish the cutoff date.</strong> "Based on DOL's own weekly allocation figure, the dismissal period should have ended on [date]. I'm appealing the denial of benefits after that date."</span></li>
+      <li><span class="arrow do-not">→</span><span><strong>Do NOT argue that the severance was "not much money" or "only one month."</strong> The threshold is your specific weekly benefit rate — not whether the total amount was large. The hearing officer is applying the formula, not making a fairness judgment. Argue the formula.</span></li>
+    </ul>
+  </div>
+</div>
+
 <!-- General notes (always visible after selection) -->
 <div id="general-notes" class="section-card" style="display:none;margin-top:24px">
   <div class="section-label"><span class="dot" style="background:#64748b"></span> About the hearing</div>
@@ -593,7 +703,7 @@ function toggleCheck(checkbox) {
 // Support deep linking via hash
 if (location.hash) {
   const id = location.hash.replace('#', '');
-  const valid = ['misconduct', 'voluntary-quit', 'availability', 'refusal', 'medical'];
+  const valid = ['misconduct', 'voluntary-quit', 'availability', 'refusal', 'medical', 'dismissal-pay'];
   if (valid.includes(id)) {
     select(id);
     document.getElementById('panel-' + id).scrollIntoView({ behavior: 'smooth', block: 'start' });
