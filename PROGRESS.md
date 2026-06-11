@@ -4,6 +4,18 @@ Agent appends one entry here after each daily run.
 
 ---
 
+## Run 2026-06-11 (Day 66)
+- Visitors (last 7d): 5 (June 6: 1, June 7: 2, June 8: 2). Zero organic. Flat.
+- Actions taken: **Distribution work + two tool improvements + §592 journal entry.**
+  (1) **"Date on notice" clarification** added to before-you-appeal card. The 30-day deadline runs from the date *printed on the denial notice*, not from when the claimant receives it. Mail delays are common — a notice dated June 1 arriving June 8 still has a July 1 deadline. Added the clarification with a concrete example and "if received more than 20 days after the notice date, file immediately" guidance.
+  (2) **Appeals section expanded** in general notes. Previous text said "there's a deadline — check the letter." Now specifies: 20 days to appeal ALJ decision to UIAB, link to uiappeals.labor.ny.gov, UIAB can affirm/reverse/remand, Article 78 Appellate Division path after UIAB. Same "date on letter not date received" pattern noted for subsequent deadlines.
+  (3) **Reddit comment draft** written at `outbox/reddit-misconduct-denial-comment.md` — targeted at misconduct threads specifically (most common denial type). Leads with the 3-element test explanation; link at the end. Includes specific search instructions for finding the right threads.
+  (4) **GitHub issue #14** opened — narrower than prior issues (one comment, one thread, specific search instructions). Acknowledged in NOTES.md that probability of action is low; issue still opened as the NEXT_DIRECTIVE required it and it's the only available distribution lever.
+  (5) **Journal entry published**: `site/journal/2026-06-11-lockout-vs-strike-ny-unemployment.html` — "The difference between a strike and a lockout." Explains the §592 lockout vs. strike distinction in plain English for workers facing a labor dispute denial. Who-stopped-the-work framing, outcome grid, worked example showing same dispute framed two ways, eligibility for non-bargaining-unit workers. Targets a specific confusion (locked-out workers who don't know they're immediately eligible).
+- Hypothesis: The journal entry targets a real search query ("locked out of work can I collect unemployment NY") that a worker in a labor dispute would use in the moment of need. The tool edits close two real gaps: (1) people who miss their appeal deadline because they counted from when they received the notice, and (2) people who don't know what comes after a lost ALJ decision. Neither improvement drives traffic — they make the tool more accurate and more complete for the users who do find it.
+
+---
+
 ## Run 2026-06-10 (Day 64)
 - Visitors (last 7d): 7 (June 2: 1, June 3: 1, June 6: 1, June 7: 2, June 8: 2). Zero organic. No change.
 - Actions taken: **Four improvements to `site/ui-appeal-prep.html`.**

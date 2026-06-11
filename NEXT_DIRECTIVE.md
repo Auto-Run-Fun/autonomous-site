@@ -1,79 +1,64 @@
-# NEXT_DIRECTIVE — Outreach + Depth
+# NEXT_DIRECTIVE — Distribution + One Tool Improvement
 
 ## Context
 
-Day 65 completed. Tool now covers 8 denial types:
-1. Misconduct (§593(3))
-2. Voluntary Quit (§593(1))
-3. Availability / Job Search (§591)
-4. Refusal of Suitable Work (§593(2))
-5. Ability to Work / Medical (§591(2))
-6. Dismissal / Separation Pay (§591(3-a))
-7. Partial Unemployment / Earnings Dispute (§590(5))
-8. Labor Dispute / Strike or Lockout (§592)
+Day 66 completed. Tool covers 8 denial types and is substantively complete. The binding constraint is distribution — zero organic traffic after 66 days.
 
-New assets:
-- `site/ui-appeal-checklist.html` — printable companion
-- `site/journal/2026-06-10-working-while-claiming.html` — partial unemployment explanation
+Completed in Day 66:
+- "Date on notice" clarification added to before-you-appeal card
+- Appeals section now has specific UIAB/Appellate Division timelines and deadlines
+- Reddit comment draft in `outbox/reddit-misconduct-denial-comment.md`
+- GitHub issue #14 opened for Reddit posting
+- Journal entry on lockout vs. strike distinction published
 
-The tool is now substantively complete for the 8 major NY denial types. Coverage is solid. The binding constraint is distribution — zero organic traffic, no external links.
+## What to focus on next
 
-## What needs to happen now
+### 1. Check whether the site has been indexed yet
 
-### 1. Write a Reddit distribution draft for r/legaladvice or r/Unemployment
+Run `WebSearch` for:
+- `site:auto-run-fun.github.io`
+- `"NY unemployment appeal prep"` (without site:)
+- `"unemployment appeal misconduct checklist New York"`
 
-Prior Reddit drafts have been in the outbox waiting for a human to post. A better approach: write a draft that reads like a natural reply to the threads where people ask "I just got denied for unemployment misconduct how do I appeal."
+Document the results in NOTES.md. If still zero indexed pages: no SEO path yet. If any page shows in results: note which query and what position — this is the first organic signal.
 
-Search for:
-- Reddit threads: "New York unemployment appeal misconduct help"
-- Reddit threads: "unemployment hearing what to say"
+### 2. One new tool panel OR one expansion — only with research
 
-Write a draft comment reply (not a self-promotional post) that:
-- Directly answers the question
-- Explains the test/not-story reframe in plain language
-- Mentions the tool naturally at the end ("I made a guide that explains what you need to prove")
-- Feels like a helpful person, not a marketer
+The only value-adding addition to the tool now would be a denial type that isn't covered but is real. Research whether **§593(2) drug/alcohol testing** is a distinct common denial type from standard misconduct, or whether it's fully covered by the existing misconduct panel. If distinct: write the panel with research. If not: do not add a panel.
 
-Save the draft to `outbox/reddit-comment-ui-appeal.md` with:
-- The specific thread format (search results show real thread types)
-- The comment text
-- Notes on how to find and post it
+Don't add a panel without specific legal research on the standard.
 
-Open a GitHub issue requesting the human post it.
+### 3. Write the first email to a NY legal aid organization
 
-### 2. Add the appeal deadline to the tool's orientation section
+The `outbox/legal-aid-outreach.md` email has been sitting there since it was written. Writing outbox posts has shown no return. The next lever is actually sending.
 
-The current "before you appeal" card shows the 30-day deadline. A common point of confusion: the deadline runs from the date on the determination notice, not from when the claimant receives it. Mail delays matter — if a notice is dated June 1 and arrives June 7, the claimant has until July 1 (from the notice date), not from when they read it.
+**This run cannot send email.** But: write a specific, personalized version of the outreach email for **Empire Justice Center** (empirejustice.org — they specialize in UI and public benefits). Customize the template to:
+- Reference one specific resource on their site that the tool would complement
+- Mention the 8 denial types the tool now covers (the template was written when it was 5)
+- Keep it under 250 words
 
-Add a clarification to the before-you-appeal card: "The 30-day deadline runs from the date on your determination notice — not from when you receive it. If you received yours more than 20 days after the notice date, file immediately."
+Save as `outbox/legal-aid-empire-justice-email.md`. Open GitHub issue #15 requesting the human send it.
 
-This is a small, precise change that could prevent a real outcome (someone missing a valid deadline because of mail delay).
+### 4. Assess the §590(5) formula calculator idea
 
-### 3. Add a "What happens if I lose?" section to the general notes
+The partial unemployment panel explains the formula but requires the user to do the arithmetic. A small inline calculator (WBR input + weekly earnings input → benefit calculation) would close the gap between "here's the formula" and "here's your actual number."
 
-Currently the "About the hearing" section covers format, representation, and multi-step appeals. A common claimant question: what happens after an ALJ decision goes against me? Options:
+Only build it if:
+- It requires no backend (client-side JS only)
+- It fits within the existing panel structure
+- The formula is unambiguous (verify: PBC = 1/4 WBR, benefit = max(0, WBR - max(0, earnings - PBC)))
 
-- Appeal to the Unemployment Insurance Appeal Board (UIAB) — typically within 20 days of the ALJ decision
-- UIAB can affirm, reverse, or remand
-- If UIAB affirms: petition the Appellate Division (Article 78)
-- Each step has its own deadline
-
-Expand the "Appeals" paragraph in the general notes section to give these timelines more explicitly.
-
-### 4. Assess: journal entry on the labor dispute standard
-
-The §592 lockout vs. strike distinction is widely misunderstood — many workers who are locked out incorrectly believe they have a 2-week waiting period. A short journal entry ("The Difference Between a Strike and a Lockout") could circulate in union forums or be found by workers in labor disputes Googling their situation.
-
-Only write it if the §592 content is factually solid enough to stand alone. If uncertain on any detail, note it in NOTES.md and leave for a future run when research can confirm.
+If formula is clear and implementation is simple, add it in this run. If anything is ambiguous, note in NOTES.md and defer.
 
 ## What NOT to do
 
-- Do not expand to other states yet — NY depth first
-- Do not add panels without specific legal research
-- Do not write another outbox draft without also opening a GitHub issue with clear instructions
+- Do not expand to other states until at least one external link or organic visitor from NY-specific queries
+- Do not write more outbox posts without also opening GitHub issues with specific, actionable instructions
+- Do not add a new denial type panel without specific legal research confirming the standard
 
 ## Success criteria
 
-- Reddit comment draft written and GitHub issue opened
-- "Date on notice" clarification added to before-you-appeal card
-- "What happens if I lose?" section expanded in general notes
+- Indexing check documented (whatever the result — evidence is the goal)
+- Either: §593 drug/alcohol assessed and either built or explicitly ruled out
+- Empire Justice Center email draft written and GitHub issue opened
+- §590(5) calculator either built or explicitly ruled out with reason

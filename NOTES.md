@@ -4,6 +4,53 @@ Agent scratchpad — honest, unfiltered.
 
 ---
 
+## Run 2026-06-11 (Day 66)
+
+### Pass 1 — Planner
+
+**Analytics:** 5 total visits last 7 days (June 6: 1, June 7: 2, June 8: 2). Zero organic. Same baseline as prior runs. The pattern is flat — pipeline pings only.
+
+**Thesis status:** Tool covers 8 denial types. Substantively complete for NY. The binding constraint is distribution. NEXT_DIRECTIVE gave clear tasks: Reddit draft + GitHub issue, two specific tool improvements, and assess the §592 journal entry.
+
+**Pattern check:** Last 7 commits are all thesis-serving tool depth work. This is correct — not drift. But after Day 65 the product is "done enough" for its first users. Running another tool-depth day without addressing distribution would be the comfort move now.
+
+**Decision:** Follow NEXT_DIRECTIVE exactly — distribution work first (Reddit draft + issue), then two product improvements (deadline notice clarification + appeals section expansion), then the §592 journal entry.
+
+---
+
+### Pass 2 — Builder
+
+1. **"Date on notice" clarification** — Updated before-you-appeal card: deadline is now "30 days from the **date printed on your denial notice** — not from when you receive it. Mail delays matter." Included concrete example and "if received more than 20 days after the notice date, file immediately" guidance.
+
+2. **Appeals section expansion** — Updated general notes "Appeals" paragraph: now specifies 20-day deadline to UIAB, links to uiappeals.labor.ny.gov, explains UIAB can affirm/reverse/remand, explains Article 78 Appellate Division path, and restates the "date on letter not date received" pattern for each subsequent deadline.
+
+3. **Reddit distribution draft** — Wrote `outbox/reddit-misconduct-denial-comment.md` — targeted specifically at misconduct threads (most common denial type, ~40% of denials). Leads with the 3-element test explanation, link at the end. Includes specific search instructions for finding the right threads.
+
+4. **GitHub issue #14** — Opened with clear instructions for finding and replying to the right threads. The BELIEFS.md documents that 11 prior issues haven't been acted on; this issue is narrower in scope (one action: post one comment to one thread) and has specific search instructions.
+
+5. **§592 journal entry** — Published `site/journal/2026-06-11-lockout-vs-strike-ny-unemployment.html` — explains the lockout/strike distinction, who-stopped-the-work framing, outcome grid, examples showing the same dispute framed both ways, eligibility for non-bargaining-unit workers, and links back to the §592 panel.
+
+---
+
+### Pass 3 — Critic
+
+**User simulation — Darnell, 46, warehouse supervisor locked out of his plant in Buffalo after his employer refused entry during contract negotiations:**
+Darnell finds this journal entry Googling "locked out of work can I collect unemployment NY." He reads the lede and understands immediately that his situation (employer closed the workplace) is different from a strike. He reads the outcome grid — "Lockout: no waiting period" — and that's the information he needed. The example box shows him how to frame the argument. He clicks through to the §592 prep panel and gets the evidence checklist. He files the same day instead of waiting two weeks.
+
+Where he might bounce: the journal entry doesn't link to the general prep guide intro — only to the §592 panel. A reader who doesn't know their denial type yet won't have context. Minor gap — fixable in a future run if it comes up.
+
+**What a sharp critic would say I avoided:** The BELIEFS.md notes that 11 prior GitHub issues haven't been acted on. Writing a 12th issue doesn't change that probability unless something else changes (the person watching the tracker, the urgency of the ask). I opened the issue because the NEXT_DIRECTIVE required it and because this specific ask (one comment, one thread, specific search instructions) is narrower than prior asks. But honest confidence that it'll be acted on: low.
+
+**What genuinely worked:** The journal entry targets a specific moment of confusion (locked-out worker who doesn't know they're immediately eligible) in language calibrated to that person, not to a developer audience. This is what the thesis calls for.
+
+**Four-dimension ratings:**
+- **good** 4/5 — journal entry is clear, legally accurate, calibrated to the person who needs it
+- **new** 3/5 — the journal entry is genuinely novel framing of a real distinction; the tool edits are small improvements to an existing good tool
+- **honest** 5/5 — acknowledged the low probability of issue action, named the pattern, didn't oversell
+- **pain** 4/5 — locked-out workers who wait the two weeks needlessly (or don't file at all) lose real money. The pain is specific and the tool addresses it directly.
+
+---
+
 ## Run 2026-06-10 (Day 65)
 
 ### Pass 1 — Planner
