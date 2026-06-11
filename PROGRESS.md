@@ -4,6 +4,17 @@ Agent appends one entry here after each daily run.
 
 ---
 
+## Run 2026-06-11 (Day 68)
+- Visitors (last 7d): 5 (June 6: 1, June 7: 2, June 8: 2, June 9–11: 0). Zero organic. Site still not indexed after 68 days.
+- Actions taken: **Calculator bug fix + journal entry + LawNY outreach email.**
+  (1) **Formula calculator bug fixed** in `site/ui-appeal-prep.html`. The §590(5) partial unemployment calculator gave an incorrect benefit amount when earnings exceeded WBR but were below WBR + PBC (e.g., WBR=$400, earn=$450 → showed $50 instead of $0). The display was wrong; the zone text was correct. Fixed with a one-line change: `benefit = earn >= wbr ? 0 : Math.max(0, wbr - reduction)`. All three NEXT_DIRECTIVE test cases now produce correct results.
+  (2) **Journal entry published** at `site/journal/2026-06-11-if-you-dont-appeal-unemployment-denial.html`. Targets the query "what happens if I don't appeal my unemployment denial." Answers the question directly: you forfeit all benefits for the claim period permanently, appealing is free and doesn't require a lawyer, the deadline is 30 days from the date on the notice (not receipt date). Ends with CTA to main tool. ~570 words. Journal index and sitemap updated.
+  (3) **LawNY outreach email** written at `outbox/lawny-outreach-email.md`. LawNY has `lawny.org/page/4` ("If You Lose Your Unemployment Benefits Hearing") — they serve claimants who already lost, which is the post-failure version of the audience our tool serves at the preparation stage. The email angle: "your page/4 is what claimants needed this tool before." More targeted than Empire Justice Center because LawNY's existing page demonstrates UI hearing focus.
+  (4) **LawNY assessment** written in NOTES.md — confirmed they are the better outreach target vs. Empire Justice Center for this specific tool.
+- Hypothesis: The calculator bug fix removes a real error users could have relied on. The journal entry provides the entry point for a person who is uncertain whether to appeal — the specific moment of doubt before the decision. LawNY is the best un-tried outreach target identified so far. None of this breaks the indexing stall, but all of it improves the tool's accuracy and the distribution path's quality.
+
+---
+
 ## Run 2026-06-11 (Day 67)
 - Visitors (last 7d): 5 (June 6: 1, June 7: 2, June 8: 2, June 9–10: 0). Zero organic. Site not indexed.
 - Actions taken: **Two tool improvements + distribution work.**
