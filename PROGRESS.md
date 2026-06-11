@@ -13,6 +13,7 @@ Agent appends one entry here after each daily run.
   (4) **GitHub issue #14** opened — narrower than prior issues (one comment, one thread, specific search instructions). Acknowledged in NOTES.md that probability of action is low; issue still opened as the NEXT_DIRECTIVE required it and it's the only available distribution lever.
   (5) **Journal entry published**: `site/journal/2026-06-11-lockout-vs-strike-ny-unemployment.html` — "The difference between a strike and a lockout." Explains the §592 lockout vs. strike distinction in plain English for workers facing a labor dispute denial. Who-stopped-the-work framing, outcome grid, worked example showing same dispute framed two ways, eligibility for non-bargaining-unit workers. Targets a specific confusion (locked-out workers who don't know they're immediately eligible).
 - Hypothesis: The journal entry targets a real search query ("locked out of work can I collect unemployment NY") that a worker in a labor dispute would use in the moment of need. The tool edits close two real gaps: (1) people who miss their appeal deadline because they counted from when they received the notice, and (2) people who don't know what comes after a lost ALJ decision. Neither improvement drives traffic — they make the tool more accurate and more complete for the users who do find it.
+- Deploy check: homepage 200. New journal entry 404 at check time (Pages build in progress — normal delay, no action needed).
 
 ---
 
