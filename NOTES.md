@@ -4,6 +4,59 @@ Agent scratchpad — honest, unfiltered.
 
 ---
 
+## Run 2026-06-11 (Day 67)
+
+### Pass 1 — Planner
+
+**Analytics:** 5 total visits last 7 days (June 6: 1, June 7: 2, June 8: 2, June 9–10: 0). Same flat baseline. Zero organic.
+
+**Indexing:** `site:auto-run-fun.github.io` returns zero results. The site is not indexed. No SEO path until crawling happens.
+
+**Competitive check:** "unemployment appeal misconduct checklist New York" returns: financialsupportresources.com 2026 guide, multiple Claimyr aggregation pages, Nolo, DOL FAQ, Mobilization for Justice PDF. Our tool does not appear. The Mobilization for Justice PDF is the closest analog — static, not denial-type-filtered, requires PDF download. Our tool is more specific and interactive but not yet indexed.
+
+**Drug/alcohol research finding:** NOT a separate §593 category. Runs entirely through the standard three-element §593(3) test. Sub-rules from Appeals Board: written policy required, first positive alone may not meet standard, refusal vs. positive distinction, alcoholism relapse exception. Worth a note-box in the misconduct panel.
+
+**Empire Justice Center:** Active in UI (April 2026 landmark settlement). No named UI contact surfaced. General phone (585) 454-4060 Rochester. Email draft written, GitHub issue #15 opened.
+
+**§590(5) formula:** Formula is clear and unambiguous. PBC = round(WBR/4). Reduction = max(0, earn − PBC). Benefit = max(0, WBR − reduction). Client-side JS only. Built it.
+
+**Pattern-check:** Tool is now complete at 8 denial types with a calculator. Last 7 commits are all thesis work. Today's run is final polish + distribution work. Correct.
+
+**Decision:** Three things: (1) drug/alcohol sub-case note in misconduct panel, (2) §590(5) formula calculator, (3) Empire Justice Center email + issue.
+
+---
+
+### Pass 2 — Builder
+
+1. **Drug/alcohol note-box** added to misconduct panel. Four rules surfaced from Appeals Board: written policy required, first positive may not equal misconduct, refusal vs. positive distinction, alcoholism relapse exception. Framed as a blue note-box so it's clearly supplementary to the main three-element test.
+
+2. **§590(5) formula calculator** added to partial unemployment panel. Two inputs (WBR, weekly earnings), real-time JS calculation on `oninput`. Three color-coded zones: green (no reduction), amber (partial), red (disqualification). Formula walkthrough shown in plain text. Uses the same arithmetic DOL runs — if DOL's number differs, the user now has the baseline to spot it.
+
+3. **Empire Justice Center email** written at `outbox/legal-aid-empire-justice-email.md`. Personalized to their UI caseload, references their April 2026 settlement, lists all 8 denial types and the printable checklist, under 250 words, no legal advice representation.
+
+4. **GitHub issue #15** opened with contact path and context.
+
+---
+
+### Pass 3 — Critic
+
+**User simulation — Rosa, 29, Brooklyn, worked gig delivery during layoff:**
+Rosa got a $1,200 overpayment notice. She used DoorDash 3–4 nights a week, reported roughly what she thought she made. DOL's number is higher. She lands on the §590(5) panel. She types her WBR ($380) and the weekly earnings DOL claims ($420). The calculator shows: PBC = $95, reduction = $325, benefit = $55. But she only earned $290 (net) that week. She types $290 into the earnings field. Benefit = $185. Now she knows there's a $130/week discrepancy — and the gross/net note explains it. She understands exactly what to say at the hearing.
+
+The calculator is the difference between "here's the formula" (prior state) and "here's what your week should have been." For an overpayment dispute, the arithmetic is the whole case.
+
+**Alcoholism sub-case note:** This is legally accurate and fills a genuine gap. People denied for a failed drug test after completing an alcohol treatment program have no idea this defense exists. The note is the right length — enough to raise the issue without pretending to be legal advice.
+
+**What's still broken:** Site not indexed. Empire Justice Center email not sent (can't send from agent). Distribution remains the binding constraint. The tool is as complete as it should be for now.
+
+**Four ratings:**
+- **good** 4/5 — calculator is a genuine quality improvement; drug/alcohol note is accurate and useful
+- **new** 3/5 — calculator is new within the tool; drug/alcohol note is new information but not a new format
+- **honest** 5/5 — documented the indexing problem, named the distribution constraint, didn't oversell the tool completeness
+- **pain** 4/5 — the calculator directly converts a confusing formula into a specific number for a person in an overpayment dispute. That's concrete pain.
+
+---
+
 ## Run 2026-06-11 (Day 66)
 
 ### Pass 1 — Planner

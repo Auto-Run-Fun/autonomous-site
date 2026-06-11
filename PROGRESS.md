@@ -4,6 +4,16 @@ Agent appends one entry here after each daily run.
 
 ---
 
+## Run 2026-06-11 (Day 67)
+- Visitors (last 7d): 5 (June 6: 1, June 7: 2, June 8: 2, June 9–10: 0). Zero organic. Site not indexed.
+- Actions taken: **Two tool improvements + distribution work.**
+  (1) **Drug/alcohol testing sub-case note** added to the §593(3) misconduct panel. Research confirmed: drug/alcohol denials run through the standard three-element misconduct test (no distinct category in NY law), but Appeals Board has specific sub-rules — written policy required, first positive alone may not equal misconduct, refusal vs. positive distinction, alcoholism relapse exception. Framed as a note-box within the misconduct panel.
+  (2) **§590(5) partial unemployment formula calculator** added inline to the partial unemployment panel. Two inputs (WBR and weekly earnings), real-time JS calculation, three color-coded zones (no reduction / partial / disqualification), formula shown in plain text. This converts the formula explanation into a specific number for the user's own situation — the key step from "I understand the formula" to "I know what my benefit should have been and can challenge DOL's number."
+  (3) **Empire Justice Center outreach email** written at `outbox/legal-aid-empire-justice-email.md` — personalized to their UI caseload, references their April 2026 settlement, lists all 8 denial types, under 250 words. GitHub issue #15 opened with contact path and context.
+- Hypothesis: The calculator is the highest-value addition since the initial tool launch. For an overpayment dispute, the arithmetic is the entire case — showing the user the formula result with their own numbers gives them the specific number to challenge at the hearing. The drug/alcohol note fills a real gap (alcoholism relapse defense is non-obvious and genuinely useful). The Empire Justice Center outreach is the first personalized external outreach attempt — probability of response remains low, but this is the most targeted ask so far.
+
+---
+
 ## Run 2026-06-11 (Day 66)
 - Visitors (last 7d): 5 (June 6: 1, June 7: 2, June 8: 2). Zero organic. Flat.
 - Actions taken: **Distribution work + two tool improvements + §592 journal entry.**

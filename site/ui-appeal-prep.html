@@ -333,6 +333,15 @@ h1{font-size:clamp(1.5rem,4vw,2rem);font-weight:700;letter-spacing:-.02em;margin
     <div class="note-box red">
       <strong>Misconduct:</strong> falsifying records after warnings, repeated unexcused absences despite written warnings, deliberate violation of a known safety policy, harassment of coworkers.
     </div>
+    <div class="note-box blue" style="margin-top:14px">
+      <strong>If you were fired for a drug or alcohol test (positive result or refusal):</strong> This still runs through the same §593(3) three-element test — there is no separate drug/alcohol category in NY law. But the Appeals Board has developed specific rules you can use:
+      <ul style="margin-top:8px;margin-left:16px;line-height:1.8">
+        <li><strong>Written policy required.</strong> The employer must have a written drug/alcohol testing policy that you received and that explicitly states a positive test (not just "impairment") is a policy violation. Oral policies are generally insufficient.</li>
+        <li><strong>First positive test alone may not equal misconduct.</strong> If the employer policy doesn't expressly link a first positive to discharge, a single test without prior warnings or documented impairment at work can fail element 2 (willful/deliberate) or element 3 (disregard for interests).</li>
+        <li><strong>Refusal vs. positive result.</strong> Refusing to take a mandatory test is treated differently from testing positive — but only if the policy explicitly covers refusal as a violation. If the policy only addresses positive results, a refusal may not meet the standard.</li>
+        <li><strong>Alcoholism relapse exception.</strong> Alcoholism may be treated as an illness (beyond the employee's control), not a voluntary choice — weakening element 2. This does not apply to illegal drug use. If alcoholism was a diagnosed, documented condition, raise this specifically and have medical documentation ready.</li>
+      </ul>
+    </div>
   </div>
 
   <!-- Evidence -->
@@ -717,6 +726,41 @@ h1{font-size:clamp(1.5rem,4vw,2rem);font-weight:700;letter-spacing:-.02em;margin
       </ul>
     </div>
 
+    <div class="elements-box" style="margin-top:12px;background:#0f0f1a;border:1px solid #252535">
+      <div class="elements-title" style="color:#7eb8f7">Calculate your benefit for a disputed week</div>
+      <p style="font-size:.85rem;color:#94a3b8;margin-bottom:14px">Enter your WBR and weekly earnings to see the formula result. This is the same arithmetic DOL runs — if their number differs, that's your challenge.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+        <div>
+          <label style="font-size:.8rem;color:#94a3b8;display:block;margin-bottom:4px">Weekly Benefit Rate (WBR) $</label>
+          <input type="number" id="calc-wbr" min="0" max="999" placeholder="e.g. 400" oninput="calcPU()"
+            style="width:100%;padding:8px 10px;background:#13131c;border:1px solid #252535;border-radius:6px;color:#e2e8f0;font-size:1rem;font-family:inherit">
+        </div>
+        <div>
+          <label style="font-size:.8rem;color:#94a3b8;display:block;margin-bottom:4px">Weekly Earnings $</label>
+          <input type="number" id="calc-earn" min="0" placeholder="e.g. 250" oninput="calcPU()"
+            style="width:100%;padding:8px 10px;background:#13131c;border:1px solid #252535;border-radius:6px;color:#e2e8f0;font-size:1rem;font-family:inherit">
+        </div>
+      </div>
+      <div id="calc-result" style="display:none;padding:12px 14px;background:#13131c;border-radius:8px;border:1px solid #1e1e2e;font-size:.88rem">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center;margin-bottom:10px">
+          <div style="padding:8px;background:#0b0b10;border-radius:6px">
+            <div style="font-size:.72rem;color:#64748b;margin-bottom:2px">Partial Benefit Credit</div>
+            <div id="calc-pbc" style="font-weight:700;color:#7eb8f7;font-size:1.1rem">—</div>
+          </div>
+          <div style="padding:8px;background:#0b0b10;border-radius:6px">
+            <div style="font-size:.72rem;color:#64748b;margin-bottom:2px">Reduction</div>
+            <div id="calc-reduction" style="font-weight:700;color:#f59e0b;font-size:1.1rem">—</div>
+          </div>
+          <div style="padding:8px;background:#0b0b10;border-radius:6px">
+            <div style="font-size:.72rem;color:#64748b;margin-bottom:2px">Benefit This Week</div>
+            <div id="calc-benefit" style="font-weight:700;font-size:1.1rem">—</div>
+          </div>
+        </div>
+        <div id="calc-zone" style="padding:8px 12px;border-radius:6px;font-size:.82rem;text-align:center"></div>
+        <div id="calc-formula" style="margin-top:8px;font-size:.78rem;color:#64748b;line-height:1.6"></div>
+      </div>
+    </div>
+
     <div class="elements-box" style="margin-top:12px">
       <div class="elements-title">Three things the hearing officer is testing</div>
       <ul class="elements-list">
@@ -900,6 +944,42 @@ function toggleCheck(checkbox) {
     li.classList.add('checked');
   } else {
     li.classList.remove('checked');
+  }
+}
+
+function calcPU() {
+  const wbr = parseFloat(document.getElementById('calc-wbr').value);
+  const earn = parseFloat(document.getElementById('calc-earn').value);
+  const result = document.getElementById('calc-result');
+  if (isNaN(wbr) || isNaN(earn) || wbr <= 0) { result.style.display = 'none'; return; }
+  result.style.display = 'block';
+  const pbc = Math.round(wbr / 4);
+  const reduction = Math.max(0, earn - pbc);
+  const benefit = Math.max(0, wbr - reduction);
+  document.getElementById('calc-pbc').textContent = '$' + pbc;
+  document.getElementById('calc-reduction').textContent = reduction > 0 ? '−$' + reduction : '$0';
+  const benefitEl = document.getElementById('calc-benefit');
+  benefitEl.textContent = '$' + benefit;
+  const zoneEl = document.getElementById('calc-zone');
+  const formulaEl = document.getElementById('calc-formula');
+  if (earn <= pbc) {
+    benefitEl.style.color = '#22c55e';
+    zoneEl.style.background = '#052e16';
+    zoneEl.style.color = '#22c55e';
+    zoneEl.textContent = 'No reduction zone — your earnings are within your partial benefit credit.';
+    formulaEl.textContent = 'Earnings ($' + earn + ') ≤ PBC ($' + pbc + ') → no reduction → full WBR paid.';
+  } else if (earn < wbr) {
+    benefitEl.style.color = '#f59e0b';
+    zoneEl.style.background = '#1a1200';
+    zoneEl.style.color = '#f59e0b';
+    zoneEl.textContent = 'Reduction zone — you receive a partial benefit this week.';
+    formulaEl.textContent = 'PBC = WBR/4 = $' + pbc + '. Reduction = $' + earn + ' − $' + pbc + ' = $' + reduction + '. Benefit = $' + wbr + ' − $' + reduction + ' = $' + benefit + '.';
+  } else {
+    benefitEl.style.color = '#ef4444';
+    zoneEl.style.background = '#1f0000';
+    zoneEl.style.color = '#ef4444';
+    zoneEl.textContent = 'Disqualification zone — earnings ≥ WBR. No benefit for this week only (does not affect other weeks).';
+    formulaEl.textContent = 'Earnings ($' + earn + ') ≥ WBR ($' + wbr + ') → $0 benefit for this week.';
   }
 }
 
